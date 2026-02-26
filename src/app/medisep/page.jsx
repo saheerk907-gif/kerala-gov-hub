@@ -55,3 +55,18 @@ export default async function MedisepPage() {
     </div>
   );
 }
+{/* Content Section - കൂടുതൽ പ്രൊഫഷണൽ ഡിസൈൻ */}
+{scheme.content_ml && (
+  <div className="mt-8 space-y-6">
+    <div className="bg-[#1a1a1a] p-8 rounded-2xl border border-white/[0.08] shadow-xl">
+      <div className="pro-style text-gray-300 leading-loose">
+        {/* ഓരോ വരിയും കൃത്യമായ അകലത്തിൽ വരാൻ */}
+        {scheme.content_ml.split('\n').map((line, index) => (
+          <p key={index} className={line.startsWith('###') ? "text-xl font-bold text-green-300 mt-6 mb-2" : "mb-3"}>
+            {line.replace('###', '')}
+          </p>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
