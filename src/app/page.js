@@ -1,4 +1,4 @@
-import Link from 'next/link';<Link href="/medisep" className="text-blue-500 hover:text-blue-400"> വിശദമായി കാണുക </Link>
+
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
