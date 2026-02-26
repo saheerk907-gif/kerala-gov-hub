@@ -14,6 +14,6 @@ import Link from 'next/link'; // ഇത് പേജിന്റെ ഏറ്റ
 <Link href="/medisep">
   വിശദമായി കാണുക
 </Link>
-<a href="/ksr.pdf" target="_blank" className="mt-6 inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+<a href="/public/GO(P)No13-2026-FinDated02-02-2026_45.pdf" target="_blank" className="mt-6 inline-block bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition-colors">
   PDF വായിക്കുക / ഡൗൺലോഡ് ചെയ്യുക 📄
 </a>
