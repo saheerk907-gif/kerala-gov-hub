@@ -25,5 +25,4 @@
     "eslint": "^8.0.0",
     "eslint-config-next": "^14.2.0"
   }
-  "react-quill": "^2.0.0",
 }
