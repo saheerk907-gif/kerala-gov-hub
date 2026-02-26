@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link'; // ഇത് പുതുതായി ചേർത്തത്
 
 const COLORS = {
   blue: { bg: 'rgba(41,151,255,0.12)', text: '#2997ff', glow: '#2997ff' },
@@ -29,6 +30,11 @@ export default function SchemesSection({ schemes }) {
         {schemes.map(scheme => {
           const c = COLORS[scheme.color] || COLORS.blue;
           const isOpen = expanded === scheme.id;
+          
+          // ഓരോ കാർഡിനും അതിന്റേതായ പേജിലേക്ക് ലിങ്ക് ഉണ്ടാക്കുന്നു 
+          // (ഉദാഹരണത്തിന്: Database-ൽ title_en 'medisep' എന്നാണെങ്കിൽ /medisep ലേക്ക് പോകും)
+          const pageUrl = `/${scheme.title_en ? scheme.title_en.toLowerCase().replace(/\s+/g, '-') : 'medisep'}`;
+
           return (
             <div
               key={scheme.id}
@@ -69,9 +75,21 @@ export default function SchemesSection({ schemes }) {
                 )}
               </div>
 
-              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold mt-3" style={{ color: c.text }}>
-                {isOpen ? 'ചുരുക്കുക ↑' : 'വിശദമായി കാണുക ↓'}
-              </span>
+              {/* ഇവിടെയാണ് മാറ്റം വരുത്തിയത്: പുതിയ പേജിലേക്ക് പോകാനുള്ള ബട്ടൺ ചേർത്തു */}
+              <div className="flex items-center justify-between mt-5 pt-3 border-t border-white/[0.05]">
+                <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold" style={{ color: c.text }}>
+                  {isOpen ? 'ചുരുക്കുക ↑' : 'ചെറുതായി കാണുക ↓'}
+                </span>
+                
+                <Link 
+                  href={pageUrl} 
+                  onClick={(e) => e.stopPropagation()} 
+                  className="bg-white/10 hover:bg-white/20 text-white text-[12px] px-4 py-2 rounded-full font-bold transition-colors"
+                >
+                  പൂർണ്ണമായി വായിക്കുക →
+                </Link>
+              </div>
+
             </div>
           );
         })}

@@ -1,5 +1,6 @@
+
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights } from '@/lib/supabase';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar';import PayCalculator from '@/components/PayCalculator';
 import Hero from '@/components/Hero';
 import StatsBar from '@/components/StatsBar';
 import SchemesSection from '@/components/SchemesSection';
@@ -29,7 +30,7 @@ export default async function HomePage() {
       <StatsBar stats={stats} />
       <SchemesSection schemes={schemes} />
       <HighlightsSection highlights={highlights} />
-      <OrdersSection orders={orders} />
+      <OrdersSection orders={orders} /><PayCalculator />
       <QuickLinksSection links={quickLinks} />
       <Footer />
     </>

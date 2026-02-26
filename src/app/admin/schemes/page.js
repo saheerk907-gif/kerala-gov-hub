@@ -4,135 +4,120 @@ import { supabase } from '@/lib/supabase';
 
 export default function AdminSchemes() {
   const [schemes, setSchemes] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
-  const [detailForm, setDetailForm] = useState({ label: '', content_ml: '' });
-  const [showAddDetail, setShowAddDetail] = useState(null);
 
-  const loadSchemes = async () => {
-    setLoading(true);
-    const { data } = await supabase
-      .from('schemes')
-      .select('*, scheme_details(*)').order('sort_order');
+  useEffect(() => {
+    fetchSchemes();
+  }, []);
+
+  async function fetchSchemes() {
+    const { data } = await supabase.from('schemes').select('*').order('slug');
     setSchemes(data || []);
-    setLoading(false);
-  };
+  }
 
-  useEffect(() => { loadSchemes(); }, []);
-
-  const updateScheme = async (id, field, value) => {
-    await supabase.from('schemes').update({ [field]: value }).eq('id', id);
-    loadSchemes();
-  };
-
-  const addDetail = async (schemeId) => {
-    if (!detailForm.label || !detailForm.content_ml) return;
-    const maxSort = schemes.find(s => s.id === schemeId)?.scheme_details?.length || 0;
-    await supabase.from('scheme_details').insert({
-      scheme_id: schemeId, label: detailForm.label,
-      content_ml: detailForm.content_ml, sort_order: maxSort + 1,
-    });
-    setDetailForm({ label: '', content_ml: '' });
-    setShowAddDetail(null);
-    loadSchemes();
-  };
-
-  const deleteDetail = async (id) => {
-    if (!confirm('ഈ വിശദാംശം ഡിലീറ്റ് ചെയ്യണോ?')) return;
-    await supabase.from('scheme_details').delete().eq('id', id);
-    loadSchemes();
-  };
-
-  const inputClass = "w-full px-3 py-2 bg-[#1a1a1a] border border-white/[0.08] rounded-lg text-sm text-white outline-none focus:border-[#2997ff] transition-colors";
-
-  if (loading) return <div className="text-center text-[#6e6e73] py-10 text-sm">Loading...</div>;
+  async function handleUpdate(e) {
+    e.preventDefault();
+    const { error } = await supabase
+      .from('schemes')
+      .update({
+        title_ml: editing.title_ml,
+        description_ml: editing.description_ml,
+        content_ml: editing.content_ml,
+      })
+      .eq('id', editing.id);
+    if (!error) {
+      alert('വിജയകരമായി അപ്‌ഡേറ്റ് ചെയ്തു!');
+      setEditing(null);
+      fetchSchemes();
+    } else {
+      alert('Error: ' + error.message);
+    }
+  }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-1">പദ്ധതികൾ</h1>
-      <p className="text-xs text-[#6e6e73] font-sans mb-8">Manage Schemes (MEDISEP, GPF, NPS, SLI, GIS, KSR)</p>
+    <div className="p-8 text-white bg-black min-h-screen">
+      <h1 className="text-2xl font-bold mb-6">പദ്ധതികൾ മാനേജ് ചെയ്യുക</h1>
 
-      <div className="flex flex-col gap-4">
-        {schemes.map(scheme => (
-          <div key={scheme.id} className="bg-[#111] border border-white/[0.08] rounded-2xl p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{scheme.icon}</span>
-                <div>
-                  <h3 className="text-lg font-bold">{scheme.title_ml}</h3>
-                  <div className="text-[11px] text-[#6e6e73] font-sans">{scheme.title_en} • {scheme.subtitle_en}</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className={`text-[10px] font-sans font-semibold px-2 py-0.5 rounded ${scheme.is_published ? 'text-[#30d158] bg-[rgba(48,209,88,0.1)]' : 'text-[#ff453a] bg-[rgba(255,69,58,0.1)]'}`}>
-                  {scheme.is_published ? 'Published' : 'Draft'}
-                </span>
-                <button
-                  onClick={() => updateScheme(scheme.id, 'is_published', !scheme.is_published)}
-                  className="px-3 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white cursor-pointer border-none font-sans transition-all">
-                  Toggle
-                </button>
-              </div>
-            </div>
-
-            {/* Description edit */}
-            {editing === scheme.id ? (
-              <div className="mb-4">
-                <textarea
-                  defaultValue={scheme.description_ml}
-                  rows={2}
-                  className={inputClass + ' resize-y mb-2'}
-                  onBlur={(e) => { updateScheme(scheme.id, 'description_ml', e.target.value); setEditing(null); }}
-                />
-                <span className="text-[10px] text-[#6e6e73] font-sans">Click outside to save</span>
-              </div>
-            ) : (
-              <p className="text-sm text-[#86868b] mb-4 cursor-pointer hover:text-white transition-colors" onClick={() => setEditing(scheme.id)}>
-                {scheme.description_ml} <span className="text-[10px] text-[#2997ff] font-sans ml-2">✏️ Edit</span>
-              </p>
-            )}
-
-            {/* Details list */}
-            <div className="flex flex-col gap-1.5 mb-4">
-              <div className="text-xs font-semibold text-[#6e6e73] mb-1">വിശദാംശങ്ങൾ:</div>
-              {scheme.scheme_details?.sort((a, b) => a.sort_order - b.sort_order).map(d => (
-                <div key={d.id} className="flex items-start gap-2 py-1.5 px-3 bg-white/[0.02] rounded-lg group">
-                  <span className="text-xs text-[#86868b] flex-1">
-                    <strong className="text-white">{d.label}</strong> — {d.content_ml}
-                  </span>
-                  <button onClick={() => deleteDetail(d.id)}
-                    className="opacity-0 group-hover:opacity-100 text-[10px] text-[#ff453a] cursor-pointer bg-transparent border-none transition-opacity font-sans">
-                    ✕
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* Add detail */}
-            {showAddDetail === scheme.id ? (
-              <div className="flex gap-2 items-end">
-                <input placeholder="ലേബൽ (ഉദാ: കവറേജ്)" value={detailForm.label}
-                  onChange={e => setDetailForm(f => ({...f, label: e.target.value}))}
-                  className={inputClass + ' flex-[1]'} />
-                <input placeholder="വിവരണം" value={detailForm.content_ml}
-                  onChange={e => setDetailForm(f => ({...f, content_ml: e.target.value}))}
-                  className={inputClass + ' flex-[2]'} />
-                <button onClick={() => addDetail(scheme.id)}
-                  className="px-4 py-2 bg-[#2997ff] text-white rounded-lg text-xs font-semibold cursor-pointer border-none whitespace-nowrap">
-                  ചേർക്കുക
-                </button>
-                <button onClick={() => setShowAddDetail(null)}
-                  className="px-3 py-2 bg-white/5 text-[#86868b] rounded-lg text-xs cursor-pointer border-none">✕</button>
-              </div>
-            ) : (
-              <button onClick={() => { setShowAddDetail(scheme.id); setDetailForm({ label: '', content_ml: '' }); }}
-                className="text-xs text-[#2997ff] font-semibold cursor-pointer bg-transparent border-none hover:underline font-malayalam">
-                + വിശദാംശം ചേർക്കുക
-              </button>
-            )}
+      <div className="grid gap-4">
+        {schemes.map(s => (
+          <div key={s.id} className="bg-[#111] p-5 border border-white/10 rounded-2xl flex justify-between items-center">
+            <span className="font-bold">{s.title_ml || s.slug}</span>
+            <button
+              onClick={() => setEditing({ ...s })}
+              className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+            >
+              Edit
+            </button>
           </div>
         ))}
       </div>
+
+      {editing && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#1a1a1a] p-6 rounded-2xl w-full max-w-4xl border border-white/10 max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-bold mb-4 text-white">Editing: {editing.slug}</h2>
+
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Title (Malayalam)
+                </label>
+                <input
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors"
+                  placeholder="Title (Malayalam)"
+                  value={editing.title_ml || ''}
+                  onChange={e => setEditing({ ...editing, title_ml: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Description (Malayalam)
+                </label>
+                <textarea
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y"
+                  placeholder="Description (Malayalam)"
+                  rows={3}
+                  value={editing.description_ml || ''}
+                  onChange={e => setEditing({ ...editing, description_ml: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Content (Malayalam)
+                </label>
+                <textarea
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y font-mono text-sm"
+                  placeholder="Full content in Malayalam (HTML or plain text)"
+                  rows={12}
+                  value={editing.content_ml || ''}
+                  onChange={e => setEditing({ ...editing, content_ml: e.target.value })}
+                />
+                <div className="text-[10px] text-[#6e6e73] mt-1">
+                  HTML tags supported: &lt;b&gt;, &lt;i&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;p&gt;, &lt;br&gt;
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors"
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditing(null)}
+                  className="bg-[#333] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#444] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
