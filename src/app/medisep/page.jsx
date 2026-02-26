@@ -67,10 +67,7 @@ export default async function MedisepPage() {
           </div>
         )}
 
-        <div className="mt-10 bg-red-900 p-4">
-          <h2>DEBUG CONTENT</h2>
-          <pre>{JSON.stringify(scheme, null, 2)}</pre>
-        </div>
+       
 
       </div>
     </div>
