@@ -1,6 +1,28 @@
 'use client';
 import { useState } from 'react';
 
+const KeralaEmblem = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style={{flexShrink:0}}>
+    <circle cx="50" cy="50" r="48" fill="#c8960c" />
+    <circle cx="50" cy="50" r="44" fill="#1a1a1a" />
+    <circle cx="50" cy="50" r="40" fill="#c8960c" />
+    <circle cx="50" cy="50" r="36" fill="#0a2240" />
+    <ellipse cx="50" cy="52" rx="18" ry="16" fill="#c8960c" />
+    <ellipse cx="34" cy="50" rx="8" ry="10" fill="#c8960c" />
+    <ellipse cx="66" cy="50" rx="8" ry="10" fill="#c8960c" />
+    <ellipse cx="50" cy="44" rx="12" ry="9" fill="#c8960c" />
+    <circle cx="44" cy="46" r="2" fill="#0a2240" />
+    <circle cx="56" cy="46" r="2" fill="#0a2240" />
+    <path d="M 44 58 Q 36 65 40 72 Q 44 78 50 74" stroke="#c8960c" strokeWidth="4" fill="none" strokeLinecap="round" />
+    <path d="M 42 56 Q 32 60 30 68" stroke="#f5f5f0" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+    <text x="50" y="22" textAnchor="middle" fontSize="8" fill="#c8960c">&#9733; &#9733; &#9733;</text>
+    <path id="bottomArc" d="M 18 65 A 35 35 0 0 0 82 65" fill="none" />
+    <text fontSize="7" fill="#f5f5f0" fontWeight="bold" fontFamily="serif">
+      <textPath href="#bottomArc" startOffset="15%">KERALA</textPath>
+    </text>
+  </svg>
+);
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const links = [
@@ -17,42 +39,7 @@ export default function Navbar() {
         style={{ background: 'rgba(5,5,5,0.75)', backdropFilter: 'saturate(180%) blur(20px)' }}
       >
         <a href="#" className="flex items-center gap-3 no-underline">
-          {/* Kerala Government Emblem - inline SVG, always works */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 100 100"
-            className="w-9 h-9 flex-shrink-0"
-          >
-            {/* Outer circle - gold */}
-            <circle cx="50" cy="50" r="48" fill="#c8960c" />
-            <circle cx="50" cy="50" r="44" fill="#1a1a1a" />
-            <circle cx="50" cy="50" r="40" fill="#c8960c" />
-            <circle cx="50" cy="50" r="36" fill="#0a2240" />
-
-            {/* Elephant head - simplified */}
-            <ellipse cx="50" cy="52" rx="18" ry="16" fill="#c8960c" />
-            {/* Elephant ears */}
-            <ellipse cx="34" cy="50" rx="8" ry="10" fill="#c8960c" />
-            <ellipse cx="66" cy="50" rx="8" ry="10" fill="#c8960c" />
-            {/* Elephant forehead */}
-            <ellipse cx="50" cy="44" rx="12" ry="9" fill="#c8960c" />
-            {/* Eyes */}
-            <circle cx="44" cy="46" r="2" fill="#0a2240" />
-            <circle cx="56" cy="46" r="2" fill="#0a2240" />
-            {/* Trunk */}
-            <path d="M 44 58 Q 36 65 40 72 Q 44 78 50 74" stroke="#c8960c" strokeWidth="4" fill="none" strokeLinecap="round" />
-            {/* Tusk */}
-            <path d="M 42 56 Q 32 60 30 68" stroke="#f5f5f0" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-
-            {/* Stars at top */}
-            <text x="50" y="22" textAnchor="middle" fontSize="8" fill="#c8960c">★ ★ ★</text>
-
-            {/* Bottom text arc - Kerala */}
-            <path id="bottomArc" d="M 18 65 A 35 35 0 0 0 82 65" fill="none" />
-            <text fontSize="7" fill="#f5f5f0" fontWeight="bold" fontFamily="serif">
-              <textPath href="#bottomArc" startOffset="15%">KERALA</textPath>
-            </text>
-          </svg>
+          <KeralaEmblem />
 
           <div className="flex flex-col">
             <span className="text-[13px] font-bold text-[#f5f5f7] leading-tight">കേരള സർക്കാർ ജീവനക്കാർ</span>
