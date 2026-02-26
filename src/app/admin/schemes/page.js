@@ -117,4 +117,29 @@ export default function AdminSchemes() {
                   className="w-full bg-[#0a0a0a] border border-white/10 p-3 rounded-xl h-60 focus:border-blue-500 outline-none transition-all font-sans text-sm"
                   placeholder="ഇവിടെ കൂടുതൽ വിവരങ്ങൾ അല്ലെങ്കിൽ FAQ ചേർക്കാം..."
                   value={editing.content_ml || ''}
-                  onChange={e => setEditing({...editing
+                  onChange={e => setEditing({...editing, content_ml: e.target.value})}
+                />
+              </div>
+
+              <div className="flex gap-4 pt-4">
+                <button 
+                  type="submit" 
+                  className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20"
+                >
+                  Save Changes
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setEditing(null)} 
+                  className="flex-1 bg-[#222] hover:bg-[#333] text-gray-300 font-bold py-3 rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
