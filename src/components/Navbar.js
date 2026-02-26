@@ -16,11 +16,11 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-[1000] px-4 md:px-12 h-14 flex items-center justify-between border-b border-white/[0.08]"
         style={{ background: 'rgba(5,5,5,0.75)', backdropFilter: 'saturate(180%) blur(20px)' }}>
         <a href="#" className="flex items-center gap-3 no-underline">
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Coat_of_arms_of_Kerala.svg/180px-Coat_of_arms_of_Kerala.svg.png"
-            alt="Kerala"
-            className="w-8 h-8 rounded-full bg-white p-0.5 object-contain"
-          />
+         <img 
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Emblem_of_Kerala.svg/120px-Emblem_of_Kerala.svg.png"
+  alt="Kerala Government Emblem"
+  className="w-9 h-9 object-contain"
+/>
           <div className="flex flex-col">
             <span className="text-[13px] font-bold text-[#f5f5f7] leading-tight">കേരള സർക്കാർ ജീവനക്കാർ</span>
             <span className="text-[9px] font-medium text-[#6e6e73] font-sans uppercase tracking-wider">Kerala Gov Employee Hub</span>
