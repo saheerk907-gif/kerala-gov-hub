@@ -6,7 +6,7 @@ export default async function MedisepPage() {
     .from('schemes')
     .select('*')
     .eq('slug', 'medisep')
-    .single();
+    .maybeSingle();
 
   if (error || !scheme) {
     return (
