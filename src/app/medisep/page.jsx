@@ -1,3 +1,4 @@
+export const revalidate = 0; // ഇത് ഓരോ തവണയും പുതിയ ഡാറ്റ എടുക്കാൻ സഹായിക്കും
 import { supabase } from '@/lib/supabase';
 
 export default async function MedisepPage() {
