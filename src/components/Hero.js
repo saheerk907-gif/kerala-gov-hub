@@ -1,5 +1,5 @@
 const KeralaEmblem = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="64" height="64" style={{flexShrink:0, margin:'0 auto', display:'block'}}>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="120" height="120" style={{flexShrink:0, margin:'0 auto', display:'block', filter:'drop-shadow(0 0 18px rgba(200,150,12,0.5))'}}>
     <circle cx="50" cy="50" r="48" fill="#c8960c" />
     <circle cx="50" cy="50" r="44" fill="#1a1a1a" />
     <circle cx="50" cy="50" r="40" fill="#c8960c" />
@@ -26,7 +26,9 @@ export default function Hero() {
       <div className="absolute top-[-40%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(41,151,255,0.07) 0%, transparent 70%)' }} />
 
-      <KeralaEmblem />
+      <div className="mb-6 animate-fade-up" style={{animation: 'fadeUp 0.8s ease forwards'}}>
+        <KeralaEmblem />
+      </div>
 
       <div className="animate-fade-up animate-fade-up-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-[#2997ff] mb-7 mt-6 font-sans"
         style={{ background: 'rgba(41,151,255,0.1)', border: '1px solid rgba(41,151,255,0.2)' }}>
