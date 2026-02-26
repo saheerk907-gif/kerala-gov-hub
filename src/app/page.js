@@ -30,7 +30,7 @@ export default async function HomePage() {
       <StatsBar stats={stats} />
       <SchemesSection schemes={schemes} />
       <HighlightsSection highlights={highlights} />
-      <OrdersSection orders={orders} />
+      <OrdersSection orders={orders} /><PayCalculator />
       <QuickLinksSection links={quickLinks} />
       <Footer />
     </>
