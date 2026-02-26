@@ -1,6 +1,6 @@
 
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights } from '@/lib/supabase';
-import Navbar from '@/components/Navbar';
+import Navbar from '@/components/Navbar';import PayCalculator from '@/components/PayCalculator';
 import Hero from '@/components/Hero';
 import StatsBar from '@/components/StatsBar';
 import SchemesSection from '@/components/SchemesSection';
