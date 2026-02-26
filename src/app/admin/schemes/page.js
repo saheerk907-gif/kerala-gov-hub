@@ -1,25 +1,10 @@
 'use client';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import dynamic from 'next/dynamic';
-import 'react-quill/dist/quill.snow.css';
-
-// ക്ലയന്റ് സൈഡിൽ മാത്രം ലോഡ് ചെയ്യാൻ വേണ്ടി
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 export default function AdminSchemes() {
   const [schemes, setSchemes] = useState([]);
   const [editing, setEditing] = useState(null);
-
-  // Editor-ൽ വേണ്ട ബട്ടണുകൾ സെറ്റ് ചെയ്യുന്നു
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['clean']
-    ],
-  }), []);
 
   useEffect(() => {
     fetchSchemes();
@@ -37,26 +22,32 @@ export default function AdminSchemes() {
       .update({
         title_ml: editing.title_ml,
         description_ml: editing.description_ml,
-        content_ml: editing.content_ml, // ഇവിടെയാണ് എഡിറ്ററിലെ ഡാറ്റ സേവ് ആകുന്നത്
+        content_ml: editing.content_ml,
       })
       .eq('id', editing.id);
-
     if (!error) {
       alert('വിജയകരമായി അപ്‌ഡേറ്റ് ചെയ്തു!');
       setEditing(null);
       fetchSchemes();
+    } else {
+      alert('Error: ' + error.message);
     }
   }
 
   return (
     <div className="p-8 text-white bg-black min-h-screen">
       <h1 className="text-2xl font-bold mb-6">പദ്ധതികൾ മാനേജ് ചെയ്യുക</h1>
-      
+
       <div className="grid gap-4">
         {schemes.map(s => (
           <div key={s.id} className="bg-[#111] p-5 border border-white/10 rounded-2xl flex justify-between items-center">
             <span className="font-bold">{s.title_ml || s.slug}</span>
-            <button onClick={() => setEditing({...s})} className="bg-blue-600 px-4 py-2 rounded-lg text-sm">Edit</button>
+            <button
+              onClick={() => setEditing({ ...s })}
+              className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+            >
+              Edit
+            </button>
           </div>
         ))}
       </div>
@@ -64,29 +55,64 @@ export default function AdminSchemes() {
       {editing && (
         <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
           <div className="bg-[#1a1a1a] p-6 rounded-2xl w-full max-w-4xl border border-white/10 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Editing: {editing.slug}</h2>
-            
-            <form onSubmit={handleUpdate} className="space-y-4 text-black">
-              <input 
-                className="w-full p-3 rounded-xl bg-white outline-none"
-                placeholder="Title (Malayalam)"
-                value={editing.title_ml || ''}
-                onChange={e => setEditing({...editing, title_ml: e.target.value})}
-              />
+            <h2 className="text-xl font-bold mb-4 text-white">Editing: {editing.slug}</h2>
 
-              <div className="bg-white rounded-xl overflow-hidden min-h-[300px]">
-                <ReactQuill 
-                  theme="snow" 
-                  value={editing.content_ml || ''} 
-                  onChange={(content) => setEditing({...editing, content_ml: content})}
-                  modules={modules}
-                  className="h-[250px]"
+            <form onSubmit={handleUpdate} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Title (Malayalam)
+                </label>
+                <input
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors"
+                  placeholder="Title (Malayalam)"
+                  value={editing.title_ml || ''}
+                  onChange={e => setEditing({ ...editing, title_ml: e.target.value })}
                 />
               </div>
 
-              <div className="flex gap-3 pt-12">
-                <button type="submit" className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold">Save Changes</button>
-                <button type="button" onClick={() => setEditing(null)} className="bg-gray-700 text-white px-8 py-3 rounded-xl font-bold">Cancel</button>
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Description (Malayalam)
+                </label>
+                <textarea
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y"
+                  placeholder="Description (Malayalam)"
+                  rows={3}
+                  value={editing.description_ml || ''}
+                  onChange={e => setEditing({ ...editing, description_ml: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  Content (Malayalam)
+                </label>
+                <textarea
+                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y font-mono text-sm"
+                  placeholder="Full content in Malayalam (HTML or plain text)"
+                  rows={12}
+                  value={editing.content_ml || ''}
+                  onChange={e => setEditing({ ...editing, content_ml: e.target.value })}
+                />
+                <div className="text-[10px] text-[#6e6e73] mt-1">
+                  HTML tags supported: &lt;b&gt;, &lt;i&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;p&gt;, &lt;br&gt;
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors"
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditing(null)}
+                  className="bg-[#333] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#444] transition-colors"
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
