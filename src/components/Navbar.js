@@ -30,6 +30,7 @@ export default function Navbar() {
     { href: '#benefits', label: 'ആനുകൂല്യങ്ങൾ' },
     { href: '#orders', label: 'ഉത്തരവുകൾ' },
     { href: '#links', label: 'പോർട്ടലുകൾ' },
+    { href: '#calculator', label: 'കാൽക്കുലേറ്റർ' },
   ];
 
   return (
