@@ -5,8 +5,6 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Optional helper functions (since your home page expects them)
-
 export async function getSchemes() {
   const { data, error } = await supabase.from('schemes').select('*')
   if (error) throw error
