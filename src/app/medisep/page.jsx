@@ -8,3 +8,9 @@ export default function MedisepPage() {
     </div>
   );
 }
+import Link from 'next/link'; // ഇത് പേജിന്റെ ഏറ്റവും മുകളിൽ കൊടുക്കണം
+
+// ... മെഡിസെപ്പ് കാർഡിന്റെ കോഡിനുള്ളിൽ ...
+<Link href="/medisep">
+  വിശദമായി കാണുക
+</Link>
