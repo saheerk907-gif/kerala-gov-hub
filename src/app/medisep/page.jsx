@@ -61,11 +61,17 @@ export default async function MedisepPage() {
           </div>
         )}
 
-        {!scheme.content_ml && (
+               {!scheme.content_ml && (
           <div className="text-gray-500 text-center py-10">
             കൂടുതൽ വിവരങ്ങൾ അഡ്മിൻ പാനൽ വഴി ഉടൻ അപ്‌ഡേറ്റ് ചെയ്യുന്നതാണ്.
           </div>
         )}
+
+        <div className="mt-10 bg-red-900 p-4">
+          <h2>DEBUG CONTENT</h2>
+          <pre>{JSON.stringify(scheme, null, 2)}</pre>
+        </div>
+
       </div>
     </div>
   );
