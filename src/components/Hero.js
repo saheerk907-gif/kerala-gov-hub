@@ -4,12 +4,11 @@ export default function Hero() {
       <div className="absolute top-[-40%] left-1/2 -translate-x-1/2 w-[900px] h-[900px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, rgba(41,151,255,0.07) 0%, transparent 70%)' }} />
 
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Coat_of_arms_of_Kerala.svg/180px-Coat_of_arms_of_Kerala.svg.png"
-        alt="കേരള സർക്കാർ ചിഹ്നം"
-        className="w-[80px] h-[80px] md:w-[90px] md:h-[90px] rounded-full bg-white p-1.5 object-contain mb-7 animate-fade-up"
-        style={{ boxShadow: '0 0 60px rgba(41,151,255,0.15), 0 0 120px rgba(41,151,255,0.05)' }}
-      />
+     <img 
+  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Emblem_of_Kerala.svg/120px-Emblem_of_Kerala.svg.png"
+  alt="Kerala Government Emblem"
+  className="w-16 h-16 object-contain mx-auto"
+/>
 
       <div className="animate-fade-up animate-fade-up-delay-1 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-[#2997ff] mb-7 font-sans"
         style={{ background: 'rgba(41,151,255,0.1)', border: '1px solid rgba(41,151,255,0.2)' }}>
