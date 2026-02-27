@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { notFound } from 'next/navigation';
 
+// പേജ് ലെവലിൽ റീവാലിഡേഷൻ നൽകുന്നു (60 സെക്കൻഡ്)
 export const revalidate = 60;
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -18,16 +19,29 @@ const CATEGORY_LABELS = {
 };
 
 async function getNews(id) {
+  // fetch-ൽ നിന്ന് { next: { revalidate: 60 } } ഒഴിവാക്കി. 
+  // ഇത് പേജ് ലെവലിൽ നേരത്തെ നൽകിയിട്ടുണ്ട്.
   const res = await fetch(
     `${SUPABASE_URL}/rest/v1/news?id=eq.${id}&select=*`,
-    { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }, next: { revalidate: 60 } }
+    { 
+      headers: { 
+        'apikey': SUPABASE_KEY, 
+        'Authorization': `Bearer ${SUPABASE_KEY}` 
+      } 
+    }
   );
+  
+  if (!res.ok) return null;
+  
   const data = await res.json();
   return data?.[0] || null;
 }
 
 export default async function NewsDetailPage({ params }) {
-  const news = await getNews(params.id);
+  // Next.js-ന്റെ പുതിയ വേർഷനുകളിൽ params await ചെയ്യേണ്ടതുണ്ട്
+  const { id } = await params;
+  const news = await getNews(id);
+
   if (!news) notFound();
 
   const cat = CATEGORY_LABELS[news.category] || CATEGORY_LABELS.general;
@@ -39,7 +53,7 @@ export default async function NewsDetailPage({ params }) {
     <>
       <Navbar />
       <main className="min-h-screen bg-black text-white">
-        {/* Hero */}
+        {/* Hero Section */}
         <div className="relative pt-32 pb-16 px-6 overflow-hidden"
           style={{ background: `linear-gradient(135deg, ${cat.color}08 0%, #000 60%)` }}>
           <div className="absolute inset-0 opacity-20"
@@ -57,7 +71,7 @@ export default async function NewsDetailPage({ params }) {
               <span style={{ color: cat.color }}>{cat.label}</span>
             </div>
 
-            {/* Category + date */}
+            {/* Category + Date */}
             <div className="flex items-center gap-3 mb-5">
               <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full"
                 style={{ color: cat.color, border: `1px solid ${cat.color}30`, background: `${cat.color}10` }}>
@@ -88,13 +102,13 @@ export default async function NewsDetailPage({ params }) {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Content Section */}
         <div className="max-w-3xl mx-auto px-6 py-12">
           {news.content_ml ? (
             <div className="news-content" dangerouslySetInnerHTML={{ __html: news.content_ml }} />
           ) : (
             <div className="text-[#6e6e73] text-sm py-8 text-center">
-              Full content coming soon.
+              വിശദവിവരങ്ങൾ ഉടൻ ലഭ്യമാകും.
             </div>
           )}
 
@@ -116,6 +130,7 @@ export default async function NewsDetailPage({ params }) {
           </div>
         </div>
 
+        {/* Dynamic Styles */}
         <style dangerouslySetInnerHTML={{ __html: `
           .news-content { font-family: 'Noto Sans Malayalam', Georgia, serif; line-height: 1.9; color: #e5e5e7; }
           .news-content h3 { font-size: 1.15rem; font-weight: 700; color: ${cat.color}; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid ${cat.color}; }
