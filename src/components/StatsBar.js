@@ -30,11 +30,21 @@ function StatCard({ stat, index }) {
     return () => obs.disconnect();
   }, [target, index]);
 
-  const display = target >= 1000 ? val.toLocaleString('en-IN') : val;
+  // Smart display: 3000000 → 30 ലക്ഷം, 500000 → 5 ലക്ഷം, others normal
+  function formatNumber(n) {
+    if (n >= 100000) {
+      const lakhs = Math.floor(val / 100000);
+      return `${lakhs} ലക്ഷം`;
+    }
+    if (n >= 1000) return val.toLocaleString('en-IN');
+    return val;
+  }
+
+  const display = formatNumber(target);
 
   return (
     <div ref={ref}
-      className="rounded-2xl px-10 py-8 text-center min-w-[200px] transition-all duration-700"
+      className="relative rounded-2xl px-8 py-7 text-center min-w-[160px] flex-1 transition-all duration-700"
       style={{
         background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%)',
         border: '1px solid rgba(255,255,255,0.12)',
@@ -45,19 +55,20 @@ function StatCard({ stat, index }) {
         filter: visible ? 'blur(0px)' : 'blur(12px)',
         transform: visible ? 'translateY(0)' : 'translateY(16px)',
         transitionDelay: `${index * 120}ms`,
+        maxWidth: '220px',
       }}>
 
       {/* Top shimmer */}
-      <div className="absolute top-0 left-8 right-8 h-px rounded-full"
+      <div className="absolute top-0 left-6 right-6 h-px rounded-full"
         style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)' }} />
 
       {/* Number */}
-      <div className="text-4xl font-black tracking-tight tabular-nums text-white leading-none mb-3 whitespace-nowrap">
-        {display}{stat.suffix || '+'}
+      <div className="text-3xl font-black tracking-tight text-white leading-none mb-2">
+        {display}+
       </div>
 
       {/* Label */}
-      <div className="text-xs font-semibold uppercase tracking-widest text-[#86868b] whitespace-nowrap">
+      <div className="text-[10px] font-bold uppercase tracking-widest text-[#86868b]">
         {stat.label_ml}
       </div>
     </div>
@@ -69,7 +80,7 @@ export default function StatsBar({ stats }) {
 
   return (
     <div className="relative z-[1] py-14 px-6">
-      <div className="max-w-4xl mx-auto flex gap-5 flex-wrap justify-center">
+      <div className="max-w-5xl mx-auto flex gap-4 flex-wrap justify-center">
         {stats.map((s, i) => (
           <StatCard key={s.id} stat={s} index={i} />
         ))}
