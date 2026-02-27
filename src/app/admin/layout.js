@@ -1,31 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-async function supabaseFetch(path, options = {}) {
-  const url = `${SUPABASE_URL}/rest/v1/${path}`;
-  const res = await fetch(url, {
-    ...options,
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      ...options.headers,
-    },
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : [];
-}
-
-export { supabaseFetch };
 
 const navItems = [
   { href: '/admin', label: 'ഡാഷ്‌ബോർഡ്', icon: '🏠', en: 'Dashboard' },
@@ -34,8 +12,26 @@ const navItems = [
   { href: '/admin/links', label: 'ലിങ്കുകൾ', icon: '🔗', en: 'Links' },
 ];
 
+async function refreshToken() {
+  const refresh = sessionStorage.getItem('admin_refresh_token');
+  if (!refresh) return null;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refresh }),
+    });
+    const data = await res.json();
+    if (data.access_token) {
+      sessionStorage.setItem('admin_token', data.access_token);
+      sessionStorage.setItem('admin_refresh_token', data.refresh_token);
+      return data.access_token;
+    }
+  } catch {}
+  return null;
+}
+
 export default function AdminLayout({ children }) {
-  const router = useRouter();
   const pathname = usePathname();
   const [checking, setChecking] = useState(true);
   const [authed, setAuthed] = useState(false);
@@ -45,9 +41,20 @@ export default function AdminLayout({ children }) {
   const [loggingIn, setLoggingIn] = useState(false);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('admin_token');
-    if (token) { setAuthed(true); }
-    setChecking(false);
+    async function check() {
+      const token = sessionStorage.getItem('admin_token');
+      if (token) {
+        // Try to refresh proactively
+        const newToken = await refreshToken();
+        setAuthed(true);
+      }
+      setChecking(false);
+    }
+    check();
+
+    // Auto-refresh every 50 minutes
+    const interval = setInterval(refreshToken, 50 * 60 * 1000);
+    return () => clearInterval(interval);
   }, []);
 
   async function handleLogin(e) {
@@ -57,20 +64,18 @@ export default function AdminLayout({ children }) {
     try {
       const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
         method: 'POST',
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Content-Type': 'application/json',
-        },
+        headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
       if (data.access_token) {
         sessionStorage.setItem('admin_token', data.access_token);
+        sessionStorage.setItem('admin_refresh_token', data.refresh_token);
         setAuthed(true);
       } else {
         setError('ഇമെയിൽ അല്ലെങ്കിൽ പാസ്‌വേഡ് തെറ്റാണ്');
       }
-    } catch (err) {
+    } catch {
       setError('Login failed. Check your credentials.');
     }
     setLoggingIn(false);
@@ -78,6 +83,7 @@ export default function AdminLayout({ children }) {
 
   function handleLogout() {
     sessionStorage.removeItem('admin_token');
+    sessionStorage.removeItem('admin_refresh_token');
     setAuthed(false);
   }
 
@@ -120,7 +126,6 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-black text-white flex">
-      {/* Sidebar */}
       <aside className="w-56 min-h-screen bg-[#0a0a0a] border-r border-white/[0.06] flex flex-col fixed top-0 left-0 bottom-0">
         <div className="p-5 border-b border-white/[0.06]">
           <div className="text-xs font-bold text-[#2997ff] uppercase tracking-widest mb-0.5">Admin Panel</div>
@@ -153,8 +158,6 @@ export default function AdminLayout({ children }) {
           </button>
         </div>
       </aside>
-
-      {/* Main content */}
       <main className="flex-1 ml-56 p-8 min-h-screen">
         {children}
       </main>
