@@ -33,11 +33,7 @@ function StatCard({ stat, index }) {
     return () => obs.disconnect();
   }, [target, index]);
 
-  function formatNumber(n) {
-    if (n >= 100000) return `${Math.floor(val / 100000)} ലക്ഷം`;
-    if (n >= 1000) return val.toLocaleString('en-IN');
-    return val;
-  }
+  const display = val.toLocaleString('en-IN');
 
   return (
     <div ref={ref}
@@ -54,23 +50,23 @@ function StatCard({ stat, index }) {
         transitionDelay: `${index * 130}ms`,
         minWidth: '160px',
         flex: '1',
-        maxWidth: '200px',
+        maxWidth: '210px',
       }}>
 
       {/* Glow dot top */}
       <div className="absolute top-3 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full opacity-60"
-        style={{ background: color, filter: `blur(4px)` }} />
+        style={{ background: color, filter: 'blur(4px)' }} />
 
-      {/* Number */}
-      <div className="text-3xl font-black tracking-tight leading-none" style={{ color }}>
-        {formatNumber(target)}+
+      {/* Number — white */}
+      <div className="text-3xl font-black tracking-tight leading-none text-white">
+        {display}+
       </div>
 
       {/* Divider */}
-      <div className="w-8 h-px" style={{ background: `${color}50` }} />
+      <div className="w-8 h-px" style={{ background: `${color}60` }} />
 
-      {/* Label — same visual weight as number */}
-      <div className="text-base font-bold leading-snug text-white/90 text-center" 
+      {/* Label */}
+      <div className="text-base font-bold leading-snug text-white/90 text-center"
         style={{ fontFamily: "'Noto Sans Malayalam', sans-serif" }}>
         {stat.label_ml}
       </div>
@@ -83,7 +79,6 @@ export default function StatsBar({ stats }) {
 
   return (
     <section className="relative z-[1] py-16 px-6">
-      {/* Section label */}
       <p className="text-center text-[10px] font-bold uppercase tracking-[0.25em] text-[#6e6e73] mb-8">
         കേരള സർക്കാർ ജീവനക്കാർ — ഒരു നോട്ടത്തിൽ
       </p>
