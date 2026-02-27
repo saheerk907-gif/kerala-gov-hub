@@ -1,40 +1,69 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-function AnimatedNumber({ target, suffix }) {
+function StatCard({ stat, index }) {
   const [val, setVal] = useState(0);
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
   const animated = useRef(false);
+  const target = Number(stat.value) || 0;
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !animated.current) {
         animated.current = true;
-        setVisible(true);
-        const start = performance.now();
-        const dur = 2400;
-        function upd(now) {
-          const p = Math.min((now - start) / dur, 1);
-          const eased = 1 - Math.pow(1 - p, 4);
-          setVal(Math.floor(eased * target));
-          if (p < 1) requestAnimationFrame(upd);
-        }
-        requestAnimationFrame(upd);
+        setTimeout(() => {
+          setVisible(true);
+          const start = performance.now();
+          const dur = 2000;
+          function upd(now) {
+            const p = Math.min((now - start) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            setVal(Math.floor(eased * target));
+            if (p < 1) requestAnimationFrame(upd);
+          }
+          requestAnimationFrame(upd);
+        }, index * 120);
       }
-    }, { threshold: 0.3 });
+    }, { threshold: 0.2 });
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
-  }, [target]);
+  }, [target, index]);
 
   const display = target >= 1000 ? val.toLocaleString('en-IN') : val;
 
   return (
-    <div ref={ref} className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-      <span className="text-[clamp(36px,5vw,52px)] font-black tracking-tight tabular-nums"
-        style={{ background: 'linear-gradient(135deg, #ffffff 0%, #aeaeb2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-        {display}{suffix}
-      </span>
+    <div ref={ref}
+      className="relative flex-1 min-w-[140px] rounded-2xl p-6 text-center transition-all duration-700"
+      style={{
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.09)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06)',
+        opacity: visible ? 1 : 0,
+        filter: visible ? 'blur(0px)' : 'blur(12px)',
+        transform: visible ? 'translateY(0) scale(1)' : 'translateY(16px) scale(0.97)',
+        transitionDelay: `${index * 100}ms`,
+      }}>
+      {/* Top shimmer line */}
+      <div className="absolute top-0 left-6 right-6 h-px rounded-full"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }} />
+
+      {/* Number */}
+      <div className="text-[clamp(32px,4vw,48px)] font-black tracking-tight tabular-nums leading-none mb-2"
+        style={{
+          background: 'linear-gradient(160deg, #ffffff 30%, #6e6e73 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+        }}>
+        {display}{stat.suffix || '+'}
+      </div>
+
+      {/* Label */}
+      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6e6e73]">
+        {stat.label_ml}
+      </div>
     </div>
   );
 }
@@ -43,26 +72,10 @@ export default function StatsBar({ stats }) {
   if (!stats?.length) return null;
 
   return (
-    <div className="relative z-[1] py-16 px-6 border-y border-white/[0.06] overflow-hidden">
-      {/* subtle background glow */}
-      <div className="absolute inset-0 opacity-20"
-        style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, #2997ff10, transparent)' }} />
-
-      <div className="relative max-w-4xl mx-auto flex justify-center gap-0 flex-wrap">
+    <div className="relative z-[1] py-14 px-6">
+      <div className="max-w-3xl mx-auto flex gap-4 flex-wrap justify-center">
         {stats.map((s, i) => (
-          <div key={s.id} className="flex items-stretch">
-            {/* Stat item */}
-            <div className="px-10 py-4 text-center group">
-              <AnimatedNumber target={Number(s.value) || 0} suffix={s.suffix || '+'} />
-              <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#6e6e73] mt-2 group-hover:text-[#86868b] transition-colors">
-                {s.label_ml}
-              </div>
-            </div>
-            {/* Divider */}
-            {i < stats.length - 1 && (
-              <div className="self-center w-px h-10 bg-white/[0.08]" />
-            )}
-          </div>
+          <StatCard key={s.id} stat={s} index={i} />
         ))}
       </div>
     </div>
