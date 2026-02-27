@@ -23,15 +23,27 @@ async function api(path, method = 'GET', body = null) {
 export default function AdminSchemes() {
   const [schemes, setSchemes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
 
   async function load() {
     setLoading(true);
+    setError('');
     try {
       const data = await api('schemes?select=*&order=slug');
-      setSchemes(Array.isArray(data) ? data : []);
-    } catch { setSchemes([]); }
+      if (Array.isArray(data)) {
+        setSchemes(data);
+      } else if (data?.message) {
+        setError(data.message);
+        setSchemes([]);
+      } else {
+        setSchemes([]);
+      }
+    } catch (e) {
+      setError(e.message);
+      setSchemes([]);
+    }
     setLoading(false);
   }
 
@@ -62,8 +74,23 @@ export default function AdminSchemes() {
       <h1 className="text-2xl font-bold mb-1">പദ്ധതികൾ</h1>
       <p className="text-xs text-[#6e6e73] mb-6">Edit scheme details shown on public site</p>
 
+      {error && (
+        <div className="bg-[#ff453a]/10 border border-[#ff453a]/30 rounded-xl p-4 mb-4 text-sm text-[#ff453a]">
+          ⚠️ Error: {error}
+        </div>
+      )}
+
       {loading ? (
         <div className="text-center text-[#6e6e73] py-12">Loading...</div>
+      ) : schemes.length === 0 ? (
+        <div className="text-center text-[#6e6e73] py-16 bg-[#111] rounded-2xl border border-white/[0.08]">
+          <div className="text-4xl mb-3">📭</div>
+          <div className="font-semibold mb-1">No schemes found</div>
+          <div className="text-xs">Run the SQL seed script in Supabase to add schemes</div>
+          <button onClick={load} className="mt-4 px-4 py-2 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer">
+            Retry
+          </button>
+        </div>
       ) : (
         <div className="space-y-3">
           {schemes.map(s => (
