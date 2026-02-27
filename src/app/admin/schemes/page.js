@@ -1,116 +1,136 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+async function api(path, method = 'GET', body = null) {
+  const token = sessionStorage.getItem('admin_token');
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${token || SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+    },
+    body: body ? JSON.stringify(body) : null,
+  });
+  const text = await res.text();
+  return text ? JSON.parse(text) : [];
+}
 
 export default function AdminSchemes() {
   const [schemes, setSchemes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
+  const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchSchemes();
-  }, []);
-
-  async function fetchSchemes() {
-    const { data } = await supabase.from('schemes').select('*').order('slug');
-    setSchemes(data || []);
+  async function load() {
+    setLoading(true);
+    try {
+      const data = await api('schemes?select=*&order=slug');
+      setSchemes(Array.isArray(data) ? data : []);
+    } catch { setSchemes([]); }
+    setLoading(false);
   }
 
-  async function handleUpdate(e) {
+  useEffect(() => { load(); }, []);
+
+  async function handleSave(e) {
     e.preventDefault();
-    const { error } = await supabase
-      .from('schemes')
-      .update({
+    setSaving(true);
+    try {
+      await api(`schemes?id=eq.${editing.id}`, 'PATCH', {
         title_ml: editing.title_ml,
+        title_en: editing.title_en,
         description_ml: editing.description_ml,
         content_ml: editing.content_ml,
-      })
-      .eq('id', editing.id);
-    if (!error) {
-      alert('വിജയകരമായി അപ്‌ഡേറ്റ് ചെയ്തു!');
+      });
       setEditing(null);
-      fetchSchemes();
-    } else {
-      alert('Error: ' + error.message);
+      load();
+    } catch (err) {
+      alert('Error: ' + err.message);
     }
+    setSaving(false);
   }
 
+  const inp = "w-full px-3 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors";
+
   return (
-    <div className="p-8 text-white bg-black min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">പദ്ധതികൾ മാനേജ് ചെയ്യുക</h1>
+    <div>
+      <h1 className="text-2xl font-bold mb-1">പദ്ധതികൾ</h1>
+      <p className="text-xs text-[#6e6e73] mb-6">Edit scheme details shown on public site</p>
 
-      <div className="grid gap-4">
-        {schemes.map(s => (
-          <div key={s.id} className="bg-[#111] p-5 border border-white/10 rounded-2xl flex justify-between items-center">
-            <span className="font-bold">{s.title_ml || s.slug}</span>
-            <button
-              onClick={() => setEditing({ ...s })}
-              className="bg-blue-600 px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
-            >
-              Edit
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {editing && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#1a1a1a] p-6 rounded-2xl w-full max-w-4xl border border-white/10 max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4 text-white">Editing: {editing.slug}</h2>
-
-            <form onSubmit={handleUpdate} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
-                  Title (Malayalam)
-                </label>
-                <input
-                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors"
-                  placeholder="Title (Malayalam)"
-                  value={editing.title_ml || ''}
-                  onChange={e => setEditing({ ...editing, title_ml: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
-                  Description (Malayalam)
-                </label>
-                <textarea
-                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y"
-                  placeholder="Description (Malayalam)"
-                  rows={3}
-                  value={editing.description_ml || ''}
-                  onChange={e => setEditing({ ...editing, description_ml: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
-                  Content (Malayalam)
-                </label>
-                <textarea
-                  className="w-full p-3 rounded-xl bg-[#111] border border-white/10 text-white outline-none focus:border-blue-500 transition-colors resize-y font-mono text-sm"
-                  placeholder="Full content in Malayalam (HTML or plain text)"
-                  rows={12}
-                  value={editing.content_ml || ''}
-                  onChange={e => setEditing({ ...editing, content_ml: e.target.value })}
-                />
-                <div className="text-[10px] text-[#6e6e73] mt-1">
-                  HTML tags supported: &lt;b&gt;, &lt;i&gt;, &lt;ul&gt;, &lt;li&gt;, &lt;p&gt;, &lt;br&gt;
+      {loading ? (
+        <div className="text-center text-[#6e6e73] py-12">Loading...</div>
+      ) : (
+        <div className="space-y-3">
+          {schemes.map(s => (
+            <div key={s.id} className="bg-[#111] border border-white/[0.08] rounded-2xl p-5 flex items-center justify-between hover:bg-[#1a1a1a] transition-all">
+              <div className="flex items-center gap-4">
+                <div className="text-3xl">{s.icon || '📋'}</div>
+                <div>
+                  <div className="font-bold text-white">{s.title_ml || s.slug}</div>
+                  <div className="text-xs text-[#6e6e73]">{s.title_en} • {s.slug}</div>
+                  {s.description_ml && (
+                    <div className="text-xs text-[#86868b] mt-1 max-w-lg truncate">{s.description_ml}</div>
+                  )}
                 </div>
               </div>
+              <button onClick={() => setEditing({ ...s })}
+                className="px-4 py-2 bg-[#2997ff]/10 text-[#2997ff] rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#2997ff]/20 transition-all">
+                Edit
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
+      {/* Edit Modal */}
+      {editing && (
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-start justify-center pt-16 px-4"
+          onClick={() => setEditing(null)}>
+          <div className="bg-[#111] border border-white/[0.08] rounded-2xl p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto"
+            onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="text-lg font-bold">Edit: {editing.title_ml}</h2>
+                <div className="text-xs text-[#6e6e73]">slug: {editing.slug}</div>
+              </div>
+              <button onClick={() => setEditing(null)} className="text-[#6e6e73] hover:text-white text-xl border-none bg-transparent cursor-pointer">✕</button>
+            </div>
+            <form onSubmit={handleSave} className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Malayalam Title</label>
+                  <input value={editing.title_ml || ''} onChange={e => setEditing({...editing, title_ml: e.target.value})}
+                    placeholder="Malayalam title" className={inp} />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">English Title</label>
+                  <input value={editing.title_en || ''} onChange={e => setEditing({...editing, title_en: e.target.value})}
+                    placeholder="English title" className={inp} />
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Short Description (Malayalam)</label>
+                <textarea value={editing.description_ml || ''} onChange={e => setEditing({...editing, description_ml: e.target.value})}
+                  rows={3} placeholder="Short description shown on cards..." className={inp + ' resize-y'} />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Full Content (Malayalam)</label>
+                <textarea value={editing.content_ml || ''} onChange={e => setEditing({...editing, content_ml: e.target.value})}
+                  rows={10} placeholder="Full detailed content. HTML tags supported: <b>, <i>, <ul>, <li>, <p>, <br>" className={inp + ' resize-y font-mono text-xs'} />
+                <div className="text-[10px] text-[#6e6e73] mt-1">HTML supported: &lt;b&gt; &lt;i&gt; &lt;ul&gt; &lt;li&gt; &lt;p&gt; &lt;br&gt; &lt;h3&gt;</div>
+              </div>
               <div className="flex gap-3 pt-2">
-                <button
-                  type="submit"
-                  className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors"
-                >
-                  Save Changes
+                <button type="submit" disabled={saving}
+                  className="flex-1 py-3 bg-[#30d158] text-black rounded-xl text-sm font-black hover:bg-[#28b84c] transition-all disabled:opacity-50 border-none cursor-pointer">
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setEditing(null)}
-                  className="bg-[#333] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#444] transition-colors"
-                >
+                <button type="button" onClick={() => setEditing(null)}
+                  className="px-6 py-3 bg-white/5 text-[#86868b] rounded-xl text-sm font-bold hover:text-white transition-all border-none cursor-pointer">
                   Cancel
                 </button>
               </div>
