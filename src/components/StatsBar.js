@@ -1,15 +1,12 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-const COLORS = ['#ff9f0a', '#2997ff', '#30d158', '#bf5af2'];
-
 function StatCard({ stat, index }) {
   const [val, setVal] = useState(0);
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
   const animated = useRef(false);
   const target = Number(stat.value) || 0;
-  const color = COLORS[index % COLORS.length];
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => {
@@ -37,13 +34,13 @@ function StatCard({ stat, index }) {
 
   return (
     <div ref={ref}
-      className="relative rounded-2xl p-6 text-center transition-all duration-700 flex flex-col items-center justify-center gap-3"
+      className="relative rounded-2xl p-6 text-center flex flex-col items-center justify-center gap-3 transition-all duration-700"
       style={{
-        background: `linear-gradient(145deg, ${color}10 0%, rgba(0,0,0,0) 100%)`,
-        border: `1px solid ${color}30`,
+        background: 'rgba(255,255,255,0.05)',
+        border: '1px solid rgba(255,255,255,0.10)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: `0 0 40px ${color}10, inset 0 1px 0 ${color}20`,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08)',
         opacity: visible ? 1 : 0,
         filter: visible ? 'blur(0px)' : 'blur(14px)',
         transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
@@ -53,20 +50,20 @@ function StatCard({ stat, index }) {
         maxWidth: '210px',
       }}>
 
-      {/* Glow dot top */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 w-6 h-1 rounded-full opacity-60"
-        style={{ background: color, filter: 'blur(4px)' }} />
+      {/* Top shimmer */}
+      <div className="absolute top-0 left-8 right-8 h-px rounded-full"
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)' }} />
 
-      {/* Number — white */}
+      {/* Number */}
       <div className="text-3xl font-black tracking-tight leading-none text-white">
         {display}+
       </div>
 
       {/* Divider */}
-      <div className="w-8 h-px" style={{ background: `${color}60` }} />
+      <div className="w-8 h-px bg-white/20" />
 
       {/* Label */}
-      <div className="text-base font-bold leading-snug text-white/90 text-center"
+      <div className="text-base font-bold leading-snug text-white/80 text-center"
         style={{ fontFamily: "'Noto Sans Malayalam', sans-serif" }}>
         {stat.label_ml}
       </div>
