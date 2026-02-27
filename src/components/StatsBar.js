@@ -23,7 +23,7 @@ function StatCard({ stat, index }) {
             if (p < 1) requestAnimationFrame(upd);
           }
           requestAnimationFrame(upd);
-        }, index * 120);
+        }, index * 150);
       }
     }, { threshold: 0.2 });
     if (ref.current) obs.observe(ref.current);
@@ -34,30 +34,30 @@ function StatCard({ stat, index }) {
 
   return (
     <div ref={ref}
-      className="relative flex-1 min-w-[140px] rounded-2xl p-6 text-center transition-all duration-700"
+      className="rounded-2xl px-10 py-8 text-center min-w-[200px] transition-all duration-700"
       style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)',
-        border: '1px solid rgba(255,255,255,0.15)',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%)',
+        border: '1px solid rgba(255,255,255,0.12)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08)',
         opacity: visible ? 1 : 0,
-        filter: visible ? 'blur(0px)' : 'blur(14px)',
-        transform: visible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.96)',
-        transitionDelay: `${index * 100}ms`,
+        filter: visible ? 'blur(0px)' : 'blur(12px)',
+        transform: visible ? 'translateY(0)' : 'translateY(16px)',
+        transitionDelay: `${index * 120}ms`,
       }}>
 
       {/* Top shimmer */}
       <div className="absolute top-0 left-8 right-8 h-px rounded-full"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)' }} />
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent)' }} />
 
       {/* Number */}
-      <div className="text-[clamp(34px,4vw,50px)] font-black tracking-tight tabular-nums leading-none mb-2 text-white">
+      <div className="text-4xl font-black tracking-tight tabular-nums text-white leading-none mb-3 whitespace-nowrap">
         {display}{stat.suffix || '+'}
       </div>
 
       {/* Label */}
-      <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-[#aeaeb2]">
+      <div className="text-xs font-semibold uppercase tracking-widest text-[#86868b] whitespace-nowrap">
         {stat.label_ml}
       </div>
     </div>
@@ -69,7 +69,7 @@ export default function StatsBar({ stats }) {
 
   return (
     <div className="relative z-[1] py-14 px-6">
-      <div className="max-w-3xl mx-auto flex gap-4 flex-wrap justify-center">
+      <div className="max-w-4xl mx-auto flex gap-5 flex-wrap justify-center">
         {stats.map((s, i) => (
           <StatCard key={s.id} stat={s} index={i} />
         ))}
