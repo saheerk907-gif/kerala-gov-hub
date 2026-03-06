@@ -282,7 +282,7 @@ export default function NPSvsAPSPage() {
         <div className="rounded-2xl p-6 mb-8"
           style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-5">Your Details</div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
             <GlassInput label="Basic Pay (₹)" value={currentBasic} onChange={setCurrentBasic} min={15000} max={200000} step={1000} />
             <GlassInput label="Current DA %" value={currentDA}    onChange={setCurrentDA}    min={0}     max={100}    />
             <GlassInput label="Join Year"    value={joinYear}     onChange={setJoinYear}     min={1990}  max={nowYear} />
@@ -342,11 +342,11 @@ export default function NPSvsAPSPage() {
         </div>
 
         {/* ── Tabs ──────────────────────────────────────────────────────────── */}
-        <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit"
+        <div className="flex flex-wrap gap-1 mb-6 p-1 rounded-xl w-full sm:w-fit overflow-x-auto"
           style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className="px-4 py-2 rounded-lg text-[12px] font-bold transition-all"
+              className="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-[11px] sm:text-[12px] font-bold transition-all whitespace-nowrap"
               style={{
                 background: tab === t.id ? 'rgba(255,255,255,0.10)' : 'transparent',
                 color: tab === t.id ? '#fff' : 'rgba(255,255,255,0.40)',

@@ -28,10 +28,13 @@
 }
 
 /* ── Base ──────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+  -webkit-text-size-adjust: 100%;
 }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -40,6 +43,14 @@ html {
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+/* ── Mobile Safety ─────────────────────────────────────── */
+img, video, svg { max-width: 100%; }
+/* Prevent iOS zoom on input focus */
+@media (max-width: 640px) {
+  input, select, textarea { font-size: 16px !important; }
 }
 
 /* ── Background Mesh ───────────────────────────────────── */

@@ -299,7 +299,7 @@ export default function DaArrearPage() {
                 {payRows.length > 0 && (
                   <div className="space-y-3 mb-4">
                     {payRows.map(row => (
-                      <div key={row.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end">
+                      <div key={row.id} className="grid grid-cols-2 sm:grid-cols-[1fr_1fr_1fr_auto] gap-3 items-end">
                         <div>
                           <label className={labelCls}>Type</label>
                           <select className={inputCls} value={row.type} onChange={e => updateRow(row.id, 'type', e.target.value)}>

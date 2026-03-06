@@ -331,7 +331,7 @@ export default function PensionPage() {
             </div>
 
             {/* Annual figures */}
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 { label: 'Annual Basic Pension', value: fmtL(result.pension * 12),      color: '#2997ff' },
                 { label: 'Annual Gross Pension', value: fmtL(result.grossPension * 12), color: '#30d158' },

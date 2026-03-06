@@ -231,18 +231,18 @@ export default function PayCalculator() {
             <div className="text-[10px] tracking-[3px] text-white/70 uppercase mb-4 font-bold text-center">
               ESTIMATED MONTHLY TAKE-HOME PAY
             </div>
-            <div className="grid grid-cols-3 gap-4 mb-5 items-center">
-              <div className="bg-white/10 rounded-xl p-4 text-center">
-                <div className="text-[9px] text-white/60 uppercase mb-2">ഇപ്പോൾ</div>
-                <div className="text-2xl font-black">{fmt(result.cur.net)}</div>
+            <div className="grid grid-cols-[1fr_auto_1fr] gap-3 mb-5 items-center">
+              <div className="bg-white/10 rounded-xl p-3 sm:p-4 text-center">
+                <div className="text-[9px] text-white/60 uppercase mb-1 sm:mb-2">ഇപ്പോൾ</div>
+                <div className="text-xl sm:text-2xl font-black">{fmt(result.cur.net)}</div>
               </div>
-              <div className="text-center text-white/40 text-2xl">→</div>
-              <div className="bg-white/20 rounded-xl p-4 text-center border border-white/30 backdrop-blur-sm">
-                <div className="text-[9px] text-white/90 uppercase mb-2 font-bold text-[#30d158]">പുതിയ ശമ്പളം</div>
-                <div className="text-3xl font-black text-white">{fmt(result.rev.net)}</div>
+              <div className="text-center text-white/40 text-xl px-1">→</div>
+              <div className="bg-white/20 rounded-xl p-3 sm:p-4 text-center border border-white/30 backdrop-blur-sm">
+                <div className="text-[9px] text-white/90 uppercase mb-1 sm:mb-2 font-bold text-[#30d158]">പുതിയ ശമ്പളം</div>
+                <div className="text-2xl sm:text-3xl font-black text-white">{fmt(result.rev.net)}</div>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 bg-black/10 rounded-xl p-4 text-center">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 bg-black/10 rounded-xl p-3 sm:p-4 text-center">
               <div>
                 <div className="text-[9px] text-white/60 uppercase mb-1">Net Hike</div>
                 <div className="text-xl font-black text-[#30d158]">{fmt(netHike)}</div>
