@@ -63,6 +63,16 @@ const tools = [
     tags: ['G.O.(P)', 'G.O.(Ms)', 'Circular', 'Finance'],
   },
   {
+    icon: '💰',
+    title: 'Pension Calculator',
+    subtitle: 'KSR Part III — Monthly Pension',
+    desc: 'Average Emoluments, half-year units, family pension — KSR Part III അനുസരിച്ച് പെൻഷൻ കണക്കാക്കൂ',
+    href: '/pension',
+    color: '#2997ff',
+    badge: 'NEW',
+    tags: ['Pension', 'AE', 'Family Pension', 'DA'],
+  },
+  {
     icon: '🎖️',
     title: 'DCRG Calculator',
     subtitle: 'Death-cum-Retirement Gratuity',

@@ -46,38 +46,49 @@ function getDARate(retireDate, prc) {
   return rate;
 }
 
+const MAX_DCRG = 2000000; // ₹20 lakhs current ceiling
+
 // ─── Core DCRG calculation ────────────────────────────────────────────────────
 function calcDCRG({ basic, daRate, serviceYears, serviceMonths, retireType }) {
   const daAmt = Math.round(basic * daRate / 100);
-  const le    = basic + daAmt;                         // Last Emoluments
+  const le    = basic + daAmt;                         // Last Emoluments (monthly)
 
-  // Qualifying service in completed half-year (6-month) periods
-  const totalMonths  = serviceYears * 12 + serviceMonths;
-  const halfYears    = Math.floor(totalMonths / 6) + (totalMonths % 6 >= 3 ? 1 : 0);
-  const cappedHalf   = Math.min(halfYears, 66);        // max 33 years = 66 half-years
+  // Qualifying service rounding:
+  // If remaining months > 6 (i.e., 6 months + 1 day or more), round up to next full year
+  const qualifyingYears = Math.min(serviceYears + (serviceMonths > 6 ? 1 : 0), 33);
+  const totalMonths     = serviceYears * 12 + serviceMonths;
+  const totalYears      = serviceYears + serviceMonths / 12;
 
-  // Retirement DCRG
-  const retireDCRG   = Math.ceil(le * cappedHalf / 4);
+  // Eligible for retirement DCRG only if qualifying service >= 5 years
+  const eligible = totalYears >= 5;
 
-  // Death gratuity minimums (KSR Rule 77)
-  let deathDCRG;
-  if (totalMonths < 6) {
-    deathDCRG = Math.ceil(le * 2);            // 2 months' LE
-  } else if (totalMonths < 60) {              // < 5 years
-    deathDCRG = Math.ceil(le * 6);            // 6 months' LE
-  } else if (totalMonths < 240) {             // 5–20 years
-    deathDCRG = Math.ceil(le * 12);           // 12 months' LE
+  // Retirement DCRG = LE × qualifying_years / 2, capped at ₹20L
+  const retireDCRGRaw = Math.ceil(le * qualifyingYears / 2);
+  const retireDCRG    = eligible ? Math.min(retireDCRGRaw, MAX_DCRG) : 0;
+
+  // Death Gratuity (KSR Rule 77) — no minimum service requirement
+  let deathDCRGRaw;
+  if (totalYears < 1) {
+    deathDCRGRaw = le * 2;                        // < 1 year  → 2 months' LE
+  } else if (totalYears < 5) {
+    deathDCRGRaw = le * 6;                        // 1–5 yrs   → 6 months' LE
+  } else if (totalYears < 20) {
+    deathDCRGRaw = le * 12;                       // 5–20 yrs  → 12 months' LE
   } else {
-    deathDCRG = retireDCRG;                   // Normal formula
+    // 20+ yrs: ½ month per year (min 12×, max 16.5×)
+    const formula = le * qualifyingYears / 2;
+    deathDCRGRaw  = Math.max(le * 12, Math.min(formula, le * 16.5));
   }
+  const deathDCRG = Math.min(Math.ceil(deathDCRGRaw), MAX_DCRG);
 
   const dcrg = retireType === 'death' ? deathDCRG : retireDCRG;
 
   return {
-    daAmt, le, halfYears, cappedHalf,
+    daAmt, le, qualifyingYears, totalMonths, eligible,
     retireDCRG, deathDCRG, dcrg,
-    totalMonths,
-    effectiveYears: (cappedHalf / 2).toFixed(1),
+    cappedAt20L: retireType === 'death'
+      ? Math.ceil(deathDCRGRaw) > MAX_DCRG
+      : retireDCRGRaw > MAX_DCRG,
   };
 }
 
@@ -139,7 +150,7 @@ export default function DCRGPage() {
     basic, daRate: effectiveDA, serviceYears, serviceMonths, retireType,
   }), [basic, effectiveDA, serviceYears, serviceMonths, retireType]);
 
-  const halfYearDisplay = `${result.cappedHalf} half-years${result.halfYears > 66 ? ` (capped from ${result.halfYears})` : ''}`;
+  const qualifyingDisplay = `${result.qualifyingYears} yrs${serviceMonths > 6 ? ` (rounded up from ${serviceYears}y ${serviceMonths}m)` : serviceMonths === 6 ? ` + 6m (not rounded)` : serviceMonths > 0 ? ` + ${serviceMonths}m` : ''}`;
 
   return (
     <div className="relative min-h-screen bg-aurora overflow-x-hidden">
@@ -273,21 +284,35 @@ export default function DCRGPage() {
               <div className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: '#c8960c' }}>
                 {retireType === 'death' ? 'Death Gratuity' : 'DCRG Amount'}
               </div>
-              <div className="text-[42px] font-[900] leading-none tracking-tight text-white mb-1">
-                {fmt(result.dcrg)}
-              </div>
-              <div className="text-[12px] text-white/40 mt-2">
-                {retireType === 'death'
-                  ? result.totalMonths >= 240
-                    ? 'Service ≥ 20 yrs — Normal formula applies'
-                    : result.totalMonths >= 60
-                      ? '5–20 yrs service → 12 months\' emoluments'
-                      : result.totalMonths >= 6
-                        ? '< 5 yrs service → 6 months\' emoluments'
-                        : '< 6 months service → 2 months\' emoluments'
-                  : `LE × ${result.cappedHalf} half-years ÷ 4`
-                }
-              </div>
+
+              {retireType === 'retirement' && !result.eligible ? (
+                <div className="text-[16px] font-bold text-red-400 mt-2">
+                  Not eligible — minimum 5 years qualifying service required
+                </div>
+              ) : (
+                <>
+                  <div className="text-[42px] font-[900] leading-none tracking-tight text-white mb-1">
+                    {fmt(result.dcrg)}
+                  </div>
+                  {result.cappedAt20L && (
+                    <div className="text-[11px] font-bold mt-1" style={{ color: '#ff9f0a' }}>
+                      ⚠ Capped at ₹20,00,000 (maximum limit)
+                    </div>
+                  )}
+                  <div className="text-[12px] text-white/40 mt-2">
+                    {retireType === 'death'
+                      ? result.totalMonths < 12
+                        ? '< 1 year service → 2 months\' emoluments'
+                        : result.totalMonths < 60
+                          ? '1–5 yrs service → 6 months\' emoluments'
+                          : result.totalMonths < 240
+                            ? '5–20 yrs service → 12 months\' emoluments'
+                            : '20+ yrs — ½ month/year (min 12×, max 16.5×)'
+                      : `LE × ${result.qualifyingYears} yrs ÷ 2`
+                    }
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Breakdown */}
@@ -299,10 +324,10 @@ export default function DCRGPage() {
               <ResultRow label={`DA @ ${effectiveDA}%`} value={fmt(result.daAmt)} color="#2997ff" />
               <ResultRow label="Last Emoluments (LE)" value={fmt(result.le)} color="#64d2ff"
                 sub="Basic Pay + DA" />
-              <ResultRow label="Qualifying Half-Years (n)" value={halfYearDisplay}
-                sub={`${serviceYears} yrs ${serviceMonths} mos → ${result.totalMonths} months`} />
-              <ResultRow label="Formula" value={`LE × ${result.cappedHalf} ÷ 4`}
-                sub={`= ${fmt(result.le)} × ${result.cappedHalf} ÷ 4`} />
+              <ResultRow label="Qualifying Service" value={qualifyingDisplay}
+                sub={`6m+1day rule applies${result.qualifyingYears === 33 ? ' · capped at 33 yrs' : ''}`} />
+              <ResultRow label="Formula" value={`LE × ${result.qualifyingYears} ÷ 2`}
+                sub={`= ${fmt(result.le)} × ${result.qualifyingYears} ÷ 2`} />
               <ResultRow label="Retirement DCRG" value={fmt(result.retireDCRG)} color="#30d158" />
               {retireType === 'death' && (
                 <ResultRow label="Death Gratuity (applied)" value={fmt(result.deathDCRG)} color="#c8960c" big />
@@ -312,13 +337,14 @@ export default function DCRGPage() {
             {/* KSR Note */}
             <div className="rounded-2xl p-5"
               style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">KSR Rule 77 — Death Gratuity Minimums</div>
-              <div className="flex flex-col gap-2">
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">KSR Rule 77 — DCRG Rules</div>
+              <div className="flex flex-col gap-2 mb-4">
+                <div className="text-[11px] font-bold text-white/40 mb-1">Death Gratuity (no min service required)</div>
                 {[
-                  { range: '< 6 months service',   amount: '2 months\' LE'  },
-                  { range: '6 months – 5 years',    amount: '6 months\' LE'  },
-                  { range: '5 years – 20 years',    amount: '12 months\' LE' },
-                  { range: '20+ years',             amount: 'Normal DCRG formula' },
+                  { range: '< 1 year service',   amount: '2 × monthly LE'  },
+                  { range: '1 – 5 years',         amount: '6 × monthly LE'  },
+                  { range: '5 – 20 years',         amount: '12 × monthly LE' },
+                  { range: '20+ years',            amount: 'LE × yrs ÷ 2 (min 12×, max 16.5×)' },
                 ].map(row => (
                   <div key={row.range} className="flex justify-between text-[11px]">
                     <span className="text-white/35">{row.range}</span>
@@ -326,9 +352,20 @@ export default function DCRGPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-4 pt-3 border-t border-white/[0.06] text-[11px] text-white/25 leading-relaxed">
-                Max qualifying service = 33 years. Retirement DCRG = LE × n ÷ 4, where n = completed
-                half-year periods (months ≥ 3 in a half-year period are rounded up).
+              <div className="pt-3 border-t border-white/[0.06] flex flex-col gap-1.5">
+                <div className="text-[11px] font-bold text-white/40 mb-1">Retirement DCRG</div>
+                {[
+                  { label: 'Formula',            value: 'LE × qualifying years ÷ 2' },
+                  { label: 'Min qualifying svc', value: '5 years' },
+                  { label: 'Max qualifying svc', value: '33 years' },
+                  { label: 'Max DCRG amount',    value: '₹20,00,000' },
+                  { label: 'Service rounding',   value: '6 months + 1 day → full year' },
+                ].map(r => (
+                  <div key={r.label} className="flex justify-between text-[11px]">
+                    <span className="text-white/30">{r.label}</span>
+                    <span className="text-white/55 font-semibold">{r.value}</span>
+                  </div>
+                ))}
               </div>
             </div>
 

@@ -26,6 +26,7 @@ const navLinks = [
   { href: '#orders',     label: 'ഉത്തരവുകൾ' },
   { href: '#calculator', label: 'PRC കാൽക്കുലേറ്റർ' },
   { href: '/da-arrear',  label: 'DA Arrear' },
+  { href: '/pension',   label: 'Pension' },
   { href: '/nps-aps',   label: 'NPS vs APS' },
   { href: '#links',      label: 'പോർട്ടലുകൾ' },
 ];
