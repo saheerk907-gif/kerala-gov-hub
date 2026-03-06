@@ -4,7 +4,6 @@ import AnnouncementBanner from '@/components/AnnouncementBanner';
 import StatsBar from '@/components/StatsBar';
 import ToolsSection from '@/components/ToolsSection';
 import NewSection from '@/components/NewSection';
-import PayCalculator from '@/components/PayCalculator';
 import SchemesSection from '@/components/SchemesSection';
 import ImportantDatesSection from '@/components/ImportantDatesSection';
 import HighlightsSection from '@/components/HighlightsSection';
@@ -45,20 +44,11 @@ export default async function HomePage() {
         <ToolsSection />
       </ScrollReveal>
 
-      {/* 5. News + Pay Calculator side by side */}
+      {/* 5. News — full width */}
       <section className="py-16 px-4 md:px-6 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-5">
-            <ScrollReveal direction="up" delay={0.1}>
-              <NewSection news={news} />
-            </ScrollReveal>
-          </div>
-          <div className="lg:col-span-7">
-            <ScrollReveal direction="scale" delay={0.2}>
-              <PayCalculator />
-            </ScrollReveal>
-          </div>
-        </div>
+        <ScrollReveal direction="up" delay={0.1}>
+          <NewSection news={news} />
+        </ScrollReveal>
       </section>
 
       {/* 6. Schemes */}

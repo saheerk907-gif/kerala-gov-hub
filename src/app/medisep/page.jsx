@@ -1,17 +1,18 @@
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Link from 'next/link';
 
 export const revalidate = 60;
 
 export default async function MedisepPage() {
-  const { data } = await supabase
-    .from('schemes')
-    .select('*')
-    .eq('slug', 'medisep')
-    .single();
+  const [{ data }, { data: articles }] = await Promise.all([
+    supabase.from('schemes').select('*').eq('slug', 'medisep').single(),
+    supabase.from('news').select('*').eq('category', 'medisep').order('created_at', { ascending: false }),
+  ]);
 
   const scheme = data || {};
+  const posts = articles || [];
 
   return (
     <>
@@ -57,14 +58,45 @@ export default async function MedisepPage() {
         </div>
 
         <div className="max-w-4xl mx-auto px-6 py-16">
-          {scheme.content_ml ? (
-            <div className="scheme-content" dangerouslySetInnerHTML={{ __html: scheme.content_ml }} />
-          ) : (
+          {scheme.content_ml && (
+            <div className="scheme-content mb-16" dangerouslySetInnerHTML={{ __html: scheme.content_ml }} />
+          )}
+
+          {posts.length > 0 && (
+            <div>
+              <h2 className="text-2xl font-black text-white mb-8">Medisep ലേഖനങ്ങൾ</h2>
+              <div className="flex flex-col gap-4">
+                {posts.map(post => (
+                  <Link key={post.id} href={`/news/${post.id}`}
+                    className="group block p-6 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+                    style={{ background: 'rgba(255,159,10,0.04)', border: '1px solid rgba(255,159,10,0.12)' }}>
+                    {post.image_url && (
+                      <img src={post.image_url} alt="" className="w-full h-48 object-cover rounded-xl mb-4" />
+                    )}
+                    <div className="text-xs text-[#ff9f0a] font-bold uppercase tracking-widest mb-2">
+                      {new Date(post.created_at).toLocaleDateString('ml-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                    </div>
+                    <h3 className="text-lg font-bold text-white/90 group-hover:text-white mb-2 transition-colors"
+                      style={{ fontFamily: "'Meera', sans-serif" }}>
+                      {post.title_ml}
+                    </h3>
+                    {post.summary_ml && (
+                      <p className="text-sm text-[#86868b] leading-relaxed line-clamp-3">{post.summary_ml}</p>
+                    )}
+                    <span className="inline-block mt-3 text-xs font-bold text-[#ff9f0a]">വായിക്കുക →</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {!scheme.content_ml && posts.length === 0 && (
             <div className="text-center py-20 text-[#6e6e73]">
               <div className="text-5xl mb-4">🏥</div>
               <p>Content coming soon.</p>
             </div>
           )}
+
           <div className="mt-16 pt-8 border-t border-white/[0.06]">
             <a href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
               style={{ background: '#ff9f0a15', color: '#ff9f0a', border: '1px solid #ff9f0a30' }}>

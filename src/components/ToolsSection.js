@@ -57,7 +57,7 @@ const tools = [
     title: 'സർക്കാർ ഉത്തരവുകൾ',
     subtitle: 'Government Orders',
     desc: 'Finance department GOs, circulars, notifications — latest first',
-    href: '#orders',
+    href: '/#orders',
     color: '#c8960c',
     badge: null,
     tags: ['G.O.(P)', 'G.O.(Ms)', 'Circular', 'Finance'],

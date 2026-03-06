@@ -6,10 +6,11 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const navItems = [
-  { href: '/admin', label: 'ഡാഷ്‌ബോർഡ്', icon: '🏠', en: 'Dashboard' },
-  { href: '/admin/orders', label: 'ഉത്തരവുകൾ', icon: '📄', en: 'Orders' },
-  { href: '/admin/schemes', label: 'പദ്ധതികൾ', icon: '📋', en: 'Schemes' },
-  { href: '/admin/links', label: 'ലിങ്കുകൾ', icon: '🔗', en: 'Links' },
+  { href: '/admin',          label: 'ഡാഷ്‌ബോർഡ്', icon: '🏠', en: 'Dashboard' },
+  { href: '/admin/articles', label: 'ലേഖനങ്ങൾ',   icon: '✍️', en: 'Articles' },
+  { href: '/admin/orders',   label: 'ഉത്തരവുകൾ',  icon: '📄', en: 'Orders' },
+  { href: '/admin/schemes',  label: 'പദ്ധതികൾ',    icon: '📋', en: 'Schemes' },
+  { href: '/admin/links',    label: 'ലിങ്കുകൾ',    icon: '🔗', en: 'Links' },
 ];
 
 async function refreshToken() {

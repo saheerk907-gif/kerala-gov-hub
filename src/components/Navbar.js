@@ -21,14 +21,14 @@ const socials = [
 ];
 
 const navLinks = [
-  { href: '#services',   label: 'സേവന ചട്ടങ്ങൾ' },
-  { href: '#benefits',   label: 'ആനുകൂല്യങ്ങൾ' },
-  { href: '#orders',     label: 'ഉത്തരവുകൾ' },
-  { href: '#calculator', label: 'PRC കാൽക്കുലേറ്റർ' },
-  { href: '/da-arrear',  label: 'DA Arrear' },
+  { href: '/ksr',       label: 'സേവന ചട്ടങ്ങൾ' },
+  { href: '/gpf',       label: 'GPF' },
+  { href: '/medisep',   label: 'Medisep' },
+  { href: '/da-arrear', label: 'DA Arrear' },
   { href: '/pension',   label: 'Pension' },
   { href: '/nps-aps',   label: 'NPS vs APS' },
-  { href: '#links',      label: 'പോർട്ടലുകൾ' },
+  { href: '/dcrg',      label: 'DCRG' },
+  { href: '#links',     label: 'പോർട്ടലുകൾ' },
 ];
 
 const ticker = [
