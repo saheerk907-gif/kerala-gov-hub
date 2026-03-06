@@ -12,11 +12,9 @@ const DA_HISTORY = [
 
 const STATS = [
   { label: 'GPF പലിശ', value: '7.1%', sub: '2024-25', color: '#30d158' },
-  { label: 'HRA — TVM', value: '30%', sub: 'of Basic Pay', color: '#ff9f0a' },
-  { label: 'വിരമിക്കൽ', value: '56 yrs', sub: 'KSR Rule 60', color: '#bf5af2' },
-  { label: 'Medisep', value: '₹5L', sub: 'family / year', color: '#ff453a' },
+  { label: 'Medisep Coverage', value: '₹5L', sub: 'family / year', color: '#ff453a' },
   { label: 'Max Pension', value: '50%', sub: 'of Basic Pay', color: '#64d2ff' },
-  { label: 'DCRG Max', value: '₹20L', sub: 'KSR Rule 77', color: '#c8960c' },
+  { label: 'DCRG Max', value: '₹17L', sub: 'KSR Rule 77', color: '#c8960c' },
 ];
 
 // Build SVG sparkline path from data points
