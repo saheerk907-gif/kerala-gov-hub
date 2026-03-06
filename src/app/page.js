@@ -1,7 +1,7 @@
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights, getNews } from '@/lib/supabase';
 import Hero from '@/components/Hero';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
-import StatsBar from '@/components/StatsBar';
+import QuickInfoBar from '@/components/QuickInfoBar';
 import ToolsSection from '@/components/ToolsSection';
 import NewSection from '@/components/NewSection';
 import SchemesSection from '@/components/SchemesSection';
@@ -34,9 +34,9 @@ export default async function HomePage() {
       {/* 2. Announcement scrolling banner */}
       <AnnouncementBanner />
 
-      {/* 3. Stats */}
+      {/* 3. Quick Reference — current rates & rules */}
       <ScrollReveal direction="up" delay={0}>
-        <StatsBar stats={stats} />
+        <QuickInfoBar />
       </ScrollReveal>
 
       {/* 4. Tools & Calculators grid — most important, above the fold */}

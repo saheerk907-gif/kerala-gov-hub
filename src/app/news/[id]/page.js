@@ -4,6 +4,19 @@ import Footer from '@/components/Footer';
 
 export const dynamic = 'force-dynamic';
 
+// Strip HTML tags and decode entities — used to clean RSS summary_ml
+function stripHtml(html = '') {
+  return html
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+// Extract source domain from URL for display
+function sourceDomain(url = '') {
+  try { return new URL(url).hostname.replace('www.', ''); } catch { return ''; }
+}
+
 export default async function NewsDetailPage({ params }) {
   const { id } = params;
 
@@ -81,26 +94,76 @@ export default async function NewsDetailPage({ params }) {
               className="w-full rounded-2xl object-cover mb-10"
               style={{ maxHeight: '420px' }} />
           )}
-          {item.summary_ml && (
-            <div className="rss-summary text-[16px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
-              style={{ fontFamily: "'Meera', sans-serif" }}
-              dangerouslySetInnerHTML={{ __html: item.summary_ml }} />
-          )}
+
           {item.content_ml ? (
-            <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
-          ) : item.source_url ? (
-            <div className="text-center py-12">
-              <p className="text-[#6e6e73] text-sm mb-6">പൂർണ്ണ ലേഖനം ഒറിജിനൽ സ്രോതസ്സിൽ വായിക്കുക</p>
-              <a href={item.source_url} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-                style={{ background: '#2997ff', color: 'white' }}>
-                Read Full Article ↗
-              </a>
-            </div>
+            /* Admin-written article — show full content */
+            <>
+              {item.summary_ml && (
+                <p className="text-[17px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
+                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                  {stripHtml(item.summary_ml)}
+                </p>
+              )}
+              <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
+            </>
           ) : (
-            <div className="text-[#6e6e73] text-sm italic">വിശദാംശങ്ങൾ ലഭ്യമല്ല.</div>
+            /* Auto-fetched RSS article — clean snippet + source link */
+            <div className="space-y-8">
+              {/* Clean text snippet */}
+              {item.summary_ml && (
+                <div className="rounded-2xl p-6"
+                  style={{ background: 'rgba(41,151,255,0.04)', border: '1px solid rgba(41,151,255,0.12)' }}>
+                  <div className="text-[10px] font-black uppercase tracking-widest text-[#2997ff] mb-3">Article Summary</div>
+                  <p className="text-[15px] text-[#c7c7cc] leading-relaxed"
+                    style={{ fontFamily: "'Meera', sans-serif" }}>
+                    {stripHtml(item.summary_ml)}
+                  </p>
+                </div>
+              )}
+
+              {/* Read full article CTA */}
+              {item.source_url && (
+                <div className="rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div className="flex-1">
+                    <div className="text-[11px] font-bold uppercase tracking-widest text-white/30 mb-1">
+                      Source · {sourceDomain(item.source_url)}
+                    </div>
+                    <p className="text-sm text-[#86868b]">
+                      ഈ വാർത്ത ഒറിജിനൽ വെബ്‌സൈറ്റിൽ നിന്ന് ഓട്ടോമാറ്റിക്കായി ശേഖരിച്ചതാണ്. പൂർണ്ണ ലേഖനം വായിക്കാൻ Source സന്ദർശിക്കുക.
+                    </p>
+                  </div>
+                  <a href={item.source_url} target="_blank" rel="noopener noreferrer"
+                    className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+                    style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}>
+                    പൂർണ്ണ ലേഖനം വായിക്കുക ↗
+                  </a>
+                </div>
+              )}
+
+              {/* Related tools suggestion */}
+              <div className="rounded-2xl p-5"
+                style={{ background: 'rgba(200,150,12,0.04)', border: '1px solid rgba(200,150,12,0.12)' }}>
+                <div className="text-[10px] font-black uppercase tracking-widest text-[#c8960c] mb-3">Related Tools</div>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'DA Arrear Calculator', href: '/da-arrear' },
+                    { label: 'Pension Calculator', href: '/pension' },
+                    { label: 'PRC Calculator', href: '/prc' },
+                    { label: 'NPS vs APS', href: '/nps-aps' },
+                  ].map(t => (
+                    <a key={t.href} href={t.href}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold no-underline transition-all hover:scale-105"
+                      style={{ background: 'rgba(200,150,12,0.1)', color: '#c8960c', border: '1px solid rgba(200,150,12,0.2)' }}>
+                      {t.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
           )}
-          <div className="mt-16 pt-8 border-t border-white/[0.06]">
+
+          <div className="mt-12 pt-8 border-t border-white/[0.06]">
             <a href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
               style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}>
               ← Home
@@ -123,8 +186,6 @@ export default async function NewsDetailPage({ params }) {
           .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
           .article-content th { background: rgba(41,151,255,0.1); color: white; padding: 10px 14px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
           .article-content td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
-          .rss-summary a { color: #2997ff; word-break: break-word; font-size: 0.8rem; }
-          .rss-summary font { display: none; }
         ` }} />
       </main>
       <Footer />
