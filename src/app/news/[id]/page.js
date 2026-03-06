@@ -82,13 +82,21 @@ export default async function NewsDetailPage({ params }) {
               style={{ maxHeight: '420px' }} />
           )}
           {item.summary_ml && (
-            <div className="text-[17px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
-              {item.summary_ml}
-            </div>
+            <div className="rss-summary text-[16px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
+              style={{ fontFamily: "'Meera', sans-serif" }}
+              dangerouslySetInnerHTML={{ __html: item.summary_ml }} />
           )}
           {item.content_ml ? (
             <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
+          ) : item.source_url ? (
+            <div className="text-center py-12">
+              <p className="text-[#6e6e73] text-sm mb-6">പൂർണ്ണ ലേഖനം ഒറിജിനൽ സ്രോതസ്സിൽ വായിക്കുക</p>
+              <a href={item.source_url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
+                style={{ background: '#2997ff', color: 'white' }}>
+                Read Full Article ↗
+              </a>
+            </div>
           ) : (
             <div className="text-[#6e6e73] text-sm italic">വിശദാംശങ്ങൾ ലഭ്യമല്ല.</div>
           )}
@@ -115,6 +123,8 @@ export default async function NewsDetailPage({ params }) {
           .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
           .article-content th { background: rgba(41,151,255,0.1); color: white; padding: 10px 14px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
           .article-content td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+          .rss-summary a { color: #2997ff; word-break: break-word; font-size: 0.8rem; }
+          .rss-summary font { display: none; }
         ` }} />
       </main>
       <Footer />
