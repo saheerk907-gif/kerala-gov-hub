@@ -63,6 +63,16 @@ const tools = [
     tags: ['G.O.(P)', 'G.O.(Ms)', 'Circular', 'Finance'],
   },
   {
+    icon: '🎖️',
+    title: 'DCRG Calculator',
+    subtitle: 'Death-cum-Retirement Gratuity',
+    desc: 'KSR Rule 77 അനുസരിച്ച് DCRG / Death Gratuity കണക്കാക്കൂ — retirement & death cases',
+    href: '/dcrg',
+    color: '#c8960c',
+    badge: 'NEW',
+    tags: ['DCRG', 'Gratuity', 'KSR', 'Death'],
+  },
+  {
     icon: '📅',
     title: 'Leave Calculator',
     subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',
