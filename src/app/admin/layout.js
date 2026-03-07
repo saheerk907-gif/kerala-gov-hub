@@ -9,6 +9,7 @@ const navItems = [
   { href: '/admin',          label: 'ഡാഷ്‌ബോർഡ്', icon: '🏠', en: 'Dashboard' },
   { href: '/admin/articles', label: 'ലേഖനങ്ങൾ',   icon: '✍️', en: 'Articles' },
   { href: '/admin/orders',   label: 'ഉത്തരവുകൾ',  icon: '📄', en: 'Orders' },
+  { href: '/admin/tests',    label: 'Quiz / Tests', icon: '🧠', en: 'Quiz Questions' },
   { href: '/admin/schemes',  label: 'പദ്ധതികൾ',    icon: '📋', en: 'Schemes' },
   { href: '/admin/links',    label: 'ലിങ്കുകൾ',    icon: '🔗', en: 'Links' },
 ];
