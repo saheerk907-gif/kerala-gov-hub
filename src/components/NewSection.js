@@ -110,6 +110,19 @@ export default function NewsSection() {
         </div>
       )}
 
+      {!loading && news.length > 0 && (
+        <div className="mt-4">
+          <Link href="/news"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
+            എല്ലാ വാർത്തകളും കാണുക
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      )}
+
     </div>
   );
 }
