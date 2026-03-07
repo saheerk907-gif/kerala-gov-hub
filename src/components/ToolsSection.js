@@ -137,7 +137,7 @@ export default function ToolsSection() {
               </div>
 
               {/* Title */}
-              <h3 className="text-[11px] md:text-[13px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "'Meera', sans-serif" }}>
                 {t.title}
               </h3>
               <div className="hidden md:block text-[8px] font-black uppercase tracking-wider leading-tight" style={{ color: t.color + 'bb' }}>
