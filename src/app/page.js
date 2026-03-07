@@ -5,6 +5,7 @@ import SectionNav from '@/components/SectionNav';
 import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
 import NewSection from '@/components/NewSection';
+import ArticlesSection from '@/components/ArticlesSection';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import SchemesSection from '@/components/SchemesSection';
 import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
@@ -52,6 +53,11 @@ export default async function HomePage() {
           <NewSection news={news} />
         </ScrollReveal>
       </section>
+
+      {/* 5b. Articles */}
+      <ScrollReveal direction="up" delay={0}>
+        <ArticlesSection />
+      </ScrollReveal>
 
       {/* 6. Quick Links — portals users need daily */}
       <ScrollReveal direction="up" delay={0}>
