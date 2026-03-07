@@ -9,6 +9,7 @@ import ImportantDatesSection from '@/components/ImportantDatesSection';
 import HighlightsSection from '@/components/HighlightsSection';
 import OrdersSection from '@/components/OrdersSection';
 import DepartmentResourcesSection from '@/components/DepartmentResourcesSection';
+import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -71,7 +72,12 @@ export default async function HomePage() {
         <OrdersSection orders={orders} />
       </ScrollReveal>
 
-      {/* 10. Department-wise resources */}
+      {/* 10. Departmental Tests */}
+      <ScrollReveal direction="up" delay={0}>
+        <DepartmentalTestsSection />
+      </ScrollReveal>
+
+      {/* 11. Department-wise resources */}
       <ScrollReveal direction="up" delay={0}>
         <DepartmentResourcesSection />
       </ScrollReveal>
