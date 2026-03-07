@@ -33,16 +33,6 @@ const tools = [
     tags: ['Balance', 'Interest', 'Withdrawal', 'Nomination'],
   },
   {
-    icon: '🏥',
-    title: 'Medisep',
-    subtitle: 'Health Insurance Scheme',
-    desc: 'Medisep coverage, hospitals, cashless treatment details',
-    href: '/medisep',
-    color: '#ff9f0a',
-    badge: null,
-    tags: ['Coverage', 'Hospitals', 'Claims', 'Dependants'],
-  },
-  {
     icon: '📖',
     title: 'Kerala Service Rules',
     subtitle: 'KSR Parts I–III',
@@ -51,16 +41,6 @@ const tools = [
     color: '#bf5af2',
     badge: null,
     tags: ['Leave', 'Pay', 'Service', 'Conduct'],
-  },
-  {
-    icon: '📋',
-    title: 'സർക്കാർ ഉത്തരവുകൾ',
-    subtitle: 'Government Orders',
-    desc: 'Finance department GOs, circulars, notifications — latest first',
-    href: '/#orders',
-    color: '#c8960c',
-    badge: null,
-    tags: ['G.O.(P)', 'G.O.(Ms)', 'Circular', 'Finance'],
   },
   {
     icon: '💰',
