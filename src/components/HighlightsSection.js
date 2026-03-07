@@ -20,7 +20,7 @@ export default function HighlightsSection({ highlights }) {
           <div className="section-label mb-3">Key Benefits</div>
           <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
             ശമ്പളം, അവധി,{' '}
-            <span className="text-white/40">പെൻഷൻ വിവരങ്ങൾ</span>
+            <span>പെൻഷൻ വിവരങ്ങൾ</span>
           </h2>
           <p className="text-[15px] text-white/50 leading-relaxed max-w-[580px] mt-4">
             കേരള സർക്കാർ ജീവനക്കാരുടെ സാമ്പത്തിക സുരക്ഷയും ക്ഷേമവും ഉറപ്പാക്കുന്ന സമഗ്ര ആനുകൂല്യങ്ങൾ.

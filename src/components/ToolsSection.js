@@ -115,7 +115,7 @@ export default function ToolsSection() {
             <div className="section-label mb-3">Tools & Calculators</div>
             <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
               ജീവനക്കാർക്ക് ഉപകാരപ്രദമായ{' '}
-              <span className="text-white/40">ടൂളുകൾ</span>
+              <span>ടൂളുകൾ</span>
             </h2>
           </div>
           <p className="text-[13px] text-white/40 max-w-[320px] md:text-right leading-relaxed">

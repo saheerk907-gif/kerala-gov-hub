@@ -18,7 +18,7 @@ export default function DepartmentalTestsSection() {
             <div className="section-label mb-3">Exam Prep</div>
             <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
               ഡിപ്പാർട്ട്‌മെന്റൽ{' '}
-              <span className="text-white/40">ടെസ്റ്റുകൾ</span>
+              <span>ടെസ്റ്റുകൾ</span>
             </h2>
             <p className="text-[15px] text-white/50 max-w-[560px] mt-3">
               30 വകുപ്പുകളിലെ 64+ ടെസ്റ്റുകൾ — സിലബസ്, ആർക്ക് ആവശ്യം, Quiz സഹിതം.

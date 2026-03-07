@@ -29,7 +29,7 @@ export default function OrdersSection({ orders }) {
           <div className="section-label mb-3">Latest Updates</div>
           <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
             പ്രധാന{' '}
-            <span className="text-white/40">സർക്കാർ ഉത്തരവുകൾ</span>
+            <span>സർക്കാർ ഉത്തരവുകൾ</span>
           </h2>
           <p className="text-[15px] text-white/50 leading-relaxed max-w-[580px] mt-3">
             കേരള സർക്കാർ ജീവനക്കാർ അറിഞ്ഞിരിക്കേണ്ട പ്രധാന ഉത്തരവുകൾ — യഥാർത്ഥ GO നമ്പറുകളും തീയതികളും സഹിതം.

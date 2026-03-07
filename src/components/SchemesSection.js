@@ -25,7 +25,7 @@ export default function SchemesSection({ schemes }) {
           <div className="section-label mb-3">Resources</div>
           <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
             സേവന ചട്ടങ്ങളും{' '}
-            <span className="text-white/40">ജീവനക്കാര്യ പദ്ധതികളും</span>
+            <span>ജീവനക്കാര്യ പദ്ധതികളും</span>
           </h2>
           <p className="text-[15px] text-white/50 leading-relaxed max-w-[580px] mt-4 font-medium">
             കേരള സർവ്വീസ് ചട്ടങ്ങൾ, ആരോഗ്യ ഇൻഷുറൻസ്, പ്രോവിഡന്റ് ഫണ്ട് തുടങ്ങി എല്ലാ വിവരങ്ങളും.
