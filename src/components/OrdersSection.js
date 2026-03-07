@@ -5,15 +5,28 @@ const ITEMS_PER_PAGE = 10;
 
 export default function OrdersSection({ orders }) {
   const [currentPage, setCurrentPage] = useState(1);
+  const [query, setQuery] = useState('');
 
   if (!orders?.length) return null;
 
   const formatDate = (d) =>
     new Date(d).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
 
-  const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);
+  const filtered = query.trim()
+    ? orders.filter(o =>
+        o.title_ml?.toLowerCase().includes(query.toLowerCase()) ||
+        o.go_number?.toLowerCase().includes(query.toLowerCase())
+      )
+    : orders;
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentOrders = orders.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentOrders = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handleSearch = (val) => {
+    setQuery(val);
+    setCurrentPage(1);
+  };
 
   const goToPage = (page) => {
     setCurrentPage(page);
@@ -25,7 +38,7 @@ export default function OrdersSection({ orders }) {
       <div>
 
         {/* Header */}
-        <div className="mb-7">
+        <div className="mb-5">
           <div className="section-label mb-2">Latest Updates</div>
           <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
             സർക്കാർ ഉത്തരവുകൾ
@@ -33,10 +46,35 @@ export default function OrdersSection({ orders }) {
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#ff9f0a] to-transparent mt-2 rounded-full" />
         </div>
 
+        {/* Search */}
+        <div className="relative mb-4">
+          <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" strokeLinecap="round" />
+          </svg>
+          <input
+            type="text"
+            value={query}
+            onChange={e => handleSearch(e.target.value)}
+            placeholder="ഉത്തരവ് തിരയുക..."
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl text-[13px] text-white placeholder-white/30 outline-none transition-all"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: "'Meera', sans-serif" }}
+            onFocus={e => e.target.style.borderColor = 'rgba(255,159,10,0.4)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+          />
+          {query && (
+            <button onClick={() => handleSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors bg-transparent border-0 cursor-pointer text-lg leading-none">
+              ×
+            </button>
+          )}
+        </div>
+
         {/* Orders list */}
         <div>
-          {currentOrders.map((o, i) =>
-            o.pdf_url ? (
+          {currentOrders.length === 0 ? (
+            <div className="text-center py-10 text-white/30 text-[13px]" style={{ fontFamily: "'Meera', sans-serif" }}>
+              "{query}" എന്നതിന് ഫലങ്ങൾ ഒന്നും കിട്ടിയില്ല.
+            </div>
+          ) : currentOrders.map((o, i) => o.pdf_url ? (
               <a
                 key={o.id}
                 href={o.pdf_url}
