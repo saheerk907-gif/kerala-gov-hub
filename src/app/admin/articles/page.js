@@ -162,9 +162,22 @@ export default function AdminArticles() {
       };
       if (editId) {
         await api(`articles?id=eq.${editId}`, 'PATCH', payload);
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: editId }),
+        });
       } else {
         payload.created_at = new Date().toISOString();
-        await api('articles', 'POST', payload);
+        const result = await api('articles', 'POST', payload);
+        const newId = Array.isArray(result) ? result[0]?.id : result?.id;
+        if (newId) {
+          await fetch('/api/revalidate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: newId }),
+          });
+        }
       }
       setShowForm(false);
       setEditId(null);
