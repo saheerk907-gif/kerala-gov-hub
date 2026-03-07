@@ -16,10 +16,12 @@ function stripHtml(html = '') {
     .replace(/\s+/g, ' ').trim();
 }
 
-// Returns true if the string is essentially just HTML markup with no real text body
+// Returns true if content is just a link/RSS stub, not a real article body
 function isJustHtml(str = '') {
+  if (!str) return true;
+  if (str.includes('news.google.com')) return true;
   const text = stripHtml(str).trim();
-  return text.length < 20;
+  return text.length < 120;
 }
 
 // Extract source domain from URL for display
