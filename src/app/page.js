@@ -65,9 +65,9 @@ export default async function HomePage() {
         <ArticlesSection />
       </ScrollReveal>
 
-      {/* 6. Quick Links — portals users need daily */}
+      {/* 6. Departmental Tests */}
       <ScrollReveal direction="up" delay={0}>
-        <QuickLinksSection links={quickLinks} />
+        <DepartmentalTestsSection />
       </ScrollReveal>
 
       {/* 7. Schemes */}
@@ -75,9 +75,9 @@ export default async function HomePage() {
         <SchemesSection schemes={schemes} />
       </ScrollReveal>
 
-      {/* 8. Departmental Tests */}
+      {/* 8. Quick Links — portals users need daily */}
       <ScrollReveal direction="up" delay={0}>
-        <DepartmentalTestsSection />
+        <QuickLinksSection links={quickLinks} />
       </ScrollReveal>
 
       {/* 9. Highlights */}
