@@ -1,5 +1,6 @@
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights, getNews } from '@/lib/supabase';
 import Hero from '@/components/Hero';
+import AnnouncementBanner from '@/components/AnnouncementBanner';
 import SectionNav from '@/components/SectionNav';
 import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
@@ -29,7 +30,10 @@ export default async function HomePage() {
       {/* 1. Hero — compact */}
       <Hero />
 
-      {/* 2. Sticky section jump bar (appears after scrolling) */}
+      {/* 2. Live breaking news ticker */}
+      <AnnouncementBanner />
+
+      {/* 3. Sticky section jump bar (appears after scrolling) */}
       <SectionNav />
 
       {/* 3. Tools & Calculators — first thing users see */}

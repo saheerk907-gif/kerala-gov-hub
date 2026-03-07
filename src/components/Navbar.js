@@ -1,48 +1,93 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
-const socials = [
+// ── Dropdown data ─────────────────────────────────────────────
+const NAV_ITEMS = [
   {
-    label: 'WhatsApp', href: 'https://wa.me/', color: '#25D366',
-    icon: <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>,
+    label: 'ടൂളുകൾ',
+    en: 'Tools',
+    href: '#tools',
+    dropdown: [
+      { icon: '💰', label: '12th PRC കാൽക്കുലേറ്റർ',   sub: 'Pay Revision',          href: '/prc',       badge: 'NEW',  color: '#2997ff' },
+      { icon: '📊', label: 'NPS vs APS',                  sub: 'Pension Comparison',    href: '/nps-aps',   badge: 'NEW',  color: '#ff453a' },
+      { icon: '💰', label: 'Pension Calculator',          sub: 'Monthly Pension',       href: '/pension',   badge: 'NEW',  color: '#2997ff' },
+      { icon: '🎖️', label: 'DCRG Calculator',             sub: 'Retirement Gratuity',   href: '/dcrg',      badge: 'NEW',  color: '#c8960c' },
+      { icon: '📊', label: 'DA Arrear Calculator',        sub: '11th PRC · Mar 2021',   href: '/da-arrear', badge: 'NEW',  color: '#ff9f0a' },
+      { icon: '🏦', label: 'GPF കാൽക്കുലേറ്റർ',         sub: 'Provident Fund',        href: '/gpf',       badge: null,   color: '#30d158' },
+      { icon: '🏥', label: 'Medisep',                     sub: 'Health Insurance',      href: '/medisep',   badge: null,   color: '#ff9f0a' },
+      { icon: '📖', label: 'Kerala Service Rules',        sub: 'KSR Parts I–III',       href: '/ksr',       badge: null,   color: '#bf5af2' },
+      { icon: '📋', label: 'സർക്കാർ ഉത്തരവുകൾ',         sub: 'Government Orders',     href: '#orders',    badge: null,   color: '#c8960c' },
+      { icon: '📅', label: 'Leave Calculator',            sub: 'EL, CL, ML',            href: '/prc',       badge: 'SOON', color: '#64d2ff' },
+    ],
   },
   {
-    label: 'Facebook', href: 'https://facebook.com/', color: '#1877F2',
-    icon: <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
+    label: 'ഉത്തരവുകൾ',
+    en: 'Govt Orders',
+    href: '#orders',
+    dropdown: [
+      { icon: '📋', label: 'എല്ലാ ഉത്തരവുകളും',    sub: 'All GOs',           href: '#orders',  color: '#ff9f0a' },
+      { icon: '💵', label: 'ക്ഷാമബത്ത (DA)',         sub: 'DA Orders',         href: '#orders',  color: '#ff9f0a' },
+      { icon: '🎁', label: 'ബോണസ് / ഉത്സവബത്ത',   sub: 'Bonus / Festival',  href: '#orders',  color: '#30d158' },
+      { icon: '🏥', label: 'മെഡിസെപ്',             sub: 'Medisep Orders',    href: '#orders',  color: '#2997ff' },
+      { icon: '🧓', label: 'പെൻഷൻ',               sub: 'Pension Orders',    href: '#orders',  color: '#bf5af2' },
+      { icon: '💰', label: 'ശമ്പളം / Pay',          sub: 'Pay Orders',        href: '#orders',  color: '#64d2ff' },
+      { icon: '🏦', label: 'GPF / NPS',             sub: 'PF Orders',         href: '#orders',  color: '#ff453a' },
+      { icon: '🏖️', label: 'അവധി / Leave',          sub: 'Leave Orders',      href: '#orders',  color: '#c8960c' },
+    ],
   },
   {
-    label: 'YouTube', href: 'https://youtube.com/', color: '#FF0000',
-    icon: <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>,
+    label: 'പദ്ധതികൾ',
+    en: 'Schemes',
+    href: '#services',
+    dropdown: [
+      { icon: '📜', label: 'കേരള സർവ്വീസ് ചട്ടങ്ങൾ', sub: 'KSR',     href: '/ksr',      color: '#2997ff' },
+      { icon: '🏥', label: 'മെഡിസെപ്',               sub: 'MEDISEP', href: '/medisep',  color: '#30d158' },
+      { icon: '🏦', label: 'ജി.പി.എഫ്',              sub: 'GPF',     href: '/gpf',      color: '#ff9f0a' },
+      { icon: '📊', label: 'എൻ.പി.എസ്',              sub: 'NPS',     href: '/nps-aps',  color: '#bf5af2' },
+      { icon: '🛡️', label: 'എസ്.എൽ.ഐ',              sub: 'SLI',     href: '#services', color: '#64d2ff' },
+      { icon: '🔒', label: 'ജി.ഐ.എസ്',              sub: 'GIS',     href: '#services', color: '#ff453a' },
+    ],
   },
   {
-    label: 'Telegram', href: 'https://t.me/', color: '#0088cc',
-    icon: <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>,
+    label: 'ടെസ്റ്റ്',
+    en: 'Dept Tests',
+    href: '/departmental-tests',
+    dropdown: [
+      { icon: '📋', label: 'പൊതു (Common)',         sub: 'MOP, KSR, KFC…',  href: '/departmental-tests?dept=common',       color: '#2997ff' },
+      { icon: '🏛️', label: 'റവന്യൂ',               sub: 'Revenue Test',     href: '/departmental-tests?dept=revenue',      color: '#ff9f0a' },
+      { icon: '🏘️', label: 'പഞ്ചായത്ത്',            sub: 'Panchayat Test',   href: '/departmental-tests?dept=panchayat',    color: '#bf5af2' },
+      { icon: '⚖️', label: 'ജുഡീഷ്യറി',            sub: 'Judicial Test',    href: '/departmental-tests?dept=judiciary',    color: '#ffd60a' },
+      { icon: '👮', label: 'പോലീസ്',               sub: 'Police Manual',    href: '/departmental-tests?dept=police',       color: '#0071e3' },
+      { icon: '🎓', label: 'വിദ്യാഭ്യാസം (KER)',    sub: 'Education Rules',  href: '/departmental-tests?dept=education',    color: '#34c759' },
+      { icon: '🌿', label: 'വനം',                   sub: 'Forest Test',      href: '/departmental-tests?dept=forest',       color: '#30d158' },
+      { icon: '📝', label: 'രജിസ്ട്രേഷൻ',          sub: 'Registration',     href: '/departmental-tests?dept=registration', color: '#64d2ff' },
+      { icon: '🗂️', label: 'എല്ലാ ടെസ്റ്റുകളും', sub: '64 tests',         href: '/departmental-tests',                   color: '#86868b' },
+    ],
   },
-];
-
-const navLinks = [
-  { href: '/ksr',       label: 'സേവന ചട്ടങ്ങൾ' },
-  { href: '/gpf',       label: 'GPF' },
-  { href: '/medisep',   label: 'Medisep' },
-  { href: '/da-arrear', label: 'DA Arrear' },
-  { href: '/pension',   label: 'Pension' },
-  { href: '/nps-aps',   label: 'NPS vs APS' },
-  { href: '/dcrg',      label: 'DCRG' },
-  { href: '#links',     label: 'പോർട്ടലുകൾ' },
-];
-
-const ticker = [
-  '📢 12th PRC — ശമ്പള പരിഷ്കരണ കാൽക്കുലേറ്റർ ലഭ്യം',
-  '📋 DA Revision — July 2024 മുതൽ 35% DA',
-  '🏥 Medisep Premium Payment Deadline Extended',
-  '📌 GPF Annual Statement — March 2025 Available',
+  {
+    label: 'പോർട്ടലുകൾ',
+    en: 'Portals',
+    href: '#links',
+    dropdown: [
+      { icon: '⚡', label: 'SPARK',         sub: 'spark.gov.in',                href: 'https://spark.gov.in',                       color: '#2997ff', external: true },
+      { icon: '🏛️', label: 'e-Treasury',    sub: 'treasury.kerala.gov.in',      href: 'https://treasury.kerala.gov.in',             color: '#30d158', external: true },
+      { icon: '🏥', label: 'MEDISEP',       sub: 'medisep.kerala.gov.in',       href: 'https://medisep.kerala.gov.in',              color: '#ff9f0a', external: true },
+      { icon: '📊', label: 'NPS / CRA',     sub: 'npscra.nsdl.co.in',           href: 'https://www.npscra.nsdl.co.in',             color: '#bf5af2', external: true },
+      { icon: '💼', label: 'Finance Dept',  sub: 'finance.kerala.gov.in',       href: 'https://www.finance.kerala.gov.in',         color: '#64d2ff', external: true },
+      { icon: '🧓', label: 'Pension Portal',sub: 'pension.treasury.kerala.gov.in', href: 'https://pension.treasury.kerala.gov.in', color: '#c8960c', external: true },
+      { icon: '🛡️', label: 'SLI Portal',   sub: 'sli.kerala.gov.in',           href: 'https://sli.kerala.gov.in',                 color: '#ff453a', external: true },
+      { icon: '🌐', label: 'Kerala.gov.in', sub: 'Official Portal',             href: 'https://www.kerala.gov.in',                 color: '#30d158', external: true },
+    ],
+  },
 ];
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen]   = useState(false);
-  const [scrolled,   setScrolled]     = useState(false);
-  const [newsIdx,    setNewsIdx]       = useState(0);
-  const [dateStr,    setDateStr]       = useState('');
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -50,126 +95,125 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
-    setDateStr(new Date().toLocaleDateString('en-IN', {
-      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric',
-    }));
-    const t = setInterval(() => setNewsIdx(i => (i + 1) % ticker.length), 4500);
-    return () => clearInterval(t);
+    const handler = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
+
+  function handleNavClick(href) {
+    setMobileOpen(false);
+    setOpenDropdown(null);
+    if (href.startsWith('#')) {
+      const id = href.slice(1);
+      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+    }
+  }
 
   return (
     <>
-      {/* ── Single unified header ──────────────────────────── */}
       <header
-        className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-500 ${
-          scrolled ? 'shadow-[0_4px_30px_rgba(0,0,0,0.4)]' : ''
-        }`}
+        ref={navRef}
+        className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : ''}`}
         style={{
-          background: scrolled ? 'rgba(18,20,22,0.95)' : 'rgba(18,20,22,0.75)',
+          background: scrolled ? 'rgba(18,20,22,0.97)' : 'rgba(18,20,22,0.85)',
           backdropFilter: 'saturate(180%) blur(24px)',
           WebkitBackdropFilter: 'saturate(180%) blur(24px)',
           borderBottom: '1px solid rgba(255,255,255,0.07)',
         }}
       >
-        {/* ── Top strip — ticker + socials + date ─────────── */}
-        <div
-          className="hidden lg:flex items-center justify-between px-8 h-8"
-          style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
-        >
-          {/* Social icons */}
-          <div className="flex items-center gap-0.5">
-            {socials.map(s => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={s.label}
-                className="flex items-center justify-center w-7 h-7 rounded-lg transition-all duration-200 text-white/30 hover:scale-110"
-                onMouseEnter={e => { e.currentTarget.style.color = s.color; e.currentTarget.style.background = `${s.color}18`; }}
-                onMouseLeave={e => { e.currentTarget.style.color = ''; e.currentTarget.style.background = ''; }}
-              >
-                {s.icon}
-              </a>
-            ))}
-            {/* Divider */}
-            <div className="w-px h-3.5 bg-white/10 mx-2" />
-            {/* News ticker */}
-            <div className="flex items-center gap-2">
-              <span className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-[#2997ff]/20 text-[#2997ff] whitespace-nowrap">
-                LIVE
-              </span>
-              <span
-                key={newsIdx}
-                className="text-[11px] text-white/45 font-medium animate-fade-up"
-                style={{ fontFamily: "'Meera', sans-serif" }}
-              >
-                {ticker[newsIdx]}
-              </span>
-            </div>
-          </div>
-
-          {/* Right — quick portals + date */}
-          <div className="flex items-center gap-1">
-            {['SPARK|https://spark.gov.in', 'e-Treasury|https://treasury.kerala.gov.in', 'Finance Dept|https://www.finance.kerala.gov.in'].map(item => {
-              const [label, href] = item.split('|');
-              return (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer"
-                  className="text-[10px] font-semibold text-white/35 no-underline hover:text-white/75 transition-colors px-2 py-1 rounded hover:bg-white/[0.05]">
-                  {label}
-                </a>
-              );
-            })}
-            <div className="w-px h-3.5 bg-white/10 mx-1" />
-            <span className="text-[10px] text-white/28 whitespace-nowrap font-medium">
-              {dateStr}
-            </span>
-          </div>
-        </div>
-
-        {/* ── Main nav row ─────────────────────────────────── */}
-        <div className="flex items-center justify-between px-6 md:px-8 h-14">
+        <div className="flex items-center justify-between px-4 md:px-6 h-14">
 
           {/* Brand */}
-          <a href="#" className="flex items-center gap-3 no-underline group flex-shrink-0">
-            <img
-              src="/logo.png"
-              alt="Kerala Gov Logo"
-              width={40}
-              height={40}
-              className="w-10 h-10 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all"
-            />
+          <a href="/" className="flex items-center gap-3 no-underline group flex-shrink-0">
+            <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
+              className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             <div className="flex flex-col leading-tight">
-              <span className="text-[15px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
-              <span className="text-[10px] font-semibold text-white/35 uppercase tracking-widest font-sans">
+              <span className="text-[9px] font-semibold text-white/30 uppercase tracking-widest font-sans hidden sm:block">
                 Kerala Gov Employee Hub
               </span>
             </div>
           </a>
 
-          {/* Desktop nav links */}
+          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map(l => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="px-3.5 py-1.5 text-[13px] font-semibold text-white/55 no-underline hover:text-white hover:bg-white/[0.07] rounded-lg transition-all duration-200"
-                style={{ fontFamily: "'Meera', sans-serif" }}
-              >
-                {l.label}
-              </a>
-            ))}
+            {NAV_ITEMS.map((item) => {
+              const isOpen = openDropdown === item.en;
+              return (
+                <div key={item.en} className="relative">
+                  <button
+                    onClick={() => setOpenDropdown(isOpen ? null : item.en)}
+                    className="flex items-center gap-1 px-3.5 py-2 rounded-lg text-[13px] font-semibold text-white/55 hover:text-white hover:bg-white/[0.07] transition-all border-none bg-transparent cursor-pointer"
+                    style={{ fontFamily: "'Meera', sans-serif", color: isOpen ? '#fff' : undefined }}
+                  >
+                    {item.label}
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"
+                      className="opacity-40 transition-transform duration-200 mt-0.5"
+                      style={{ transform: isOpen ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M1 3l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+                    </svg>
+                  </button>
+
+                  {/* Dropdown panel */}
+                  {isOpen && (
+                    <div
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.5)] z-50 min-w-[280px]"
+                      style={{ background: 'rgba(22,24,28,0.98)', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(30px)' }}
+                    >
+                      {/* Panel header */}
+                      <div className="px-4 py-3 border-b border-white/[0.06]">
+                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">{item.en}</div>
+                      </div>
+
+                      {/* Items grid — 2 columns if >5 items */}
+                      <div className={`p-2 ${item.dropdown.length > 5 ? 'grid grid-cols-2 gap-0.5' : 'flex flex-col gap-0.5'}`}>
+                        {item.dropdown.map((d) => (
+                          <a
+                            key={d.label}
+                            href={d.href}
+                            target={d.external ? '_blank' : undefined}
+                            rel={d.external ? 'noopener noreferrer' : undefined}
+                            onClick={() => handleNavClick(d.href)}
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline group/item transition-all hover:bg-white/[0.06]"
+                          >
+                            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+                              style={{ background: d.color + '18', border: `1px solid ${d.color}25` }}>
+                              {d.icon}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="text-[12px] font-semibold text-white/75 group-hover/item:text-white transition-colors leading-tight flex items-center gap-1.5"
+                                style={{ fontFamily: "'Meera', sans-serif" }}>
+                                {d.label}
+                                {d.badge && (
+                                  <span className="text-[8px] font-black px-1 py-0.5 rounded"
+                                    style={{ background: d.badge === 'NEW' ? '#2997ff25' : '#ffffff10', color: d.badge === 'NEW' ? '#2997ff' : '#ffffff40' }}>
+                                    {d.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-white/25 font-sans">{d.sub}</div>
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           {/* Mobile hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-            className="lg:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer"
-          >
+          <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
+            className="lg:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer">
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
@@ -177,37 +221,61 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* ── Mobile drawer ─────────────────────────────────── */}
+      {/* Mobile drawer */}
       {mobileOpen && (
-        <div
-          className="fixed inset-0 z-[999] flex flex-col pt-[56px]"
-          style={{ background: 'rgba(18,20,22,0.98)', backdropFilter: 'blur(24px)' }}
-        >
-          <div className="px-6 py-4 flex flex-col gap-1">
-            {navLinks.map(l => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setMobileOpen(false)}
-                className="block py-3.5 px-4 text-[16px] font-semibold text-white/65 no-underline border-b border-white/[0.06] hover:text-white hover:bg-white/[0.04] rounded-lg transition-all"
-                style={{ fontFamily: "'Meera', sans-serif" }}
-              >
-                {l.label}
-              </a>
-            ))}
-            {/* Social icons in mobile */}
-            <div className="flex items-center gap-3 pt-6 px-2">
-              {socials.map(s => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center justify-center w-9 h-9 rounded-xl text-white/40 hover:text-white transition-all"
-                  style={{ background: `${s.color}18`, border: `1px solid ${s.color}30` }}
-                  onMouseEnter={e => { e.currentTarget.style.color = s.color; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = ''; }}
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
+        <div className="fixed inset-0 z-[999] flex flex-col pt-14 overflow-y-auto"
+          style={{ background: 'rgba(14,16,18,0.99)', backdropFilter: 'blur(24px)' }}>
+          <div className="px-4 py-3 flex flex-col gap-1">
+            {NAV_ITEMS.map((item) => {
+              const isExpanded = mobileExpanded === item.en;
+              return (
+                <div key={item.en}>
+                  {/* Section header */}
+                  <button
+                    onClick={() => setMobileExpanded(isExpanded ? null : item.en)}
+                    className="w-full flex items-center justify-between py-3.5 px-4 rounded-xl text-[15px] font-semibold text-white/70 border-none bg-transparent cursor-pointer transition-all hover:bg-white/[0.04] hover:text-white"
+                    style={{ fontFamily: "'Meera', sans-serif' " }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span style={{ fontFamily: "'Meera', sans-serif" }}>{item.label}</span>
+                      <span className="text-[10px] text-white/30 font-sans">{item.en}</span>
+                    </div>
+                    <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+                      className="opacity-40 transition-transform duration-200"
+                      style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
+                      <path d="M1 3l4 4 4-4"/>
+                    </svg>
+                  </button>
+
+                  {/* Expanded sub-items */}
+                  {isExpanded && (
+                    <div className="pl-3 pb-2 flex flex-col gap-0.5">
+                      {item.dropdown.map((d) => (
+                        <a
+                          key={d.label}
+                          href={d.href}
+                          target={d.external ? '_blank' : undefined}
+                          rel={d.external ? 'noopener noreferrer' : undefined}
+                          onClick={() => handleNavClick(d.href)}
+                          className="flex items-center gap-3 px-3 py-2.5 rounded-xl no-underline transition-all hover:bg-white/[0.05]"
+                        >
+                          <div className="w-7 h-7 rounded-lg flex items-center justify-center text-sm flex-shrink-0"
+                            style={{ background: d.color + '18' }}>
+                            {d.icon}
+                          </div>
+                          <div>
+                            <div className="text-[13px] font-semibold text-white/65" style={{ fontFamily: "'Meera', sans-serif" }}>
+                              {d.label}
+                            </div>
+                            <div className="text-[10px] text-white/25 font-sans">{d.sub}</div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
