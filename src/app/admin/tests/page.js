@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DEPTS, TESTS } from '@/lib/testsData';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -18,6 +18,61 @@ async function api(path, method = 'GET', body = null) {
   return text ? JSON.parse(text) : [];
 }
 
+function parseCSV(text) {
+  const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+  if (lines.length < 2) return { rows: [], error: 'CSV ഫയലിൽ ഡേറ്റ ഇല്ല' };
+
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/^"|"$/g, ''));
+  const required = ['question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer'];
+  const missing = required.filter(r => !headers.includes(r));
+  if (missing.length) return { rows: [], error: `കോളം കാണുന്നില്ല: ${missing.join(', ')}` };
+
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    // Handle quoted commas
+    const cols = [];
+    let cur = '', inQ = false;
+    for (const ch of lines[i]) {
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
+    }
+    cols.push(cur.trim());
+
+    const row = {};
+    headers.forEach((h, idx) => { row[h] = cols[idx] || ''; });
+
+    if (!row.question || !row.option_a || !row.option_b || !row.option_c || !row.option_d) continue;
+    const ans = (row.correct_answer || '').toLowerCase().replace(/^option\s*/i, '').trim();
+    if (!['a', 'b', 'c', 'd'].includes(ans)) continue;
+
+    rows.push({
+      question: row.question,
+      option_a: row.option_a,
+      option_b: row.option_b,
+      option_c: row.option_c,
+      option_d: row.option_d,
+      correct_answer: ans,
+      explanation: row.explanation || '',
+      sort_order: Number(row.sort_order) || (i - 1),
+    });
+  }
+
+  if (!rows.length) return { rows: [], error: 'Valid ആയ ചോദ്യങ്ങൾ ഒന്നും കണ്ടില്ല. correct_answer a/b/c/d ആയിരിക്കണം.' };
+  return { rows, error: null };
+}
+
+function downloadTemplate() {
+  const csv = `question,option_a,option_b,option_c,option_d,correct_answer,explanation
+"What does KSR stand for?","Kerala Service Rules","Kerala State Rules","Kerala Salary Rules","Kerala Staff Rules",a,"KSR = Kerala Service Rules"
+"Under KSR which part deals with leave?","Part I","Part II","Part III","Part IV",b,""
+`;
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'quiz_template.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AdminTests() {
   const [activeDept, setActiveDept] = useState('common');
   const [selectedTest, setSelectedTest] = useState(null);
@@ -30,7 +85,14 @@ export default function AdminTests() {
   const [saving, setSaving] = useState(false);
   const [qCounts, setQCounts] = useState({});
 
-  // Load question counts for all tests
+  // CSV import state
+  const [showImport, setShowImport] = useState(false);
+  const [csvPreview, setCsvPreview] = useState([]);
+  const [csvError, setCsvError] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState(null);
+  const fileRef = useRef();
+
   useEffect(() => {
     api('quiz_questions?select=test_id,paper_number').then(data => {
       if (!Array.isArray(data)) return;
@@ -54,9 +116,21 @@ export default function AdminTests() {
     setSelectedTest(test);
     setSelectedPaper(paper);
     setShowForm(false);
+    setShowImport(false);
+    setCsvPreview([]);
+    setCsvError('');
+    setImportResult(null);
     setForm(EMPTY_Q);
     setEditId(null);
     loadQuestions(test.id, paper);
+  }
+
+  async function refreshCounts() {
+    const data = await api('quiz_questions?select=test_id,paper_number');
+    if (!Array.isArray(data)) return;
+    const map = {};
+    data.forEach(q => { const key = `${q.test_id}_${q.paper_number}`; map[key] = (map[key] || 0) + 1; });
+    setQCounts(map);
   }
 
   async function handleSubmit(e) {
@@ -73,19 +147,58 @@ export default function AdminTests() {
     setForm(EMPTY_Q);
     setEditId(null);
     loadQuestions(selectedTest.id, selectedPaper);
-    // refresh counts
-    api('quiz_questions?select=test_id,paper_number').then(data => {
-      if (!Array.isArray(data)) return;
-      const map = {};
-      data.forEach(q => { const key = `${q.test_id}_${q.paper_number}`; map[key] = (map[key] || 0) + 1; });
-      setQCounts(map);
-    });
+    refreshCounts();
   }
 
   async function handleDelete(id) {
     if (!confirm('ഈ ചോദ്യം ഡിലീറ്റ് ചെയ്യണോ?')) return;
     await api(`quiz_questions?id=eq.${id}`, 'DELETE');
     loadQuestions(selectedTest.id, selectedPaper);
+    refreshCounts();
+  }
+
+  function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    setCsvError('');
+    setCsvPreview([]);
+    setImportResult(null);
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const { rows, error } = parseCSV(ev.target.result);
+      if (error) { setCsvError(error); return; }
+      setCsvPreview(rows);
+    };
+    reader.readAsText(file);
+  }
+
+  async function handleImport() {
+    if (!csvPreview.length) return;
+    setImporting(true);
+    setImportResult(null);
+    const payload = csvPreview.map((q, i) => ({
+      ...q,
+      test_id: selectedTest.id,
+      paper_number: selectedPaper,
+      sort_order: q.sort_order || i + 1,
+    }));
+
+    // Insert in batches of 50
+    let inserted = 0;
+    let failed = 0;
+    for (let i = 0; i < payload.length; i += 50) {
+      const batch = payload.slice(i, i + 50);
+      const result = await api('quiz_questions', 'POST', batch);
+      if (Array.isArray(result)) inserted += result.length;
+      else failed += batch.length;
+    }
+
+    setImporting(false);
+    setImportResult({ inserted, failed });
+    setCsvPreview([]);
+    if (fileRef.current) fileRef.current.value = '';
+    loadQuestions(selectedTest.id, selectedPaper);
+    refreshCounts();
   }
 
   const deptTests = TESTS.filter(t => t.dept === activeDept);
@@ -94,11 +207,10 @@ export default function AdminTests() {
   return (
     <div className="flex gap-6 h-full">
 
-      {/* Left panel — dept + test selector */}
+      {/* Left panel */}
       <div className="w-64 flex-shrink-0">
         <h1 className="text-xl font-bold mb-4">Quiz Questions</h1>
 
-        {/* Dept tabs */}
         <div className="flex flex-col gap-1 mb-4">
           {DEPTS.map(d => (
             <button key={d.id}
@@ -111,7 +223,6 @@ export default function AdminTests() {
           ))}
         </div>
 
-        {/* Tests in dept */}
         <div className="text-[9px] uppercase tracking-widest text-[#6e6e73] mb-2 ml-1">Tests</div>
         <div className="flex flex-col gap-1">
           {deptTests.map(test => {
@@ -147,7 +258,7 @@ export default function AdminTests() {
         </div>
       </div>
 
-      {/* Right panel — questions */}
+      {/* Right panel */}
       <div className="flex-1 min-w-0">
         {!selectedTest ? (
           <div className="flex items-center justify-center h-64 text-[#6e6e73] text-sm">
@@ -156,12 +267,81 @@ export default function AdminTests() {
         ) : (
           <>
             {/* Header */}
-            <div className="mb-5">
-              <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
-              <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
+            <div className="flex items-start justify-between mb-5 gap-4">
+              <div>
+                <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
+                <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
+              </div>
+              <button
+                onClick={() => { setShowImport(v => !v); setShowForm(false); setCsvPreview([]); setCsvError(''); setImportResult(null); }}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border-none cursor-pointer transition-all flex-shrink-0"
+                style={{ background: showImport ? '#30d15820' : 'rgba(255,255,255,0.07)', color: showImport ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
+                📥 CSV Import
+              </button>
             </div>
 
-            {/* Add/Edit form */}
+            {/* CSV Import Panel */}
+            {showImport && (
+              <div className="bg-[#111] border border-white/[0.08] rounded-2xl p-5 mb-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-bold text-base">CSV Bulk Import</h3>
+                  <button onClick={downloadTemplate}
+                    className="text-[11px] px-3 py-1.5 bg-white/5 text-[#2997ff] rounded-lg border-none cursor-pointer hover:bg-white/10 transition-all">
+                    ⬇ Template Download
+                  </button>
+                </div>
+
+                <div className="text-[11px] text-[#6e6e73] mb-3">
+                  CSV columns: <span className="text-white/50">question, option_a, option_b, option_c, option_d, correct_answer (a/b/c/d), explanation (optional)</span>
+                </div>
+
+                <input
+                  ref={fileRef}
+                  type="file" accept=".csv"
+                  onChange={handleFileChange}
+                  className="w-full text-sm text-white/60 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#2997ff] file:text-white file:cursor-pointer cursor-pointer mb-3"
+                />
+
+                {csvError && (
+                  <div className="text-[12px] text-[#ff453a] bg-[#ff453a]/10 px-3 py-2 rounded-lg mb-3">{csvError}</div>
+                )}
+
+                {importResult && (
+                  <div className="text-[12px] px-3 py-2 rounded-lg mb-3"
+                    style={{ background: importResult.failed ? '#ff9f0a20' : '#30d15820', color: importResult.failed ? '#ff9f0a' : '#30d158' }}>
+                    {importResult.inserted} ചോദ്യങ്ങൾ import ചെയ്തു{importResult.failed ? `, ${importResult.failed} failed` : ' ✓'}
+                  </div>
+                )}
+
+                {csvPreview.length > 0 && (
+                  <>
+                    <div className="text-[11px] font-black uppercase tracking-widest text-[#6e6e73] mb-2">
+                      Preview — {csvPreview.length} questions
+                    </div>
+                    <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto mb-4">
+                      {csvPreview.map((q, i) => (
+                        <div key={i} className="bg-white/[0.04] rounded-xl px-4 py-2.5">
+                          <div className="text-[12px] font-semibold text-white/80 mb-1">{i + 1}. {q.question}</div>
+                          <div className="flex gap-3 text-[10px] text-white/40">
+                            {['a', 'b', 'c', 'd'].map(opt => (
+                              <span key={opt} style={{ color: q.correct_answer === opt ? '#30d158' : undefined }}>
+                                {opt.toUpperCase()}. {q[`option_${opt}`]}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <button onClick={handleImport} disabled={importing}
+                      className="w-full py-3 bg-[#30d158] text-white rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#28b34a] disabled:opacity-50 transition-all">
+                      {importing ? 'Import ചെയ്യുന്നു...' : `${csvPreview.length} ചോദ്യങ്ങൾ Import ചെയ്യുക`}
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* Manual add/edit form */}
             {showForm && (
               <div className="bg-[#111] border border-white/[0.08] rounded-2xl p-5 mb-5">
                 <div className="flex items-center justify-between mb-4">
@@ -220,7 +400,7 @@ export default function AdminTests() {
             ) : questions.length === 0 ? (
               <div className="text-center text-[#6e6e73] py-12 bg-[#111] rounded-2xl border border-white/[0.08]">
                 <div className="text-4xl mb-2">📭</div>
-                <div>ഇതുവരെ ചോദ്യങ്ങൾ ഇല്ല — + ബട്ടൺ ഉപയോഗിച്ച് ചേർക്കുക</div>
+                <div>ഇതുവരെ ചോദ്യങ്ങൾ ഇല്ല</div>
               </div>
             ) : (
               <div className="flex flex-col gap-2">
@@ -244,7 +424,7 @@ export default function AdminTests() {
                         {q.explanation && <div className="text-[11px] text-[#6e6e73] italic">💡 {q.explanation}</div>}
                       </div>
                       <div className="flex gap-2 flex-shrink-0">
-                        <button onClick={() => { setForm({ question: q.question, option_a: q.option_a, option_b: q.option_b, option_c: q.option_c, option_d: q.option_d, correct_answer: q.correct_answer, explanation: q.explanation || '', sort_order: q.sort_order || 0 }); setEditId(q.id); setShowForm(true); }}
+                        <button onClick={() => { setForm({ question: q.question, option_a: q.option_a, option_b: q.option_b, option_c: q.option_c, option_d: q.option_d, correct_answer: q.correct_answer, explanation: q.explanation || '', sort_order: q.sort_order || 0 }); setEditId(q.id); setShowForm(true); setShowImport(false); }}
                           className="px-2.5 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer transition-all">Edit</button>
                         <button onClick={() => handleDelete(q.id)}
                           className="px-2.5 py-1.5 bg-[#ff453a]/10 rounded-lg text-xs text-[#ff453a] hover:bg-[#ff453a]/20 border-none cursor-pointer transition-all">Delete</button>
@@ -258,7 +438,7 @@ export default function AdminTests() {
             {/* Add button at bottom */}
             {!showForm && (
               <div className="mt-6">
-                <button onClick={() => { setForm(EMPTY_Q); setEditId(null); setShowForm(true); }}
+                <button onClick={() => { setForm(EMPTY_Q); setEditId(null); setShowForm(true); setShowImport(false); }}
                   className="w-full py-4 bg-[#2997ff] text-white rounded-2xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
                   + ചോദ്യം ചേർക്കുക
                 </button>
