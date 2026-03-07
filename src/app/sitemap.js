@@ -9,6 +9,10 @@ const staticRoutes = [
   // MEDISEP
   { url: '/medisep', changeFrequency: 'weekly', priority: 0.9 },
   { url: '/medisep/faq', changeFrequency: 'monthly', priority: 0.85 },
+  { url: '/medisep-claim-process', changeFrequency: 'monthly', priority: 0.85 },
+  { url: '/medisep-complaint', changeFrequency: 'monthly', priority: 0.85 },
+  // Pension
+  { url: '/pension-calculation', changeFrequency: 'monthly', priority: 0.85 },
   // Calculators
   { url: '/prc', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/pension', changeFrequency: 'monthly', priority: 0.8 },

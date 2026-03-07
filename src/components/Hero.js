@@ -71,6 +71,11 @@ export default function Hero() {
           />
         </div>
 
+        {/* English SEO title — immediately tells Google & new visitors what this site is */}
+        <p className="text-[11px] font-black uppercase tracking-[0.25em] text-white/35 mb-2">
+          Kerala Government Employees Portal
+        </p>
+
         {/* Title */}
         <div className="flex flex-col gap-3" style={meeraStyle}>
           <h1 className="text-[clamp(40px,7.5vw,84px)] font-bold leading-[1] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
@@ -91,6 +96,27 @@ export default function Hero() {
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
+
+        {/* Feature pills — topic keywords visible to Google and users */}
+        <div className="mt-5 flex flex-wrap justify-center gap-2">
+          {[
+            { label: 'MEDISEP', href: '/medisep' },
+            { label: 'Pension', href: '/pension' },
+            { label: 'Service Rules', href: '/ksr' },
+            { label: 'Calculators', href: '#tools' },
+            { label: 'Govt Orders', href: '#orders' },
+            { label: 'Departmental Tests', href: '/departmental-tests' },
+          ].map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              className="px-3 py-1 rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
+              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              {label}
+            </a>
+          ))}
+        </div>
 
         {/* CTAs */}
         <div className="mt-6 flex flex-col sm:flex-row gap-3 items-center">
