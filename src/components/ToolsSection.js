@@ -106,83 +106,70 @@ const tools = [
 
 export default function ToolsSection() {
   return (
-    <section id="tools" className="relative py-12 px-4 md:px-6">
+    <section id="tools" className="relative py-8 px-4 md:px-6">
+      <style>{`.tools-scroll::-webkit-scrollbar{display:none}`}</style>
       <div className="max-w-[1300px] mx-auto">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <div className="section-label mb-3">Tools & Calculators</div>
-            <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
-              ജീവനക്കാർക്ക് ഉപകാരപ്രദമായ{' '}
-              <span>ടൂളുകൾ</span>
+            <div className="section-label mb-1">Tools & Calculators</div>
+            <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+              ടൂളുകൾ
             </h2>
           </div>
-          <p className="text-[13px] text-white/40 max-w-[320px] md:text-right leading-relaxed">
-            Pay revision, pension, GPF, leave — എല്ലാ കണക്കുകൂട്ടൽ ഒരിടത്ത്
-          </p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Scroll strip on mobile, grid on desktop */}
+        <div className="tools-scroll flex flex-row overflow-x-auto gap-2.5 pb-2 md:grid md:grid-cols-5 md:overflow-visible md:pb-0 md:gap-3"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {tools.map((t) => (
             <Link
               key={t.title}
               href={t.href}
-              className="glass-card glow-top group relative flex flex-col rounded-[22px] p-5 no-underline transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.35)] overflow-hidden"
+              className="glass-card group relative flex flex-col items-center text-center rounded-[14px] p-3 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 w-[110px] md:w-auto md:items-start md:text-left md:rounded-[16px] md:p-3.5"
             >
               {/* Badge */}
-              {t.badge && (
+              {t.badge && t.badge !== 'SOON' && (
                 <span
-                  className="absolute top-3.5 right-3.5 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full"
-                  style={{
-                    background: t.badge === 'NEW' ? 'rgba(41,151,255,0.25)' : 'rgba(255,255,255,0.08)',
-                    color: t.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.4)',
-                    border: `1px solid ${t.badge === 'NEW' ? 'rgba(41,151,255,0.3)' : 'rgba(255,255,255,0.1)'}`,
-                  }}
+                  className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+                  style={{ background: 'rgba(41,151,255,0.2)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.3)' }}
                 >
-                  {t.badge}
+                  NEW
+                </span>
+              )}
+              {t.badge === 'SOON' && (
+                <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/30 border border-white/[0.08]">
+                  SOON
                 </span>
               )}
 
               {/* Glow blob */}
               <div
-                className="absolute -top-6 -left-6 w-24 h-24 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: t.color + '20' }}
+                className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                style={{ background: t.color + '25' }}
               />
 
               {/* Icon */}
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center text-2xl mb-4 transition-transform duration-300 group-hover:scale-110"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-xl mb-2.5 transition-transform duration-200 group-hover:scale-105"
                 style={{ background: t.color + '18', border: `1px solid ${t.color}30` }}
               >
                 {t.icon}
               </div>
 
               {/* Title */}
-              <h3 className="text-[15px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <h3 className="text-[11px] md:text-[13px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "'Meera', sans-serif" }}>
                 {t.title}
               </h3>
-              <div className="text-[9px] font-black uppercase tracking-widest mb-2.5" style={{ color: t.color + 'cc' }}>
+              <div className="hidden md:block text-[8px] font-black uppercase tracking-wider leading-tight" style={{ color: t.color + 'bb' }}>
                 {t.subtitle}
-              </div>
-              <p className="text-[12px] text-white/45 leading-relaxed mb-4 flex-1" style={{ fontFamily: "'Meera', sans-serif" }}>
-                {t.desc}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5 mt-auto">
-                {t.tags.map(tag => (
-                  <span key={tag} className="text-[9px] font-bold px-2 py-0.5 rounded-full text-white/30 bg-white/[0.05] border border-white/[0.07]">
-                    {tag}
-                  </span>
-                ))}
               </div>
 
               {/* Bottom accent */}
               <div
-                className="absolute bottom-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: `linear-gradient(90deg, transparent, ${t.color}80, transparent)` }}
+                className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
               />
             </Link>
           ))}

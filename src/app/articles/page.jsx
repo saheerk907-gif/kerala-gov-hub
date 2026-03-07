@@ -94,46 +94,37 @@ function ArticleCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   const cat = CATEGORIES.find(c => c.value === article.category);
   return (
-    <Link href={`/articles/${article.id}`} className="no-underline group flex flex-col">
-      <div className="rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
-        style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.07)' }}>
+    <Link href={`/articles/${article.id}`} className="no-underline group block">
+      <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+        style={{ minHeight: '280px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
 
-        {/* Image */}
-        <div className="relative overflow-hidden" style={{ height: '180px', background: '#111', flexShrink: 0 }}>
-          {article.image_url ? (
+        {article.image_url ? (
+          <>
             <img src={article.image_url} alt={article.title_ml}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.05]" />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center"
-              style={{ background: `radial-gradient(ellipse 80% 80% at 50% 50%, ${color}10, transparent)` }}>
-              <div className="text-4xl opacity-20">📄</div>
-            </div>
-          )}
-          <div className="absolute top-3 left-3">
-            <span className="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"
-              style={{ background: `${color}dd`, color: 'white' }}>
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              style={{ opacity: 0.35 }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #000 45%, transparent 100%)' }} />
+          </>
+        ) : (
+          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}12, transparent)` }} />
+        )}
+
+        <div className="relative z-10 flex flex-col justify-end h-full p-5" style={{ minHeight: '280px' }}>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
+              style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
               {cat?.en || article.category}
             </span>
+            <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
           </div>
-        </div>
-
-        {/* Content */}
-        <div className="flex flex-col flex-1 p-5">
-          <div className="text-[11px] text-white/30 mb-2">{formatDate(article.created_at)}</div>
-          <h3 className="text-[15px] font-bold text-white/90 leading-snug mb-2 group-hover:text-white transition-colors line-clamp-2"
+          <h3 className="text-[15px] font-bold text-white leading-snug mb-1.5 group-hover:text-white/90 transition-colors line-clamp-2"
             style={{ fontFamily: "'Meera', sans-serif" }}>
             {article.title_ml}
           </h3>
           {article.title_en && (
-            <p className="text-[12px] text-white/40 mb-2 line-clamp-1">{article.title_en}</p>
+            <p className="text-[11px] text-white/40 mb-2 line-clamp-1">{article.title_en}</p>
           )}
-          {article.summary_ml && (
-            <p className="text-[13px] text-white/40 leading-relaxed line-clamp-3 flex-1"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
-              {article.summary_ml.replace(/<[^>]+>/g, '')}
-            </p>
-          )}
-          <div className="mt-4 flex items-center gap-1.5 text-[12px] font-bold transition-colors" style={{ color }}>
+          <div className="flex items-center gap-1.5 text-[12px] font-bold" style={{ color }}>
             വായിക്കുക
             <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="group-hover:translate-x-0.5 transition-transform">
               <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
