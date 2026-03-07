@@ -153,19 +153,17 @@ img, video, svg { max-width: 100%; }
 .card-expanded .card-details { max-height: 600px; }
 
 /* ── Light Mode ────────────────────────────────────────── */
-/* Invert the whole page to flip dark→light, then re-invert
-   images/videos so they stay natural-looking */
-[data-theme="light"] body {
+/* Apply invert to the html element (where data-theme lives).
+   Re-invert images/videos so they stay natural. */
+html[data-theme="light"] {
   filter: invert(1) hue-rotate(180deg);
   background: #fff;
 }
 
-/* Re-invert media so images/videos look normal */
-[data-theme="light"] img,
-[data-theme="light"] video,
-[data-theme="light"] iframe,
-[data-theme="light"] canvas,
-[data-theme="light"] svg image {
+html[data-theme="light"] img,
+html[data-theme="light"] video,
+html[data-theme="light"] iframe,
+html[data-theme="light"] canvas {
   filter: invert(1) hue-rotate(180deg);
 }
 
