@@ -10,6 +10,7 @@ export async function getNews() {
   const { data, error } = await supabase
     .from('news')
     .select('*')
+    .eq('category', 'news')
     .order('created_at', { ascending: false });
   if (error) throw error;
   return data;

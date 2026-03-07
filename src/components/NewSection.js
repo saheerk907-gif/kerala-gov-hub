@@ -53,7 +53,7 @@ export default function NewsSection() {
     async function fetchNews() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/news?select=*&order=created_at.desc&limit=6`,
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/news?select=*&category=eq.news&order=created_at.desc&limit=6`,
           {
             headers: {
               apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
