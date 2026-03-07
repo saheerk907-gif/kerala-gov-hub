@@ -22,9 +22,17 @@ export async function getSchemes() {
 }
 
 export async function getGovernmentOrders() {
-  const { data, error } = await supabase.from('government_orders').select('*')
+  const { data, error } = await supabase
+    .from('government_orders')
+    .select('*')
+    .order('go_date', { ascending: false })
   if (error) throw error
-  return data
+  // PDF orders first, then no-PDF orders
+  return (data || []).sort((a, b) => {
+    if (a.pdf_url && !b.pdf_url) return -1;
+    if (!a.pdf_url && b.pdf_url) return 1;
+    return 0;
+  });
 }
 
 export async function getQuickLinks() {
