@@ -14,7 +14,7 @@ const tools = [
   },
   {
     icon: '📊',
-    title: 'NPS vs APS',
+    title: 'NPS vs APS Comparison Calculator',
     subtitle: 'Pension Comparison Tool',
     desc: 'NPS-ഉം APS-ഉം തമ്മിലുള്ള വ്യത്യാസം — corpus growth, post-retirement charts',
     href: '/nps-aps',
