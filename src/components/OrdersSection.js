@@ -21,8 +21,8 @@ export default function OrdersSection({ orders }) {
   };
 
   return (
-    <section id="orders" className="relative py-8 px-4 md:px-6">
-      <div className="max-w-[1200px] mx-auto">
+    <section id="orders" className="relative py-8">
+      <div>
 
         {/* Header */}
         <div className="flex items-center justify-between mb-5">

@@ -46,17 +46,19 @@ export default async function HomePage() {
         <ToolsSection />
       </ScrollReveal>
 
-      {/* 4. Latest Government Orders */}
-      <ScrollReveal direction="up" delay={0}>
-        <OrdersSection orders={orders} />
-      </ScrollReveal>
-
-      {/* 5. News */}
-      <section id="news" className="py-14 px-4 md:px-6 max-w-[1400px] mx-auto">
-        <ScrollReveal direction="up" delay={0}>
-          <NewSection news={news} />
-        </ScrollReveal>
-      </section>
+      {/* 4 & 5. Orders + News — side by side */}
+      <div className="px-4 md:px-6 max-w-[1400px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+          <ScrollReveal direction="up" delay={0}>
+            <OrdersSection orders={orders} />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0}>
+            <section id="news" className="py-8">
+              <NewSection news={news} />
+            </section>
+          </ScrollReveal>
+        </div>
+      </div>
 
       {/* 5b. Articles */}
       <ScrollReveal direction="up" delay={0}>
