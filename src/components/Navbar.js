@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const NAV_ITEMS = [
   {
@@ -235,13 +236,16 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Mobile hamburger */}
+          {/* Theme toggle + Mobile hamburger */}
+          <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
             className="lg:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer">
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
           </button>
+          </div>
         </div>
       </header>
 
