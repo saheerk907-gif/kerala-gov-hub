@@ -200,45 +200,6 @@ export default function AdminArticles() {
         </button>
       </div>
 
-      {/* SQL setup notice */}
-      <div className="bg-[#1a1200] border border-[#ff9f0a]/30 rounded-2xl px-5 py-4 flex flex-col sm:flex-row gap-3 items-start">
-        <div className="text-[#ff9f0a] text-lg flex-shrink-0">⚠</div>
-        <div className="flex-1">
-          <div className="text-xs font-black uppercase tracking-widest text-[#ff9f0a] mb-1">One-time Supabase setup required</div>
-          <p className="text-xs text-[#86868b] mb-2">Run this SQL in Supabase → SQL Editor to create the <b className="text-white">articles</b> table:</p>
-          <code className="block text-[11px] bg-black/50 px-3 py-2 rounded-lg text-[#30d158] font-mono select-all whitespace-pre-wrap">
-{`-- 1. Create articles table
-CREATE TABLE IF NOT EXISTS articles (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title_ml TEXT NOT NULL,
-  title_en TEXT,
-  summary_ml TEXT,
-  content_ml TEXT,
-  category TEXT DEFAULT 'general',
-  image_url TEXT,
-  source_url TEXT,
-  internal_link TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-ALTER TABLE articles ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Public read articles" ON articles FOR SELECT USING (true);
-CREATE POLICY "Anon all articles" ON articles FOR ALL USING (true);
-
--- 2. Create article-images storage bucket
-INSERT INTO storage.buckets (id, name, public)
-VALUES ('article-images', 'article-images', true)
-ON CONFLICT DO NOTHING;
-
--- 3. Storage policies (allow upload/delete)
-CREATE POLICY "Public read article-images" ON storage.objects
-  FOR SELECT USING (bucket_id = 'article-images');
-CREATE POLICY "Anyone upload article-images" ON storage.objects
-  FOR INSERT WITH CHECK (bucket_id = 'article-images');
-CREATE POLICY "Anyone delete article-images" ON storage.objects
-  FOR DELETE USING (bucket_id = 'article-images');`}
-          </code>
-        </div>
-      </div>
 
       {/* Article Form */}
       {showForm && (
