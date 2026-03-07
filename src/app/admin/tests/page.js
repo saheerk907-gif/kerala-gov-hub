@@ -267,17 +267,9 @@ export default function AdminTests() {
         ) : (
           <>
             {/* Header */}
-            <div className="flex items-start justify-between mb-5 gap-4">
-              <div>
-                <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
-                <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
-              </div>
-              <button
-                onClick={() => { setShowImport(v => !v); setShowForm(false); setCsvPreview([]); setCsvError(''); setImportResult(null); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border-none cursor-pointer transition-all flex-shrink-0"
-                style={{ background: showImport ? '#30d15820' : 'rgba(255,255,255,0.07)', color: showImport ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
-                📥 CSV Import
-              </button>
+            <div className="mb-5">
+              <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
+              <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
             </div>
 
             {/* CSV Import Panel */}
@@ -435,12 +427,18 @@ export default function AdminTests() {
               </div>
             )}
 
-            {/* Add button at bottom */}
+            {/* Buttons at bottom */}
             {!showForm && (
-              <div className="mt-6">
+              <div className="mt-6 flex flex-col gap-3">
                 <button onClick={() => { setForm(EMPTY_Q); setEditId(null); setShowForm(true); setShowImport(false); }}
                   className="w-full py-4 bg-[#2997ff] text-white rounded-2xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
                   + ചോദ്യം ചേർക്കുക
+                </button>
+                <button
+                  onClick={() => { setShowImport(v => !v); setShowForm(false); setCsvPreview([]); setCsvError(''); setImportResult(null); }}
+                  className="w-full py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all"
+                  style={{ background: showImport ? '#30d15825' : 'rgba(255,255,255,0.06)', color: showImport ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
+                  📥 CSV Bulk Import
                 </button>
               </div>
             )}
