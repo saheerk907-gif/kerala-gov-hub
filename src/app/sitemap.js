@@ -6,6 +6,7 @@ const staticRoutes = [
   // Core
   { url: '/', changeFrequency: 'daily', priority: 1.0 },
   { url: '/news', changeFrequency: 'daily', priority: 0.9 },
+  { url: '/articles', changeFrequency: 'daily', priority: 0.9 },
   // MEDISEP
   { url: '/medisep', changeFrequency: 'weekly', priority: 0.9 },
   { url: '/medisep/faq', changeFrequency: 'monthly', priority: 0.85 },

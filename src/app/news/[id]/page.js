@@ -207,6 +207,22 @@ export default async function NewsDetailPage({ params }) {
                 </p>
               )}
               <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
+              {item.internal_link && (
+                <div className="mt-8 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+                  style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.2)' }}>
+                  <div className="flex-1">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-1">Related Page</div>
+                    <p className="text-sm text-[#86868b]" style={{ fontFamily: "'Meera', sans-serif" }}>
+                      ഈ വിഷയത്തെ കുറിച്ചുള്ള കൂടുതൽ വിവരങ്ങൾ ഇവിടെ ലഭ്യമാണ്.
+                    </p>
+                  </div>
+                  <a href={item.internal_link}
+                    className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+                    style={{ background: '#30d158', color: 'white' }}>
+                    കൂടുതൽ വായിക്കുക →
+                  </a>
+                </div>
+              )}
             </>
           ) : (
             /* RSS article — show fetched full content inline */
@@ -255,6 +271,24 @@ export default async function NewsDetailPage({ params }) {
                   <a href={item.source_url} target="_blank" rel="noopener noreferrer"
                     className="text-[12px] text-[#2997ff] no-underline hover:underline">
                     Original article ↗
+                  </a>
+                </div>
+              )}
+
+              {/* Admin-set internal link CTA */}
+              {item.internal_link && (
+                <div className="rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
+                  style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.2)' }}>
+                  <div className="flex-1">
+                    <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-1">Related Page</div>
+                    <p className="text-sm text-[#86868b]" style={{ fontFamily: "'Meera', sans-serif" }}>
+                      ഈ വിഷയത്തെ കുറിച്ചുള്ള കൂടുതൽ വിവരങ്ങൾ ഇവിടെ ലഭ്യമാണ്.
+                    </p>
+                  </div>
+                  <a href={item.internal_link}
+                    className="flex-shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+                    style={{ background: '#30d158', color: 'white' }}>
+                    കൂടുതൽ വായിക്കുക →
                   </a>
                 </div>
               )}

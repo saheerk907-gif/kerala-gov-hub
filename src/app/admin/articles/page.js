@@ -16,6 +16,26 @@ const CATEGORIES = [
   { value: 'general',  label: 'പൊതുവായത് (General)',        page: '/' },
 ];
 
+const INTERNAL_PAGES = [
+  { value: '', label: '— None —' },
+  { value: '/medisep', label: '/medisep — MEDISEP Overview' },
+  { value: '/medisep/faq', label: '/medisep/faq — MEDISEP FAQ' },
+  { value: '/medisep-claim-process', label: '/medisep-claim-process — Claim Process' },
+  { value: '/medisep-complaint', label: '/medisep-complaint — Complaint Guide' },
+  { value: '/pension', label: '/pension — Pension Calculator' },
+  { value: '/pension-calculation', label: '/pension-calculation — Pension Calculation Guide' },
+  { value: '/prc', label: '/prc — PRC Calculator' },
+  { value: '/da-arrear', label: '/da-arrear — DA Arrear Calculator' },
+  { value: '/dcrg', label: '/dcrg — DCRG Calculator' },
+  { value: '/nps', label: '/nps — NPS Information' },
+  { value: '/nps-aps', label: '/nps-aps — NPS vs APS' },
+  { value: '/gpf', label: '/gpf — GPF Information' },
+  { value: '/ksr', label: '/ksr — Service Rules' },
+  { value: '/departmental-tests', label: '/departmental-tests — Departmental Tests' },
+  { value: '/news', label: '/news — All News' },
+  { value: '/articles', label: '/articles — All Articles' },
+];
+
 const EMPTY = {
   title_ml: '',
   title_en: '',
@@ -24,6 +44,7 @@ const EMPTY = {
   category: 'news',
   image_url: '',
   source_url: '',
+  internal_link: '',
 };
 
 async function api(path, method = 'GET', body = null) {
@@ -52,6 +73,7 @@ export default function AdminArticles() {
   const [filterCat, setFilterCat] = useState('all');
   const [search, setSearch]       = useState('');
   const [deleteId, setDeleteId]   = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -74,15 +96,50 @@ export default function AdminArticles() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  async function handleImageUpload(file) {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const token = sessionStorage.getItem('admin_token');
+      const ext = file.name.split('.').pop();
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const res = await fetch(
+        `${SUPABASE_URL}/storage/v1/object/article-images/${filename}`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token || SUPABASE_KEY}`,
+            'apikey': SUPABASE_KEY,
+            'Content-Type': file.type,
+            'x-upsert': 'true',
+          },
+          body: file,
+        }
+      );
+      if (res.ok) {
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${filename}`;
+        setForm(f => ({ ...f, image_url: publicUrl }));
+      } else {
+        const err = await res.text();
+        alert('Upload failed: ' + err + '\n\nMake sure the "article-images" bucket exists in Supabase Storage with public access.');
+      }
+    } catch (e) {
+      alert('Upload error: ' + e.message);
+    } finally {
+      setUploading(false);
+    }
+  }
+
   function openEdit(a) {
     setForm({
-      title_ml:   a.title_ml   || '',
-      title_en:   a.title_en   || '',
-      summary_ml: a.summary_ml || '',
-      content_ml: a.content_ml || '',
-      category:   a.category   || 'news',
-      image_url:  a.image_url  || '',
-      source_url: a.source_url || '',
+      title_ml:      a.title_ml      || '',
+      title_en:      a.title_en      || '',
+      summary_ml:    a.summary_ml    || '',
+      content_ml:    a.content_ml    || '',
+      category:      a.category      || 'news',
+      image_url:     a.image_url     || '',
+      source_url:    a.source_url    || '',
+      internal_link: a.internal_link || '',
     });
     setEditId(a.id);
     setShowForm(true);
@@ -94,13 +151,14 @@ export default function AdminArticles() {
     setSaving(true);
     try {
       const payload = {
-        title_ml:   form.title_ml,
-        title_en:   form.title_en,
-        summary_ml: form.summary_ml,
-        content_ml: form.content_ml,
-        category:   form.category,
-        image_url:  form.image_url || null,
-        source_url: form.source_url || null,
+        title_ml:      form.title_ml,
+        title_en:      form.title_en,
+        summary_ml:    form.summary_ml,
+        content_ml:    form.content_ml,
+        category:      form.category,
+        image_url:     form.image_url || null,
+        source_url:    form.source_url || null,
+        internal_link: form.internal_link || null,
       };
       if (editId) {
         await api(`news?id=eq.${editId}`, 'PATCH', payload);
@@ -142,20 +200,49 @@ export default function AdminArticles() {
         </button>
       </div>
 
+      {/* SQL setup notice */}
+      <div className="bg-[#1a1200] border border-[#ff9f0a]/30 rounded-2xl px-5 py-4 flex flex-col sm:flex-row gap-3 items-start">
+        <div className="text-[#ff9f0a] text-lg flex-shrink-0">⚠</div>
+        <div className="flex-1">
+          <div className="text-xs font-black uppercase tracking-widest text-[#ff9f0a] mb-1">One-time Supabase setup required</div>
+          <p className="text-xs text-[#86868b] mb-2">Run this SQL in Supabase → SQL Editor to enable <b className="text-white">Internal Link</b> and <b className="text-white">Image Upload</b>:</p>
+          <code className="block text-[11px] bg-black/50 px-3 py-2 rounded-lg text-[#30d158] font-mono select-all">
+            ALTER TABLE news ADD COLUMN IF NOT EXISTS internal_link TEXT;
+          </code>
+          <p className="text-[11px] text-[#6e6e73] mt-1.5">Also create a Storage bucket named <b className="text-white">article-images</b> with <b className="text-white">Public</b> access in Supabase → Storage.</p>
+        </div>
+      </div>
+
       {/* Article Form */}
       {showForm && (
         <div className="bg-[#111] border border-white/[0.08] rounded-2xl p-6 space-y-5">
           <h2 className="text-lg font-bold text-white">{editId ? 'ലേഖനം തിരുത്തുക' : 'പുതിയ ലേഖനം'}</h2>
 
-          {/* Category */}
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Category — ഈ ലേഖനം ഏത് പേജിൽ കാണണം?</label>
-            <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
-              className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors">
-              {CATEGORIES.map(c => (
-                <option key={c.value} value={c.value}>{c.label} → {c.page}</option>
-              ))}
-            </select>
+          {/* Row 1: Category + Internal Link */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Category</label>
+              <select value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+                className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors">
+                {CATEGORIES.map(c => (
+                  <option key={c.value} value={c.value}>{c.label} → {c.page}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                Internal Link <span className="normal-case font-normal text-[#6e6e73]">— Related page on this site</span>
+              </label>
+              <select value={form.internal_link} onChange={e => setForm(f => ({ ...f, internal_link: e.target.value }))}
+                className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#30d158] transition-colors">
+                {INTERNAL_PAGES.map(p => (
+                  <option key={p.value} value={p.value}>{p.label}</option>
+                ))}
+              </select>
+              {form.internal_link && (
+                <p className="text-[10px] text-[#30d158] mt-1">→ ലേഖനത്തിൽ "{form.internal_link}" CTA button കാണിക്കും</p>
+              )}
+            </div>
           </div>
 
           {/* Title ML */}
@@ -169,15 +256,15 @@ export default function AdminArticles() {
 
           {/* Title EN */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Title (English)</label>
+            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Title (English) <span className="normal-case font-normal">— for SEO</span></label>
             <input value={form.title_en} onChange={e => setForm(f => ({ ...f, title_en: e.target.value }))}
-              placeholder="Article title in English (optional)"
+              placeholder="Article title in English (recommended for Google ranking)"
               className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors" />
           </div>
 
           {/* Summary */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">സംക്ഷിപ്തം (Summary)</label>
+            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">സംക്ഷിപ്തം (Summary) <span className="normal-case font-normal">— article card-ൽ കാണിക്കും</span></label>
             <textarea value={form.summary_ml} onChange={e => setForm(f => ({ ...f, summary_ml: e.target.value }))}
               rows={3} placeholder="ചെറിയ വിവരണം — ഹോം പേജിൽ കാർഡിൽ കാണിക്കും"
               className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors resize-y"
@@ -188,7 +275,7 @@ export default function AdminArticles() {
           <div>
             <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
               പൂർണ്ണ ഉള്ളടക്കം (Full Content)
-              <span className="ml-2 normal-case font-normal text-[#6e6e73]">— HTML tags supported: &lt;h3&gt; &lt;p&gt; &lt;b&gt; &lt;ul&gt; &lt;li&gt; &lt;br&gt;</span>
+              <span className="ml-2 normal-case font-normal text-[#6e6e73]">— HTML: &lt;h3&gt; &lt;p&gt; &lt;b&gt; &lt;ul&gt; &lt;li&gt; &lt;br&gt; supported</span>
             </label>
             <textarea value={form.content_ml} onChange={e => setForm(f => ({ ...f, content_ml: e.target.value }))}
               rows={14} placeholder="<h3>വിഭാഗം 1</h3>&#10;<p>ഇവിടെ ഉള്ളടക്കം എഴുതുക...</p>&#10;<ul>&#10;  <li>പോയിന്റ് 1</li>&#10;  <li>പോയിന്റ് 2</li>&#10;</ul>"
@@ -196,17 +283,45 @@ export default function AdminArticles() {
               style={{ lineHeight: 1.6 }} />
           </div>
 
-          {/* Image URL */}
+          {/* Image Upload */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Image URL (optional)</label>
-            <input value={form.image_url} onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
-              placeholder="https://..."
-              className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors" />
+            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-2">
+              Article Image
+            </label>
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* File upload */}
+              <label className={`flex items-center gap-3 px-4 py-3 rounded-xl border border-dashed cursor-pointer transition-all flex-shrink-0
+                ${uploading ? 'opacity-50 cursor-wait' : 'hover:border-[#2997ff] hover:bg-[#2997ff]/5'}`}
+                style={{ borderColor: 'rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.02)' }}>
+                <input type="file" accept="image/jpeg,image/png,image/webp,image/gif"
+                  className="hidden"
+                  onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+                <span className="text-xl">{uploading ? '⏳' : '📸'}</span>
+                <div>
+                  <div className="text-sm font-bold text-white/80">{uploading ? 'Uploading...' : 'Image Upload ചെയ്യുക'}</div>
+                  <div className="text-[10px] text-[#6e6e73]">JPG, PNG, WebP — max 5MB</div>
+                </div>
+              </label>
+              {/* URL fallback */}
+              <input value={form.image_url} onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
+                placeholder="അല്ലെങ്കിൽ image URL paste ചെയ്യുക..."
+                className="flex-1 px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors" />
+            </div>
+            {/* Preview */}
+            {form.image_url && (
+              <div className="mt-3 relative inline-block">
+                <img src={form.image_url} alt="preview" className="h-28 rounded-xl object-cover" />
+                <button onClick={() => setForm(f => ({ ...f, image_url: '' }))}
+                  className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#ff453a] text-white text-xs flex items-center justify-center border-none cursor-pointer font-bold">
+                  ×
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Source URL */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Source URL (optional)</label>
+            <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Source URL <span className="normal-case font-normal">— original article link (external)</span></label>
             <input value={form.source_url} onChange={e => setForm(f => ({ ...f, source_url: e.target.value }))}
               placeholder="https://finance.kerala.gov.in/..."
               className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors" />
@@ -214,7 +329,7 @@ export default function AdminArticles() {
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
-            <button onClick={save} disabled={saving}
+            <button onClick={save} disabled={saving || uploading}
               className="px-6 py-2.5 rounded-xl text-sm font-bold bg-[#2997ff] text-white hover:bg-[#0077ed] transition-all border-none cursor-pointer disabled:opacity-50">
               {saving ? 'സേവ് ചെയ്യുന്നു...' : editId ? 'അപ്ഡേറ്റ് ചെയ്യുക' : 'പ്രസിദ്ധീകരിക്കുക'}
             </button>
