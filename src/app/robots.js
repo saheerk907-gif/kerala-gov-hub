@@ -7,6 +7,6 @@ export default function robots() {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://keralagovhub.in/sitemap.xml',
+    sitemap: 'https://keralaemployees.in/sitemap.xml',
   };
 }

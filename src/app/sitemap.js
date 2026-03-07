@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase';
 
-const BASE_URL = 'https://keralagovhub.in';
+const BASE_URL = 'https://keralaemployees.in';
 
 const staticRoutes = [
   { url: '/', changeFrequency: 'daily', priority: 1.0 },
