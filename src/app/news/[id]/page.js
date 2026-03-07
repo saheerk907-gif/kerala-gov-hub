@@ -29,6 +29,58 @@ function sourceDomain(url = '') {
   try { return new URL(url).hostname.replace('www.', ''); } catch { return ''; }
 }
 
+// Extracts readable paragraphs from raw HTML
+function extractContent(html) {
+  const cleaned = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+    .replace(/<header[\s\S]*?<\/header>/gi, '')
+    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+    .replace(/<aside[\s\S]*?<\/aside>/gi, '')
+    .replace(/<!--[\s\S]*?-->/g, '');
+
+  const articleMatch = cleaned.match(/<article[\s\S]*?<\/article>/i) ||
+                       cleaned.match(/<main[\s\S]*?<\/main>/i) ||
+                       cleaned.match(/class="[^"]*(?:article|content|story|post|body)[^"]*"[\s\S]*?>([\s\S]*?)<\/(?:div|section)/i);
+
+  const source = articleMatch ? articleMatch[0] : cleaned;
+  const paragraphs = [];
+  const pRegex = /<p[^>]*>([\s\S]*?)<\/p>/gi;
+  let match;
+  while ((match = pRegex.exec(source)) !== null) {
+    const text = match[1]
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+      .replace(/\s+/g, ' ').trim();
+    if (text.length > 40) paragraphs.push(text);
+  }
+  return paragraphs;
+}
+
+// Server-side fetch of full article content
+async function fetchArticleContent(url) {
+  try {
+    const res = await fetch(url, {
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9,ml;q=0.8',
+      },
+      signal: AbortSignal.timeout(8000),
+      next: { revalidate: 3600 },
+    });
+    const html = await res.text();
+    const paragraphs = extractContent(html);
+    const imgMatch = html.match(/<meta[^>]+(?:property="og:image"|name="twitter:image")[^>]+content="([^"]+)"/i) ||
+                     html.match(/content="([^"]+)"[^>]+property="og:image"/i);
+    return { paragraphs, image: imgMatch ? imgMatch[1] : null };
+  } catch {
+    return { paragraphs: [], image: null };
+  }
+}
+
 export default async function NewsDetailPage({ params }) {
   const { id } = params;
 
@@ -56,6 +108,11 @@ export default async function NewsDetailPage({ params }) {
       </>
     );
   }
+
+  // For RSS articles without real content, fetch the full article server-side
+  const needsFetch = isJustHtml(item.content_ml) && item.source_url;
+  const fetched = needsFetch ? await fetchArticleContent(item.source_url) : { paragraphs: [], image: null };
+  const displayImage = item.image_url || fetched.image;
 
   return (
     <>
@@ -101,8 +158,8 @@ export default async function NewsDetailPage({ params }) {
 
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6 py-12">
-          {item.image_url && (
-            <img src={item.image_url} alt={item.title_ml}
+          {displayImage && (
+            <img src={displayImage} alt={item.title_ml}
               className="w-full rounded-2xl object-cover mb-10"
               style={{ maxHeight: '420px' }} />
           )}
@@ -119,41 +176,57 @@ export default async function NewsDetailPage({ params }) {
               <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
             </>
           ) : (
-            /* Auto-fetched RSS article — clean snippet + source link */
+            /* RSS article — show fetched full content inline */
             <div className="space-y-8">
-              {/* Clean text snippet */}
+              {/* Summary lead */}
               {item.summary_ml && !isJustHtml(item.summary_ml) && (
-                <div className="rounded-2xl p-6"
-                  style={{ background: 'rgba(41,151,255,0.04)', border: '1px solid rgba(41,151,255,0.12)' }}>
-                  <div className="text-[10px] font-black uppercase tracking-widest text-[#2997ff] mb-3">Article Summary</div>
-                  <p className="text-[15px] text-[#c7c7cc] leading-relaxed"
-                    style={{ fontFamily: "'Meera', sans-serif" }}>
-                    {stripHtml(item.summary_ml)}
-                  </p>
-                </div>
+                <p className="text-[17px] text-[#aeaeb2] leading-relaxed pl-5 border-l-2 border-[#2997ff]"
+                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                  {stripHtml(item.summary_ml)}
+                </p>
               )}
 
-              {/* Read full article CTA */}
-              {item.source_url && (
-                <div className="rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center gap-5"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                  <div className="flex-1">
-                    <div className="text-[11px] font-bold uppercase tracking-widest text-white/30 mb-1">
-                      Source · {sourceDomain(item.source_url)}
-                    </div>
-                    <p className="text-sm text-[#86868b]">
-                      ഈ വാർത്ത ഒറിജിനൽ വെബ്‌സൈറ്റിൽ നിന്ന് ഓട്ടോമാറ്റിക്കായി ശേഖരിച്ചതാണ്. പൂർണ്ണ ലേഖനം വായിക്കാൻ Source സന്ദർശിക്കുക.
+              {/* Fetched article paragraphs */}
+              {fetched.paragraphs.length > 0 ? (
+                <div className="space-y-4">
+                  {fetched.paragraphs.map((para, i) => (
+                    <p key={i} className="text-[15px] text-[#c7c7cc] leading-[1.85]"
+                      style={{ fontFamily: "'Meera', Georgia, serif" }}>
+                      {para}
                     </p>
+                  ))}
+                </div>
+              ) : (
+                /* Fallback if scraping failed */
+                item.source_url && (
+                  <div className="rounded-2xl p-6"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <p className="text-sm text-[#86868b] mb-4">
+                      ഈ വാർത്ത ഒറിജിനൽ വെബ്‌സൈറ്റിൽ നിന്ന് ഓട്ടോമാറ്റിക്കായി ശേഖരിച്ചതാണ്.
+                    </p>
+                    <a href={item.source_url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+                      style={{ background: '#2997ff', color: 'white' }}>
+                      പൂർണ്ണ ലേഖനം വായിക്കുക ↗
+                    </a>
                   </div>
+                )
+              )}
+
+              {/* Source attribution */}
+              {item.source_url && (
+                <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                  <span className="text-[11px] text-white/25 uppercase tracking-widest">
+                    Source · {sourceDomain(item.source_url)}
+                  </span>
                   <a href={item.source_url} target="_blank" rel="noopener noreferrer"
-                    className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
-                    style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}>
-                    പൂർണ്ണ ലേഖനം വായിക്കുക ↗
+                    className="text-[12px] text-[#2997ff] no-underline hover:underline">
+                    Original article ↗
                   </a>
                 </div>
               )}
 
-              {/* Related tools suggestion */}
+              {/* Related tools */}
               <div className="rounded-2xl p-5"
                 style={{ background: 'rgba(200,150,12,0.04)', border: '1px solid rgba(200,150,12,0.12)' }}>
                 <div className="text-[10px] font-black uppercase tracking-widest text-[#c8960c] mb-3">Related Tools</div>
