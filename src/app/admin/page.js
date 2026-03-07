@@ -16,19 +16,20 @@ async function fetchCount(table) {
 }
 
 export default function AdminDashboard() {
-  const [counts, setCounts] = useState({ orders: '...', schemes: '...', links: '...', news: '...' });
+  const [counts, setCounts] = useState({ orders: '...', schemes: '...', links: '...', news: '...', audio: '...' });
   const [status, setStatus] = useState('checking');
 
   useEffect(() => {
     async function load() {
       try {
-        const [orders, schemes, links, news] = await Promise.all([
+        const [orders, schemes, links, news, audio] = await Promise.all([
           fetchCount('government_orders'),
           fetchCount('schemes'),
           fetchCount('quick_links'),
           fetchCount('news'),
+          fetchCount('audio_classes'),
         ]);
-        setCounts({ orders, schemes, links, news });
+        setCounts({ orders, schemes, links, news, audio });
         setStatus('ok');
       } catch {
         setStatus('error');
@@ -42,6 +43,7 @@ export default function AdminDashboard() {
     { label: 'സർക്കാർ ഉത്തരവുകൾ', en: 'Government Orders', count: counts.orders, color: '#ff9f0a', href: '/admin/orders', icon: '📄' },
     { label: 'പദ്ധതികൾ', en: 'Schemes', count: counts.schemes, color: '#30d158', href: '/admin/schemes', icon: '📋' },
     { label: 'ലിങ്കുകൾ', en: 'Quick Links', count: counts.links, color: '#5e5ce6', href: '/admin/links', icon: '🔗' },
+    { label: 'ഓഡിയോ ക്ലാസ്സുകൾ', en: 'Audio Classes', count: counts.audio, color: '#30d158', href: '/admin/audio', icon: '🎙️' },
   ];
 
   return (
@@ -80,6 +82,7 @@ export default function AdminDashboard() {
           { href: '/admin/orders', icon: '➕', label: 'പുതിയ ഉത്തരവ് ചേർക്കുക', en: 'Add new Government Order' },
           { href: '/admin/schemes', icon: '✏️', label: 'പദ്ധതികൾ എഡിറ്റ് ചെയ്യുക', en: 'Edit Schemes content' },
           { href: '/admin/links', icon: '🔗', label: 'ലിങ്കുകൾ മാനേജ് ചെയ്യുക', en: 'Manage Quick Links' },
+          { href: '/admin/audio', icon: '🎙️', label: 'ഓഡിയോ ക്ലാസ്സ് അപ്‌ലോഡ് ചെയ്യുക', en: 'Upload Audio Classes' },
           { href: '/', icon: '🌐', label: 'പബ്ലിക് സൈറ്റ് കാണുക', en: 'View public website', target: '_blank' },
         ].map(a => (
           <Link key={a.en} href={a.href} target={a.target}

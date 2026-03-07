@@ -1,4 +1,5 @@
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights, getNews } from '@/lib/supabase';
+import AudioClassesSection from '@/components/AudioClassesSection';
 import Hero from '@/components/Hero';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 import SectionNav from '@/components/SectionNav';
@@ -65,7 +66,12 @@ export default async function HomePage() {
         <ArticlesSection />
       </ScrollReveal>
 
-      {/* 6. Departmental Tests */}
+      {/* 6. Audio Classes */}
+      <ScrollReveal direction="up" delay={0}>
+        <AudioClassesSection />
+      </ScrollReveal>
+
+      {/* 7. Departmental Tests */}
       <ScrollReveal direction="up" delay={0}>
         <DepartmentalTestsSection />
       </ScrollReveal>

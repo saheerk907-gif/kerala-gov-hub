@@ -55,6 +55,15 @@ export async function getHighlights() {
 }
 
 // വാർത്തകൾ അഡ്മിൻ പേജിൽ നിന്ന് ചേർക്കാൻ (Add News)
+export async function getAudioClasses() {
+  const { data, error } = await supabase
+    .from('audio_classes')
+    .select('*')
+    .order('episode_number', { ascending: true });
+  if (error) throw error;
+  return data;
+}
+
 export const addNews = async (newsData) => {
   const { data, error } = await supabase
     .from('news')
