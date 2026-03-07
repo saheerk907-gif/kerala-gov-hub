@@ -29,7 +29,7 @@ const staticRoutes = [
 ];
 
 export default async function sitemap() {
-  // Fetch all news article IDs + dates for dynamic routes
+  // Fetch all news IDs for dynamic routes
   let newsRoutes = [];
   try {
     const { data } = await supabase
@@ -49,6 +49,26 @@ export default async function sitemap() {
     // if fetch fails, sitemap still works with static routes
   }
 
+  // Fetch all article IDs for dynamic routes
+  let articleRoutes = [];
+  try {
+    const { data } = await supabase
+      .from('articles')
+      .select('id, created_at')
+      .order('created_at', { ascending: false });
+
+    if (data) {
+      articleRoutes = data.map((item) => ({
+        url: `${BASE_URL}/articles/${item.id}`,
+        lastModified: new Date(item.created_at),
+        changeFrequency: 'never',
+        priority: 0.65,
+      }));
+    }
+  } catch {
+    // if fetch fails, sitemap still works with static routes
+  }
+
   const statics = staticRoutes.map((route) => ({
     url: `${BASE_URL}${route.url}`,
     lastModified: new Date(),
@@ -56,5 +76,5 @@ export default async function sitemap() {
     priority: route.priority,
   }));
 
-  return [...statics, ...newsRoutes];
+  return [...statics, ...newsRoutes, ...articleRoutes];
 }

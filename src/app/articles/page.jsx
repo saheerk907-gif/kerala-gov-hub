@@ -40,7 +40,7 @@ function FeaturedCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   const cat = CATEGORIES.find(c => c.value === article.category);
   return (
-    <Link href={`/news/${article.id}`} className="no-underline group block" style={{ gridColumn: '1 / -1' }}>
+    <Link href={`/articles/${article.id}`} className="no-underline group block" style={{ gridColumn: '1 / -1' }}>
       <div className="relative rounded-3xl overflow-hidden"
         style={{ minHeight: '380px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
@@ -94,7 +94,7 @@ function ArticleCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   const cat = CATEGORIES.find(c => c.value === article.category);
   return (
-    <Link href={`/news/${article.id}`} className="no-underline group flex flex-col">
+    <Link href={`/articles/${article.id}`} className="no-underline group flex flex-col">
       <div className="rounded-2xl overflow-hidden flex flex-col h-full transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
         style={{ background: '#0d0d0d', border: '1px solid rgba(255,255,255,0.07)' }}>
 
@@ -157,7 +157,7 @@ export default function ArticlesPage() {
   async function fetchArticles(cat, offset, replace = false) {
     const catFilter = cat !== 'all' ? `&category=eq.${cat}` : '';
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/news?select=id,title_ml,title_en,summary_ml,image_url,category,created_at${catFilter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`,
+      `${SUPABASE_URL}/rest/v1/articles?select=id,title_ml,title_en,summary_ml,image_url,category,created_at${catFilter}&order=created_at.desc&limit=${PAGE_SIZE}&offset=${offset}`,
       { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
     );
     const data = await res.json();

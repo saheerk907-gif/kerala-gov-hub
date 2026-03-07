@@ -78,7 +78,7 @@ export default function AdminArticles() {
   async function load() {
     setLoading(true);
     try {
-      let path = 'news?select=*&order=created_at.desc';
+      let path = 'articles?select=*&order=created_at.desc';
       if (filterCat !== 'all') path += `&category=eq.${filterCat}`;
       const data = await api(path);
       setArticles(Array.isArray(data) ? data : []);
@@ -161,10 +161,10 @@ export default function AdminArticles() {
         internal_link: form.internal_link || null,
       };
       if (editId) {
-        await api(`news?id=eq.${editId}`, 'PATCH', payload);
+        await api(`articles?id=eq.${editId}`, 'PATCH', payload);
       } else {
         payload.created_at = new Date().toISOString();
-        await api('news', 'POST', payload);
+        await api('articles', 'POST', payload);
       }
       setShowForm(false);
       setEditId(null);
@@ -178,7 +178,7 @@ export default function AdminArticles() {
 
   async function remove(id) {
     if (!confirm('ഈ ലേഖനം ഡിലീറ്റ് ചെയ്യണോ?')) return;
-    await api(`news?id=eq.${id}`, 'DELETE');
+    await api(`articles?id=eq.${id}`, 'DELETE');
     load();
   }
 
@@ -205,9 +205,23 @@ export default function AdminArticles() {
         <div className="text-[#ff9f0a] text-lg flex-shrink-0">⚠</div>
         <div className="flex-1">
           <div className="text-xs font-black uppercase tracking-widest text-[#ff9f0a] mb-1">One-time Supabase setup required</div>
-          <p className="text-xs text-[#86868b] mb-2">Run this SQL in Supabase → SQL Editor to enable <b className="text-white">Internal Link</b> and <b className="text-white">Image Upload</b>:</p>
-          <code className="block text-[11px] bg-black/50 px-3 py-2 rounded-lg text-[#30d158] font-mono select-all">
-            ALTER TABLE news ADD COLUMN IF NOT EXISTS internal_link TEXT;
+          <p className="text-xs text-[#86868b] mb-2">Run this SQL in Supabase → SQL Editor to create the <b className="text-white">articles</b> table:</p>
+          <code className="block text-[11px] bg-black/50 px-3 py-2 rounded-lg text-[#30d158] font-mono select-all whitespace-pre-wrap">
+{`CREATE TABLE IF NOT EXISTS articles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title_ml TEXT NOT NULL,
+  title_en TEXT,
+  summary_ml TEXT,
+  content_ml TEXT,
+  category TEXT DEFAULT 'general',
+  image_url TEXT,
+  source_url TEXT,
+  internal_link TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE articles ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read articles" ON articles FOR SELECT USING (true);
+CREATE POLICY "Admin all articles" ON articles FOR ALL USING (auth.role() = 'authenticated');`}
           </code>
           <p className="text-[11px] text-[#6e6e73] mt-1.5">Also create a Storage bucket named <b className="text-white">article-images</b> with <b className="text-white">Public</b> access in Supabase → Storage.</p>
         </div>
@@ -391,7 +405,7 @@ export default function AdminArticles() {
                   )}
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <a href={`/news/${a.id}`} target="_blank" rel="noopener noreferrer"
+                  <a href={`/articles/${a.id}`} target="_blank" rel="noopener noreferrer"
                     className="px-3 py-1.5 rounded-lg text-xs font-bold text-[#6e6e73] hover:text-white bg-white/5 hover:bg-white/10 transition-all no-underline">
                     കാണുക
                   </a>
