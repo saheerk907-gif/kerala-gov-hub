@@ -8,6 +8,8 @@ const staticRoutes = [
   { url: '/prc', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/nps', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/gpf', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/medisep', changeFrequency: 'weekly', priority: 0.8 },
+  { url: '/medisep/faq', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.7 },
 ];
 
