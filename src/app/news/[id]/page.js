@@ -4,12 +4,22 @@ import Footer from '@/components/Footer';
 
 export const dynamic = 'force-dynamic';
 
-// Strip HTML tags and decode entities — used to clean RSS summary_ml
+// Strip HTML tags and decode entities
 function stripHtml(html = '') {
   return html
-    .replace(/<[^>]+>/g, ' ')
+    // decode entities first so tags become visible to the next step
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
+    // strip all tags
+    .replace(/<[^>]*>/g, ' ')
+    // decode any remaining entities
     .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ')
     .replace(/\s+/g, ' ').trim();
+}
+
+// Returns true if the string is essentially just HTML markup with no real text body
+function isJustHtml(str = '') {
+  const text = stripHtml(str).trim();
+  return text.length < 20;
 }
 
 // Extract source domain from URL for display
@@ -95,10 +105,10 @@ export default async function NewsDetailPage({ params }) {
               style={{ maxHeight: '420px' }} />
           )}
 
-          {item.content_ml ? (
-            /* Admin-written article — show full content */
+          {item.content_ml && !isJustHtml(item.content_ml) ? (
+            /* Admin-written article with real content */
             <>
-              {item.summary_ml && (
+              {item.summary_ml && !isJustHtml(item.summary_ml) && (
                 <p className="text-[17px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
                   style={{ fontFamily: "'Meera', sans-serif" }}>
                   {stripHtml(item.summary_ml)}
@@ -110,7 +120,7 @@ export default async function NewsDetailPage({ params }) {
             /* Auto-fetched RSS article — clean snippet + source link */
             <div className="space-y-8">
               {/* Clean text snippet */}
-              {item.summary_ml && (
+              {item.summary_ml && !isJustHtml(item.summary_ml) && (
                 <div className="rounded-2xl p-6"
                   style={{ background: 'rgba(41,151,255,0.04)', border: '1px solid rgba(41,151,255,0.12)' }}>
                   <div className="text-[10px] font-black uppercase tracking-widest text-[#2997ff] mb-3">Article Summary</div>
