@@ -2,8 +2,16 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+
+export const metadata = buildMetadata({
+  title: 'Kerala Service Rules (KSR) — Complete Guide',
+  description: 'Complete guide to Kerala Service Rules (KSR) for government employees — leave rules, pay, promotion, transfer, pension, and disciplinary proceedings.',
+  path: '/ksr',
+  keywords: ['Kerala Service Rules', 'KSR', 'Kerala government service rules', 'KSR leave rules', 'KSR pay rules'],
+});
 
 export default async function KsrPage() {
   const [{ data }, { data: articles }] = await Promise.all([

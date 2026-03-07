@@ -1,8 +1,32 @@
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildArticleJsonLd } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }) {
+  const { id } = params;
+  const { data: item } = await supabase.from('news').select('title_ml,title_en,summary_ml,image_url,created_at').eq('id', id).single();
+  if (!item) return { title: 'വാർത്ത | Kerala Employees' };
+  const title = item.title_en || item.title_ml;
+  const description = item.summary_ml ? item.summary_ml.replace(/<[^>]+>/g, '').slice(0, 160) : title;
+  const url = `https://keralaemployees.in/news/${id}`;
+  return {
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      type: 'article',
+      publishedTime: item.created_at,
+      images: item.image_url ? [{ url: item.image_url }] : [],
+    },
+    twitter: { card: 'summary_large_image', title, description, images: item.image_url ? [item.image_url] : [] },
+  };
+}
 
 // Strip HTML tags and decode entities
 function stripHtml(html = '') {
@@ -114,8 +138,17 @@ export default async function NewsDetailPage({ params }) {
   const fetched = needsFetch ? await fetchArticleContent(item.source_url) : { paragraphs: [], image: null };
   const displayImage = item.image_url || fetched.image;
 
+  const articleJsonLd = buildArticleJsonLd({
+    title: item.title_en || item.title_ml,
+    description: item.summary_ml ? stripHtml(item.summary_ml).slice(0, 160) : item.title_ml,
+    url: `https://keralaemployees.in/news/${id}`,
+    image: displayImage,
+    datePublished: item.created_at,
+  });
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <Navbar />
       <main className="min-h-screen bg-black text-white">
         {/* Hero */}

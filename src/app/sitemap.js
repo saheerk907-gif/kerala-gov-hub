@@ -3,14 +3,24 @@ import { supabase } from '@/lib/supabase';
 const BASE_URL = 'https://keralaemployees.in';
 
 const staticRoutes = [
+  // Core
   { url: '/', changeFrequency: 'daily', priority: 1.0 },
   { url: '/news', changeFrequency: 'daily', priority: 0.9 },
-  { url: '/prc', changeFrequency: 'monthly', priority: 0.8 },
-  { url: '/nps', changeFrequency: 'monthly', priority: 0.8 },
-  { url: '/gpf', changeFrequency: 'monthly', priority: 0.8 },
-  { url: '/medisep', changeFrequency: 'weekly', priority: 0.8 },
+  // MEDISEP
+  { url: '/medisep', changeFrequency: 'weekly', priority: 0.9 },
   { url: '/medisep/faq', changeFrequency: 'monthly', priority: 0.85 },
-  { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.7 },
+  // Calculators
+  { url: '/prc', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/pension', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/da-arrear', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/dcrg', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/nps-aps', changeFrequency: 'monthly', priority: 0.75 },
+  // Schemes / Info
+  { url: '/nps', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/gpf', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/ksr', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/kerala-service-rules', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.8 },
 ];
 
 export default async function sitemap() {

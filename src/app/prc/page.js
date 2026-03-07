@@ -3,8 +3,15 @@ import Footer from '@/components/Footer';
 import PayCalculator from '@/components/PayCalculator';
 
 export const metadata = {
-  title: '12th PRC Calculator — Kerala Pay Revision',
-  description: 'Calculate your revised salary under 12th Pay Revision Commission for Kerala government employees.',
+  title: '12th PRC Calculator — Kerala Pay Revision 2024',
+  description: 'Calculate your revised salary under the 12th Pay Revision Commission (PRC) for Kerala government employees. Fitment, DA, and new basic pay calculation.',
+  alternates: { canonical: 'https://keralaemployees.in/prc' },
+  keywords: '12th PRC calculator, Kerala pay revision 2024, PRC salary calculator, Kerala PRC fitment',
+  openGraph: {
+    title: '12th PRC Calculator — Kerala Pay Revision 2024',
+    description: 'Calculate revised salary under 12th PRC for Kerala government employees.',
+    url: 'https://keralaemployees.in/prc',
+  },
 };
 
 export default function PrcPage() {

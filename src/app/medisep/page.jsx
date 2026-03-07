@@ -2,8 +2,16 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+
+export const metadata = buildMetadata({
+  title: 'MEDISEP — Medical Insurance Scheme for Kerala Employees',
+  description: 'MEDISEP scheme details for Kerala government employees and pensioners — coverage, premium, empanelled hospitals, claim process, and helpline.',
+  path: '/medisep',
+  keywords: ['MEDISEP Kerala', 'MEDISEP scheme', 'Kerala employee health insurance', 'MEDISEP claim', 'MEDISEP hospitals', 'മെഡിസെപ്'],
+});
 
 export default async function MedisepPage() {
   const [{ data }, { data: articles }] = await Promise.all([

@@ -1,8 +1,16 @@
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+
+export const metadata = buildMetadata({
+  title: 'Kerala Service Rules — Leave, Pay & Pension',
+  description: 'Kerala Service Rules (KSR) for government employees — leave entitlement, pay rules, pension, disciplinary proceedings, and service conditions.',
+  path: '/kerala-service-rules',
+  keywords: ['Kerala Service Rules', 'Kerala government leave rules', 'KSR pension', 'Kerala pay rules'],
+});
 
 export default async function KsrPage() {
   const { data: pageData } = await supabase

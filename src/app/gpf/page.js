@@ -2,8 +2,16 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+
+export const metadata = buildMetadata({
+  title: 'GPF — General Provident Fund for Kerala Employees',
+  description: 'General Provident Fund (GPF) information for Kerala government employees — subscription rules, advance, withdrawal, and final settlement.',
+  path: '/gpf',
+  keywords: ['GPF Kerala', 'General Provident Fund Kerala', 'GPF advance withdrawal', 'GPF ജീവനക്കാർ'],
+});
 
 export default async function GpfPage() {
   const [{ data }, { data: articles }] = await Promise.all([

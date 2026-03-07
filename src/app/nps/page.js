@@ -1,8 +1,16 @@
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
+
+export const metadata = buildMetadata({
+  title: 'NPS — National Pension System for Kerala Employees',
+  description: 'National Pension System (NPS) details for Kerala government employees — contribution, benefits, withdrawal rules, and comparison with APS.',
+  path: '/nps',
+  keywords: ['NPS Kerala', 'National Pension System Kerala', 'NPS ജീവനക്കാർ', 'Kerala NPS benefits'],
+});
 
 export default async function NpsPage() {
   const { data } = await supabase
