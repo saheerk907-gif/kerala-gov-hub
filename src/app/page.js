@@ -6,6 +6,7 @@ import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
 import NewSection from '@/components/NewSection';
 import ArticlesSection from '@/components/ArticlesSection';
+import TrendingArticle from '@/components/TrendingArticle';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import SchemesSection from '@/components/SchemesSection';
 import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
@@ -36,6 +37,9 @@ export default async function HomePage() {
 
       {/* 3. Sticky section jump bar (appears after scrolling) */}
       <SectionNav />
+
+      {/* Trending Article */}
+      <TrendingArticle />
 
       {/* 3. Tools & Calculators — first thing users see */}
       <ScrollReveal direction="up" delay={0}>
