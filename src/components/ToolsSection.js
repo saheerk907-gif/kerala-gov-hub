@@ -107,7 +107,6 @@ const tools = [
 export default function ToolsSection() {
   return (
     <section id="tools" className="relative py-8 px-4 md:px-6">
-      <style>{`.tools-scroll::-webkit-scrollbar{display:none}`}</style>
       <div className="max-w-[1300px] mx-auto">
 
         {/* Header */}
@@ -120,14 +119,13 @@ export default function ToolsSection() {
           </div>
         </div>
 
-        {/* Scroll strip on mobile, grid on desktop */}
-        <div className="tools-scroll flex flex-row overflow-x-auto gap-2.5 pb-2 md:grid md:grid-cols-5 md:overflow-visible md:pb-0 md:gap-3"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        {/* 3-col grid on mobile, 5-col on desktop */}
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-2.5 md:gap-3">
           {tools.map((t) => (
             <Link
               key={t.title}
               href={t.href}
-              className="glass-card group relative flex flex-col items-center text-center rounded-[14px] p-3 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden flex-shrink-0 w-[110px] md:w-auto md:items-start md:text-left md:rounded-[16px] md:p-3.5"
+              className="glass-card group relative flex flex-col items-center text-center rounded-[14px] p-3 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden md:items-start md:text-left md:rounded-[16px] md:p-3.5"
             >
               {/* Badge */}
               {t.badge && t.badge !== 'SOON' && (
