@@ -156,15 +156,9 @@ export default function AdminTests() {
         ) : (
           <>
             {/* Header */}
-            <div className="flex items-center justify-between mb-5">
-              <div>
-                <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
-                <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
-              </div>
-              <button onClick={() => { setForm(EMPTY_Q); setEditId(null); setShowForm(true); }}
-                className="px-4 py-2 bg-[#2997ff] text-white rounded-xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
-                + ചോദ്യം ചേർക്കുക
-              </button>
+            <div className="mb-5">
+              <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
+              <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
             </div>
 
             {/* Add/Edit form */}
@@ -258,6 +252,16 @@ export default function AdminTests() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Add button at bottom */}
+            {!showForm && (
+              <div className="mt-6">
+                <button onClick={() => { setForm(EMPTY_Q); setEditId(null); setShowForm(true); }}
+                  className="w-full py-4 bg-[#2997ff] text-white rounded-2xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
+                  + ചോദ്യം ചേർക്കുക
+                </button>
               </div>
             )}
           </>
