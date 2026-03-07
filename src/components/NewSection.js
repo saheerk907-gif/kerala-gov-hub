@@ -110,16 +110,26 @@ export default function NewsSection() {
         </div>
       )}
 
-      {/* More news button */}
+      {/* Bottom buttons */}
       {!loading && news.length > 0 && (
-        <Link href="/news"
-          className="mt-4 w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
-          style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)' }}>
-          എല്ലാ വാർത്തകളും കാണുക
-          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
-            <path d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
+        <div className="mt-4 flex flex-col gap-2">
+          <Link href="/articles"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-[#2997ff]/10"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.2)' }}>
+            എല്ലാ ലേഖനങ്ങളും കാണുക
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+          <Link href="/news"
+            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
+            എല്ലാ വാർത്തകളും കാണുക
+            <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
       )}
     </div>
   );

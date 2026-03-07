@@ -62,6 +62,19 @@ const NAV_ITEMS = [
     ],
   },
   {
+    label: 'വാർത്തകൾ',
+    en: 'Articles',
+    href: '/articles',
+    dropdown: [
+      { label: 'എല്ലാ ലേഖനങ്ങളും',   sub: 'All published articles',     href: '/articles'               },
+      { label: 'MEDISEP Articles',    sub: 'Claim, complaint, FAQ',       href: '/articles?cat=medisep'  },
+      { label: 'Pension Articles',    sub: 'Calculation, rules',          href: '/articles?cat=pension'  },
+      { label: 'KSR Articles',        sub: 'Service rule updates',        href: '/articles?cat=ksr'      },
+      { label: 'DA / Pay Articles',   sub: 'Dearness allowance updates',  href: '/articles?cat=da'       },
+      { label: 'Latest News',         sub: 'Government news feed',        href: '/news'                  },
+    ],
+  },
+  {
     label: 'പോർട്ടലുകൾ',
     en: 'Portals',
     href: '#links',
