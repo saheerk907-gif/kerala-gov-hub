@@ -7,7 +7,7 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const CAT_COLORS = {
   news: '#2997ff', medisep: '#ff9f0a', pension: '#30d158',
-  ksr: '#bf5af2', gpf: '#64d2ff', da: '#ff453a',
+  ksr: '#5ac8fa', gpf: '#64d2ff', da: '#ff453a',
   nps: '#ff9f0a', benefits: '#30d158', general: '#aeaeb2',
 };
 

@@ -24,7 +24,7 @@ const CAT_COLORS = {
   news:     '#2997ff',
   medisep:  '#ff9f0a',
   pension:  '#30d158',
-  ksr:      '#bf5af2',
+  ksr:      '#5ac8fa',
   gpf:      '#64d2ff',
   da:       '#ff453a',
   nps:      '#ff9f0a',
