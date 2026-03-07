@@ -90,7 +90,9 @@ export default function AdminTests() {
   const [csvPreview, setCsvPreview] = useState([]);
   const [csvError, setCsvError] = useState('');
   const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState(0);
   const [importResult, setImportResult] = useState(null);
+  const [deletingAll, setDeletingAll] = useState(false);
   const fileRef = useRef();
 
   useEffect(() => {
@@ -176,6 +178,7 @@ export default function AdminTests() {
     if (!csvPreview.length) return;
     setImporting(true);
     setImportResult(null);
+    setImportProgress(0);
     const payload = csvPreview.map((q, i) => ({
       ...q,
       test_id: selectedTest.id,
@@ -183,21 +186,33 @@ export default function AdminTests() {
       sort_order: q.sort_order || i + 1,
     }));
 
-    // Insert in batches of 50
+    const BATCH = 100;
+    const total = Math.ceil(payload.length / BATCH);
     let inserted = 0;
     let failed = 0;
-    for (let i = 0; i < payload.length; i += 50) {
-      const batch = payload.slice(i, i + 50);
+    for (let i = 0; i < payload.length; i += BATCH) {
+      const batch = payload.slice(i, i + BATCH);
       const result = await api('quiz_questions', 'POST', batch);
       if (Array.isArray(result)) inserted += result.length;
       else failed += batch.length;
+      setImportProgress(Math.round(((i / BATCH + 1) / total) * 100));
     }
 
     setImporting(false);
+    setImportProgress(0);
     setImportResult({ inserted, failed });
     setCsvPreview([]);
     if (fileRef.current) fileRef.current.value = '';
     loadQuestions(selectedTest.id, selectedPaper);
+    refreshCounts();
+  }
+
+  async function handleDeleteAll() {
+    if (!confirm(`"${selectedTest.name_ml}" Paper ${selectedPaper}-ലെ എല്ലാ ചോദ്യങ്ങളും ഡിലീറ്റ് ചെയ്യണോ? ഇത് തിരിച്ചെടുക്കാനാകില്ല.`)) return;
+    setDeletingAll(true);
+    await api(`quiz_questions?test_id=eq.${selectedTest.id}&paper_number=eq.${selectedPaper}`, 'DELETE');
+    setDeletingAll(false);
+    setQuestions([]);
     refreshCounts();
   }
 
@@ -324,9 +339,19 @@ export default function AdminTests() {
                         </div>
                       ))}
                     </div>
+                    {importing && (
+                      <div className="mb-3">
+                        <div className="flex justify-between text-[11px] text-[#6e6e73] mb-1">
+                          <span>Importing...</span><span>{importProgress}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                          <div className="h-full bg-[#30d158] rounded-full transition-all duration-300" style={{ width: `${importProgress}%` }} />
+                        </div>
+                      </div>
+                    )}
                     <button onClick={handleImport} disabled={importing}
                       className="w-full py-3 bg-[#30d158] text-white rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#28b34a] disabled:opacity-50 transition-all">
-                      {importing ? 'Import ചെയ്യുന്നു...' : `${csvPreview.length} ചോദ്യങ്ങൾ Import ചെയ്യുക`}
+                      {importing ? `Importing... ${importProgress}%` : `${csvPreview.length} ചോദ്യങ്ങൾ Import ചെയ്യുക`}
                     </button>
                   </>
                 )}
@@ -440,6 +465,13 @@ export default function AdminTests() {
                   style={{ background: showImport ? '#30d15825' : 'rgba(255,255,255,0.06)', color: showImport ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
                   📥 CSV Bulk Import
                 </button>
+                {questions.length > 0 && (
+                  <button onClick={handleDeleteAll} disabled={deletingAll}
+                    className="w-full py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50"
+                    style={{ background: 'rgba(255,69,58,0.10)', color: '#ff453a' }}>
+                    {deletingAll ? 'Deleting...' : `🗑 ഈ Paper-ലെ എല്ലാ ചോദ്യങ്ങളും Delete (${questions.length})`}
+                  </button>
+                )}
               </div>
             )}
           </>
