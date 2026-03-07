@@ -20,47 +20,81 @@ export default function TrendingArticle() {
 
   if (!article) return null;
 
+  const summary = article.summary_ml ? article.summary_ml.replace(/<[^>]+>/g, '').slice(0, 80) : null;
+
   return (
     <div className="px-4 md:px-6 max-w-[1400px] mx-auto mb-6">
       <Link href={`/articles/${article.id}`} className="no-underline group block">
-        <div className="relative rounded-2xl overflow-hidden flex items-center gap-4 px-5 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(255,159,10,0.15)]"
-          style={{ background: 'linear-gradient(135deg, rgba(255,159,10,0.08) 0%, rgba(255,69,58,0.05) 100%)', border: '1px solid rgba(255,159,10,0.2)' }}>
+        <div className="relative rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
+          style={{ background: 'linear-gradient(135deg, rgba(255,159,10,0.1) 0%, rgba(255,69,58,0.06) 100%)', border: '1px solid rgba(255,159,10,0.25)' }}>
 
-          {/* Pulse dot */}
-          <div className="flex-shrink-0 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#ff9f0a] animate-pulse" />
-            <span className="text-[9px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
-          </div>
-
-          <div className="w-px h-6 bg-white/10 flex-shrink-0" />
-
-          {/* Image */}
-          {article.image_url && (
-            <img src={article.image_url} alt={article.title_ml}
-              className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
-          )}
-
-          {/* Text */}
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] md:text-sm font-bold text-white/90 truncate group-hover:text-white transition-colors"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
-              {article.title_ml}
-            </p>
-            {article.summary_ml && (
-              <p className="text-[11px] text-white/35 truncate hidden md:block">
-                {article.summary_ml.replace(/<[^>]+>/g, '')}
-              </p>
+          {/* Mobile layout */}
+          <div className="flex md:hidden items-start gap-3 px-4 py-4">
+            {/* Left: image */}
+            {article.image_url ? (
+              <img src={article.image_url} alt={article.title_ml}
+                className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+            ) : (
+              <div className="w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center"
+                style={{ background: 'rgba(255,159,10,0.15)' }}>
+                <span className="text-2xl">📰</span>
+              </div>
             )}
+
+            {/* Right: content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a] animate-pulse flex-shrink-0" />
+                <span className="text-[9px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
+              </div>
+              <p className="text-[14px] font-bold text-white/90 leading-snug line-clamp-2 mb-2"
+                style={{ fontFamily: "'Meera', sans-serif" }}>
+                {article.title_ml}
+              </p>
+              {summary && (
+                <p className="text-[11px] text-white/40 line-clamp-2 leading-relaxed mb-2"
+                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                  {summary}
+                </p>
+              )}
+              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff9f0a]">
+                വായിക്കുക
+                <svg width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            </div>
           </div>
 
-          {/* Arrow */}
-          <div className="flex-shrink-0 flex items-center gap-1.5 text-[12px] font-bold text-[#ff9f0a]">
-            വായിക്കുക
-            <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
-              className="group-hover:translate-x-1 transition-transform">
-              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          {/* Desktop layout */}
+          <div className="hidden md:flex items-center gap-4 px-5 py-4">
+            <div className="flex-shrink-0 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#ff9f0a] animate-pulse" />
+              <span className="text-[9px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
+            </div>
+            <div className="w-px h-6 bg-white/10 flex-shrink-0" />
+            {article.image_url && (
+              <img src={article.image_url} alt={article.title_ml}
+                className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+            )}
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold text-white/90 truncate group-hover:text-white transition-colors"
+                style={{ fontFamily: "'Meera', sans-serif" }}>
+                {article.title_ml}
+              </p>
+              {summary && (
+                <p className="text-[11px] text-white/35 truncate">{summary}</p>
+              )}
+            </div>
+            <div className="flex-shrink-0 flex items-center gap-1.5 text-[12px] font-bold text-[#ff9f0a]">
+              വായിക്കുക
+              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
+                className="group-hover:translate-x-1 transition-transform">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
           </div>
+
         </div>
       </Link>
     </div>
