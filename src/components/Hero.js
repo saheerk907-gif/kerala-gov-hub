@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 export default function Hero() {
   const meeraStyle = { fontFamily: "'Meera', sans-serif" };
@@ -10,15 +11,16 @@ export default function Hero() {
 
       {/* ── Background: Secretariat building ─────────────── */}
       <div className="absolute inset-0 z-0">
-        {/* Building image — centered, covers full area */}
-        <div
-          className="absolute inset-0 bg-no-repeat opacity-[0.18]"
-          style={{
-            backgroundImage: "url('/kerala-secretariat.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 40%',   /* nudge slightly upward so building is prominent */
-            filter: 'grayscale(60%) brightness(0.9) contrast(1.05)',
-          }}
+        {/* Building image — next/image with priority for instant load */}
+        <Image
+          src="/kerala-secretariat.jpg"
+          alt=""
+          fill
+          priority
+          fetchPriority="high"
+          className="object-cover object-[center_40%] opacity-[0.18]"
+          style={{ filter: 'grayscale(60%) brightness(0.9) contrast(1.05)' }}
+          sizes="100vw"
         />
         {/* Vignette — darken edges, keep center clear for logo */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#121416]/90 via-transparent to-[#121416]/90" />
@@ -54,19 +56,20 @@ export default function Hero() {
           {/* Deep drop shadow for lift */}
           <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />
 
-          <img
+          <Image
             src="/logo.png"
             alt="Kerala Gov Employee Hub Logo"
             width={120}
             height={120}
+            priority
+            fetchPriority="high"
             className="relative z-10 w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
             style={{
-              /* Ring glow that traces the logo's own gold border */
               boxShadow:
-                '0 0 0 2px rgba(200,150,12,0.55), ' +   /* tight gold ring */
-                '0 0 18px 4px rgba(200,150,12,0.22), ' + /* inner spread */
-                '0 0 50px 12px rgba(200,150,12,0.10), ' + /* soft outer halo */
-                '0 20px 50px rgba(0,0,0,0.55)',           /* depth shadow */
+                '0 0 0 2px rgba(200,150,12,0.55), ' +
+                '0 0 18px 4px rgba(200,150,12,0.22), ' +
+                '0 0 50px 12px rgba(200,150,12,0.10), ' +
+                '0 20px 50px rgba(0,0,0,0.55)',
             }}
           />
         </div>
