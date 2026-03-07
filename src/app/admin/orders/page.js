@@ -121,16 +121,11 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">സർക്കാർ ഉത്തരവുകൾ</h1>
-          <p className="text-xs text-[#6e6e73]">{orders.length} records total</p>
-        </div>
-        <button onClick={() => { setForm(EMPTY); setEditId(null); setShowForm(true); }}
-          className="px-5 py-2.5 bg-[#2997ff] text-white rounded-xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
-          + പുതിയ ഉത്തരവ്
-        </button>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold">സർക്കാർ ഉത്തരവുകൾ</h1>
+        <p className="text-xs text-[#6e6e73]">{orders.length} records total</p>
       </div>
+
 
       {/* Search */}
       <input value={search} onChange={e => setSearch(e.target.value)}
@@ -190,10 +185,15 @@ export default function AdminOrders() {
                   rows={3} placeholder="ഉത്തരവിന്റെ സംക്ഷിപ്ത വിവരണം..." className={inp + ' resize-y'} />
               </div>
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">PDF Upload</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
+                  PDF Upload <span className="text-[#ff453a]">*</span>
+                </label>
                 <input type="file" accept=".pdf" onChange={handleUpload} className="text-sm text-[#86868b]" />
                 {uploading && <span className="text-xs text-[#ff9f0a] ml-2">Uploading...</span>}
-                {form.pdf_url && <div className="text-xs text-[#2997ff] mt-1 truncate">{form.pdf_url}</div>}
+                {form.pdf_url
+                  ? <div className="text-xs text-[#30d158] mt-1 truncate">✓ PDF ready: {form.pdf_url.split('/').pop()}</div>
+                  : <div className="text-xs text-[#ff453a]/80 mt-1">PDF ഇല്ലാത്ത ഉത്തരവുകൾ പബ്ലിക് പേജിൽ ക്ലിക്ക് ചെയ്യാൻ കഴിയില്ല. PDF upload ചെയ്യുക.</div>
+                }
               </div>
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Source URL</label>
@@ -247,10 +247,11 @@ export default function AdminOrders() {
                   {o.go_number} • {o.go_date} • {CATEGORIES.find(c => c.value === o.category)?.label}
                 </div>
               </div>
-              {o.pdf_url && (
-                <a href={o.pdf_url} target="_blank" rel="noopener noreferrer"
-                  className="text-[10px] text-[#2997ff] font-bold no-underline hover:underline">PDF</a>
-              )}
+              {o.pdf_url
+                ? <a href={o.pdf_url} target="_blank" rel="noopener noreferrer"
+                    className="text-[10px] text-[#30d158] font-bold no-underline hover:underline whitespace-nowrap">✓ PDF</a>
+                : <span className="text-[10px] text-[#ff453a] font-bold whitespace-nowrap">No PDF</span>
+              }
               <button onClick={() => { setForm({ title_ml: o.title_ml||'', title_en: o.title_en||'', go_number: o.go_number||'', go_date: o.go_date||'', category: o.category||'general', description_ml: o.description_ml||'', pdf_url: o.pdf_url||'', source_url: o.source_url||'', is_published: o.is_published, is_pinned: o.is_pinned }); setEditId(o.id); setShowForm(true); }}
                 className="px-3 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer transition-all">
                 Edit
@@ -263,6 +264,15 @@ export default function AdminOrders() {
           ))}
         </div>
       )}
+
+      {/* Add Button at Bottom */}
+      <div className="mt-8">
+        <button
+          onClick={() => { setForm(EMPTY); setEditId(null); setShowForm(true); }}
+          className="w-full py-4 bg-[#2997ff] text-white rounded-2xl text-sm font-bold hover:bg-[#0077ed] transition-all border-none cursor-pointer">
+          + പുതിയ ഉത്തരവ് ചേർക്കുക
+        </button>
+      </div>
     </div>
   );
 }

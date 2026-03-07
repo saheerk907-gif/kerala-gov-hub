@@ -42,9 +42,10 @@ export default function OrdersSection({ orders }) {
         {/* Orders list */}
         <div className="flex flex-col gap-2">
           {currentOrders.map(o => (
+            o.pdf_url ? (
             <a
               key={o.id}
-              href={o.pdf_url || o.source_url || '#'}
+              href={o.pdf_url}
               target="_blank"
               rel="noopener noreferrer"
               className="glass-card glow-top group flex items-center gap-4 px-5 py-4 rounded-2xl no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] hover:border-[#ff9f0a]/30"
@@ -64,9 +65,14 @@ export default function OrdersSection({ orders }) {
                 </div>
               </div>
 
-              {/* Date */}
-              <div className="text-[11px] text-[#ff9f0a]/70 font-bold whitespace-nowrap hidden sm:block">
-                {formatDate(o.go_date)}
+              {/* Date + PDF badge */}
+              <div className="flex items-center gap-2">
+                <div className="text-[11px] text-[#ff9f0a]/70 font-bold whitespace-nowrap hidden sm:block">
+                  {formatDate(o.go_date)}
+                </div>
+                <div className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded bg-[#ff9f0a]/15 text-[#ff9f0a] hidden sm:block">
+                  PDF
+                </div>
               </div>
 
               {/* Arrow */}
@@ -74,6 +80,27 @@ export default function OrdersSection({ orders }) {
                 →
               </div>
             </a>
+            ) : (
+            <div
+              key={o.id}
+              className="glass-card flex items-center gap-4 px-5 py-4 rounded-2xl opacity-50 cursor-not-allowed"
+            >
+              <div className="w-10 h-10 min-w-[40px] rounded-xl flex items-center justify-center text-base bg-white/5 border border-white/10 text-white/30">
+                {o.is_pinned ? '📌' : '📄'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[14px] font-semibold text-white/50 truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  {o.title_ml}
+                </div>
+                <div className="text-[11px] text-white/25 font-sans mt-0.5">
+                  {o.go_number}
+                </div>
+              </div>
+              <div className="text-[11px] text-white/25 font-bold whitespace-nowrap hidden sm:block">
+                {formatDate(o.go_date)}
+              </div>
+            </div>
+            )
           ))}
         </div>
 
