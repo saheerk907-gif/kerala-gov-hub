@@ -9,7 +9,7 @@ export default function DepartmentalTestsSection() {
   const popular = TESTS.filter(t => t.popular).slice(0, 6);
 
   return (
-    <section id="departmental-tests" className="relative py-24 px-4 md:px-6">
+    <section id="departmental-tests" className="relative py-14 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}

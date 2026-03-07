@@ -6,7 +6,7 @@ export default function Hero() {
   const meeraStyle = { fontFamily: "'Meera', sans-serif" };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-0 overflow-hidden">
+    <section className="relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-8 overflow-hidden">
 
       {/* ── Background: Secretariat building ─────────────── */}
       <div className="absolute inset-0 z-0">
@@ -39,7 +39,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
 
         {/* Live badge */}
-        <div className="glass-pill flex items-center gap-2.5 px-5 py-2 rounded-full mb-10 animate-bounce-slow">
+        <div className="glass-pill flex items-center gap-2.5 px-5 py-2 rounded-full mb-6 animate-bounce-slow">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
@@ -50,16 +50,16 @@ export default function Hero() {
         </div>
 
         {/* ── Logo ─────────────────────────────────────────── */}
-        <div className="relative mb-10 group cursor-pointer">
+        <div className="relative mb-6 group cursor-pointer">
           {/* Deep drop shadow for lift */}
           <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />
 
           <img
             src="/logo.png"
             alt="Kerala Gov Employee Hub Logo"
-            width={170}
-            height={170}
-            className="relative z-10 w-[150px] h-[150px] md:w-[170px] md:h-[170px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
+            width={120}
+            height={120}
+            className="relative z-10 w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
             style={{
               /* Ring glow that traces the logo's own gold border */
               boxShadow:
@@ -85,7 +85,7 @@ export default function Hero() {
 
         {/* Subtitle */}
         <p
-          className="mt-7 text-[clamp(15px,2vw,19px)] text-white/60 max-w-[680px] leading-relaxed font-medium px-4"
+          className="mt-4 text-[clamp(13px,1.8vw,16px)] text-white/55 max-w-[580px] leading-relaxed font-medium px-4"
           style={meeraStyle}
         >
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
@@ -93,7 +93,7 @@ export default function Hero() {
         </p>
 
         {/* CTAs */}
-        <div className="mt-11 flex flex-col sm:flex-row gap-4 items-center">
+        <div className="mt-6 flex flex-col sm:flex-row gap-3 items-center">
           <a
             href="#services"
             className="px-10 py-4 bg-white text-[#121416] rounded-full text-[14px] font-black uppercase tracking-wider hover:bg-[#c8960c] hover:text-white transition-all duration-300 shadow-[0_8px_32px_rgba(255,255,255,0.12)] hover:shadow-[0_8px_32px_rgba(200,150,12,0.35)] hover:scale-105 no-underline"
@@ -108,11 +108,6 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="mt-14 mb-16 flex flex-col items-center gap-2 opacity-30">
-          <div className="w-[1px] h-10 bg-gradient-to-b from-transparent via-white to-transparent animate-pulse" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">Scroll</span>
-        </div>
       </div>
     </section>
   );

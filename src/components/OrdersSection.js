@@ -21,7 +21,7 @@ export default function OrdersSection({ orders }) {
   };
 
   return (
-    <section id="orders" className="relative py-24 px-4 md:px-6">
+    <section id="orders" className="relative py-14 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}

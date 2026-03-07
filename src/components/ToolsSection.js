@@ -106,7 +106,7 @@ const tools = [
 
 export default function ToolsSection() {
   return (
-    <section id="tools" className="relative py-20 px-4 md:px-6">
+    <section id="tools" className="relative py-12 px-4 md:px-6">
       <div className="max-w-[1300px] mx-auto">
 
         {/* Header */}

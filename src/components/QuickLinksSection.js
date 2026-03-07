@@ -14,9 +14,9 @@ export default function QuickLinksSection({ links }) {
   if (!links?.length) return null;
 
   return (
-    <section id="links" className="relative py-24 px-4 md:px-6">
+    <section id="links" className="relative py-14 px-4 md:px-6">
       {/* Divider line */}
-      <div className="max-w-[1100px] mx-auto mb-14">
+      <div className="max-w-[1100px] mx-auto mb-8">
         <div className="border-t border-white/[0.06]" />
       </div>
 
