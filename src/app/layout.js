@@ -35,7 +35,6 @@ export const metadata = {
     description: 'MEDISEP, pension, salary calculators, and government orders for Kerala government employees.',
     images: [`${BASE_URL}/og-image.png`],
   },
-  alternates: { canonical: BASE_URL },
 };
 
 export default function RootLayout({ children }) {
