@@ -2,15 +2,16 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'Kerala Pension Calculation — How Pension is Calculated',
+  title: 'പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം | Kerala Pension Calculation Guide',
   description:
-    'How pension is calculated for Kerala government employees — qualifying service, average emoluments, basic pension formula, commutation, family pension, DCRG, and gratuity under Kerala Service Rules.',
+    'കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പെൻഷൻ എങ്ങനെ കണക്കാക്കാം — ശരാശരി വേതനം, യോഗ്യമായ സേവനം, അർദ്ധവർഷ യൂണിറ്റുകൾ, ഫോർമുല, ഉദാഹരണം.',
   keywords:
-    'Kerala pension calculation, how pension is calculated Kerala, Kerala government pension formula, qualifying service pension, pension commutation Kerala, family pension Kerala, DCRG calculation',
+    'Kerala pension calculation Malayalam, KSR pension formula, ശരാശരി വേതനം, qualifying service half year units, pension calculation step by step Kerala, Kerala government pension guide',
   alternates: { canonical: 'https://keralaemployees.in/pension-calculation' },
   openGraph: {
-    title: 'Kerala Pension Calculation — Complete Guide',
-    description: 'How pension is calculated for Kerala government employees — formula, qualifying service, commutation, family pension, DCRG.',
+    title: 'പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം',
+    description:
+      'Kerala Service Rules Part III — Average Emoluments, Qualifying Service, Half-year Units, Pension Formula. Complete step-by-step guide in Malayalam.',
     url: 'https://keralaemployees.in/pension-calculation',
     type: 'article',
   },
@@ -23,45 +24,103 @@ const faqJsonLd = {
     {
       '@type': 'Question',
       name: 'Kerala pension-ന് minimum qualifying service എത്ര വർഷം?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Pension ലഭിക്കാൻ minimum 10 years qualifying service ആവശ്യമാണ്. 10 years-ൽ കൂടുതൽ service ഉള്ളവർക്ക് proportionate pension ലഭിക്കും.' },
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Pension ലഭിക്കാൻ minimum 10 years qualifying service ആവശ്യമാണ്. 10 years-ൽ കൂടുതൽ service ഉള്ളവർക്ക് proportionate pension ലഭിക്കും. Maximum 30 years (60 half-year units) ആണ് pension calculation-ൽ പരിഗണിക്കുക.',
+      },
     },
     {
       '@type': 'Question',
-      name: 'Kerala pension formula എന്താണ്?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Basic Pension = (Average Emoluments × Qualifying Service) ÷ 66. Maximum pension = Last drawn basic pay-ന്റെ 50%. Minimum pension = ₹9,000 per month.' },
+      name: 'Kerala KSR pension formula എന്താണ്?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Monthly Pension = (Average Emoluments × Half-year Units) ÷ 120. ഇവിടെ Average Emoluments = last 10 months-ലെ Basic Pay-ന്റെ ശരാശരി. Maximum pension = Average Emoluments-ന്റെ 50%. Minimum pension = ₹9,000/month.',
+      },
     },
     {
       '@type': 'Question',
-      name: 'Pension commutation എന്താണ്?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Basic pension-ന്റെ maximum 40% lump sum ആയി receive ചെയ്യാം. Commuted amount = Commuted portion × 12 × commutation factor (age based). 15 years ശേഷം full pension restore ആകും.' },
+      name: 'Half-year units എന്നാൽ എന്ത്? Rounding rules എന്തൊക്കെ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: '1 year service = 2 half-year units. ബാക്കി മാസങ്ങൾ: 3 months-ൽ താഴെ ആണെങ്കിൽ ignore ചെയ്യും; 3–8 months ആണെങ്കിൽ 1 unit; 9 months-ഉം അതിൽ കൂടുതലും ആണെങ്കിൽ 2 units (1 full year). Maximum 60 units (30 years) ആണ് cap.',
+      },
     },
     {
       '@type': 'Question',
-      name: 'Family pension ആർക്ക് ലഭിക്കും?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Employee service-ൽ/pension കൊണ്ടിരിക്കുമ്പോൾ മരിച്ചാൽ spouse-ന് family pension ലഭിക്കും. Spouse ഇല്ലെങ്കിൽ unmarried/widowed daughters, minor children ഇവർക്ക് ലഭിക്കും.' },
+      name: 'Average Emoluments-ൽ Leave Without Allowance ഉൾപ്പെടുമോ?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'LWA (Leave Without Allowance) അല്ലെങ്കിൽ Suspension കാലം last 10 months-ൽ വന്നാൽ, ആ കാലം ഒഴിവാക്കി അതിന് തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച മാസങ്ങൾ പകരം ചേർത്ത് 10 months പൂർത്തിയാക്കും.',
+      },
     },
     {
       '@type': 'Question',
-      name: 'DCRG (Gratuity) maximum amount എത്ര?',
-      acceptedAnswer: { '@type': 'Answer', text: 'DCRG maximum = ₹20 lakh. DCRG = (Last drawn emoluments × qualifying service) ÷ 4. Maximum qualifying service considered: 33 years.' },
+      name: 'Maximum pension ceiling എത്ര?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Maximum pension = Average Emoluments-ന്റെ 50%. 11th Pay Revision Commission അനുസരിച്ച് ₹83,400/month ആണ് നിലവിലെ ceiling. ഈ ceiling-ൽ കൂടുതൽ pension ഫോർമുല വഴി ലഭിക്കുന്നെങ്കിൽ ceiling amount മാത്രം തരും.',
+      },
     },
   ],
 };
 
-const COMPONENTS = [
-  { title: 'Basic Pension', color: '#2997ff', desc: 'Monthly pension amount, qualifying service and average emoluments അടിസ്ഥാനമാക്കി calculate ചെയ്യുന്നു.' },
-  { title: 'Commuted Pension', color: '#30d158', desc: 'Basic pension-ന്റെ 40% വരെ lump sum ആയി withdraw ചെയ്യാം. 15 years ശേഷം full pension restore.' },
-  { title: 'DCRG (Gratuity)', color: '#ff9f0a', desc: 'Retirement-ൽ one-time payment. Maximum ₹20 lakh.' },
-  { title: 'Leave Salary', color: '#bf5af2', desc: 'Unutilised earned leave (max 300 days) encashment.' },
-  { title: 'Family Pension', color: '#ff453a', desc: 'Employee-ന്റെ മരണശേഷം spouse/children-ന് monthly pension.' },
+const AVERAGE_EMOLUMENTS_TABLE = [
+  {
+    scenario: 'മുഴുവൻ ശമ്പളം (Full Pay)',
+    treatment: 'ഡ്യൂട്ടിയിലായിരുന്ന കാലയളവിലെ മുഴുവൻ Basic Pay-ഉം ശരാശരി കണക്കാക്കാൻ പരിഗണിക്കും.',
+  },
+  {
+    scenario: 'ഇൻക്രിമെന്റ് (Increments)',
+    treatment: 'അവസാന 10 മാസത്തിനിടെ increment ലഭിച്ചിട്ടുണ്ടെങ്കിൽ, അത് ലഭിച്ച തീയതി മുതൽ ശരാശരിയിൽ ഉൾപ്പെടുത്തും.',
+  },
+  {
+    scenario: 'സ്ഥാനക്കയറ്റം (Promotions)',
+    treatment: 'Promotion വഴി ലഭിക്കുന്ന ഉയർന്ന ശമ്പളം, അത് ലഭിച്ച തീയതി മുതൽ ബാക്കി മാസങ്ങളിൽ ശരാശരി കണക്കാക്കാൻ ഉപയോഗിക്കും.',
+  },
+  {
+    scenario: 'LWA / Suspension',
+    treatment: 'ശമ്പളമില്ലാത്ത അവധി അല്ലെങ്കിൽ Suspension ഈ 10 മാസത്തിനുള്ളിൽ വന്നാൽ ആ കാലം ഒഴിവാക്കി, തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച മാസങ്ങൾ ചേർത്ത് 10 months പൂർത്തിയാക്കും.',
+  },
 ];
 
-const PENSION_TABLE = [
-  { service: '10 years', percent: '15.15%', example: '₹40,000 × 10/66 = ₹6,060' },
-  { service: '20 years', percent: '30.30%', example: '₹40,000 × 20/66 = ₹12,121' },
-  { service: '30 years', percent: '45.45%', example: '₹40,000 × 30/66 = ₹18,181' },
-  { service: '33 years (max)', percent: '50%', example: '₹40,000 × 50% = ₹20,000' },
+const ROUNDING_RULES = [
+  { months: '3 months-ൽ താഴെ', units: '0 units', note: 'Ignored — pension-ൽ ചേർക്കില്ല' },
+  { months: '3 – 8 months', units: '1 unit', note: '½ year ആയി കണക്കാക്കും' },
+  { months: '9 months-ഉം അതിനു മുകളിലും', units: '2 units', note: '1 full year ആയി round up ചെയ്യും' },
+  { months: 'Maximum cap', units: '60 units', note: '30 years — ഇതിൽ കൂടുതൽ ഇല്ല' },
 ];
+
+function Section({ title, children, color = '#2997ff' }) {
+  return (
+    <section className="space-y-5">
+      <h2 className="text-[22px] font-black text-white leading-snug" style={{ fontFamily: "'Meera', sans-serif" }}>
+        {title}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+function Card({ color = '#2997ff', label, children }) {
+  return (
+    <div className="p-5 rounded-2xl" style={{ background: `${color}08`, border: `1px solid ${color}25` }}>
+      {label && (
+        <div className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color }}>
+          {label}
+        </div>
+      )}
+      {children}
+    </div>
+  );
+}
+
+function Body({ children }) {
+  return (
+    <div className="text-[15px] text-[#aeaeb2] leading-[1.9]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
+      {children}
+    </div>
+  );
+}
 
 export default function PensionCalculationPage() {
   return (
@@ -70,193 +129,413 @@ export default function PensionCalculationPage() {
       <Navbar />
       <main className="min-h-screen bg-black text-white">
 
-        {/* Hero */}
-        <div className="relative pt-32 pb-14 px-6 overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #000a1a 0%, #00050d 60%, #000 100%)' }}>
+        {/* ── Hero ─────────────────────────────────────────────────────────── */}
+        <div
+          className="relative pt-32 pb-14 px-6 overflow-hidden"
+          style={{ background: 'linear-gradient(135deg, #000a1a 0%, #00050d 60%, #000 100%)' }}
+        >
           <div className="absolute inset-0 opacity-20"
             style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, #2997ff20, transparent)' }} />
           <div className="absolute top-0 left-0 right-0 h-px"
             style={{ background: 'linear-gradient(90deg, transparent, #2997ff40, transparent)' }} />
+
           <div className="relative max-w-3xl mx-auto">
+            {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
               <a href="/" className="hover:text-white no-underline text-[#6e6e73] transition-colors">Home</a>
               <span>›</span>
               <a href="/pension" className="hover:text-white no-underline text-[#6e6e73] transition-colors">Pension Calculator</a>
               <span>›</span>
-              <span className="text-[#2997ff]">Pension Calculation</span>
+              <span className="text-[#2997ff]">Pension Calculation Guide</span>
             </div>
+
             <div className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-5"
               style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}>
-              Kerala Service Rules — Pension Guide
+              Kerala Service Rules — KSR Part III
             </div>
-            <h1 className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.1] mb-4">
-              Kerala Pension Calculation — How Pension is Calculated
+
+            <h1
+              className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.15] mb-4"
+              style={{ fontFamily: "'Meera', sans-serif" }}
+            >
+              പെൻഷൻ കണക്കുകൂട്ടൽ
+              <span className="block text-[0.55em] font-bold text-white/40 mt-1 tracking-normal">
+                Pension Calculation — A Step-by-Step Guide
+              </span>
             </h1>
-            <p className="text-[16px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "'Meera', sans-serif" }}>
-              കേരള സർക്കാർ ജീവനക്കാരുടെ pension എങ്ങനെ കണക്കാക്കാം? Qualifying service, average emoluments, basic pension formula, commutation, DCRG — complete guide.
+
+            <p className="text-[15px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "'Meera', serif" }}>
+              കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പ്രതിമാസ പെൻഷൻ,
+              ശരാശരി വേതനം, അർദ്ധവർഷ യൂണിറ്റുകൾ എന്നിവ ഉപയോഗിച്ച് ഘട്ടം ഘട്ടമായി കണക്കാക്കുന്ന വിധം.
             </p>
+
             <div className="mt-6">
-              <a href="/pension" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
-                style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}>
+              <a
+                href="/pension"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+                style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}
+              >
                 Pension Calculator ഉപയോഗിക്കുക →
               </a>
             </div>
           </div>
         </div>
 
+        {/* ── Content ──────────────────────────────────────────────────────── */}
         <div className="max-w-3xl mx-auto px-6 py-14 space-y-16">
 
-          {/* What you get */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Kerala Pension-ൽ ഉൾപ്പെടുന്ന Benefits</h2>
-            <p className="text-[15px] text-[#aeaeb2] mb-8 leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
-              Retirement-ൽ ഒരു ജീവനക്കാരന് ഇനി പറയുന്ന financial benefits ലഭിക്കും:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {COMPONENTS.map(c => (
-                <div key={c.title} className="p-5 rounded-2xl"
-                  style={{ background: `${c.color}08`, border: `1px solid ${c.color}20` }}>
-                  <div className="font-black text-sm mb-2" style={{ color: c.color }}>{c.title}</div>
-                  <p className="text-[13px] text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>{c.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* ── 1. Introduction / Eligibility ─────────────────────────────── */}
+          <Section title="1. ആമുഖം: പെൻഷൻ യോഗ്യതകൾ">
+            <Body>
+              <p>
+                കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പെൻഷൻ
+                കൃത്യമായി കണക്കാക്കുന്നത് എങ്ങനെയെന്ന് മനസ്സിലാക്കുക എന്നത് ഓരോ ഉദ്യോഗസ്ഥന്റെയും
+                സാമ്പത്തിക ആസൂത്രണത്തിന് അത്യന്താപേക്ഷിതമാണ്. വിരമിക്കുന്ന സമയത്ത് ലഭിക്കുന്ന
+                പെൻഷൻ തുക പ്രധാനമായും ജീവനക്കാരന്റെ <strong className="text-white">സേവന
+                കാലയളവിനെയും</strong> <strong className="text-white">ശമ്പളത്തെയും</strong> അടിസ്ഥാനപ്പെടുത്തിയാണ്
+                നിശ്ചയിക്കുന്നത്.
+              </p>
+            </Body>
 
-          {/* Step 1: Qualifying service */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Step 1: Qualifying Service കണക്കാക്കുക</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
-              <p>Qualifying Service (QS) = Actual service (probation, regular service) + Recognised extraordinary leave. Suspension period, leave without allowance (unauthorised), ഇവ qualify ആകില്ല.</p>
-              <div className="p-5 rounded-2xl space-y-3" style={{ background: 'rgba(41,151,255,0.05)', border: '1px solid rgba(41,151,255,0.15)' }}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff]">Qualifying Service Rules</div>
+            <Card color="#2997ff" label="Pension Eligibility — Key Rules">
+              <div className="space-y-3">
                 {[
-                  'Minimum QS for pension: 10 years',
-                  'Maximum QS considered: 33 years (beyond 33 years additional benefit ഇല്ല)',
-                  'Periods of suspension — ഒടുവിൽ reinstate ആയാൽ qualifying ആകും',
-                  'Child care leave, maternity leave — qualifying ആകും',
-                  'EOL on medical grounds — qualifying ആകും',
-                ].map((r, i) => (
-                  <div key={i} className="flex gap-2 text-[13px] text-[#c7c7cc]">
-                    <span className="text-[#2997ff] flex-shrink-0">›</span>
-                    <span style={{ fontFamily: "'Meera', serif" }}>{r}</span>
+                  { label: 'കുറഞ്ഞ സേവന കാലയളവ്', value: '10 വർഷം', desc: 'Pension ലഭിക്കാൻ minimum 10 years qualifying service ആവശ്യം' },
+                  { label: 'പരമാവധി സേവന കാലയളവ്', value: '30 വർഷം', desc: 'Pension calculation-ൽ maximum 30 years (60 half-year units) മാത്രം' },
+                ].map(r => (
+                  <div key={r.label} className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <div className="text-[13px] font-bold text-white/80" style={{ fontFamily: "'Meera', sans-serif" }}>{r.label}</div>
+                      <div className="text-[11px] text-white/35 mt-0.5" style={{ fontFamily: "'Meera', serif" }}>{r.desc}</div>
+                    </div>
+                    <div className="text-[15px] font-black whitespace-nowrap" style={{ color: '#2997ff' }}>{r.value}</div>
                   </div>
                 ))}
               </div>
-            </div>
-          </section>
+            </Card>
 
-          {/* Step 2: Average emoluments */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Step 2: Average Emoluments കണക്കാക്കുക</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
-              <p>Average Emoluments = Retirement-ന് തൊട്ടുമുൻപുള്ള <strong className="text-white">10 months-ലെ average pay</strong>. ഇതിൽ Basic Pay + Dearness Pay ഉൾപ്പെടും. HRA, TA ഇവ ഉൾപ്പെടില്ല.</p>
-              <p>ആ 10 months-ൽ pay revision ഉണ്ടായിട്ടുണ്ടെങ്കിൽ, revised pay ഉം pre-revised pay ഉം proportionately average ചെയ്യും.</p>
-              <div className="p-5 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/40 mb-3">Example</div>
-                <p className="text-[13px] text-[#c7c7cc]" style={{ fontFamily: "'Meera', serif" }}>
-                  ജീവനക്കാരൻ March 31-ന് retire ആകുന്നു. June 1 മുതൽ March 31 വരെ (10 months) basic pay ₹40,000 ആയിരുന്നെങ്കിൽ Average Emoluments = ₹40,000.
-                </p>
-              </div>
-            </div>
-          </section>
+            <Body>
+              <p>
+                പെൻഷൻ യോഗ്യത നേടിക്കഴിഞ്ഞാൽ, അടുത്തതായി നാം കണ്ടെത്തേണ്ടത് പെൻഷൻ തുക
+                നിശ്ചയിക്കുന്നതിനുള്ള അടിസ്ഥാന ഘടകമായ <strong className="text-white">ശരാശരി
+                വേതനം</strong> (Average Emoluments) ആണ്.
+              </p>
+            </Body>
+          </Section>
 
-          {/* Step 3: Pension formula */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Step 3: Basic Pension Calculate ചെയ്യുക</h2>
-            <div className="p-6 rounded-2xl text-center mb-8" style={{ background: 'rgba(41,151,255,0.06)', border: '1px solid rgba(41,151,255,0.2)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-4">Pension Formula</div>
-              <div className="text-[20px] font-black text-white font-mono">
-                Basic Pension = (Average Emoluments × Qualifying Service) ÷ 66
-              </div>
-              <div className="mt-4 text-[12px] text-[#6e6e73]">Maximum = 50% of Average Emoluments &nbsp;|&nbsp; Minimum = ₹9,000/month</div>
-            </div>
+          <div className="border-t border-white/[0.06]" />
+
+          {/* ── 2. Average Emoluments ─────────────────────────────────────── */}
+          <Section title="2. ശരാശരി വേതനം (Average Emoluments) കണക്കാക്കുന്ന വിധം">
+            <Body>
+              <p>
+                വിരമിക്കുന്ന തീയതിക്ക് തൊട്ടുമുൻപുള്ള <strong className="text-white">10 മാസത്തെ ശമ്പളത്തിന്റെ
+                ശരാശരി</strong>യാണ് 'ശരാശരി വേതനം' എന്ന് പറയുന്നത്. ശമ്പളം എന്ന് പറയുമ്പോൾ അത്
+                <strong className="text-white"> Basic Pay മാത്രമാണ്</strong> അർത്ഥമാക്കുന്നത് — HRA, TA,
+                DA ഇവ ഉൾപ്പെടില്ല. ഈ 10 മാസത്തിനുള്ളിൽ അവധിയോ മറ്റ് തടസ്സങ്ങളോ വന്നാൽ ഈ
+                കണക്കുകൂട്ടലിൽ മാറ്റങ്ങൾ വരും.
+              </p>
+            </Body>
+
+            {/* Table */}
             <div className="overflow-x-auto rounded-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
               <table className="w-full text-[13px]">
                 <thead>
                   <tr style={{ background: 'rgba(41,151,255,0.08)' }}>
-                    <th className="text-left px-5 py-3 font-black text-white/60 uppercase text-[10px] tracking-widest">Qualifying Service</th>
-                    <th className="text-left px-5 py-3 font-black text-white/60 uppercase text-[10px] tracking-widest">% of Pay</th>
-                    <th className="text-left px-5 py-3 font-black text-white/60 uppercase text-[10px] tracking-widest">Example (Pay ₹40,000)</th>
+                    <th className="text-left px-5 py-3 font-black text-white/50 uppercase text-[10px] tracking-widest w-[40%]">
+                      സാഹചര്യം (Scenario)
+                    </th>
+                    <th className="text-left px-5 py-3 font-black text-white/50 uppercase text-[10px] tracking-widest">
+                      പരിഗണന (Treatment)
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {PENSION_TABLE.map((r, i) => (
+                  {AVERAGE_EMOLUMENTS_TABLE.map((row, i) => (
                     <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td className="px-5 py-3 font-bold text-white/80">{r.service}</td>
-                      <td className="px-5 py-3 text-[#2997ff] font-bold">{r.percent}</td>
-                      <td className="px-5 py-3 text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>{r.example}</td>
+                      <td className="px-5 py-3.5 font-bold text-white/80 align-top" style={{ fontFamily: "'Meera', sans-serif" }}>
+                        {row.scenario}
+                      </td>
+                      <td className="px-5 py-3.5 text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                        {row.treatment}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          </section>
 
-          {/* Commutation */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Pension Commutation</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
-              <p>Retirement-ൽ basic pension-ന്റെ <strong className="text-white">maximum 40%</strong> lump sum ആയി receive ചെയ്യാം. ഇതിനെ commutation എന്ന് പറയുന്നു. Commuted ചെയ്ത ശേഷം monthly pension reduced ആകും, <strong className="text-white">15 years</strong> ശേഷം full pension restore ആകും.</p>
-              <div className="p-5 rounded-2xl" style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.15)' }}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-[#30d158] mb-4">Commutation Formula</div>
-                <div className="space-y-2 text-[13px] text-[#c7c7cc]">
-                  <p><strong className="text-white">Commuted Amount</strong> = Commuted Pension × 12 × Commutation Factor</p>
-                  <p className="mt-2">Commutation factor — age of retirement അനുസരിച്ച് table-ൽ നിന്ന് ലഭിക്കും.</p>
-                  <p className="mt-2 text-[#86868b]">Example: Basic Pension ₹15,000, 40% commute ചെയ്യുന്നു. Commuted Pension = ₹6,000. Age 58-ൽ factor = 9.81. Commuted Amount = 6,000 × 12 × 9.81 = ₹7,06,320 lump sum.</p>
-                </div>
-              </div>
-            </div>
-          </section>
+            <Body>
+              <p>
+                ചുരുക്കത്തിൽ, <strong className="text-white">കൃത്യമായ പത്തു മാസത്തെ ശമ്പളത്തിന്റെ
+                ശരാശരി</strong>യാണ് നാം കണ്ടെത്തുന്നത്. ഇപ്പോൾ ശമ്പളത്തിന്റെ കണക്ക് ലഭിച്ചു —
+                അടുത്തതായി സേവന കാലയളവ് എങ്ങനെ ക്രമീകരിക്കാം എന്ന് നോക്കാം.
+              </p>
+            </Body>
+          </Section>
 
-          {/* DCRG */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">DCRG (Death-cum-Retirement Gratuity)</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
-              <p>DCRG (Gratuity) retirement-ൽ one-time lump sum payment ആണ്. Qualifying service 5 years ഉണ്ടെങ്കിൽ DCRG ലഭ്യമാണ്.</p>
-              <div className="p-5 rounded-2xl" style={{ background: 'rgba(255,159,10,0.05)', border: '1px solid rgba(255,159,10,0.15)' }}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-[#ff9f0a] mb-4">DCRG Formula</div>
-                <div className="space-y-2 text-[13px] text-[#c7c7cc]">
-                  <p><strong className="text-white">DCRG</strong> = (Last drawn emoluments × Qualifying Service) ÷ 4</p>
-                  <p className="mt-2">Maximum DCRG = <strong className="text-white">₹20 lakh</strong></p>
-                  <p>Maximum QS considered = 33 years</p>
-                  <p className="mt-2 text-[#86868b]">Example: Last drawn pay ₹50,000, QS 30 years. DCRG = (50,000 × 30) ÷ 4 = ₹3,75,000.</p>
-                </div>
-              </div>
-            </div>
-          </section>
+          <div className="border-t border-white/[0.06]" />
 
-          {/* Family pension */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-4">Family Pension</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
-              <p>Service-ൽ ഉള്ളപ്പോഴോ pension receive ചെയ്തുകൊണ്ടിരിക്കുമ്പോഴോ employee മരിച്ചാൽ spouse-ന് family pension ലഭിക്കും.</p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { period: 'Enhanced Family Pension', amount: 'Basic Pension-ന്റെ 50%', duration: 'മരണ date മുതൽ 7 years, അല്ലെങ്കിൽ spouse-ന് 65 വയസ്സ് ആകുന്നതു വരെ (whichever is earlier)', color: '#2997ff' },
-                  { period: 'Normal Family Pension', amount: 'Basic Pension-ന്റെ 30%', duration: 'Enhanced period കഴിഞ്ഞ ശേഷം spouse ജീവിക്കുന്ന കാലം', color: '#30d158' },
-                ].map(f => (
-                  <div key={f.period} className="p-5 rounded-2xl" style={{ background: `${f.color}06`, border: `1px solid ${f.color}20` }}>
-                    <div className="font-black text-sm mb-1" style={{ color: f.color }}>{f.period}</div>
-                    <div className="text-[15px] font-bold text-white mb-2">{f.amount}</div>
-                    <p className="text-[12px] text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>{f.duration}</p>
+          {/* ── 3. Qualifying Service ─────────────────────────────────────── */}
+          <Section title="3. യോഗ്യമായ സേവനം (Qualifying Service) ക്രമീകരിക്കുന്നത്">
+            <Body>
+              <p>
+                പെൻഷൻ നിർണ്ണയിക്കുമ്പോൾ സേവന കാലയളവിനെ <strong className="text-white">അർദ്ധവർഷങ്ങളായി
+                (Half-year units)</strong> ആണ് കണക്കാക്കുന്നത്. ഒരു വർഷത്തെ സേവനം = 2 അർദ്ധവർഷ
+                യൂണിറ്റുകൾ.
+              </p>
+            </Body>
+
+            {/* Steps */}
+            <div className="space-y-4">
+              {[
+                {
+                  step: '1',
+                  title: 'യൂണിറ്റുകളിലേക്കുള്ള മാറ്റം',
+                  body: 'സേവന കാലയളവിലെ വർഷങ്ങളെ 2 കൊണ്ട് ഗുണിക്കുക. ഉദാഹരണം: 28 years × 2 = 56 units.',
+                },
+                {
+                  step: '2',
+                  title: 'ബാക്കി മാസങ്ങൾ — Rounding Rules',
+                  body: 'ബാക്കി മാസങ്ങൾ താഴെ പറയുന്ന നിയമം അനുസരിച്ച് units ആക്കുന്നു (നോക്കൂ table).',
+                },
+                {
+                  step: '3',
+                  title: 'പരമാവധി പരിധി',
+                  body: 'ആകെ units എത്രയായാലും, calculation-ന് ഉപയോഗിക്കുന്ന maximum = 60 units (30 years).',
+                },
+              ].map(s => (
+                <div key={s.step} className="flex gap-4 items-start">
+                  <div
+                    className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black mt-0.5"
+                    style={{ background: '#2997ff20', color: '#2997ff', border: '1px solid #2997ff30' }}
+                  >
+                    {s.step}
                   </div>
-                ))}
+                  <div>
+                    <div className="text-[14px] font-bold text-white/80 mb-1" style={{ fontFamily: "'Meera', sans-serif" }}>{s.title}</div>
+                    <div className="text-[13px] text-[#aeaeb2]" style={{ fontFamily: "'Meera', serif" }}>{s.body}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Rounding rules table */}
+            <Card color="#ff9f0a" label="KSR Half-Year Rounding Rules">
+              <div className="overflow-x-auto rounded-xl -mx-1">
+                <table className="w-full text-[12px]">
+                  <thead>
+                    <tr>
+                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">ബാക്കി മാസങ്ങൾ</th>
+                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">Units</th>
+                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">കുറിപ്പ്</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ROUNDING_RULES.map((r, i) => (
+                      <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                        <td className="py-2.5 px-3 font-bold text-white/70" style={{ fontFamily: "'Meera', sans-serif" }}>{r.months}</td>
+                        <td className="py-2.5 px-3 font-black" style={{ color: '#ff9f0a' }}>{r.units}</td>
+                        <td className="py-2.5 px-3 text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>{r.note}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+
+            <Body>
+              <p>
+                ശമ്പളവും (Average Emoluments) സേവനവും (Qualifying Service) ലഭ്യമായ സ്ഥിതിക്ക്,
+                ഇവ രണ്ടും ഉപയോഗിച്ച് എങ്ങനെ പെൻഷൻ കണ്ടെത്താം എന്ന് നോക്കാം.
+              </p>
+            </Body>
+          </Section>
+
+          <div className="border-t border-white/[0.06]" />
+
+          {/* ── 4. The Formula ────────────────────────────────────────────── */}
+          <Section title="4. പെൻഷൻ സൂത്രവാക്യം (The Pension Formula)">
+            <Body>
+              <p>
+                KSR Part III അനുസരിച്ച് പ്രതിമാസ പെൻഷൻ കണ്ടെത്തുന്നതിനായുള്ള Master Formula:
+              </p>
+            </Body>
+
+            {/* Big formula card */}
+            <div
+              className="rounded-2xl p-8 text-center"
+              style={{ background: 'rgba(41,151,255,0.06)', border: '1px solid rgba(41,151,255,0.25)' }}
+            >
+              <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-5">
+                KSR Pension Formula
+              </div>
+              <div className="text-[clamp(14px,3vw,20px)] font-black text-white font-mono leading-snug">
+                പ്രതിമാസ പെൻഷൻ =
+                <span className="block mt-2 text-[#2997ff]">
+                  (ശരാശരി വേതനം × അർദ്ധവർഷ യൂണിറ്റുകൾ) ÷ 120
+                </span>
+              </div>
+              <div className="mt-5 text-[12px] text-[#6e6e73]">
+                Monthly Pension = (Average Emoluments × Half-year Units) ÷ 120
+              </div>
+              <div className="mt-4 flex flex-wrap justify-center gap-3 text-[11px]">
+                <span className="px-3 py-1 rounded-full font-bold" style={{ background: '#30d15815', color: '#30d158' }}>
+                  Maximum: 50% of AE (or ₹83,400)
+                </span>
+                <span className="px-3 py-1 rounded-full font-bold" style={{ background: '#2997ff15', color: '#2997ff' }}>
+                  Minimum: ₹9,000/month
+                </span>
               </div>
             </div>
-          </section>
 
-          {/* FAQ */}
-          <section>
-            <h2 className="text-[22px] font-black text-white mb-6">Pension Calculation — FAQ</h2>
+            <Card color="#30d158" label="120 എന്തുകൊണ്ട്?">
+              <Body>
+                <p>
+                  ഒരു ജീവനക്കാരന് അദ്ദേഹത്തിന്റെ ശരാശരി വേതനത്തിന്റെ <strong className="text-white">
+                  പരമാവധി 50%</strong> ആണ് പെൻഷനായി ലഭിക്കുക. Maximum units = 60. ആ 60 units-ന്
+                  50% (= 0.5) pension നൽകാൻ 60 ÷ 120 = 0.5 — അതാണ് 120 ഉപയോഗിക്കുന്നത്.
+                  30 years സർവീസ് ഉള്ളൊരാൾക്ക് ശരാശരി ശമ്പളത്തിന്റെ കൃത്യം പകുതി
+                  (50%) പെൻഷൻ ഉറപ്പാക്കാനാണ് ഈ divisor.
+                </p>
+              </Body>
+            </Card>
+          </Section>
+
+          <div className="border-t border-white/[0.06]" />
+
+          {/* ── 5. Practical Example ──────────────────────────────────────── */}
+          <Section title="5. പ്രായോഗിക ഉദാഹരണം (Practical Example)">
+            <Body>
+              <p>ഒരു ഉദാഹരണത്തിലൂടെ ഈ ഗണിതക്രിയ നോക്കാം:</p>
+            </Body>
+
+            {/* Step walkthrough */}
+            <div className="space-y-3">
+              {[
+                {
+                  step: 'ഘട്ടം 1 — ശരാശരി വേതനം',
+                  value: '₹1,00,000',
+                  desc: 'അവസാന 10 മാസത്തെ Basic Pay ശരാശരി ₹1,00,000 ആണ്.',
+                  color: '#2997ff',
+                },
+                {
+                  step: 'ഘട്ടം 2 — Qualifying Service',
+                  value: '30 years = 60 units',
+                  desc: '30 years × 2 = 60 half-year units (maximum cap-ൽ ഉൾപ്പെടുന്നു).',
+                  color: '#ff9f0a',
+                },
+                {
+                  step: 'ഘട്ടം 3 — Formula',
+                  value: '₹1,00,000 × 60 ÷ 120',
+                  desc: 'Pension = (1,00,000 × 60) ÷ 120 = 60,00,000 ÷ 120',
+                  color: '#30d158',
+                },
+                {
+                  step: 'അന്തിമഫലം — പ്രതിമാസ പെൻഷൻ',
+                  value: '₹50,000',
+                  desc: 'ശരാശരി വേതനത്തിന്റെ 50% — Maximum pension percentage.',
+                  color: '#30d158',
+                  bold: true,
+                },
+              ].map((s, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between gap-4 rounded-2xl px-5 py-4"
+                  style={{
+                    background: `${s.color}06`,
+                    border: `1px solid ${s.color}20`,
+                  }}
+                >
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: s.color }}>
+                      {s.step}
+                    </div>
+                    <div className="text-[12px] text-white/40" style={{ fontFamily: "'Meera', serif" }}>{s.desc}</div>
+                  </div>
+                  <div className={`font-black whitespace-nowrap ${s.bold ? 'text-[22px]' : 'text-[15px]'}`} style={{ color: s.color }}>
+                    {s.value}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Card color="#ff453a" label="പ്രത്യേകം ശ്രദ്ധിക്കുക — Maximum Ceiling">
+              <Body>
+                <p>
+                  പെൻഷൻ തുക ഫോർമുല വഴി ₹83,400-ൽ (11th PRC ceiling) കൂടുതൽ വന്നാൽ, ceiling amount
+                  മാത്രമേ ലഭിക്കൂ. ഉദാഹരണം: ശരാശരി വേതനം ₹2,00,000 ആണെങ്കിൽ ഫോർമുല ₹1,00,000
+                  കൊടുക്കും — എന്നാൽ ₹83,400 മാത്രമേ ലഭിക്കൂ.
+                </p>
+              </Body>
+            </Card>
+          </Section>
+
+          <div className="border-t border-white/[0.06]" />
+
+          {/* ── 6. Summary ────────────────────────────────────────────────── */}
+          <Section title="6. ഉപസംഹാരം — പ്രധാന കാര്യങ്ങൾ">
+            <div className="space-y-3">
+              {[
+                {
+                  title: '10 മാസത്തെ ശരാശരി',
+                  body: 'വിരമിക്കുന്നതിന് തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച 10 മാസത്തെ Basic Pay ശരാശരിയാണ് Average Emoluments. LWA/Suspension ഉണ്ടെങ്കിൽ ആ കാലം ഒഴിവാക്കി തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച മാസങ്ങൾ ചേർക്കണം.',
+                  color: '#2997ff',
+                },
+                {
+                  title: 'Half-year Units-ന്റെ കൃത്യത',
+                  body: 'Service-ൽ ബാക്കി വരുന്ന മാസങ്ങൾ rounding rule (< 3 = ignore, 3–8 = 1 unit, ≥ 9 = 2 units) അനുസരിച്ച് convert ചെയ്യണം. Maximum 60 units.',
+                  color: '#ff9f0a',
+                },
+                {
+                  title: '50 ശതമാനം നിയമം',
+                  body: 'Pension ഒരിക്കലും Average Emoluments-ന്റെ 50%-ൽ കൂടാൻ പാടില്ല. Plus, നിലവിലെ ceiling ₹83,400-ൽ കൂടാൻ പാടില്ല. Minimum pension ₹9,000/month ആണ്.',
+                  color: '#30d158',
+                },
+              ].map(c => (
+                <div
+                  key={c.title}
+                  className="rounded-2xl p-5 flex gap-4"
+                  style={{ background: `${c.color}06`, border: `1px solid ${c.color}20` }}
+                >
+                  <div
+                    className="flex-shrink-0 w-2 rounded-full self-stretch"
+                    style={{ background: c.color }}
+                  />
+                  <div>
+                    <div className="font-black text-[14px] mb-1" style={{ color: c.color, fontFamily: "'Meera', sans-serif" }}>
+                      {c.title}
+                    </div>
+                    <div className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                      {c.body}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <div className="border-t border-white/[0.06]" />
+
+          {/* ── FAQ ──────────────────────────────────────────────────────── */}
+          <Section title="പതിവ് ചോദ്യങ്ങൾ (FAQ)">
             <div className="space-y-3">
               {faqJsonLd.mainEntity.map((faq, i) => (
-                <details key={i} className="rounded-2xl overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <details
+                  key={i}
+                  className="rounded-2xl overflow-hidden group"
+                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+                >
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
-                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "'Meera', sans-serif" }}>{faq.name}</span>
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
-                      style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}>+</span>
+                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "'Meera', sans-serif" }}>
+                      {faq.name}
+                    </span>
+                    <span
+                      className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
+                      style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}
+                    >
+                      +
+                    </span>
                   </summary>
                   <div className="px-5 pb-5 pt-1">
                     <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
@@ -266,21 +545,30 @@ export default function PensionCalculationPage() {
                 </details>
               ))}
             </div>
-          </section>
+          </Section>
 
-          {/* CTA to calculator */}
-          <div className="rounded-2xl p-6 text-center" style={{ background: 'rgba(41,151,255,0.05)', border: '1px solid rgba(41,151,255,0.15)' }}>
-            <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-3">Pension Calculator</div>
+          {/* ── CTA ──────────────────────────────────────────────────────── */}
+          <div
+            className="rounded-2xl p-7 text-center"
+            style={{ background: 'rgba(41,151,255,0.05)', border: '1px solid rgba(41,151,255,0.15)' }}
+          >
+            <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-3">
+              Pension Calculator
+            </div>
             <p className="text-[15px] text-[#86868b] mb-5" style={{ fontFamily: "'Meera', serif" }}>
-              നിങ്ങളുടെ exact pension, commutation amount, DCRG ഇവ calculate ചെയ്യാൻ ഞങ്ങളുടെ free calculator ഉപയോഗിക്കൂ.
+              നിങ്ങളുടെ exact pension — KSR half-year units, Average Emoluments, DA — ഉൾപ്പെടെ
+              കണക്കാക്കാൻ ഞങ്ങളുടെ free calculator ഉപയോഗിക്കൂ.
             </p>
-            <a href="/pension" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
-              style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}>
+            <a
+              href="/pension"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
+              style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}
+            >
               Pension Calculator ഉപയോഗിക്കുക →
             </a>
           </div>
 
-          {/* Related */}
+          {/* ── Related links ─────────────────────────────────────────────── */}
           <div className="rounded-2xl p-6" style={{ background: 'rgba(255,159,10,0.04)', border: '1px solid rgba(255,159,10,0.15)' }}>
             <div className="text-[10px] font-black uppercase tracking-widest text-[#ff9f0a] mb-4">Related Tools & Pages</div>
             <div className="flex flex-wrap gap-3">
@@ -291,9 +579,12 @@ export default function PensionCalculationPage() {
                 { label: 'NPS vs APS', href: '/nps-aps' },
                 { label: 'GPF Information', href: '/gpf' },
               ].map(l => (
-                <a key={l.href} href={l.href}
+                <a
+                  key={l.href}
+                  href={l.href}
                   className="px-4 py-2 rounded-xl text-[13px] font-bold no-underline transition-all hover:scale-[1.03]"
-                  style={{ background: 'rgba(255,159,10,0.1)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.2)' }}>
+                  style={{ background: 'rgba(255,159,10,0.10)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.2)' }}
+                >
                   {l.label} →
                 </a>
               ))}
@@ -301,8 +592,11 @@ export default function PensionCalculationPage() {
           </div>
 
           <div className="pt-4 border-t border-white/[0.06]">
-            <a href="/" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline"
-              style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}>
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline"
+              style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}
+            >
               ← Home
             </a>
           </div>
