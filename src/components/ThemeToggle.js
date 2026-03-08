@@ -26,8 +26,8 @@ export default function ThemeToggle() {
       title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
       className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
       style={{
-        background: isLight ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.07)',
-        color: isLight ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)',
+        background: 'rgba(255,255,255,0.07)',
+        color: 'rgba(255,255,255,0.6)',
       }}
     >
       {isLight ? (

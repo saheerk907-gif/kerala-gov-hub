@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import ThemeToggle from '@/components/ThemeToggle';
+import SearchModal from '@/components/SearchModal';
 
 const NAV_ITEMS = [
   {
@@ -112,6 +113,7 @@ export default function Navbar() {
   const [scrolled, setScrolled]           = useState(false);
   const [openDropdown, setOpenDropdown]   = useState(null);
   const [mobileExpanded, setMobileExpanded] = useState(null);
+  const [searchOpen, setSearchOpen]       = useState(false);
   const navRef = useRef(null);
 
   useEffect(() => {
@@ -126,6 +128,17 @@ export default function Navbar() {
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
   }, []);
 
   function handleNavClick(href) {
@@ -256,6 +269,33 @@ export default function Navbar() {
 
           {/* Theme toggle + Mobile hamburger */}
           <div className="flex items-center gap-2">
+          {/* Search button */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search"
+            title="Search (Ctrl+K)"
+            className="flex items-center gap-2 rounded-lg px-2.5 h-8 transition-all duration-200 border-none cursor-pointer flex-shrink-0 hidden sm:flex"
+            style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
+          >
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <span className="text-[11px] font-medium hidden md:block">Search</span>
+            <kbd className="hidden lg:flex items-center text-[10px] text-white/25 border border-white/10 rounded px-1 py-0.5 font-mono leading-none">⌘K</kbd>
+          </button>
+          {/* Mobile search icon only */}
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Search"
+            className="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
+            style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
+          >
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+          </button>
           <ThemeToggle />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
             className="lg:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer">
@@ -266,6 +306,8 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Mobile drawer */}
       {mobileOpen && (
