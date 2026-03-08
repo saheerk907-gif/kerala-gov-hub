@@ -87,7 +87,7 @@ const tools = [
 export default function ToolsSection() {
   return (
     <section id="tools" className="relative py-8 px-4 md:px-6">
-      <div className="max-w-[1300px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
@@ -99,13 +99,13 @@ export default function ToolsSection() {
           </div>
         </div>
 
-        {/* 3-col grid on mobile, 5-col on desktop */}
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-2.5 md:gap-3">
+        {/* 2-col on mobile, 4-col on desktop — 8 items = 4+4 clean */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {tools.map((t) => (
             <Link
               key={t.title}
               href={t.href}
-              className="glass-card group relative flex flex-col items-center text-center rounded-[14px] p-3 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden md:items-start md:text-left md:rounded-[16px] md:p-3.5"
+              className="glass-card group relative flex flex-col items-start text-left rounded-[16px] p-3.5 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
             >
               {/* Badge */}
               {t.badge && t.badge !== 'SOON' && (
@@ -140,7 +140,7 @@ export default function ToolsSection() {
               <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "'Meera', sans-serif" }}>
                 {t.title}
               </h3>
-              <div className="hidden md:block text-[8px] font-black uppercase tracking-wider leading-tight" style={{ color: t.color + 'bb' }}>
+              <div className="text-[8px] font-black uppercase tracking-wider leading-tight" style={{ color: t.color + 'bb' }}>
                 {t.subtitle}
               </div>
 

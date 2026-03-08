@@ -46,13 +46,13 @@ export default async function HomePage() {
       </ScrollReveal>
 
       {/* 4 & 5. Orders + News — side by side */}
-      <div className="px-4 md:px-6 max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+      <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
           <ScrollReveal direction="up" delay={0}>
             <OrdersSection orders={orders} />
           </ScrollReveal>
           <ScrollReveal direction="up" delay={0}>
-            <section id="news" className="py-8">
+            <section id="news">
               <NewSection news={news} />
             </section>
           </ScrollReveal>

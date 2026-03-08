@@ -16,11 +16,11 @@ export default function QuickLinksSection({ links }) {
   return (
     <section id="links" className="relative py-14 px-4 md:px-6">
       {/* Divider line */}
-      <div className="max-w-[1100px] mx-auto mb-8">
+      <div className="max-w-[1200px] mx-auto mb-8">
         <div className="border-t border-white/[0.06]" />
       </div>
 
-      <div className="max-w-[1100px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>

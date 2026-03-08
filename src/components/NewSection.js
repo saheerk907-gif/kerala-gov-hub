@@ -73,7 +73,7 @@ export default function NewsSection() {
   }, []);
 
   return (
-    <div className="h-full">
+    <div className="h-full py-8">
       {/* Header */}
       <div className="mb-7">
         <div className="section-label mb-2">Latest</div>
