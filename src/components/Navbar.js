@@ -11,7 +11,6 @@ const NAV_ITEMS = [
       { label: '12th PRC Calculator',   sub: 'Pay Revision 2024',      href: '/prc',       badge: 'NEW'  },
       { label: 'NPS vs APS',            sub: 'Pension Comparison',      href: '/nps-aps',   badge: 'NEW'  },
       { label: 'Pension Calculator',    sub: 'Monthly Pension',         href: '/pension',   badge: 'NEW'  },
-      { label: 'Pension Forms',         sub: 'Download official forms',  href: '/pension-forms', badge: 'NEW' },
       { label: 'DCRG Calculator',       sub: 'Retirement Gratuity',     href: '/dcrg',      badge: 'NEW'  },
       { label: 'DA Arrear Calculator',  sub: '11th PRC · Mar 2021',     href: '/da-arrear', badge: 'NEW'  },
       { label: 'GPF Calculator',        sub: 'Provident Fund',          href: '/gpf',       badge: null   },
@@ -61,6 +60,20 @@ const NAV_ITEMS = [
       { label: 'Forest',              sub: 'Forest Department Test',   href: '/departmental-tests?dept=forest'       },
       { label: 'Registration',        sub: 'Registration Test',        href: '/departmental-tests?dept=registration' },
       { label: 'All 64 Tests',        sub: 'Browse all departments',   href: '/departmental-tests'                   },
+    ],
+  },
+  {
+    label: 'ഫോറങ്ങൾ',
+    en: 'Forms',
+    href: '/pension-forms',
+    dropdown: [
+      { label: 'Pension Forms',         sub: 'Form 2, 3, 4B, 5, 6, 8, 11…',  href: '/pension-forms',           badge: 'NEW' },
+      { label: 'Application — Pension', sub: 'Form 2 · Pension/Gratuity/DCRG', href: '/pension-forms#form-2'               },
+      { label: 'Family Pension',        sub: 'Form 5, 5A, 6, 6A',             href: '/pension-forms#family'               },
+      { label: 'Commutation Forms',     sub: 'Form A, B, C, D, E',            href: '/pension-forms#commutation'          },
+      { label: 'Nomination Forms',      sub: 'Form 15, 16, 17, E(1)',          href: '/pension-forms#nomination'           },
+      { label: 'Indemnity Bond',        sub: 'Form 8, 8A',                    href: '/pension-forms#bond'                 },
+      { label: 'Special / EOP',        sub: 'Schedule IV A, B, C',            href: '/pension-forms#special'              },
     ],
   },
   {
