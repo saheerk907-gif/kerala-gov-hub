@@ -1,4 +1,4 @@
-import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getHighlights, getNews } from '@/lib/supabase';
+import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getNews } from '@/lib/supabase';
 import AudioClassesSection from '@/components/AudioClassesSection';
 import Hero from '@/components/Hero';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
@@ -11,19 +11,17 @@ import TrendingArticle from '@/components/TrendingArticle';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import SchemesSection from '@/components/SchemesSection';
 import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
-import HighlightsSection from '@/components/HighlightsSection';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [schemes, orders, quickLinks, stats, highlights, news] = await Promise.all([
+  const [schemes, orders, quickLinks, stats, news] = await Promise.all([
     getSchemes(),
     getGovernmentOrders(),
     getQuickLinks(),
     getSiteStats(),
-    getHighlights(),
     getNews(),
   ]);
 
@@ -86,12 +84,7 @@ export default async function HomePage() {
         <QuickLinksSection links={quickLinks} />
       </ScrollReveal>
 
-      {/* 9. Highlights */}
-      <ScrollReveal direction="up" delay={0}>
-        <HighlightsSection highlights={highlights} />
-      </ScrollReveal>
-
-      {/* 10. Footer */}
+      {/* 9. Footer */}
       <ScrollReveal direction="fade" delay={0}>
         <Footer />
       </ScrollReveal>
