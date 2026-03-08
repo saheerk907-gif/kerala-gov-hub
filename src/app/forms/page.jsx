@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -410,7 +410,7 @@ const CAT_COLOR = {
   'Planning':     '#ff9f0a',
 };
 
-export default function FormsPage() {
+function FormsContent() {
   const searchParams = useSearchParams();
   const [search,   setSearch]   = useState('');
   const [category, setCategory] = useState('All');
@@ -586,5 +586,13 @@ export default function FormsPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function FormsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-aurora" />}>
+      <FormsContent />
+    </Suspense>
   );
 }
