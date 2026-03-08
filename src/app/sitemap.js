@@ -13,19 +13,36 @@ const staticRoutes = [
   { url: '/medisep-claim-process', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/medisep-complaint', changeFrequency: 'monthly', priority: 0.85 },
   // Pension
+  { url: '/pension', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/pension-calculation', changeFrequency: 'monthly', priority: 0.85 },
+  { url: '/pension-forms', changeFrequency: 'monthly', priority: 0.85 },
+  { url: '/dcrg', changeFrequency: 'monthly', priority: 0.8 },
   // Calculators
-  { url: '/prc', changeFrequency: 'monthly', priority: 0.8 },
-  { url: '/pension', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/prc', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/da-arrear', changeFrequency: 'monthly', priority: 0.8 },
-  { url: '/dcrg', changeFrequency: 'monthly', priority: 0.75 },
-  { url: '/nps-aps', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/nps-aps', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/gpf', changeFrequency: 'monthly', priority: 0.75 },
+  // Forms
+  { url: '/forms', changeFrequency: 'monthly', priority: 0.8 },
+  { url: '/forms?cat=Pension', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/forms?cat=GPF', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/forms?cat=Leave', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/forms?cat=NPS', changeFrequency: 'monthly', priority: 0.65 },
+  { url: '/forms?cat=HBA', changeFrequency: 'monthly', priority: 0.65 },
+  { url: '/forms?cat=Treasury', changeFrequency: 'monthly', priority: 0.65 },
   // Schemes / Info
   { url: '/nps', changeFrequency: 'monthly', priority: 0.75 },
-  { url: '/gpf', changeFrequency: 'monthly', priority: 0.75 },
-  { url: '/ksr', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/ksr', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/kerala-service-rules', changeFrequency: 'monthly', priority: 0.7 },
-  { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.8 },
+  // Departmental Tests
+  { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.85 },
+  { url: '/departmental-tests/quiz', changeFrequency: 'monthly', priority: 0.75 },
+  { url: '/departmental-tests?dept=common', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/departmental-tests?dept=revenue', changeFrequency: 'monthly', priority: 0.7 },
+  { url: '/departmental-tests?dept=panchayat', changeFrequency: 'monthly', priority: 0.65 },
+  { url: '/departmental-tests?dept=judiciary', changeFrequency: 'monthly', priority: 0.65 },
+  { url: '/departmental-tests?dept=police', changeFrequency: 'monthly', priority: 0.65 },
+  { url: '/departmental-tests?dept=education', changeFrequency: 'monthly', priority: 0.65 },
 ];
 
 export default async function sitemap() {
