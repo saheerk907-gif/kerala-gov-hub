@@ -244,52 +244,36 @@ export default function PensionPage() {
             {/* ── RIGHT COLUMN: Outputs ────────────────────────────────── */}
             <div className="flex flex-col gap-5">
 
-              {/* Dates */}
+              {/* Row 1: Dates */}
               <div className="grid grid-cols-2 gap-4">
                 <OutputField label="Date of Retirement" value={fmtDate(retDate)} />
                 <OutputField label="Date of Restore"    value={fmtDate(restDate)} />
               </div>
 
-              {/* Basic + Reduced */}
+              {/* Row 2: Basic + Reduced */}
               <div className="grid grid-cols-2 gap-4">
                 <OutputField label="Basic Pension (Rs.)"   value={fmt(result?.pension)}        highlight={!!result?.pension} />
                 <OutputField label="Reduced Pension (Rs.)" value={fmt(result?.reducedPension)}  highlight={!!result?.reducedPension} />
               </div>
 
-              {/* Family Pension */}
+              {/* Row 3: Family Pension */}
               <OutputField label="Normal Family Pension (Rs.)" value={fmt(result?.familyPension)} highlight={!!result?.familyPension} />
 
-              {/* DCRG */}
+              {/* Row 4: DCRG */}
               <OutputField label="DCRG (Rs.)" value={fmt(result?.dcrg)} highlight={!!result?.dcrg} />
 
-              {/* Commuted + Commuted Value */}
-              <div className="grid grid-cols-2 gap-4">
-                <OutputField label="Pension Commuted (Rs.)" value={fmt(result?.commutedAmt)}   highlight={!!result?.commutedAmt} />
-                <OutputField label="Commuted Value (Rs.)"   value={fmt(result?.commutedValue)} highlight={!!result?.commutedValue} />
-              </div>
+              {/* Row 5: Pension Commuted */}
+              <OutputField label="Pension Commuted (Rs.)" value={fmt(result?.commutedAmt)} highlight={!!result?.commutedAmt} />
 
-              {/* Formula reference */}
-              <div className="rounded-2xl p-4 mt-1" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-2">Formulas Used</div>
-                {[
-                  ['Basic Pension',   '(50% × AE ÷ 30) × QS'],
-                  ['Family Pension',  '30% of Last Emoluments  [₹4,500 – ₹17,960]'],
-                  ['DCRG',            '(Last Emoluments ÷ 2) × QS  [max ₹14L]'],
-                  ['Commuted Value',  'Commuted Amt × 11.10 × 12'],
-                  ['Date of Restore', 'Retirement Date + 12 years'],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex justify-between text-[10px] py-0.5 gap-4">
-                    <span className="text-white/28 flex-shrink-0">{k}</span>
-                    <span className="text-white/40 text-right">{v}</span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-[11px] text-white/30 italic text-right" style={{ fontFamily: "'Meera', serif" }}>
-                * Results are only indicators. Refer official codes for authenticity.
-              </p>
+              {/* Row 6: Commuted Value */}
+              <OutputField label="Commuted Value (Rs.)" value={fmt(result?.commutedValue)} highlight={!!result?.commutedValue} />
             </div>
           </div>
+
+          {/* Disclaimer */}
+          <p className="mt-6 text-center text-[12px] italic" style={{ color: '#ff453a' }}>
+            * The results are only indicators. Refer codes for authenticity
+          </p>
 
           {/* Action buttons */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
