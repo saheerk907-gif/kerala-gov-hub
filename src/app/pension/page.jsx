@@ -1,6 +1,35 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import FAQSection from '@/components/FAQSection';
+
+const PENSION_FAQS = [
+  {
+    q: 'How is pension calculated for Kerala government employees?',
+    a: 'Basic Pension = (50% × Average Emoluments ÷ 30) × Qualifying Service (in years). Average Emoluments is the average of the last 10 months\' salary. Maximum qualifying service counted is 30 years.',
+  },
+  {
+    q: 'What is Average Emoluments (AE) in pension calculation?',
+    a: 'Average Emoluments is the average of the Basic Pay + DA drawn during the last 10 months before retirement. If there was an increment or promotion in the last 10 months, a weighted average is calculated.',
+  },
+  {
+    q: 'What is the maximum qualifying service for pension?',
+    a: 'Maximum qualifying service counted for pension calculation is 30 years under KSR Part III. Service beyond 30 years does not increase the pension amount.',
+  },
+  {
+    q: 'What is pension commutation and when can it be restored?',
+    a: 'Commutation allows you to take a lump sum by surrendering a portion (maximum 40%) of your monthly pension. The commuted pension is restored after 12 years from the date of retirement. Commutation value = Commuted amount × 11.10 × 12.',
+  },
+  {
+    q: 'What is Normal Family Pension in Kerala?',
+    a: 'Normal Family Pension = 30% of last emoluments (Basic Pay + DA). Minimum is ₹4,500/month and maximum is ₹17,960/month as per current rules.',
+  },
+  {
+    q: 'What is the retirement age for Kerala government employees?',
+    a: 'The retirement age is 56 years for most Kerala government employees. For teachers under superannuation, retirement is at the end of the academic term (31st March or 31st May) after turning 56.',
+  },
+];
+
 
 // ─── Retirement date helpers ───────────────────────────────────────────────────
 function lastDayOfMonth(year, month) {          // month: 1-based
@@ -303,6 +332,8 @@ export default function PensionPage() {
             Download Pension Forms (24 forms) →
           </Link>
         </div>
+
+        <FAQSection faqs={PENSION_FAQS} accentColor="#2997ff" />
 
       </div>
     </div>

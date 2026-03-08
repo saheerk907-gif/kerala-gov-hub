@@ -1,6 +1,34 @@
 'use client';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import FAQSection from '@/components/FAQSection';
+
+const NPS_APS_FAQS = [
+  {
+    q: 'What is the difference between NPS and APS for Kerala government employees?',
+    a: 'NPS (National Pension System) is a market-linked pension scheme where corpus depends on investment returns. APS (Assured Pension Scheme) guarantees 50% of last drawn salary as pension, similar to the old pension scheme. APS provides certainty while NPS depends on market performance.',
+  },
+  {
+    q: 'Who is eligible for APS in Kerala?',
+    a: 'Kerala government employees who joined service on or after 01-04-2013 (covered under NPS) are eligible to opt for the Assured Pension Scheme (APS) as per the Kerala government\'s decision to introduce an assured pension option.',
+  },
+  {
+    q: 'Which is better — NPS or APS for Kerala government employees?',
+    a: 'APS is generally considered safer as it guarantees 50% of last salary as pension regardless of market conditions. NPS can provide higher returns if markets perform well but comes with uncertainty. Employees with longer service periods tend to benefit more from NPS in a good market, while APS suits those who prefer certainty.',
+  },
+  {
+    q: 'What is the employer contribution in NPS for Kerala?',
+    a: 'In NPS, the employee contributes 10% of Basic Pay + DA, and the government (employer) contributes 14% of Basic Pay + DA to the NPS corpus. Both amounts are invested in the NPS fund.',
+  },
+  {
+    q: 'Can I switch from NPS to APS in Kerala?',
+    a: 'Yes, eligible NPS employees in Kerala can opt for APS as per the state government\'s notification. Once switched to APS, the accumulated NPS corpus is handled as per the scheme rules. Check the latest GO from Finance Department for current opt-in procedures.',
+  },
+  {
+    q: 'What happens to NPS corpus after retirement in Kerala?',
+    a: 'On retirement under NPS, the employee must use at least 40% of the corpus to purchase an annuity (monthly pension from an insurance company). The remaining 60% can be withdrawn as a lump sum, which is tax-free.',
+  },
+];
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -736,6 +764,9 @@ export default function NPSvsAPSPage() {
             ? 'ഈ കാൽക്കുലേറ്റർ ഒരു ഏകദേശ ചിത്രം മാത്രം. ഔദ്യോഗിക കണക്കുകൾക്ക് പെൻഷൻ വിഭാഗവുമായി ബന്ധപ്പെടുക.'
             : 'Illustrative only. Actual amounts depend on pay scales, promotions, DA rates & NPS performance. Consult your pension section for official figures.'}
         </div>
+
+        <FAQSection faqs={NPS_APS_FAQS} accentColor="#ff453a" />
+
       </div>
     </div>
   );

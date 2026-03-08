@@ -1,6 +1,34 @@
 'use client';
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import FAQSection from '@/components/FAQSection';
+
+const DCRG_FAQS = [
+  {
+    q: 'What is DCRG for Kerala government employees?',
+    a: 'DCRG (Death-cum-Retirement Gratuity) is a lump sum payment made to a government employee on retirement, or to the family in case of death during service. It is governed by Rule 77 of Kerala Service Rules (KSR).',
+  },
+  {
+    q: 'How is DCRG calculated in Kerala?',
+    a: 'DCRG = (Last Month Emoluments ÷ 2) × Qualifying Service (in years). Last Month Emoluments includes Basic Pay + DA. Maximum DCRG payable is ₹14,00,000.',
+  },
+  {
+    q: 'What is the maximum DCRG amount in Kerala?',
+    a: 'The maximum DCRG payable to a Kerala government employee is ₹14,00,000 (Fourteen Lakh Rupees) as per the current rules.',
+  },
+  {
+    q: 'Is DCRG different from Death Gratuity?',
+    a: 'Yes. DCRG is paid on retirement after completing qualifying service. Death Gratuity is paid to the family when an employee dies in service. The calculation formula is similar but the conditions differ.',
+  },
+  {
+    q: 'What is the minimum qualifying service for DCRG?',
+    a: 'A minimum of 5 years of qualifying service is required to be eligible for DCRG on retirement. For Death Gratuity (death in service), there is no minimum service requirement.',
+  },
+  {
+    q: 'Is DCRG taxable in Kerala?',
+    a: 'Gratuity received by government employees is fully exempt from income tax under Section 10(10)(i) of the Income Tax Act. There is no tax liability on DCRG.',
+  },
+];
 
 // ─── DA Rate lookup by retirement date (11th PRC, effective from 01-07-2019) ──
 // Source: Kerala Finance Dept G.O.s
@@ -387,6 +415,9 @@ export default function DCRGPage() {
             </div>
           </div>
         </div>
+
+        <FAQSection faqs={DCRG_FAQS} accentColor="#c8960c" />
+
       </div>
     </div>
   );
