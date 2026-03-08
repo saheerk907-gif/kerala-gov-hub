@@ -70,8 +70,8 @@ export default function ContactPage() {
                 {
                   icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
                   label: 'Email',
-                  value: 'hello@keralaemployees.in',
-                  href: 'mailto:hello@keralaemployees.in',
+                  value: 'kerala.employees.gov@gmail.com',
+                  href: 'mailto:kerala.employees.gov@gmail.com',
                 },
                 {
                   icon: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>,
@@ -157,7 +157,7 @@ export default function ContactPage() {
                   </div>
                   {status === 'error' && (
                     <p className="text-[12px]" style={{ color: 'rgba(255,69,58,0.9)' }}>
-                      Something went wrong. Please try emailing us directly at hello@keralaemployees.in
+                      Something went wrong. Please try emailing us directly at kerala.employees.gov@gmail.com
                     </p>
                   )}
                   <button type="submit" disabled={status === 'sending'}

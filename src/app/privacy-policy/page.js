@@ -64,7 +64,7 @@ const SECTIONS = [
   {
     title: '9. Contact',
     content: [
-      'If you have questions about this Privacy Policy, please contact us at hello@keralaemployees.in or through our Contact page.',
+      'If you have questions about this Privacy Policy, please contact us at kerala.employees.gov@gmail.com or through our Contact page.',
     ],
   },
 ];
@@ -107,8 +107,8 @@ export default function PrivacyPolicyPage() {
           {/* Footer note */}
           <p className="mt-8 text-[12px] text-white/25 text-center">
             For any privacy-related concerns, email us at{' '}
-            <a href="mailto:hello@keralaemployees.in" className="text-white/40 hover:text-white/70 transition-colors">
-              hello@keralaemployees.in
+            <a href="mailto:kerala.employees.gov@gmail.com" className="text-white/40 hover:text-white/70 transition-colors">
+              kerala.employees.gov@gmail.com
             </a>
           </p>
 
