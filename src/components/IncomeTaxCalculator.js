@@ -3,641 +3,1433 @@ import { useState, useMemo } from 'react';
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
 const n = (v) => Number(v) || 0;
-const fmt  = (v) => Math.round(Math.abs(v)).toLocaleString('en-IN');
+const fmt = (v) => Math.round(Math.abs(v)).toLocaleString('en-IN');
 const fmtR = (v) => `₹${fmt(v)}`;
+const fmtPrint = (v) => Math.round(Math.abs(v)).toLocaleString('en-IN');
+const nilOrAmt = (v) => (Math.round(Math.abs(v)) === 0 ? 'NIL' : fmtPrint(v));
 const clamp = (v, max) => Math.min(Math.max(0, n(v)), max);
+
+// ─── Month arrays ──────────────────────────────────────────────────────────────
+const MONTH_NAMES = ['April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March'];
+const MONTH_NAMES_FY = ['April 2025', 'May 2025', 'June 2025', 'July 2025', 'August 2025', 'September 2025', 'October 2025', 'November 2025', 'December 2025', 'January 2026', 'February 2026', 'March 2026'];
 
 // ─── Tax Slabs ────────────────────────────────────────────────────────────────
 const NEW_SLABS = [
-  { min: 0,           max: 400_000,   rate: 0  },
-  { min: 400_000,     max: 800_000,   rate: 5  },
-  { min: 800_000,     max: 1_200_000, rate: 10 },
-  { min: 1_200_000,   max: 1_600_000, rate: 15 },
-  { min: 1_600_000,   max: 2_000_000, rate: 20 },
-  { min: 2_000_000,   max: 2_400_000, rate: 25 },
-  { min: 2_400_000,   max: Infinity,  rate: 30 },
+  { min: 0,         max: 400_000,   rate: 0  },
+  { min: 400_000,   max: 800_000,   rate: 5  },
+  { min: 800_000,   max: 1_200_000, rate: 10 },
+  { min: 1_200_000, max: 1_600_000, rate: 15 },
+  { min: 1_600_000, max: 2_000_000, rate: 20 },
+  { min: 2_000_000, max: 2_400_000, rate: 25 },
+  { min: 2_400_000, max: Infinity,  rate: 30 },
 ];
 
 const OLD_SLABS = {
   below60: [
-    { min: 0,         max: 250_000,   rate: 0  },
-    { min: 250_000,   max: 500_000,   rate: 5  },
-    { min: 500_000,   max: 1_000_000, rate: 20 },
-    { min: 1_000_000, max: Infinity,  rate: 30 },
+    { min: 0,          max: 250_000,  rate: 0  },
+    { min: 250_000,    max: 500_000,  rate: 5  },
+    { min: 500_000,    max: 1_000_000, rate: 20 },
+    { min: 1_000_000,  max: Infinity, rate: 30 },
   ],
   senior: [
-    { min: 0,         max: 300_000,   rate: 0  },
-    { min: 300_000,   max: 500_000,   rate: 5  },
-    { min: 500_000,   max: 1_000_000, rate: 20 },
-    { min: 1_000_000, max: Infinity,  rate: 30 },
+    { min: 0,          max: 300_000,  rate: 0  },
+    { min: 300_000,    max: 500_000,  rate: 5  },
+    { min: 500_000,    max: 1_000_000, rate: 20 },
+    { min: 1_000_000,  max: Infinity, rate: 30 },
   ],
   superSenior: [
-    { min: 0,         max: 500_000,   rate: 0  },
-    { min: 500_000,   max: 1_000_000, rate: 20 },
-    { min: 1_000_000, max: Infinity,  rate: 30 },
+    { min: 0,          max: 500_000,  rate: 0  },
+    { min: 500_000,    max: 1_000_000, rate: 20 },
+    { min: 1_000_000,  max: Infinity, rate: 30 },
   ],
 };
 
+// ─── Slab tax computation ──────────────────────────────────────────────────────
 function slabTax(income, slabs) {
   let tax = 0;
   const rows = [];
   for (const s of slabs) {
     if (income <= s.min) break;
-    const band = Math.min(income, s.max === Infinity ? income : s.max) - s.min;
-    const t    = band * s.rate / 100;
-    rows.push({
-      label : `${fmtR(s.min)} – ${s.max === Infinity ? 'above' : fmtR(s.max)}`,
-      rate  : s.rate,
-      band,
-      tax   : t,
-    });
+    const taxable = Math.min(income, s.max === Infinity ? income : s.max) - s.min;
+    const t = taxable * s.rate / 100;
+    rows.push({ from: s.min, to: s.max, rate: s.rate, taxableAmount: taxable, tax: t });
     tax += t;
   }
   return { tax, rows };
 }
 
-function getSurchargeRate(income, regime) {
-  if (income <= 5_000_000)                           return 0;
-  if (income <= 10_000_000)                          return 10;
-  if (income <= 20_000_000)                          return 15;
-  if (income <= 50_000_000)                          return 25;
-  return regime === 'new' ? 25 : 37;
-}
+// ─── Surcharge ────────────────────────────────────────────────────────────────
+function computeSurcharge(rawTax, taxableIncome, isNew) {
+  const maxSurcharge = isNew ? 25 : 37;
+  let rate = 0;
+  if (taxableIncome > 50_000_000) rate = maxSurcharge;
+  else if (taxableIncome > 20_000_000) rate = 25;
+  else if (taxableIncome > 10_000_000) rate = 15;
+  else if (taxableIncome > 5_000_000) rate = 10;
 
-function hraExempt(hraAnnual, rentAnnual, basicPlusDA, isMetro) {
-  if (rentAnnual <= 0) return 0;
-  return Math.max(0, Math.min(
-    hraAnnual,
-    rentAnnual - 0.1 * basicPlusDA,
-    basicPlusDA * (isMetro ? 0.5 : 0.4),
-  ));
-}
+  let surcharge = rawTax * rate / 100;
 
-// ─── Main computation ─────────────────────────────────────────────────────────
-function computeTax(inp) {
-  const {
-    regime, ageCategory,
-    basicMonthly, daPercent, hraMonthly, otherAllow, otherAllowTaxable,
-    otherIncome,
-    // old regime deductions
-    rentAnnual, isMetro,
-    profTax,
-    hlInterest,
-    gpf, sli, lic, ppf, elss, hlPrincipal, otherC, npsC,
-    npsAdditional,
-    employerNPS,
-    medSelf, medParents, seniorParents,
-    eduLoan,
-    donations,
-    savingsInterest,
-    tdsPaid,
-  } = inp;
-
-  const basicAnnual  = n(basicMonthly) * 12;
-  const daAnnual     = basicAnnual * (n(daPercent) / 100);
-  const hraAnnual    = n(hraMonthly) * 12;
-  const otherAnn     = n(otherAllow) * 12;
-  const basicPlusDA  = basicAnnual + daAnnual;
-  const grossSalary  = basicAnnual + daAnnual + hraAnnual + otherAnn;
-
-  // ── NEW REGIME ──────────────────────────────────────────────────────────────
-  if (regime === 'new') {
-    const stdDed  = 75_000;
-    // Only 80CCD(2) employer NPS allowed; 10% for state govt
-    const empNPS  = clamp(n(employerNPS) || basicPlusDA * 0.10, basicPlusDA * 0.14);
-    const taxable = Math.max(0, grossSalary - stdDed - empNPS + n(otherIncome));
-
-    const { tax: rawTax, rows } = slabTax(taxable, NEW_SLABS);
-    const rebate87A  = taxable <= 1_200_000 ? rawTax : 0;
-    const taxNoRebate = Math.max(0, rawTax - rebate87A);
-    const scRate     = getSurchargeRate(taxable, 'new');
-    const sc         = taxNoRebate * scRate / 100;
-    const cess       = (taxNoRebate + sc) * 0.04;
-    const totalTax   = Math.round(taxNoRebate + sc + cess);
-
-    return {
-      regime: 'new', grossSalary, basicAnnual, daAnnual, hraAnnual, otherAnn,
-      stdDed, hraExemptAmt: 0, profTaxDed: 0,
-      salaryIncome: grossSalary - stdDed - empNPS,
-      otherIncomeAmt: n(otherIncome),
-      grossTotalIncome: taxable,
-      hlInterestDed: 0, c80: 0, npsAddDed: 0, empNPSDed: empNPS,
-      d80: 0, eduLoanDed: 0, donationDed: 0, savingsDed: 0,
-      totalChapterVIA: empNPS,
-      taxableIncome: taxable,
-      slabRows: rows, rawTax, rebate87A,
-      taxAfterRebate: taxNoRebate,
-      scRate, sc, cess, totalTax,
-      monthlyTDS: totalTax / 12,
-      balanceTax: totalTax - n(tdsPaid),
-    };
+  // Marginal relief on surcharge at each threshold
+  if (rate > 0) {
+    const thresholds = [
+      { limit: 5_000_000, rate: 10 },
+      { limit: 10_000_000, rate: 15 },
+      { limit: 20_000_000, rate: 25 },
+      { limit: 50_000_000, rate: maxSurcharge },
+    ];
+    for (const t of thresholds) {
+      if (taxableIncome > t.limit) {
+        // compute tax + surcharge at threshold
+        const taxAtThreshold = rawTax; // simplified: apply marginal relief
+        const excessIncome = taxableIncome - t.limit;
+        const surchargeAtThreshold = rawTax * (t.rate === rate ? 0 : (rate > t.rate ? t.rate : 0)) / 100;
+        const netTaxAtThreshold = taxAtThreshold + surchargeAtThreshold;
+        const netTaxCurrent = rawTax + surcharge;
+        const relief = Math.max(0, netTaxCurrent - (netTaxAtThreshold + excessIncome));
+        if (relief > 0) surcharge = Math.max(0, surcharge - relief);
+      }
+    }
   }
 
-  // ── OLD REGIME ──────────────────────────────────────────────────────────────
-  const slabs   = OLD_SLABS[ageCategory] ?? OLD_SLABS.below60;
-  const stdDed  = 50_000;
-  const hraEx   = hraExempt(hraAnnual, n(rentAnnual), basicPlusDA, isMetro);
-  const profTaxDed = Math.min(n(profTax), 5_000);
-  const salaryIncome = Math.max(0, grossSalary - stdDed - hraEx - profTaxDed);
-  const grossTotalIncome = salaryIncome + n(otherIncome);
+  return { rate, surcharge };
+}
 
-  // Section 24(b) housing loan interest — self-occupied max ₹2L
-  const hlInterestDed = clamp(n(hlInterest), 200_000);
+// ─── Main Tax Calculation ─────────────────────────────────────────────────────
+function computeTax(inputs) {
+  const {
+    regime, ageCategory,
+    basic1, incrementOption, basic2, incrementFromMonth,
+    daPct, hraMonthly, otherAllowMonthly,
+    daArrear, payRevisionArrear, otherArrear,
+    leaveSurrender, festivalAllowance,
+    fdInterest, otherIncome,
+    // old regime
+    rentPaidAnnual, isMetro,
+    profTax,
+    housingLoanInterest,
+    gpfContrib, sliPremium, licPremium, ppfContrib, elssAmount,
+    nscAmount, hlPrincipal, tuitionFees, npsEmployee80C, otherC80,
+    npsAdditional,
+    employerNPS,
+    mediclaimSelf, mediclaimParents, seniorParents,
+    housingLoanInterest80EEA,
+    eduLoanInterest,
+    donations,
+    savingsInterest,
+    // TDS
+    monthsAlreadyDeducted, tdsPaidAmount,
+  } = inputs;
 
-  // 80C (cap ₹1,50,000)
-  const c80 = Math.min(
-    n(gpf) + n(sli) + n(lic) + n(ppf) + n(elss) + n(hlPrincipal) + n(otherC) + n(npsC),
-    150_000,
-  );
-  // 80CCD(1B) additional NPS
-  const npsAddDed = clamp(n(npsAdditional), 50_000);
-  // 80CCD(2) employer NPS (10% for state govt)
-  const empNPSDed = clamp(n(employerNPS) || 0, basicPlusDA * 0.14);
+  const isNew = regime === 'new';
 
-  // 80D mediclaim
-  const selfMed   = clamp(n(medSelf),    ageCategory === 'below60' ? 25_000 : 50_000);
-  const parentMed = clamp(n(medParents), seniorParents              ? 50_000 : 25_000);
-  const d80       = selfMed + parentMed;
+  // ── Annual Basic calculation ─────────────────────────────────────────────────
+  let annualBasic = 0;
+  let preMonths = 0, postMonths = 0;
+  if (incrementOption === 'yes' && n(basic2) > 0) {
+    preMonths = n(incrementFromMonth) - 1;
+    postMonths = 12 - preMonths;
+    annualBasic = n(basic1) * preMonths + n(basic2) * postMonths;
+  } else {
+    annualBasic = n(basic1) * 12;
+    preMonths = 0;
+    postMonths = 12;
+  }
 
-  // 80E education loan (unlimited)
-  const eduLoanDed = Math.max(0, n(eduLoan));
-  // 80G donations (50%)
-  const donationDed = Math.round(n(donations) * 0.5);
-  // 80TTA / 80TTB savings interest
-  const savingsDed = clamp(n(savingsInterest), ageCategory === 'below60' ? 10_000 : 50_000);
+  const annualDA = annualBasic * n(daPct) / 100;
+  const basicPlusDA = annualBasic + annualDA;
+  const annualHRA = n(hraMonthly) * 12;
+  const annualOther = n(otherAllowMonthly) * 12;
 
-  const totalChapterVIA = c80 + npsAddDed + empNPSDed + d80 + eduLoanDed + donationDed + savingsDed;
-  const taxableIncome   = Math.max(0, grossTotalIncome - hlInterestDed - totalChapterVIA);
+  const totalArrears = n(daArrear) + n(payRevisionArrear) + n(otherArrear);
+  const leaveSurrenderAmt = n(leaveSurrender);
+  const festivalAllowanceAmt = n(festivalAllowance);
 
-  const { tax: rawTax, rows } = slabTax(taxableIncome, slabs);
-  const rebate87A      = taxableIncome <= 500_000 ? Math.min(rawTax, 12_500) : 0;
+  const grossFromEmployer = annualBasic + annualDA + annualHRA + annualOther +
+    totalArrears + leaveSurrenderAmt + festivalAllowanceAmt;
+
+  // ── Standard Deduction ───────────────────────────────────────────────────────
+  const stdDed = isNew ? 75_000 : 50_000;
+
+  // ── HRA Exemption (old regime only) ─────────────────────────────────────────
+  let hraExemptAmt = 0;
+  if (!isNew && annualHRA > 0) {
+    const rentPaid = n(rentPaidAnnual);
+    const metroFactor = isMetro ? 0.5 : 0.4;
+    const hraA = annualHRA;
+    const hraB = Math.max(0, rentPaid - 0.1 * basicPlusDA);
+    const hraC = metroFactor * basicPlusDA;
+    hraExemptAmt = Math.max(0, Math.min(hraA, hraB, hraC));
+  }
+
+  // ── Professional Tax ─────────────────────────────────────────────────────────
+  const profTaxDed = isNew ? 0 : Math.min(n(profTax), 5_000);
+
+  // ── Net Salary Income ────────────────────────────────────────────────────────
+  const netSalaryIncome = grossFromEmployer - stdDed - hraExemptAmt - profTaxDed;
+
+  // ── Other Income ─────────────────────────────────────────────────────────────
+  const otherIncomeTotal = n(fdInterest) + n(otherIncome);
+
+  // ── Gross Total Income ───────────────────────────────────────────────────────
+  const grossTotalIncome = netSalaryIncome + otherIncomeTotal;
+
+  // ── Old Regime Deductions ────────────────────────────────────────────────────
+  let hlInterestDed = 0;
+  let c80Total = 0;
+  let npsAddDed = 0;
+  let empNPSDed = 0;
+  let d80Total = 0;
+  let hlInterest80EEADed = 0;
+  let eduLoanDed = 0;
+  let donationDed = 0;
+  let savingsDed = 0;
+  let totalChapterVIA = 0;
+
+  if (!isNew) {
+    hlInterestDed = clamp(housingLoanInterest, 200_000);
+    const c80Raw = n(gpfContrib) + n(sliPremium) + n(licPremium) + n(ppfContrib) +
+      n(elssAmount) + n(nscAmount) + n(hlPrincipal) + n(tuitionFees) +
+      n(npsEmployee80C) + n(otherC80);
+    c80Total = Math.min(c80Raw, 150_000);
+    npsAddDed = clamp(npsAdditional, 50_000);
+    empNPSDed = Math.min(n(employerNPS), 0.1 * basicPlusDA);
+
+    const selfMedMax = ageCategory === 'below60' ? 25_000 : 50_000;
+    const parentsMedMax = seniorParents ? 50_000 : 25_000;
+    d80Total = clamp(mediclaimSelf, selfMedMax) + clamp(mediclaimParents, parentsMedMax);
+
+    hlInterest80EEADed = clamp(housingLoanInterest80EEA, 150_000);
+    eduLoanDed = n(eduLoanInterest);
+    donationDed = n(donations) * 0.5;
+    savingsDed = ageCategory === 'superSenior' ? 0
+      : ageCategory === 'senior' ? clamp(savingsInterest, 50_000)
+      : clamp(savingsInterest, 10_000);
+
+    totalChapterVIA = hlInterestDed + c80Total + npsAddDed + empNPSDed + d80Total +
+      hlInterest80EEADed + eduLoanDed + donationDed + savingsDed;
+  } else {
+    // New regime: only employer NPS 80CCD(2)
+    empNPSDed = Math.min(n(employerNPS), 0.1 * basicPlusDA);
+    totalChapterVIA = empNPSDed;
+  }
+
+  // ── Taxable Income ───────────────────────────────────────────────────────────
+  const taxableIncome = Math.max(0, grossTotalIncome - totalChapterVIA);
+
+  // ── Slab Tax ─────────────────────────────────────────────────────────────────
+  const slabs = isNew ? NEW_SLABS : OLD_SLABS[ageCategory];
+  const { tax: rawTaxBase, rows: slabRows } = slabTax(taxableIncome, slabs);
+  let rawTax = rawTaxBase;
+
+  // ── Rebate u/s 87A ───────────────────────────────────────────────────────────
+  let rebate87A = 0;
+  let rebateNote = '';
+  if (isNew) {
+    if (taxableIncome <= 1_200_000) {
+      rebate87A = rawTax;
+      rebateNote = 'Full rebate u/s 87A (taxable income ≤ ₹12,00,000)';
+    } else if (taxableIncome <= 1_270_588) {
+      // Marginal relief: tax = income - 12L
+      const effectiveTax = taxableIncome - 1_200_000;
+      rebate87A = Math.max(0, rawTax - effectiveTax);
+      rawTax = effectiveTax;
+      rebateNote = `Marginal relief applied (income ₹${fmt(taxableIncome)} — effective tax = income − ₹12,00,000)`;
+    }
+  } else {
+    if (taxableIncome <= 500_000) {
+      rebate87A = Math.min(rawTax, 12_500);
+      rebateNote = `Rebate u/s 87A: min(tax, ₹12,500) for taxable income ≤ ₹5,00,000`;
+    }
+  }
+
   const taxAfterRebate = Math.max(0, rawTax - rebate87A);
-  const scRate         = getSurchargeRate(taxableIncome, 'old');
-  const sc             = taxAfterRebate * scRate / 100;
-  const cess           = (taxAfterRebate + sc) * 0.04;
-  const totalTax       = Math.round(taxAfterRebate + sc + cess);
+
+  // ── Surcharge ─────────────────────────────────────────────────────────────────
+  const { rate: surchargeRate, surcharge: surchargeAmt } = computeSurcharge(taxAfterRebate, taxableIncome, isNew);
+
+  // ── Cess ──────────────────────────────────────────────────────────────────────
+  const cess = (taxAfterRebate + surchargeAmt) * 0.04;
+
+  // ── Total Tax ────────────────────────────────────────────────────────────────
+  const totalTaxRaw = taxAfterRebate + surchargeAmt + cess;
+  const totalTax = Math.round(totalTaxRaw / 10) * 10;
+
+  // ── Monthly TDS ──────────────────────────────────────────────────────────────
+  const tdsAlreadyPaid = n(tdsPaidAmount);
+  const mDeducted = n(monthsAlreadyDeducted);
+  const remainingMonths = Math.max(1, 12 - mDeducted);
+  const balanceTax = Math.max(0, totalTax - tdsAlreadyPaid);
+  const monthlyTDS = Math.ceil(balanceTax / remainingMonths);
 
   return {
-    regime: 'old', grossSalary, basicAnnual, daAnnual, hraAnnual, otherAnn,
-    stdDed, hraExemptAmt: hraEx, profTaxDed,
-    salaryIncome, otherIncomeAmt: n(otherIncome),
-    grossTotalIncome,
-    hlInterestDed, c80, npsAddDed, empNPSDed,
-    d80, eduLoanDed, donationDed, savingsDed,
+    annualBasic, annualDA, annualHRA, annualOther,
+    basicPlusDA,
+    totalArrears, leaveSurrenderAmt, festivalAllowanceAmt,
+    grossFromEmployer,
+    stdDed, hraExemptAmt, profTaxDed,
+    netSalaryIncome, otherIncomeTotal, grossTotalIncome,
+    hlInterestDed, c80Total, npsAddDed, empNPSDed, d80Total,
+    hlInterest80EEADed, eduLoanDed, donationDed, savingsDed,
     totalChapterVIA,
-    taxableIncome,
-    slabRows: rows, rawTax, rebate87A,
-    taxAfterRebate, scRate, sc, cess, totalTax,
-    monthlyTDS: totalTax / 12,
-    balanceTax: totalTax - n(tdsPaid),
+    taxableIncome, slabRows, rawTax, rawTaxBase,
+    rebate87A, rebateNote,
+    taxAfterRebate, surchargeRate, surchargeAmt, cess,
+    totalTax, remainingMonths, balanceTax, monthlyTDS,
+    preMonths, postMonths,
+    // raw 80C sum for display
+    c80Raw: n(gpfContrib) + n(sliPremium) + n(licPremium) + n(ppfContrib) +
+      n(elssAmount) + n(nscAmount) + n(hlPrincipal) + n(tuitionFees) +
+      n(npsEmployee80C) + n(otherC80),
   };
 }
 
-// ─── UI helpers ───────────────────────────────────────────────────────────────
-const iCls = 'w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/20 focus:outline-none focus:border-[#ff9f0a]/60 focus:ring-1 focus:ring-[#ff9f0a]/30 transition-all';
-const lCls = 'block text-[10px] font-bold text-white/40 uppercase tracking-wider mb-1';
+// ─── Print Handler ────────────────────────────────────────────────────────────
+function handlePrint(inputs, R) {
+  const {
+    regime, ageCategory,
+    name, designation, department, officeName, pan, employeeCode, gpfNpsNo, aadhaarLast4,
+    basic1, incrementOption, basic2, incrementFromMonth, daPct,
+    monthsAlreadyDeducted, tdsPaidAmount,
+    isMetro, rentPaidAnnual,
+    gpfContrib, sliPremium, licPremium, ppfContrib, elssAmount,
+    nscAmount, hlPrincipal, tuitionFees, npsEmployee80C, otherC80,
+    mediclaimSelf, mediclaimParents, seniorParents,
+    profTax, ageCategory: ac,
+    daArrear, payRevisionArrear, otherArrear,
+    fdInterest, otherIncome, housingLoanInterest, housingLoanInterest80EEA,
+    eduLoanInterest, donations, savingsInterest, employerNPS, npsAdditional,
+    leaveSurrender, festivalAllowance,
+  } = inputs;
 
-function Field({ label, hint, children, span2 }) {
+  const isNew = regime === 'new';
+  const mDeducted = n(monthsAlreadyDeducted);
+
+  // TDS deducted months label
+  let tdsMonthLabel = 'None';
+  if (mDeducted === 1) tdsMonthLabel = 'April 2025';
+  else if (mDeducted === 2) tdsMonthLabel = 'April–May 2025';
+  else if (mDeducted === 3) tdsMonthLabel = 'April–June 2025';
+  else if (mDeducted === 4) tdsMonthLabel = 'April–July 2025';
+  else if (mDeducted === 5) tdsMonthLabel = 'April–August 2025';
+  else if (mDeducted === 6) tdsMonthLabel = 'April–September 2025';
+  else if (mDeducted === 7) tdsMonthLabel = 'April–October 2025';
+  else if (mDeducted === 8) tdsMonthLabel = 'April–November 2025';
+  else if (mDeducted === 9) tdsMonthLabel = 'April–December 2025';
+  else if (mDeducted === 10) tdsMonthLabel = 'April 2025–January 2026';
+  else if (mDeducted === 11) tdsMonthLabel = 'April 2025–February 2026';
+
+  // Basic pay display
+  let basicPayDisplay = '';
+  if (incrementOption === 'yes' && n(basic2) > 0 && R.preMonths > 0) {
+    const fromMonth = MONTH_NAMES[0];
+    const toMonth = MONTH_NAMES[R.preMonths - 1];
+    const fromMonth2 = MONTH_NAMES[R.preMonths];
+    const toMonth2 = MONTH_NAMES[11];
+    basicPayDisplay = `₹${fmtPrint(n(basic1))} × ${R.preMonths} months (${fromMonth}–${toMonth} 2025) + ₹${fmtPrint(n(basic2))} × ${R.postMonths} months (${fromMonth2} ${n(incrementFromMonth) <= 9 ? '2025' : '2026'}–Mar 2026)`;
+  } else {
+    basicPayDisplay = `₹${fmtPrint(n(basic1))} × 12 months`;
+  }
+
+  // HRA computation details for print
+  const rentPaid = n(rentPaidAnnual);
+  const hraA = R.annualHRA;
+  const hraB = Math.max(0, rentPaid - 0.1 * R.basicPlusDA);
+  const hraC = (isMetro ? 0.5 : 0.4) * R.basicPlusDA;
+
+  // Age label
+  const ageLabel = ageCategory === 'below60' ? 'Below 60 years' : ageCategory === 'senior' ? 'Senior Citizen (60–79 years)' : 'Super Senior Citizen (80+ years)';
+
+  // Slabs for print
+  const slabRowsHtml = R.slabRows.map(row => {
+    const toLabel = row.to === Infinity ? 'Above' : `₹${fmtPrint(row.to)}`;
+    const fromLabel = `₹${fmtPrint(row.from)}`;
+    return `<tr>
+      <td class="indent">${fromLabel} – ${toLabel} @ ${row.rate}%</td>
+      <td class="right">${row.tax === 0 ? '<span class="nil">NIL</span>' : `₹${fmtPrint(row.tax)}`}</td>
+    </tr>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Anticipatory Income Tax Statement FY 2025-26</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 11pt; margin: 0; padding: 15mm; color: #000; }
+  h2 { text-align: center; font-size: 13pt; margin: 0; }
+  h3 { text-align: center; font-size: 11pt; margin: 4px 0; font-weight: normal; }
+  .header-box { border: 2px solid #000; padding: 10px; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  th, td { border: 1px solid #555; padding: 4px 8px; font-size: 10.5pt; }
+  th { background: #f0f0f0; font-weight: bold; }
+  .section-head th { background: #333; color: #fff; font-size: 10pt; text-transform: uppercase; }
+  .total-row td { font-weight: bold; background: #f9f9f9; }
+  .grand-total td { font-weight: bold; font-size: 12pt; background: #e8e8e8; }
+  .right { text-align: right; }
+  .indent { padding-left: 20px; }
+  .nil { color: #666; }
+  .sig-area { display: flex; justify-content: space-between; margin-top: 20px; }
+  .sig-box { text-align: center; min-width: 200px; }
+  .sig-line { border-top: 1px solid #000; margin-top: 40px; padding-top: 4px; font-size: 10pt; }
+  .footer { border-top: 1px solid #999; margin-top: 15px; font-size: 9pt; color: #666; text-align: center; }
+  .highlight { background: #fff3cd !important; }
+  @page { size: A4; margin: 15mm; }
+  @media print { body { padding: 0; } }
+</style>
+</head>
+<body>
+
+<div class="header-box">
+  <h2>ANTICIPATORY INCOME TAX STATEMENT</h2>
+  <h3>Financial Year 2025-26 (Assessment Year 2026-27)</h3>
+  <h3>Tax Regime: <strong>${isNew ? 'NEW REGIME (Section 115BAC)' : 'OLD REGIME'}</strong></h3>
+</div>
+
+<!-- Employee Details -->
+<table>
+  <tr>
+    <th colspan="4" style="background:#1a1a1a;color:#fff;text-align:center;">EMPLOYEE DETAILS</th>
+  </tr>
+  <tr>
+    <th style="width:20%">Name</th>
+    <td style="width:30%">${name || '___________________________'}</td>
+    <th style="width:20%">Designation</th>
+    <td>${designation || '___________________________'}</td>
+  </tr>
+  <tr>
+    <th>Department</th>
+    <td>${department || '___________________________'}</td>
+    <th>Office Name</th>
+    <td>${officeName || '___________________________'}</td>
+  </tr>
+  <tr>
+    <th>PAN</th>
+    <td>${pan || '___________'}</td>
+    <th>Employee Code</th>
+    <td>${employeeCode || '___________'}</td>
+  </tr>
+  <tr>
+    <th>GPF/NPS A/c No.</th>
+    <td>${gpfNpsNo || '___________'}</td>
+    <th>Aadhaar (last 4)</th>
+    <td>XXXX XXXX ${aadhaarLast4 || '____'}</td>
+  </tr>
+  <tr>
+    <th>Age Category</th>
+    <td>${ageLabel}</td>
+    <th>Tax Regime</th>
+    <td><strong>${isNew ? 'New Regime (Sec 115BAC)' : 'Old Regime'}</strong></td>
+  </tr>
+</table>
+
+<!-- PART A: Income from Salary -->
+<table>
+  <tr class="section-head"><th colspan="2">PART A: INCOME FROM SALARY</th></tr>
+  <tr><th>Sl.</th><th>Particulars</th></tr>
+  <tr>
+    <td>1</td>
+    <td>Basic Pay — ${basicPayDisplay}<span class="right" style="float:right">₹${fmtPrint(R.annualBasic)}</span></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Dearness Allowance @ ${daPct}% of Basic Pay<span class="right" style="float:right">₹${fmtPrint(R.annualDA)}</span></td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>House Rent Allowance (Annual)<span class="right" style="float:right">₹${fmtPrint(R.annualHRA)}</span></td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>Other Taxable Allowances (Annual)<span class="right" style="float:right">${nilOrAmt(R.annualOther)}</span></td>
+  </tr>
+  <tr class="total-row">
+    <td colspan="2">Sub-total: Regular Salary<span class="right" style="float:right">₹${fmtPrint(R.annualBasic + R.annualDA + R.annualHRA + R.annualOther)}</span></td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>DA Arrears<span class="right" style="float:right">${nilOrAmt(n(daArrear))}</span></td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td>Pay Revision / Increment Arrears<span class="right" style="float:right">${nilOrAmt(n(payRevisionArrear))}</span></td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td>Other Arrears<span class="right" style="float:right">${nilOrAmt(n(otherArrear))}</span></td>
+  </tr>
+  <tr>
+    <td>8</td>
+    <td>Leave Surrender Value<span class="right" style="float:right">${nilOrAmt(R.leaveSurrenderAmt)}</span></td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td>Festival Allowance / Onam Bonus<span class="right" style="float:right">${nilOrAmt(R.festivalAllowanceAmt)}</span></td>
+  </tr>
+  <tr class="grand-total">
+    <td colspan="2">GROSS SALARY FROM EMPLOYER<span class="right" style="float:right">₹${fmtPrint(R.grossFromEmployer)}</span></td>
+  </tr>
+</table>
+
+<!-- PART B: Exemptions -->
+<table>
+  <tr class="section-head"><th colspan="2">PART B: EXEMPTIONS / DEDUCTIONS FROM SALARY</th></tr>
+  <tr>
+    <td>10</td>
+    <td>Standard Deduction u/s 16(ia) [${isNew ? '₹75,000 — New Regime' : '₹50,000 — Old Regime'}]
+      <span class="right" style="float:right">₹${fmtPrint(R.stdDed)}</span>
+    </td>
+  </tr>
+  ${!isNew && R.annualHRA > 0 ? `
+  <tr>
+    <td>11</td>
+    <td>
+      HRA Exemption u/s 10(13A):<br/>
+      &nbsp;&nbsp;(a) Actual HRA Received (Annual) = ₹${fmtPrint(hraA)}<br/>
+      &nbsp;&nbsp;(b) Rent Paid − 10% of (Basic+DA) = ₹${fmtPrint(hraB)}<br/>
+      &nbsp;&nbsp;(c) ${isMetro ? '50%' : '40%'} of (Basic+DA) [${isMetro ? 'Metro' : 'Non-Metro'}] = ₹${fmtPrint(hraC)}<br/>
+      &nbsp;&nbsp;<strong>HRA Exemption (least of above)</strong>
+      <span class="right" style="float:right">₹${fmtPrint(R.hraExemptAmt)}</span>
+    </td>
+  </tr>` : ''}
+  ${!isNew ? `
+  <tr>
+    <td>${R.annualHRA > 0 ? '12' : '11'}</td>
+    <td>Professional Tax u/s 16(iii)<span class="right" style="float:right">${nilOrAmt(R.profTaxDed)}</span></td>
+  </tr>` : ''}
+  <tr class="total-row">
+    <td colspan="2">INCOME FROM SALARY (Net)
+      <span class="right" style="float:right">₹${fmtPrint(R.netSalaryIncome)}</span>
+    </td>
+  </tr>
+</table>
+
+<!-- PART C: Other Income -->
+<table>
+  <tr class="section-head"><th colspan="2">PART C: INCOME FROM OTHER SOURCES</th></tr>
+  <tr>
+    <td>13</td>
+    <td>Interest / FD / Other Income<span class="right" style="float:right">${nilOrAmt(R.otherIncomeTotal)}</span></td>
+  </tr>
+  <tr class="grand-total">
+    <td colspan="2">GROSS TOTAL INCOME<span class="right" style="float:right">₹${fmtPrint(R.grossTotalIncome)}</span></td>
+  </tr>
+</table>
+
+${!isNew ? `
+<!-- PART D: Deductions Chapter VI-A (Old Regime) -->
+<table>
+  <tr class="section-head"><th colspan="2">PART D: DEDUCTIONS UNDER CHAPTER VI-A (OLD REGIME)</th></tr>
+  <tr>
+    <td>14</td>
+    <td>Section 24(b) — Housing Loan Interest (Max ₹2,00,000)
+      <span class="right" style="float:right">${nilOrAmt(R.hlInterestDed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td rowspan="12">15</td>
+    <td><strong>Section 80C — (Max ₹1,50,000)</strong></td>
+  </tr>
+  <tr><td class="indent">(a) GPF/PF Contribution<span class="right" style="float:right">${nilOrAmt(n(gpfContrib))}</span></td></tr>
+  <tr><td class="indent">(b) SLI Premium<span class="right" style="float:right">${nilOrAmt(n(sliPremium))}</span></td></tr>
+  <tr><td class="indent">(c) LIC Premium<span class="right" style="float:right">${nilOrAmt(n(licPremium))}</span></td></tr>
+  <tr><td class="indent">(d) PPF Contribution<span class="right" style="float:right">${nilOrAmt(n(ppfContrib))}</span></td></tr>
+  <tr><td class="indent">(e) ELSS / Mutual Fund<span class="right" style="float:right">${nilOrAmt(n(elssAmount))}</span></td></tr>
+  <tr><td class="indent">(f) NSC<span class="right" style="float:right">${nilOrAmt(n(nscAmount))}</span></td></tr>
+  <tr><td class="indent">(g) Housing Loan Principal<span class="right" style="float:right">${nilOrAmt(n(hlPrincipal))}</span></td></tr>
+  <tr><td class="indent">(h) Children Tuition Fees<span class="right" style="float:right">${nilOrAmt(n(tuitionFees))}</span></td></tr>
+  <tr><td class="indent">(i) NPS Employee Contribution u/s 80CCD(1)<span class="right" style="float:right">${nilOrAmt(n(npsEmployee80C))}</span></td></tr>
+  <tr><td class="indent">(j) Others<span class="right" style="float:right">${nilOrAmt(n(otherC80))}</span></td></tr>
+  <tr class="total-row"><td>Total u/s 80C [Restricted to ₹1,50,000]<span class="right" style="float:right">₹${fmtPrint(R.c80Total)}</span></td></tr>
+  <tr>
+    <td>16</td>
+    <td>Section 80CCD(1B) — Additional NPS Contribution (Max ₹50,000)
+      <span class="right" style="float:right">${nilOrAmt(R.npsAddDed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>17</td>
+    <td>Section 80CCD(2) — Employer NPS Contribution [10% of Basic+DA]
+      <span class="right" style="float:right">${nilOrAmt(R.empNPSDed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td>Section 80D — Medical Insurance Premium
+      <br/>&nbsp;&nbsp;Self &amp; Family: ₹${fmtPrint(n(mediclaimSelf))} | Parents ${seniorParents ? '(Senior)' : ''}: ₹${fmtPrint(n(mediclaimParents))}
+      <span class="right" style="float:right">${nilOrAmt(R.d80Total)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td>Section 80E — Education Loan Interest (Unlimited)
+      <span class="right" style="float:right">${nilOrAmt(R.eduLoanDed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td>Section 80EEA — Additional Housing Loan Interest (Max ₹1,50,000)
+      <span class="right" style="float:right">${nilOrAmt(R.hlInterest80EEADed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>21</td>
+    <td>Section 80G — Charitable Donations (50% deduction)
+      <span class="right" style="float:right">${nilOrAmt(R.donationDed)}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>22</td>
+    <td>Section 80TTA / 80TTB — Savings Interest
+      [${ageCategory === 'below60' ? 'Max ₹10,000' : 'Max ₹50,000 (Senior)'}]
+      <span class="right" style="float:right">${nilOrAmt(R.savingsDed)}</span>
+    </td>
+  </tr>
+  <tr class="grand-total">
+    <td colspan="2">TOTAL DEDUCTIONS UNDER CHAPTER VI-A
+      <span class="right" style="float:right">₹${fmtPrint(R.totalChapterVIA)}</span>
+    </td>
+  </tr>
+</table>` : `
+<!-- New Regime: only 80CCD(2) -->
+<table>
+  <tr class="section-head"><th colspan="2">DEDUCTIONS ALLOWED UNDER NEW REGIME</th></tr>
+  <tr>
+    <td>14</td>
+    <td>Section 80CCD(2) — Employer NPS Contribution [10% of Basic+DA; State Govt]
+      <span class="right" style="float:right">${nilOrAmt(R.empNPSDed)}</span>
+    </td>
+  </tr>
+  <tr class="grand-total">
+    <td colspan="2">TOTAL DEDUCTIONS
+      <span class="right" style="float:right">₹${fmtPrint(R.totalChapterVIA)}</span>
+    </td>
+  </tr>
+</table>`}
+
+<!-- PART E: Tax Computation -->
+<table>
+  <tr class="section-head"><th colspan="2">PART E: COMPUTATION OF INCOME TAX</th></tr>
+  <tr class="highlight">
+    <td><strong>Net Taxable Income</strong></td>
+    <td class="right"><strong>₹${fmtPrint(R.taxableIncome)}</strong></td>
+  </tr>
+  <tr><td colspan="2"><strong>Tax on ₹${fmtPrint(R.taxableIncome)} as per ${isNew ? 'New Regime slabs' : 'Old Regime slabs'}:</strong></td></tr>
+  ${slabRowsHtml}
+  <tr class="total-row">
+    <td>Tax on Total Income (Before Rebate)</td>
+    <td class="right">₹${fmtPrint(R.rawTaxBase)}</td>
+  </tr>
+  <tr>
+    <td>Less: Rebate u/s 87A ${R.rebateNote ? `<br/><small style="color:#444">${R.rebateNote}</small>` : ''}</td>
+    <td class="right">${R.rebate87A > 0 ? `(₹${fmtPrint(R.rebate87A)})` : 'NIL'}</td>
+  </tr>
+  <tr class="total-row">
+    <td>Tax after Rebate</td>
+    <td class="right">₹${fmtPrint(R.taxAfterRebate)}</td>
+  </tr>
+  <tr>
+    <td>Add: Surcharge @ ${R.surchargeRate}%</td>
+    <td class="right">${nilOrAmt(R.surchargeAmt)}</td>
+  </tr>
+  <tr>
+    <td>Add: Health &amp; Education Cess @ 4%</td>
+    <td class="right">₹${fmtPrint(R.cess)}</td>
+  </tr>
+  <tr class="grand-total highlight">
+    <td>TOTAL TAX PAYABLE (Rounded to nearest ₹10)</td>
+    <td class="right">₹${fmtPrint(R.totalTax)}</td>
+  </tr>
+</table>
+
+<!-- PART F: Monthly TDS Schedule -->
+<table>
+  <tr class="section-head"><th colspan="2">PART F: MONTHLY TDS SCHEDULE (FY 2025-26)</th></tr>
+  <tr>
+    <td>(A) Total Tax Payable</td>
+    <td class="right">₹${fmtPrint(R.totalTax)}</td>
+  </tr>
+  <tr>
+    <td>(B) Less: TDS Already Deducted (${tdsMonthLabel})</td>
+    <td class="right">${n(tdsPaidAmount) > 0 ? `₹${fmtPrint(n(tdsPaidAmount))}` : 'NIL'}</td>
+  </tr>
+  <tr class="total-row">
+    <td>Balance Tax (A − B)</td>
+    <td class="right">₹${fmtPrint(R.balanceTax)}</td>
+  </tr>
+  <tr>
+    <td>Balance Months Remaining (Apr 2025 – Mar 2026)</td>
+    <td class="right">${R.remainingMonths} month${R.remainingMonths > 1 ? 's' : ''}</td>
+  </tr>
+  <tr class="grand-total highlight">
+    <td>MONTHLY TDS REQUIRED (Balance ÷ Months)</td>
+    <td class="right">₹${fmtPrint(R.monthlyTDS)}</td>
+  </tr>
+</table>
+
+<!-- Declaration -->
+<div style="border:1px solid #555;padding:10px;margin-top:10px;font-size:10pt;">
+  <strong>DECLARATION</strong><br/>
+  I hereby declare that the particulars furnished above are true and correct to the best of my knowledge and belief. This is an anticipatory statement prepared for the purpose of monthly TDS deduction from salary for the Financial Year 2025-26 (Assessment Year 2026-27) under the provisions of Section 192 of the Income Tax Act, 1961.
+</div>
+
+<div class="sig-area">
+  <div class="sig-box">
+    <div class="sig-line">Employee Signature</div>
+    <div style="font-size:9pt;margin-top:4px">${name || '___________________________'}<br/>${designation || ''}<br/>Date: _______________</div>
+  </div>
+  <div class="sig-box">
+    <div class="sig-line">Signature of Drawing Officer / DDO</div>
+    <div style="font-size:9pt;margin-top:4px">${officeName || '___________________________'}<br/>Seal &amp; Date: _______________</div>
+  </div>
+</div>
+
+<div class="footer">
+  Generated by keralaemployees.in | For reference only — Not an official document | All calculations as per Income Tax Act 1961 | FY 2025-26 / AY 2026-27
+</div>
+
+</body>
+</html>`;
+
+  const win = window.open('', '_blank');
+  if (!win) {
+    alert('Popup blocked. Please allow popups for this site and try again.');
+    return;
+  }
+  win.document.write(html);
+  win.document.close();
+  setTimeout(() => {
+    win.print();
+  }, 500);
+}
+
+// ─── Input Field Component ────────────────────────────────────────────────────
+function InputField({ label, value, onChange, placeholder = '0', type = 'number', hint, className = '' }) {
   return (
-    <div className={span2 ? 'md:col-span-2' : ''}>
-      <label className={lCls}>{label}</label>
-      {children}
-      {hint && <p className="mt-1 text-[10px] text-white/25">{hint}</p>}
+    <div className={`flex flex-col gap-1 ${className}`}>
+      <label className="text-xs text-white/60 font-medium">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#ff9f0a]/50 focus:bg-white/[0.09] transition-all"
+      />
+      {hint && <span className="text-xs text-white/40">{hint}</span>}
     </div>
   );
 }
 
-function Input({ value, onChange, placeholder, min = 0, step = 1, max }) {
+// ─── Section Header ───────────────────────────────────────────────────────────
+function SectionHeader({ title, subtitle }) {
   return (
-    <input
-      type="number" min={min} step={step} max={max}
-      value={value} onChange={e => onChange(e.target.value)}
-      placeholder={placeholder}
-      className={iCls}
-    />
-  );
-}
-
-function SectionHead({ title, sub }) {
-  return (
-    <div className="md:col-span-2 mt-2 pb-2 border-b border-white/[0.08]">
-      <p className="text-xs font-bold text-[#ff9f0a]">{title}</p>
-      {sub && <p className="text-[10px] text-white/30 mt-0.5">{sub}</p>}
+    <div className="mb-4">
+      <h3 className="text-sm font-bold text-[#ff9f0a] uppercase tracking-wider">{title}</h3>
+      {subtitle && <p className="text-xs text-white/40 mt-0.5">{subtitle}</p>}
     </div>
   );
 }
 
-function ResRow({ label, value, sub, accent, bold, neg, indent, border }) {
-  const color = accent ? 'text-[#ff9f0a]' : neg ? 'text-red-400' : 'text-white';
+// ─── Result Row ───────────────────────────────────────────────────────────────
+function ResultRow({ label, value, highlight, indent, className = '' }) {
   return (
-    <div className={`flex justify-between items-center py-1.5 ${border ? 'border-t border-white/10 mt-1 pt-2' : 'border-b border-white/[0.04]'}`}>
-      <span className={`text-xs ${indent ? 'pl-3 text-white/35' : bold ? 'font-semibold text-white/70' : 'text-white/50'}`}>{label}{sub && <span className="ml-1 text-[10px] text-white/25">{sub}</span>}</span>
-      <span className={`text-sm tabular-nums font-bold ${color}`}>{value}</span>
+    <div className={`flex justify-between items-center py-1.5 ${indent ? 'pl-4' : ''} ${highlight ? 'border-t border-white/10 mt-1 pt-2' : ''} ${className}`}>
+      <span className={`text-sm ${highlight ? 'text-white font-semibold' : 'text-white/70'}`}>{label}</span>
+      <span className={`text-sm font-mono ${highlight ? 'text-[#ff9f0a] font-bold text-base' : 'text-white'}`}>{value}</span>
     </div>
   );
 }
 
-function Toggle({ value, onChange, label }) {
-  return (
-    <label className="flex items-center gap-2.5 cursor-pointer select-none">
-      <div
-        onClick={() => onChange(!value)}
-        className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${value ? 'bg-[#ff9f0a]' : 'bg-white/15'}`}
-      >
-        <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${value ? 'left-4' : 'left-0.5'}`} />
-      </div>
-      <span className="text-xs text-white/55">{label}</span>
-    </label>
-  );
-}
-
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Main Component ────────────────────────────────────────────────────────────
 export default function IncomeTaxCalculator() {
-  const [regime, setRegime]       = useState('new');
-  const [ageCategory, setAge]     = useState('below60');
+  // Employee Details
+  const [name, setName] = useState('');
+  const [designation, setDesignation] = useState('');
+  const [department, setDepartment] = useState('');
+  const [officeName, setOfficeName] = useState('');
+  const [pan, setPan] = useState('');
+  const [employeeCode, setEmployeeCode] = useState('');
+  const [gpfNpsNo, setGpfNpsNo] = useState('');
+  const [aadhaarLast4, setAadhaarLast4] = useState('');
+
+  // Regime & Category
+  const [regime, setRegime] = useState('new');
+  const [ageCategory, setAgeCategory] = useState('below60');
+  const [pensionType, setPensionType] = useState('nps');
 
   // Salary
-  const [basic,      setBasic]    = useState('');
-  const [daPct,      setDaPct]    = useState('49');
-  const [hraM,       setHraM]     = useState('');
-  const [otherAllow, setOther]    = useState('');
-  const [otherInc,   setOtherInc] = useState('');
+  const [basic1, setBasic1] = useState('');
+  const [incrementOption, setIncrementOption] = useState('none');
+  const [basic2, setBasic2] = useState('');
+  const [incrementFromMonth, setIncrementFromMonth] = useState('4'); // July = month 4 (1-indexed from April)
+  const [daPct, setDaPct] = useState('49');
+  const [hraMonthly, setHraMonthly] = useState('');
+  const [otherAllowMonthly, setOtherAllowMonthly] = useState('');
 
-  // Old regime — HRA
-  const [rentAnn,    setRent]     = useState('');
-  const [isMetro,    setMetro]    = useState(false);
+  // Arrears
+  const [daArrear, setDaArrear] = useState('');
+  const [payRevisionArrear, setPayRevisionArrear] = useState('');
+  const [otherArrear, setOtherArrear] = useState('');
 
-  // Old regime — Sec 16
-  const [profTax,    setProfTax]  = useState('2400');
+  // Other Salary
+  const [leaveSurrender, setLeaveSurrender] = useState('');
+  const [festivalAllowance, setFestivalAllowance] = useState('');
 
-  // Old regime — Sec 24(b)
-  const [hlInt,      setHlInt]    = useState('');
+  // Other Income
+  const [fdInterest, setFdInterest] = useState('');
+  const [otherIncome, setOtherIncome] = useState('');
 
-  // Old regime — 80C
-  const [gpf,  setGpf]   = useState('');
-  const [sli,  setSli]   = useState('');
-  const [lic,  setLic]   = useState('');
-  const [ppf,  setPpf]   = useState('');
-  const [elss, setElss]  = useState('');
-  const [hlPrincipal, setHlPrin] = useState('');
-  const [npsC, setNpsC]  = useState('');
-  const [otherC, setOtherC] = useState('');
+  // Old Regime — HRA
+  const [rentPaidAnnual, setRentPaidAnnual] = useState('');
+  const [isMetro, setIsMetro] = useState(false);
 
-  // Old regime — 80CCD(1B) & 80CCD(2)
-  const [npsAdd,     setNpsAdd]   = useState('');
-  const [empNPS,     setEmpNPS]   = useState('');
+  // Old Regime — Sec 16
+  const [profTax, setProfTax] = useState('2400');
 
-  // Old regime — 80D
-  const [medSelf,    setMedSelf]  = useState('');
-  const [medParents, setMedPar]   = useState('');
-  const [seniorPar,  setSenPar]   = useState(false);
+  // Old Regime — 24(b)
+  const [housingLoanInterest, setHousingLoanInterest] = useState('');
 
-  // Old regime — others
-  const [eduLoan,    setEduLoan]  = useState('');
-  const [donations,  setDon]      = useState('');
-  const [savings,    setSavings]  = useState('');
+  // Old Regime — 80C
+  const [gpfContrib, setGpfContrib] = useState('');
+  const [sliPremium, setSliPremium] = useState('');
+  const [licPremium, setLicPremium] = useState('');
+  const [ppfContrib, setPpfContrib] = useState('');
+  const [elssAmount, setElssAmount] = useState('');
+  const [nscAmount, setNscAmount] = useState('');
+  const [hlPrincipal, setHlPrincipal] = useState('');
+  const [tuitionFees, setTuitionFees] = useState('');
+  const [npsEmployee80C, setNpsEmployee80C] = useState('');
+  const [otherC80, setOtherC80] = useState('');
 
-  // TDS paid
-  const [tdsPaid,    setTds]      = useState('');
+  // Old Regime — 80CCD(1B)
+  const [npsAdditional, setNpsAdditional] = useState('');
 
-  // Pension type helper
-  const [pensionType, setPension] = useState('nps');
+  // 80CCD(2) — both regimes
+  const [employerNPS, setEmployerNPS] = useState('');
 
-  const inp = {
-    regime, ageCategory,
-    basicMonthly: basic, daPercent: daPct, hraMonthly: hraM, otherAllow,
-    otherIncome: otherInc,
-    rentAnnual: rentAnn, isMetro,
-    profTax,
-    hlInterest: hlInt,
-    gpf, sli, lic, ppf, elss, hlPrincipal, otherC, npsC,
-    npsAdditional: npsAdd, employerNPS: empNPS,
-    medSelf, medParents, seniorParents: seniorPar,
-    eduLoan, donations, savingsInterest: savings,
-    tdsPaid,
+  // Old Regime — 80D
+  const [mediclaimSelf, setMediclaimSelf] = useState('');
+  const [mediclaimParents, setMediclaimParents] = useState('');
+  const [seniorParents, setSeniorParents] = useState(false);
+
+  // Old Regime — Others
+  const [housingLoanInterest80EEA, setHousingLoanInterest80EEA] = useState('');
+  const [eduLoanInterest, setEduLoanInterest] = useState('');
+  const [donations, setDonations] = useState('');
+  const [savingsInterest, setSavingsInterest] = useState('');
+
+  // TDS
+  const [monthsAlreadyDeducted, setMonthsAlreadyDeducted] = useState('0');
+  const [tdsPaidAmount, setTdsPaidAmount] = useState('');
+
+  // Collect all inputs
+  const inputs = {
+    regime, ageCategory, pensionType,
+    name, designation, department, officeName, pan, employeeCode, gpfNpsNo, aadhaarLast4,
+    basic1, incrementOption, basic2, incrementFromMonth, daPct, hraMonthly, otherAllowMonthly,
+    daArrear, payRevisionArrear, otherArrear, leaveSurrender, festivalAllowance,
+    fdInterest, otherIncome,
+    rentPaidAnnual, isMetro, profTax,
+    housingLoanInterest,
+    gpfContrib, sliPremium, licPremium, ppfContrib, elssAmount,
+    nscAmount, hlPrincipal, tuitionFees, npsEmployee80C, otherC80,
+    npsAdditional, employerNPS,
+    mediclaimSelf, mediclaimParents, seniorParents,
+    housingLoanInterest80EEA, eduLoanInterest, donations, savingsInterest,
+    monthsAlreadyDeducted, tdsPaidAmount,
   };
 
   const R = useMemo(() => {
-    if (!n(basic)) return null;
-    return computeTax(inp);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [regime, ageCategory, basic, daPct, hraM, otherAllow, otherInc,
-      rentAnn, isMetro, profTax, hlInt,
-      gpf, sli, lic, ppf, elss, hlPrincipal, npsC, otherC,
-      npsAdd, empNPS, medSelf, medParents, seniorPar,
-      eduLoan, donations, savings, tdsPaid]);
+    try { return computeTax(inputs); }
+    catch { return null; }
+  }, [
+    regime, ageCategory, basic1, incrementOption, basic2, incrementFromMonth, daPct,
+    hraMonthly, otherAllowMonthly, daArrear, payRevisionArrear, otherArrear,
+    leaveSurrender, festivalAllowance, fdInterest, otherIncome,
+    rentPaidAnnual, isMetro, profTax, housingLoanInterest,
+    gpfContrib, sliPremium, licPremium, ppfContrib, elssAmount,
+    nscAmount, hlPrincipal, tuitionFees, npsEmployee80C, otherC80,
+    npsAdditional, employerNPS, mediclaimSelf, mediclaimParents, seniorParents,
+    housingLoanInterest80EEA, eduLoanInterest, donations, savingsInterest,
+    monthsAlreadyDeducted, tdsPaidAmount,
+  ]);
+
+  const canPrint = n(basic1) > 0 && R !== null;
 
   // 80C live total
-  const liveC80 = Math.min(n(gpf)+n(sli)+n(lic)+n(ppf)+n(elss)+n(hlPrincipal)+n(npsC)+n(otherC), 150_000);
+  const c80Raw = n(gpfContrib) + n(sliPremium) + n(licPremium) + n(ppfContrib) +
+    n(elssAmount) + n(nscAmount) + n(hlPrincipal) + n(tuitionFees) +
+    n(npsEmployee80C) + n(otherC80);
+  const c80Pct = Math.min(100, (c80Raw / 150_000) * 100);
 
-  /* When pension type changes, auto-fill NPS contribution hint */
-  const basicPlusDA_mon = n(basic) * (1 + n(daPct)/100);
-  const npsAutoEmployee = Math.round(basicPlusDA_mon * 12 * 0.10);
-  const npsAutoEmployer = Math.round(basicPlusDA_mon * 12 * 0.10);
+  // Auto-hint for employer NPS
+  const annualBasicForHint = useMemo(() => {
+    if (incrementOption === 'yes' && n(basic2) > 0) {
+      const pre = n(incrementFromMonth) - 1;
+      const post = 12 - pre;
+      return n(basic1) * pre + n(basic2) * post;
+    }
+    return n(basic1) * 12;
+  }, [basic1, basic2, incrementOption, incrementFromMonth]);
+  const daForHint = annualBasicForHint * n(daPct) / 100;
+  const empNPSHint = Math.round(0.1 * (annualBasicForHint + daForHint));
+
+  // TDS month label for dropdown
+  const tdsDropdownOptions = [
+    { value: '0', label: 'None yet (0 months)' },
+    { value: '1', label: 'April 2025 (1 month)' },
+    { value: '2', label: 'April–May 2025 (2 months)' },
+    { value: '3', label: 'April–June 2025 (3 months)' },
+    { value: '4', label: 'April–July 2025 (4 months)' },
+    { value: '5', label: 'April–August 2025 (5 months)' },
+    { value: '6', label: 'April–September 2025 (6 months)' },
+    { value: '7', label: 'April–October 2025 (7 months)' },
+    { value: '8', label: 'April–November 2025 (8 months)' },
+    { value: '9', label: 'April–December 2025 (9 months)' },
+    { value: '10', label: 'April 2025–January 2026 (10 months)' },
+    { value: '11', label: 'April 2025–February 2026 (11 months)' },
+  ];
+
+  const inputCls = 'bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#ff9f0a]/50 focus:bg-white/[0.09] transition-all w-full';
 
   return (
-    <div>
-      {/* ── Header ── */}
-      <div className="glass-card rounded-[20px] p-6 md:p-8 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(255,159,10,0.15)', border: '1px solid rgba(255,159,10,0.25)' }}>💸</div>
-            <div>
-              <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>Income Tax Calculator</h1>
-              <p className="text-xs text-white/40">FY 2025–26 (AY 2026–27) · Kerala Govt Employees</p>
-            </div>
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="glass-card rounded-2xl p-6 border border-[#ff9f0a]/20">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold text-white mb-1">Income Tax Calculator</h1>
+            <p className="text-sm text-white/50">FY 2025-26 (AY 2026-27) · Kerala Government Employees</p>
           </div>
-
-          {/* Regime tabs */}
-          <div className="flex gap-1 p-1 rounded-xl bg-white/[0.05] border border-white/10 w-fit">
-            {[['new', 'New Regime'], ['old', 'Old Regime']].map(([id, label]) => (
-              <button
-                key={id}
-                onClick={() => setRegime(id)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 ${
-                  regime === id
-                    ? 'bg-[#ff9f0a] text-black'
-                    : 'text-white/40 hover:text-white/70'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Regime info banner */}
-        <div className={`mb-6 rounded-xl px-4 py-3 text-xs leading-relaxed ${regime === 'new' ? 'bg-[#ff9f0a]/[0.08] border border-[#ff9f0a]/20 text-[#ff9f0a]/80' : 'bg-[#2997ff]/[0.08] border border-[#2997ff]/20 text-[#2997ff]/80'}`}>
-          {regime === 'new'
-            ? 'New Regime (Default from FY 2023-24): Standard deduction ₹75,000. No HRA/80C/80D deductions. Rebate u/s 87A: zero tax if income ≤ ₹12,00,000. Only employer NPS (80CCD-2) allowed.'
-            : 'Old Regime: Standard deduction ₹50,000. Full HRA exemption, 80C (₹1.5L), 80D, 80E, Section 24(b) and all other deductions available. Rebate u/s 87A up to ₹12,500 if income ≤ ₹5,00,000.'}
-        </div>
-
-        {/* Age category */}
-        <div className="grid grid-cols-3 gap-2 mb-5">
-          {[['below60', 'Below 60', 'Individual'], ['senior', '60 – 79', 'Senior Citizen'], ['superSenior', '80+', 'Super Senior']].map(([id, age, label]) => (
-            <button
-              key={id}
-              onClick={() => setAge(id)}
-              className={`rounded-xl px-3 py-2.5 border text-left transition-all duration-150 ${ageCategory === id ? 'border-[#ff9f0a]/60 bg-[#ff9f0a]/10' : 'border-white/10 bg-white/[0.03] hover:border-white/20'}`}
-            >
-              <div className="text-xs font-bold text-white">{age}</div>
-              <div className="text-[10px] text-white/35">{label}</div>
-            </button>
-          ))}
-        </div>
-
-        {/* ── Inputs ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-          <SectionHead title="Salary Income (Monthly)" sub="Enter monthly figures — annual totals computed automatically" />
-
-          <Field label="Basic Pay (₹/month)">
-            <Input value={basic} onChange={setBasic} placeholder="e.g. 45000" />
-          </Field>
-          <Field label="DA (%)" hint={basic ? `DA = ${fmtR(n(basic) * n(daPct) / 100)}/month` : ''}>
-            <Input value={daPct} onChange={setDaPct} placeholder="49" step="0.5" />
-          </Field>
-          <Field label="HRA Received (₹/month)">
-            <Input value={hraM} onChange={setHraM} placeholder="e.g. 9000" />
-          </Field>
-          <Field label="Other Allowances (₹/month)" hint="TA, Medical Allowance, etc. (taxable portion)">
-            <Input value={otherAllow} onChange={setOther} placeholder="e.g. 2000" />
-          </Field>
-          <Field label="Other Income (Annual ₹)" hint="FD interest, rent, any other source" span2>
-            <Input value={otherInc} onChange={setOtherInc} placeholder="e.g. 10000" />
-          </Field>
-
-          {/* ── Old Regime Deductions ── */}
-          {regime === 'old' && (<>
-
-            <SectionHead title="HRA Exemption — Section 10(13A)" sub="Exempt = least of: (Actual HRA, Rent paid − 10% Basic+DA, 50%/40% of Basic+DA)" />
-            <Field label="Total Rent Paid (Annual ₹)">
-              <Input value={rentAnn} onChange={setRent} placeholder="e.g. 120000" />
-            </Field>
-            <Field label="City Type">
-              <select value={isMetro ? 'metro' : 'nonmetro'} onChange={e => setMetro(e.target.value === 'metro')} className={iCls}>
-                <option value="nonmetro">Non-Metro (40% of Basic+DA)</option>
-                <option value="metro">Metro — Mumbai/Delhi/Chennai/Kolkata (50%)</option>
-              </select>
-            </Field>
-
-            <SectionHead title="Section 16 — Professional Tax" />
-            <Field label="Professional Tax Paid (Annual ₹)" hint="₹2,400 is standard for Kerala Govt employees">
-              <Input value={profTax} onChange={setProfTax} placeholder="2400" max={5000} />
-            </Field>
-            <div /> {/* spacer */}
-
-            <SectionHead title="Section 24(b) — Housing Loan Interest" sub="Self-occupied property: max deduction ₹2,00,000" />
-            <Field label="Housing Loan Interest (Annual ₹)">
-              <Input value={hlInt} onChange={setHlInt} placeholder="e.g. 150000" />
-            </Field>
-            <div />
-
-            <SectionHead
-              title={`Section 80C — Max ₹1,50,000 | Live: ${fmtR(liveC80)} / ₹1,50,000`}
-              sub="GPF, SLI, LIC, PPF, ELSS, NPS employee contribution, Housing Loan Principal, etc."
-            />
-
-            {/* Pension type helper */}
-            <Field label="Pension Type" span2>
-              <div className="flex gap-2">
-                {[['nps', 'NPS (post-2013)'], ['gpf', 'GPF (pre-2013)']].map(([id, label]) => (
-                  <button key={id} onClick={() => setPension(id)}
-                    className={`flex-1 py-2 rounded-xl text-xs font-bold border transition-all ${pensionType === id ? 'border-[#ff9f0a]/60 bg-[#ff9f0a]/10 text-white' : 'border-white/10 text-white/40 hover:border-white/20'}`}>
-                    {label}
-                  </button>
-                ))}
-              </div>
-              {pensionType === 'nps' && basic && (
-                <p className="mt-1.5 text-[10px] text-white/30">
-                  Employee NPS 10% = {fmtR(npsAutoEmployee)}/yr · Employer NPS 10% = {fmtR(npsAutoEmployer)}/yr
-                </p>
-              )}
-            </Field>
-
-            <Field label="GPF Contribution (Annual ₹)" hint="Qualifying u/s 80C">
-              <Input value={gpf} onChange={setGpf} placeholder="e.g. 60000" />
-            </Field>
-            <Field label="SLI Premium (Annual ₹)" hint="State Life Insurance — 80C">
-              <Input value={sli} onChange={setSli} placeholder="e.g. 3600" />
-            </Field>
-            <Field label="LIC Premium (Annual ₹)">
-              <Input value={lic} onChange={setLic} placeholder="e.g. 12000" />
-            </Field>
-            <Field label="PPF Contribution (Annual ₹)">
-              <Input value={ppf} onChange={setPpf} placeholder="e.g. 50000" />
-            </Field>
-            <Field label="ELSS / Mutual Fund (Annual ₹)">
-              <Input value={elss} onChange={setElss} placeholder="e.g. 25000" />
-            </Field>
-            <Field label="NPS Employee Contribution (Annual ₹)" hint="Within 80C limit">
-              <Input value={npsC} onChange={setNpsC} placeholder={basic ? String(npsAutoEmployee) : 'e.g. 54000'} />
-            </Field>
-            <Field label="Housing Loan Principal (Annual ₹)">
-              <Input value={hlPrincipal} onChange={setHlPrin} placeholder="e.g. 60000" />
-            </Field>
-            <Field label="Other 80C (NSC, Tuition Fees, etc.)">
-              <Input value={otherC} onChange={setOtherC} placeholder="e.g. 5000" />
-            </Field>
-
-            <SectionHead title="80CCD(1B) — Additional NPS" sub="Over and above 80C — max ₹50,000" />
-            <Field label="Additional NPS Contribution (₹)">
-              <Input value={npsAdd} onChange={setNpsAdd} placeholder="e.g. 50000" max={50000} />
-            </Field>
-            <div />
-
-            <SectionHead title="80CCD(2) — Employer NPS Contribution" sub="10% of Basic+DA for Kerala Govt — NOT part of ₹1.5L 80C limit" />
-            <Field label="Employer NPS Contribution (Annual ₹)" hint={basic ? `10% of Basic+DA = ${fmtR(npsAutoEmployer)}` : 'Enter annual employer NPS'}>
-              <Input value={empNPS} onChange={setEmpNPS} placeholder={basic ? String(npsAutoEmployer) : 'e.g. 54000'} />
-            </Field>
-            <div />
-
-            <SectionHead title="80D — Mediclaim / Health Insurance" />
-            <Field label="Self + Family Mediclaim (Annual ₹)" hint={`Max ${ageCategory === 'below60' ? '₹25,000' : '₹50,000'}`}>
-              <Input value={medSelf} onChange={setMedSelf} placeholder={ageCategory === 'below60' ? '25000' : '50000'} />
-            </Field>
-            <Field label="Parents Mediclaim (Annual ₹)" hint={`Max ${seniorPar ? '₹50,000' : '₹25,000'}`}>
-              <Input value={medParents} onChange={setMedPar} placeholder={seniorPar ? '50000' : '25000'} />
-            </Field>
-            <div className="md:col-span-2">
-              <Toggle value={seniorPar} onChange={setSenPar} label="Parents are Senior Citizens (60+)" />
-            </div>
-
-            <SectionHead title="Other Deductions" />
-            <Field label="80E — Education Loan Interest (₹)" hint="Unlimited deduction">
-              <Input value={eduLoan} onChange={setEduLoan} placeholder="e.g. 30000" />
-            </Field>
-            <Field label="80G — Charitable Donations (₹)" hint="50% deduction applied">
-              <Input value={donations} onChange={setDon} placeholder="e.g. 10000" />
-            </Field>
-            <Field label="80TTA/80TTB — Savings Interest (₹)" hint={ageCategory === 'below60' ? 'Max ₹10,000 (80TTA)' : 'Max ₹50,000 (80TTB — senior citizens)'}>
-              <Input value={savings} onChange={setSavings} placeholder={ageCategory === 'below60' ? '10000' : '50000'} />
-            </Field>
-            <div />
-          </>)}
-
-          <SectionHead title="Tax Already Deducted / Advance Tax" />
-          <Field label="TDS + Advance Tax Paid (Annual ₹)">
-            <Input value={tdsPaid} onChange={setTds} placeholder="e.g. 20000" />
-          </Field>
-          <div />
+          <button
+            onClick={() => canPrint && handlePrint(inputs, R)}
+            disabled={!canPrint}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all ${canPrint
+              ? 'bg-[#ff9f0a] text-black hover:bg-[#e8900a] shadow-lg shadow-[#ff9f0a]/20 cursor-pointer'
+              : 'bg-white/10 text-white/30 cursor-not-allowed'}`}
+          >
+            <span>📄</span>
+            <span>Preview &amp; Print</span>
+          </button>
         </div>
       </div>
 
-      {/* ── Results ── */}
-      {!basic && (
-        <div className="glass-card rounded-[20px] p-8 text-center border border-dashed border-white/10">
-          <p className="text-sm text-white/30">Enter your Basic Pay above to see the tax computation</p>
+      {/* Regime Selector */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Tax Regime & Category" />
+        <div className="space-y-4">
+          {/* Regime Toggle */}
+          <div>
+            <label className="text-xs text-white/60 font-medium mb-2 block">Tax Regime</label>
+            <div className="flex gap-2">
+              {[
+                { value: 'new', label: 'New Regime (Sec 115BAC)', sub: '₹75K std ded, no deductions' },
+                { value: 'old', label: 'Old Regime', sub: '₹50K std ded, full deductions' },
+              ].map(r => (
+                <button
+                  key={r.value}
+                  onClick={() => setRegime(r.value)}
+                  className={`flex-1 px-4 py-3 rounded-xl text-left transition-all border ${regime === r.value
+                    ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-white'
+                    : 'bg-white/[0.04] border-white/10 text-white/50 hover:border-white/20'}`}
+                >
+                  <div className="text-sm font-semibold">{r.label}</div>
+                  <div className="text-xs mt-0.5 opacity-60">{r.sub}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Age Category */}
+          <div>
+            <label className="text-xs text-white/60 font-medium mb-2 block">Age Category</label>
+            <div className="flex gap-2 flex-wrap">
+              {[
+                { value: 'below60', label: 'Below 60' },
+                { value: 'senior', label: 'Senior (60–79)' },
+                { value: 'superSenior', label: 'Super Senior (80+)' },
+              ].map(a => (
+                <button
+                  key={a.value}
+                  onClick={() => setAgeCategory(a.value)}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all border ${ageCategory === a.value
+                    ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-[#ff9f0a]'
+                    : 'bg-white/[0.04] border-white/10 text-white/50 hover:border-white/20'}`}
+                >
+                  {a.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Pension Type */}
+          <div>
+            <label className="text-xs text-white/60 font-medium mb-2 block">Pension Type</label>
+            <div className="flex gap-2">
+              {[{ value: 'nps', label: 'NPS (National Pension System)' }, { value: 'gpf', label: 'GPF (Old Pension Scheme)' }].map(p => (
+                <button
+                  key={p.value}
+                  onClick={() => setPensionType(p.value)}
+                  className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all border ${pensionType === p.value
+                    ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-white'
+                    : 'bg-white/[0.04] border-white/10 text-white/50 hover:border-white/20'}`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      )}
+      </div>
 
-      {R && (
-        <div className="glass-card rounded-[20px] p-6 md:p-8 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="text-xs font-bold text-[#ff9f0a] uppercase tracking-widest">Tax Computation — FY 2025–26</div>
-            <div className="text-[10px] text-white/30">{regime === 'new' ? 'New Regime' : 'Old Regime'} · {ageCategory === 'below60' ? 'Below 60' : ageCategory === 'senior' ? '60–79 yrs' : '80+ yrs'}</div>
+      {/* Employee Details */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Employee Details" subtitle="Required for print statement" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <InputField label="Full Name" value={name} onChange={setName} placeholder="As per service records" type="text" />
+          <InputField label="Designation" value={designation} onChange={setDesignation} placeholder="e.g., Assistant" type="text" />
+          <InputField label="Department" value={department} onChange={setDepartment} placeholder="e.g., Finance Department" type="text" />
+          <InputField label="Office Name" value={officeName} onChange={setOfficeName} placeholder="Name of office" type="text" />
+          <InputField label="PAN" value={pan} onChange={setPan} placeholder="ABCDE1234F" type="text" />
+          <InputField label="Employee Code" value={employeeCode} onChange={setEmployeeCode} placeholder="Employee Code" type="text" />
+          <InputField label="GPF / NPS Account No." value={gpfNpsNo} onChange={setGpfNpsNo} placeholder="Account number" type="text" />
+          <InputField label="Aadhaar (Last 4 Digits)" value={aadhaarLast4} onChange={setAadhaarLast4} placeholder="XXXX" type="text" />
+        </div>
+      </div>
+
+      {/* Salary Details */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Salary Details" subtitle="Enter monthly amounts" />
+        <div className="space-y-4">
+          {/* Basic Pay */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <InputField
+              label={incrementOption === 'yes' ? 'Basic Pay (Before Increment) — Monthly' : 'Basic Pay — Monthly'}
+              value={basic1}
+              onChange={setBasic1}
+              placeholder="e.g. 45000"
+              hint="Monthly basic pay"
+            />
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-white/60 font-medium">Pay Increment This Year?</label>
+              <div className="flex gap-2 mt-1">
+                {[{ value: 'none', label: 'No Increment' }, { value: 'yes', label: 'Yes, Had Increment' }].map(opt => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setIncrementOption(opt.value)}
+                    className={`flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${incrementOption === opt.value
+                      ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-white'
+                      : 'bg-white/[0.04] border-white/10 text-white/50 hover:border-white/20'}`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
-          {/* Income section */}
-          <div className="mb-4">
-            <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-2">A. Income Computation</p>
-            <ResRow label="Gross Salary (Annual)" value={fmtR(R.grossSalary)} bold />
-            <ResRow label="Less: Standard Deduction" value={`−${fmtR(R.stdDed)}`} indent neg />
-            {R.hraExemptAmt > 0 && <ResRow label="Less: HRA Exemption u/s 10(13A)" value={`−${fmtR(R.hraExemptAmt)}`} indent neg />}
-            {R.profTaxDed  > 0 && <ResRow label="Less: Professional Tax u/s 16(iii)" value={`−${fmtR(R.profTaxDed)}`} indent neg />}
-            {R.empNPSDed   > 0 && R.regime === 'new' && <ResRow label="Less: Employer NPS u/s 80CCD(2)" value={`−${fmtR(R.empNPSDed)}`} indent neg />}
-            <ResRow label="Income from Salary" value={fmtR(R.salaryIncome)} bold border />
-            {R.otherIncomeAmt > 0 && <ResRow label="Add: Income from Other Sources" value={`+${fmtR(R.otherIncomeAmt)}`} />}
-            <ResRow label="Gross Total Income" value={fmtR(R.grossTotalIncome)} bold border />
-          </div>
-
-          {/* Deductions — old regime */}
-          {R.regime === 'old' && (R.hlInterestDed + R.totalChapterVIA) > 0 && (
-            <div className="mb-4">
-              <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-2">B. Deductions</p>
-              {R.hlInterestDed > 0 && <ResRow label="Section 24(b) — Housing Loan Interest" value={`−${fmtR(R.hlInterestDed)}`} indent neg />}
-              {R.c80      > 0 && <ResRow label="Section 80C" value={`−${fmtR(R.c80)}`} indent neg />}
-              {R.npsAddDed> 0 && <ResRow label="Section 80CCD(1B) — Additional NPS" value={`−${fmtR(R.npsAddDed)}`} indent neg />}
-              {R.empNPSDed> 0 && <ResRow label="Section 80CCD(2) — Employer NPS" value={`−${fmtR(R.empNPSDed)}`} indent neg />}
-              {R.d80      > 0 && <ResRow label="Section 80D — Mediclaim" value={`−${fmtR(R.d80)}`} indent neg />}
-              {R.eduLoanDed>0 && <ResRow label="Section 80E — Education Loan" value={`−${fmtR(R.eduLoanDed)}`} indent neg />}
-              {R.donationDed>0&& <ResRow label="Section 80G — Donations (50%)" value={`−${fmtR(R.donationDed)}`} indent neg />}
-              {R.savingsDed>0 && <ResRow label="Section 80TTA/80TTB — Savings Interest" value={`−${fmtR(R.savingsDed)}`} indent neg />}
-              <ResRow label="Total Deductions" value={`−${fmtR(R.hlInterestDed + R.totalChapterVIA)}`} bold neg border />
+          {incrementOption === 'yes' && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-white/[0.03] rounded-xl border border-white/[0.06]">
+              <InputField
+                label="Basic Pay After Increment — Monthly"
+                value={basic2}
+                onChange={setBasic2}
+                placeholder="e.g. 46500"
+              />
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-white/60 font-medium">Increment Effective From</label>
+                <select
+                  value={incrementFromMonth}
+                  onChange={e => setIncrementFromMonth(e.target.value)}
+                  className={inputCls}
+                >
+                  {MONTH_NAMES_FY.map((m, i) => (
+                    <option key={i} value={i + 1}>{m}</option>
+                  ))}
+                </select>
+                <span className="text-xs text-white/40">
+                  {n(incrementFromMonth) > 1
+                    ? `Pre: ${n(incrementFromMonth) - 1} months · Post: ${12 - (n(incrementFromMonth) - 1)} months`
+                    : 'All 12 months at new pay'}
+                </span>
+              </div>
             </div>
           )}
 
-          {/* Taxable income */}
-          <div className="rounded-xl bg-[#ff9f0a]/[0.08] border border-[#ff9f0a]/20 px-4 py-3 mb-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-bold text-white/80">Net Taxable Income</span>
-              <span className="text-xl font-[900] text-[#ff9f0a] tabular-nums">{fmtR(R.taxableIncome)}</span>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <InputField
+              label="DA Percentage (%)"
+              value={daPct}
+              onChange={setDaPct}
+              placeholder="49"
+              hint={annualBasicForHint > 0 ? `DA = ${fmtR(annualBasicForHint * n(daPct) / 100)} p.a.` : 'Annual DA'}
+            />
+            <InputField label="HRA — Monthly" value={hraMonthly} onChange={setHraMonthly} placeholder="e.g. 5000" />
+            <InputField label="Other Taxable Allowances — Monthly" value={otherAllowMonthly} onChange={setOtherAllowMonthly} placeholder="e.g. 1000" />
           </div>
+        </div>
+      </div>
 
-          {/* Slab breakdown */}
-          <div className="mb-4">
-            <p className="text-[10px] font-bold text-white/25 uppercase tracking-widest mb-2">C. Tax on Total Income (Slab-wise)</p>
-            {R.slabRows.map((row, i) => (
-              <ResRow
-                key={i}
-                label={row.label}
-                sub={`@ ${row.rate}%`}
-                value={row.tax === 0 ? 'Nil' : fmtR(row.tax)}
-                indent
+      {/* Arrears & Other Salary */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Arrears & Other Salary" subtitle="Lump sum amounts received during FY 2025-26" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <InputField label="DA Arrears" value={daArrear} onChange={setDaArrear} placeholder="0" hint="Annual lump sum" />
+          <InputField label="Pay Revision / Increment Arrears" value={payRevisionArrear} onChange={setPayRevisionArrear} placeholder="0" />
+          <InputField label="Other Arrears" value={otherArrear} onChange={setOtherArrear} placeholder="0" />
+          <InputField label="Leave Surrender / Encashment" value={leaveSurrender} onChange={setLeaveSurrender} placeholder="0" />
+          <InputField label="Festival Allowance / Onam Bonus" value={festivalAllowance} onChange={setFestivalAllowance} placeholder="0" />
+        </div>
+      </div>
+
+      {/* Other Income */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Other Income" subtitle="Annual income from other sources" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <InputField label="Interest / FD Income (Annual)" value={fdInterest} onChange={setFdInterest} placeholder="0" />
+          <InputField label="Any Other Income (Annual)" value={otherIncome} onChange={setOtherIncome} placeholder="0" />
+        </div>
+      </div>
+
+      {/* Employer NPS — both regimes */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader
+          title="Employer NPS Contribution — Sec 80CCD(2)"
+          subtitle={`Allowed in both regimes · 10% of Basic+DA (State Govt) · Auto-hint: ${fmtR(empNPSHint)}`}
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-white/60 font-medium">Employer NPS Contribution (Annual)</label>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={employerNPS}
+                onChange={e => setEmployerNPS(e.target.value)}
+                placeholder={String(empNPSHint)}
+                className={inputCls}
               />
-            ))}
-            {R.slabRows.length === 0 && <ResRow label="Income within nil-tax slab" value="Nil" indent />}
-            <ResRow label="Tax before Rebate" value={fmtR(R.rawTax)} bold border />
-            {R.rebate87A > 0 && <ResRow label={`Less: Rebate u/s 87A (income ≤ ${R.regime === 'new' ? '₹12,00,000' : '₹5,00,000'})`} value={`−${fmtR(R.rebate87A)}`} indent neg />}
-            <ResRow label="Tax after Rebate" value={fmtR(R.taxAfterRebate)} bold border />
-            {R.scRate > 0 && <ResRow label={`Surcharge @ ${R.scRate}%`} value={fmtR(R.sc)} indent />}
-            <ResRow label="Health & Education Cess @ 4%" value={fmtR(R.cess)} indent />
+              <button
+                onClick={() => setEmployerNPS(String(empNPSHint))}
+                className="px-3 py-2 bg-[#ff9f0a]/15 border border-[#ff9f0a]/30 rounded-xl text-xs text-[#ff9f0a] hover:bg-[#ff9f0a]/25 transition-all whitespace-nowrap"
+              >
+                Use Hint
+              </button>
+            </div>
+            <span className="text-xs text-white/40">Hint: 10% of (Basic+DA) = {fmtR(empNPSHint)} p.a.</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Old Regime Only Sections */}
+      {regime === 'old' && (
+        <>
+          {/* HRA */}
+          {n(hraMonthly) > 0 && (
+            <div className="glass-card rounded-2xl p-6">
+              <SectionHeader title="HRA Exemption — Section 10(13A)" subtitle="Leave blank if you don't claim HRA or live in own house" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <InputField label="Rent Paid (Annual)" value={rentPaidAnnual} onChange={setRentPaidAnnual} placeholder="0" />
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-white/60 font-medium">City Type</label>
+                  <div className="flex gap-2 mt-1">
+                    {[{ value: false, label: 'Non-Metro (40%)' }, { value: true, label: 'Metro (50%)' }].map(opt => (
+                      <button
+                        key={String(opt.value)}
+                        onClick={() => setIsMetro(opt.value)}
+                        className={`flex-1 px-3 py-2.5 rounded-xl text-sm font-medium transition-all border ${isMetro === opt.value
+                          ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-white'
+                          : 'bg-white/[0.04] border-white/10 text-white/50 hover:border-white/20'}`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                  <span className="text-xs text-white/40">Metro: Mumbai, Delhi, Kolkata, Chennai</span>
+                </div>
+              </div>
+              {R && R.hraExemptAmt > 0 && (
+                <div className="mt-3 p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
+                  <span className="text-sm text-green-400">HRA Exemption: {fmtR(R.hraExemptAmt)}</span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Section 16 */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Professional Tax — Section 16(iii)" subtitle="Kerala standard: ₹2,400 per year. Max allowed: ₹5,000" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField label="Professional Tax Paid (Annual)" value={profTax} onChange={setProfTax} placeholder="2400" hint="Max ₹5,000 allowed" />
+            </div>
           </div>
 
-          {/* Final */}
-          <div className="rounded-xl bg-white/[0.04] border border-white/10 px-4 py-4 space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-bold text-white/70">Total Tax Payable</span>
-              <span className="text-2xl font-[900] text-white tabular-nums">{fmtR(R.totalTax)}</span>
+          {/* Section 24(b) */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Housing Loan Interest — Section 24(b)" subtitle="Self-occupied property · Max ₹2,00,000" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField label="Housing Loan Interest Paid (Annual)" value={housingLoanInterest} onChange={setHousingLoanInterest} placeholder="0" hint="Max ₹2,00,000 deductible" />
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs text-white/40">Monthly TDS Required</span>
-              <span className="text-base font-bold text-[#ff9f0a] tabular-nums">{fmtR(R.monthlyTDS)}/month</span>
-            </div>
-            {n(tdsPaid) > 0 && (
-              <div className="flex justify-between items-center border-t border-white/10 pt-2">
-                <span className="text-xs text-white/40">Less: TDS / Advance Tax Paid</span>
-                <span className="text-sm font-bold text-white/60 tabular-nums">−{fmtR(n(tdsPaid))}</span>
-              </div>
-            )}
-            {n(tdsPaid) > 0 && (
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-bold text-white/70">{R.balanceTax >= 0 ? 'Balance Tax Payable' : 'Refund Due'}</span>
-                <span className={`text-base font-[900] tabular-nums ${R.balanceTax >= 0 ? 'text-red-400' : 'text-[#30d158]'}`}>
-                  {R.balanceTax >= 0 ? fmtR(R.balanceTax) : `+${fmtR(-R.balanceTax)}`}
+          </div>
+
+          {/* Section 80C */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Section 80C Investments" subtitle="Maximum deduction: ₹1,50,000" />
+            {/* Progress Bar */}
+            <div className="mb-4">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs text-white/50">80C Usage</span>
+                <span className={`text-xs font-semibold ${c80Raw > 150_000 ? 'text-red-400' : 'text-green-400'}`}>
+                  {fmtR(Math.min(c80Raw, 150_000))} / ₹1,50,000 {c80Raw > 150_000 ? '(capped)' : ''}
                 </span>
               </div>
-            )}
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${c80Raw > 150_000 ? 'bg-red-400' : 'bg-green-400'}`}
+                  style={{ width: `${c80Pct}%` }}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField label="GPF / PF Contribution (Annual)" value={gpfContrib} onChange={setGpfContrib} placeholder="0" />
+              <InputField label="SLI Premium (Annual)" value={sliPremium} onChange={setSliPremium} placeholder="0" />
+              <InputField label="LIC Premium (Annual)" value={licPremium} onChange={setLicPremium} placeholder="0" />
+              <InputField label="PPF Contribution (Annual)" value={ppfContrib} onChange={setPpfContrib} placeholder="0" />
+              <InputField label="ELSS / Mutual Fund (Annual)" value={elssAmount} onChange={setElssAmount} placeholder="0" />
+              <InputField label="NSC (Annual)" value={nscAmount} onChange={setNscAmount} placeholder="0" />
+              <InputField label="Housing Loan Principal Repaid (Annual)" value={hlPrincipal} onChange={setHlPrincipal} placeholder="0" />
+              <InputField label="Children Tuition Fees (Annual)" value={tuitionFees} onChange={setTuitionFees} placeholder="0" hint="Max 2 children" />
+              <InputField label="NPS Employee Contribution u/s 80CCD(1) (Annual)" value={npsEmployee80C} onChange={setNpsEmployee80C} placeholder="0" />
+              <InputField label="Others (Annual)" value={otherC80} onChange={setOtherC80} placeholder="0" />
+            </div>
           </div>
 
-          {/* Comparison hint */}
-          <p className="mt-3 text-[10px] text-white/20 leading-relaxed">
-            Note: This calculator uses total salary days (gross). Actual TDS may differ based on arrears, perquisites, and employer's month-wise computation. Verify with your DDO / Pay bill officer.
-          </p>
+          {/* 80CCD(1B) */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Section 80CCD(1B) — Additional NPS" subtitle="Additional NPS contribution over 80C · Max ₹50,000" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField label="Additional NPS Contribution (Annual)" value={npsAdditional} onChange={setNpsAdditional} placeholder="0" hint="Max ₹50,000 (over & above 80C)" />
+            </div>
+          </div>
+
+          {/* 80D */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Section 80D — Medical Insurance (Medisep / Mediclaim)" subtitle={`Self/family max: ${ageCategory === 'below60' ? '₹25,000' : '₹50,000'} · Parents max: ${seniorParents ? '₹50,000 (senior)' : '₹25,000'}`} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField
+                label={`Mediclaim/Medisep — Self & Family (Max ${ageCategory === 'below60' ? '₹25,000' : '₹50,000'})`}
+                value={mediclaimSelf}
+                onChange={setMediclaimSelf}
+                placeholder="0"
+              />
+              <InputField
+                label={`Mediclaim — Parents (Max ${seniorParents ? '₹50,000' : '₹25,000'})`}
+                value={mediclaimParents}
+                onChange={setMediclaimParents}
+                placeholder="0"
+              />
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <button
+                onClick={() => setSeniorParents(!seniorParents)}
+                className={`w-10 h-5 rounded-full transition-all relative ${seniorParents ? 'bg-[#ff9f0a]' : 'bg-white/20'}`}
+              >
+                <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${seniorParents ? 'left-5' : 'left-0.5'}`} />
+              </button>
+              <span className="text-sm text-white/60">Parents are Senior Citizens (60+) — Max ₹50,000</span>
+            </div>
+          </div>
+
+          {/* Other deductions */}
+          <div className="glass-card rounded-2xl p-6">
+            <SectionHeader title="Other Deductions" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <InputField label="Section 80EEA — Additional Housing Loan Interest (Max ₹1,50,000)" value={housingLoanInterest80EEA} onChange={setHousingLoanInterest80EEA} placeholder="0" hint="Affordable housing only; cannot combine with 80EE" />
+              <InputField label="Section 80E — Education Loan Interest (Unlimited)" value={eduLoanInterest} onChange={setEduLoanInterest} placeholder="0" />
+              <InputField label="Section 80G — Charitable Donations (50% deduction)" value={donations} onChange={setDonations} placeholder="0" hint="Enter actual donation; 50% will be deducted" />
+              <InputField
+                label={`Section ${ageCategory === 'senior' || ageCategory === 'superSenior' ? '80TTB — Bank Interest (Max ₹50,000)' : '80TTA — Savings Interest (Max ₹10,000)'}`}
+                value={savingsInterest}
+                onChange={setSavingsInterest}
+                placeholder="0"
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* TDS Already Paid */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="TDS Already Deducted" subtitle="For monthly TDS schedule calculation" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs text-white/60 font-medium">Months for which TDS already deducted</label>
+            <select
+              value={monthsAlreadyDeducted}
+              onChange={e => setMonthsAlreadyDeducted(e.target.value)}
+              className={inputCls}
+            >
+              {tdsDropdownOptions.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <InputField
+            label="Total TDS Already Deducted (₹)"
+            value={tdsPaidAmount}
+            onChange={setTdsPaidAmount}
+            placeholder="0"
+            hint="Sum of all TDS deducted so far"
+          />
+        </div>
+      </div>
+
+      {/* Results Panel */}
+      {R && (
+        <div className="glass-card rounded-2xl p-6 border border-[#ff9f0a]/20">
+          <SectionHeader title="Tax Computation Results" subtitle="Live calculation — updates as you type" />
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: 'Gross Salary', value: fmtR(R.grossFromEmployer) },
+              { label: 'Taxable Income', value: fmtR(R.taxableIncome) },
+              { label: 'Total Tax', value: fmtR(R.totalTax), highlight: true },
+              { label: 'Monthly TDS', value: fmtR(R.monthlyTDS), highlight: true },
+            ].map(card => (
+              <div
+                key={card.label}
+                className={`rounded-xl p-4 text-center ${card.highlight ? 'bg-[#ff9f0a]/10 border border-[#ff9f0a]/30' : 'bg-white/[0.04] border border-white/10'}`}
+              >
+                <div className="text-xs text-white/50 mb-1">{card.label}</div>
+                <div className={`text-base font-bold font-mono ${card.highlight ? 'text-[#ff9f0a]' : 'text-white'}`}>{card.value}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Detailed Breakdown */}
+          <div className="space-y-1 divide-y divide-white/[0.05]">
+            <ResultRow label="Annual Basic Pay" value={fmtR(R.annualBasic)} />
+            <ResultRow label="Dearness Allowance" value={fmtR(R.annualDA)} />
+            <ResultRow label="HRA (Annual)" value={fmtR(R.annualHRA)} />
+            <ResultRow label="Other Allowances" value={fmtR(R.annualOther)} />
+            <ResultRow label="Arrears (Total)" value={fmtR(R.totalArrears)} />
+            <ResultRow label="Leave Surrender" value={fmtR(R.leaveSurrenderAmt)} />
+            <ResultRow label="Festival Allowance" value={fmtR(R.festivalAllowanceAmt)} />
+            <ResultRow label="Gross Salary from Employer" value={fmtR(R.grossFromEmployer)} highlight />
+            <div className="pt-2">
+              <ResultRow label={`Standard Deduction u/s 16(ia)`} value={`- ${fmtR(R.stdDed)}`} />
+              {regime === 'old' && R.hraExemptAmt > 0 && (
+                <ResultRow label="HRA Exemption u/s 10(13A)" value={`- ${fmtR(R.hraExemptAmt)}`} />
+              )}
+              {regime === 'old' && R.profTaxDed > 0 && (
+                <ResultRow label="Professional Tax u/s 16(iii)" value={`- ${fmtR(R.profTaxDed)}`} />
+              )}
+            </div>
+            <ResultRow label="Net Salary Income" value={fmtR(R.netSalaryIncome)} highlight />
+            <ResultRow label="Other Income" value={fmtR(R.otherIncomeTotal)} />
+            <ResultRow label="Gross Total Income" value={fmtR(R.grossTotalIncome)} highlight />
+            {R.totalChapterVIA > 0 && (
+              <>
+                {regime === 'old' && R.hlInterestDed > 0 && <ResultRow label="Sec 24(b) Housing Loan Interest" value={`- ${fmtR(R.hlInterestDed)}`} />}
+                {regime === 'old' && R.c80Total > 0 && <ResultRow label="Section 80C (capped)" value={`- ${fmtR(R.c80Total)}`} />}
+                {regime === 'old' && R.npsAddDed > 0 && <ResultRow label="Sec 80CCD(1B) Additional NPS" value={`- ${fmtR(R.npsAddDed)}`} />}
+                {R.empNPSDed > 0 && <ResultRow label="Sec 80CCD(2) Employer NPS" value={`- ${fmtR(R.empNPSDed)}`} />}
+                {regime === 'old' && R.d80Total > 0 && <ResultRow label="Section 80D Mediclaim" value={`- ${fmtR(R.d80Total)}`} />}
+                {regime === 'old' && R.hlInterest80EEADed > 0 && <ResultRow label="Sec 80EEA HL Interest" value={`- ${fmtR(R.hlInterest80EEADed)}`} />}
+                {regime === 'old' && R.eduLoanDed > 0 && <ResultRow label="Sec 80E Education Loan" value={`- ${fmtR(R.eduLoanDed)}`} />}
+                {regime === 'old' && R.donationDed > 0 && <ResultRow label="Sec 80G Donations (50%)" value={`- ${fmtR(R.donationDed)}`} />}
+                {regime === 'old' && R.savingsDed > 0 && <ResultRow label="Sec 80TTA/TTB Savings Interest" value={`- ${fmtR(R.savingsDed)}`} />}
+                <ResultRow label="Total Deductions" value={`- ${fmtR(R.totalChapterVIA)}`} highlight />
+              </>
+            )}
+            <ResultRow label="NET TAXABLE INCOME" value={fmtR(R.taxableIncome)} highlight />
+          </div>
+
+          {/* Slab Breakdown */}
+          <div className="mt-6">
+            <h4 className="text-sm font-semibold text-[#ff9f0a] mb-3">Slab-wise Tax Breakdown</h4>
+            <div className="space-y-1 bg-white/[0.03] rounded-xl p-4">
+              {R.slabRows.map((row, i) => (
+                <div key={i} className="flex justify-between items-center py-1 text-sm">
+                  <span className="text-white/60">
+                    {fmtR(row.from)} – {row.to === Infinity ? 'Above' : fmtR(row.to)} @ {row.rate}%
+                  </span>
+                  <span className="text-white font-mono">
+                    {row.tax === 0 ? <span className="text-white/30">NIL</span> : fmtR(row.tax)}
+                  </span>
+                </div>
+              ))}
+              <div className="flex justify-between items-center py-1.5 border-t border-white/10 text-sm font-semibold mt-1">
+                <span className="text-white">Tax on Total Income</span>
+                <span className="text-white font-mono">{fmtR(R.rawTaxBase)}</span>
+              </div>
+              {R.rebate87A > 0 && (
+                <div className="flex justify-between items-center py-1 text-sm">
+                  <span className="text-green-400">Less: Rebate u/s 87A</span>
+                  <span className="text-green-400 font-mono">- {fmtR(R.rebate87A)}</span>
+                </div>
+              )}
+              {R.rebateNote && (
+                <p className="text-xs text-white/40 mt-1 italic">{R.rebateNote}</p>
+              )}
+              <div className="flex justify-between items-center py-1 text-sm">
+                <span className="text-white/60">Tax after Rebate</span>
+                <span className="text-white font-mono">{fmtR(R.taxAfterRebate)}</span>
+              </div>
+              {R.surchargeAmt > 0 && (
+                <div className="flex justify-between items-center py-1 text-sm">
+                  <span className="text-white/60">Surcharge @ {R.surchargeRate}%</span>
+                  <span className="text-white font-mono">{fmtR(R.surchargeAmt)}</span>
+                </div>
+              )}
+              <div className="flex justify-between items-center py-1 text-sm">
+                <span className="text-white/60">Health & Education Cess @ 4%</span>
+                <span className="text-white font-mono">{fmtR(R.cess)}</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-t border-[#ff9f0a]/30 mt-1">
+                <span className="text-[#ff9f0a] font-bold">Total Tax Payable</span>
+                <span className="text-[#ff9f0a] font-bold font-mono text-base">{fmtR(R.totalTax)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* TDS Schedule */}
+          <div className="mt-6">
+            <h4 className="text-sm font-semibold text-[#ff9f0a] mb-3">Monthly TDS Schedule</h4>
+            <div className="space-y-1 bg-white/[0.03] rounded-xl p-4">
+              <ResultRow label="(A) Total Tax Payable" value={fmtR(R.totalTax)} />
+              <ResultRow label={`(B) TDS Already Deducted (${tdsDropdownOptions.find(o => o.value === monthsAlreadyDeducted)?.label || '0 months'})`} value={`- ${fmtR(n(tdsPaidAmount))}`} />
+              <ResultRow label="Balance Tax (A − B)" value={fmtR(R.balanceTax)} highlight />
+              <ResultRow label={`Balance Months (${R.remainingMonths} months)`} value="" />
+              <div className="flex justify-between items-center py-2 border-t border-[#ff9f0a]/30 mt-1">
+                <span className="text-[#ff9f0a] font-bold">Monthly TDS Required</span>
+                <span className="text-[#ff9f0a] font-bold font-mono text-base">{fmtR(R.monthlyTDS)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Print Button at bottom */}
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => canPrint && handlePrint(inputs, R)}
+              disabled={!canPrint}
+              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-semibold text-sm transition-all ${canPrint
+                ? 'bg-[#ff9f0a] text-black hover:bg-[#e8900a] shadow-lg shadow-[#ff9f0a]/20 cursor-pointer'
+                : 'bg-white/10 text-white/30 cursor-not-allowed'}`}
+            >
+              <span>📄</span>
+              <span>Preview &amp; Print Anticipatory Income Tax Statement</span>
+            </button>
+          </div>
         </div>
       )}
 
-      {/* ── Regime comparison tip ── */}
-      {R && (
-        <div className="glass-card rounded-[20px] p-5 mb-6 border border-white/[0.06]">
-          <p className="text-xs font-bold text-white/50 mb-2 uppercase tracking-wider">Which Regime to Choose?</p>
-          <p className="text-xs text-white/40 leading-relaxed">
-            Switch to the other regime tab to compare. Generally, the <strong className="text-white/60">New Regime</strong> benefits employees with fewer deductions (no home loan, no large 80C investments), especially if income ≤ ₹12L (zero tax after rebate). The <strong className="text-white/60">Old Regime</strong> benefits those with GPF + SLI + LIC + housing loan interest + 80D adding up above ~₹3.75L in deductions.
-          </p>
-        </div>
-      )}
+      {/* Disclaimer */}
+      <div className="glass-card rounded-2xl p-4 border border-white/[0.06]">
+        <p className="text-xs text-white/40 text-center">
+          This calculator is for reference only. All computations are based on Income Tax Act 1961 provisions for FY 2025-26 / AY 2026-27.
+          Consult your DDO or a tax professional for official deductions. Generated by <span className="text-[#ff9f0a]">keralaemployees.in</span>.
+        </p>
+      </div>
     </div>
   );
 }
