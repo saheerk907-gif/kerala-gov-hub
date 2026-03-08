@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 /* ── KSR rounding: fraction ≥ 0.5 → ceil, else floor ── */
 function roundKSR(val) {
@@ -7,27 +7,44 @@ function roundKSR(val) {
   return frac >= 0.5 ? Math.ceil(val) : Math.floor(val);
 }
 
-/* ── Core calculation per KSR Part I ── */
-function calculateEL(inputs) {
-  const {
-    category, dutyDays, yearsOfService,
-    fullVacation, vacationAvailed,
-    appointmentType, existingBalance, isLPR,
-  } = inputs;
+/* ── Date helpers ── */
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
 
-  const existing = Number(existingBalance) || 0;
-  const duty     = Number(dutyDays) || 0;
-  let earned     = 0;
-  let rateNote   = '';
-  let maxGrant   = isLPR ? 300 : 180;
-  const MAX_ACCUM = 300;
+function daysBetween(fromStr, toStr) {
+  const a = new Date(fromStr);
+  const b = new Date(toStr);
+  return Math.max(0, Math.round((b - a) / 86400000) + 1);
+}
+
+function yearsBetween(fromStr, toStr) {
+  const a = new Date(fromStr);
+  const b = new Date(toStr);
+  return Math.max(0, (b - a) / (365.25 * 86400000));
+}
+
+function fmtDate(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+/* ── Core calculation per KSR Part I ── */
+function calculateEL({ category, dutyDays, yearsOfService, fullVacation, vacationAvailed, appointmentType, existingBalance, isLPR }) {
+  const existing   = Number(existingBalance) || 0;
+  const duty       = Number(dutyDays) || 0;
+  const years      = Number(yearsOfService) || 0;
+  const MAX_ACCUM  = 300;
+  let earned       = 0;
+  let rateNote     = '';
+  let maxGrant     = isLPR ? 300 : 180;
 
   if (category === 'permanent') {
     earned   = roundKSR(duty / 11);
     rateNote = `1/11 of ${duty} days on duty`;
 
   } else if (category === 'temporary') {
-    const years = Number(yearsOfService) || 0;
     if (years >= 3) {
       earned   = roundKSR(duty / 11);
       rateNote = `1/11 (≥3 years service) of ${duty} days`;
@@ -41,7 +58,7 @@ function calculateEL(inputs) {
     const availed = Number(vacationAvailed) || 0;
     if (fullV === 0) {
       earned   = 0;
-      rateNote = 'Enter full vacation days';
+      rateNote = 'Enter full vacation days to calculate';
     } else if (availed >= fullV) {
       earned   = 0;
       rateNote = 'Full vacation availed — no earned leave admissible this year';
@@ -61,47 +78,37 @@ function calculateEL(inputs) {
       earned   = Math.min(raw, 15);
       rateNote = `1/11 of ${duty} days = ${raw}, capped at 15 days (appointment ≤1 year)`;
     } else {
-      // 1–5 year appointments: 15 days/year max, 60 days lifetime max
-      const yearsServed  = duty / 365;
-      const maxByYear    = roundKSR(yearsServed * 15);
-      const capApplied   = Math.min(raw, maxByYear, 60);
+      const maxByYear  = roundKSR(years * 15);
+      const capApplied = Math.min(raw, maxByYear, 60);
       earned   = Math.max(0, capApplied);
       rateNote = `1/11 of ${duty} days = ${raw}, max 15 days/year (${maxByYear} days), lifetime cap 60 days`;
     }
   }
 
-  /* Apply accumulation ceiling */
-  const room           = Math.max(0, MAX_ACCUM - existing);
+  const room            = Math.max(0, MAX_ACCUM - existing);
   const effectiveEarned = Math.min(earned, room);
-  const newBalance     = existing + effectiveEarned;
-  const cappedAt300    = earned > room;
+  const newBalance      = existing + effectiveEarned;
+  const cappedAt300     = earned > room;
 
-  return {
-    earned,
-    effectiveEarned,
-    newBalance,
-    cappedAt300,
-    maxGrant,
-    rateNote,
-    canGrant: Math.min(newBalance, maxGrant),
-  };
+  return { earned, effectiveEarned, newBalance, cappedAt300, maxGrant, rateNote, canGrant: Math.min(newBalance, maxGrant) };
 }
 
 const CATEGORIES = [
-  { id: 'permanent', label: 'Permanent Officer',          sub: 'Non-vacation dept' },
-  { id: 'temporary', label: 'Temporary / Officiating',    sub: 'Non-permanent employ' },
-  { id: 'vacation',  label: 'Vacation Department',        sub: 'Schools / Courts / Colleges' },
-  { id: 'limited',   label: 'Limited Period (Contract)',  sub: 'Up to 5 years appointment' },
+  { id: 'permanent', label: 'Permanent Officer',         sub: 'Non-vacation dept' },
+  { id: 'temporary', label: 'Temporary / Officiating',   sub: 'Non-permanent employ' },
+  { id: 'vacation',  label: 'Vacation Department',       sub: 'Schools / Courts / Colleges' },
+  { id: 'limited',   label: 'Limited Period (Contract)', sub: 'Up to 5 years appointment' },
 ];
 
-const inputCls  = 'w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#64d2ff]/60 focus:ring-1 focus:ring-[#64d2ff]/30 transition-all';
-const labelCls  = 'block text-xs font-semibold text-white/50 uppercase tracking-wider mb-1.5';
+const inputCls = 'w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#64d2ff]/60 focus:ring-1 focus:ring-[#64d2ff]/30 transition-all';
+const labelCls = 'block text-xs font-semibold text-white/50 uppercase tracking-wider mb-1.5';
 
-function Field({ label, children }) {
+function Field({ label, hint, children }) {
   return (
     <div>
       <label className={labelCls}>{label}</label>
       {children}
+      {hint && <p className="mt-1 text-[10px] text-white/25">{hint}</p>}
     </div>
   );
 }
@@ -109,7 +116,7 @@ function Field({ label, children }) {
 function ResultRow({ label, value, accent, small }) {
   return (
     <div className={`flex justify-between items-center ${small ? 'py-1.5' : 'py-2.5'} border-b border-white/[0.06] last:border-0`}>
-      <span className={`${small ? 'text-xs text-white/40' : 'text-sm text-white/65'}`}>{label}</span>
+      <span className={small ? 'text-xs text-white/40' : 'text-sm text-white/65'}>{label}</span>
       <span className={`font-bold tabular-nums ${small ? 'text-sm' : 'text-base'} ${accent ? 'text-[#64d2ff]' : 'text-white'}`}>{value}</span>
     </div>
   );
@@ -137,7 +144,7 @@ const FAQ_DATA = [
     a: 'The half-pay leave admissible to an officer in permanent employ is 20 days for each completed year of service. This leave can be availed of either on private affairs or on medical certificate. Furthermore, commuted leave not exceeding half the amount of half-pay leave due may be granted to an officer in permanent employ. When commuted leave is granted, twice the amount of such leave is debited against the half-pay leave due.',
   },
   {
-    q: 'What is the Subsistence Allowance granted during an employee\'s Suspension?',
+    q: "What is the Subsistence Allowance granted during an employee's Suspension?",
     a: 'An officer under suspension is entitled to a subsistence allowance at an amount equal to the leave salary which the officer would have drawn had they been on leave on half-pay on the date of suspension. In addition, the officer may be granted Dearness Allowance and Dearness Pay not exceeding the amount admissible had they been on a leave salary equal to the rate of the subsistence allowance.',
   },
   {
@@ -151,19 +158,29 @@ const FAQ_DATA = [
 ];
 
 export default function LeaveCalculator() {
-  const [category, setCategory] = useState('permanent');
-  const [dutyDays, setDutyDays]           = useState('');
-  const [yearsOfService, setYearsOfService] = useState('');
-  const [fullVacation, setFullVacation]   = useState('');
-  const [vacationAvailed, setVacAvailed]  = useState('');
-  const [appointmentType, setApptType]    = useState('upto1year');
-  const [existingBalance, setExisting]    = useState('');
-  const [isLPR, setIsLPR]                 = useState(false);
-  const [openFaq, setOpenFaq]             = useState(null);
+  const today = todayStr();
 
-  const inputs = { category, dutyDays, yearsOfService, fullVacation, vacationAvailed, appointmentType, existingBalance, isLPR };
-  const hasInput = Number(dutyDays) > 0 || (category === 'vacation' && Number(fullVacation) > 0);
-  const result   = hasInput ? calculateEL(inputs) : null;
+  const [category,       setCategory]    = useState('permanent');
+  const [joiningDate,    setJoiningDate] = useState('');
+  const [asOfDate,       setAsOfDate]    = useState(today);
+  const [fullVacation,   setFullVacation] = useState('');
+  const [vacationAvailed, setVacAvailed] = useState('');
+  const [appointmentType, setApptType]   = useState('upto1year');
+  const [existingBalance, setExisting]   = useState('');
+  const [isLPR,          setIsLPR]       = useState(false);
+  const [openFaq,        setOpenFaq]     = useState(null);
+
+  /* Derived values from dates */
+  const dutyDays      = useMemo(() => joiningDate && asOfDate ? daysBetween(joiningDate, asOfDate) : 0, [joiningDate, asOfDate]);
+  const yearsOfService = useMemo(() => joiningDate && asOfDate ? yearsBetween(joiningDate, asOfDate) : 0, [joiningDate, asOfDate]);
+
+  const ready  = joiningDate && asOfDate && dutyDays > 0;
+  const result = ready ? calculateEL({ category, dutyDays, yearsOfService, fullVacation, vacationAvailed, appointmentType, existingBalance, isLPR }) : null;
+
+  /* Display helpers */
+  const yearsDisplay = yearsOfService > 0
+    ? `${Math.floor(yearsOfService)} yr${Math.floor(yearsOfService) !== 1 ? 's' : ''} ${Math.round((yearsOfService % 1) * 12)} mo`
+    : '—';
 
   return (
     <div>
@@ -177,7 +194,7 @@ export default function LeaveCalculator() {
           </div>
         </div>
 
-        {/* Category tabs */}
+        {/* Category */}
         <Field label="Employee Category">
           <div className="grid grid-cols-2 gap-2">
             {CATEGORIES.map((c) => (
@@ -199,23 +216,57 @@ export default function LeaveCalculator() {
 
         <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
 
-          {/* Always: duty days */}
-          <Field label="Days on Duty (this period)">
+          {/* Date of Joining */}
+          <Field label="Date of Joining / Service Start" hint="First day of duty in the current post">
             <input
-              type="number"
-              min="0"
-              placeholder="e.g. 330"
-              value={dutyDays}
-              onChange={e => setDutyDays(e.target.value)}
+              type="date"
+              max={asOfDate}
+              value={joiningDate}
+              onChange={e => setJoiningDate(e.target.value)}
               className={inputCls}
             />
           </Field>
 
-          {/* Existing balance */}
-          <Field label="Existing EL Balance (days)">
+          {/* Calculate As Of */}
+          <Field label="Calculate As Of" hint="Defaults to today; change for a past/future date">
+            <input
+              type="date"
+              min={joiningDate || undefined}
+              max={today}
+              value={asOfDate}
+              onChange={e => setAsOfDate(e.target.value)}
+              className={inputCls}
+            />
+          </Field>
+
+          {/* Auto-computed summary pill */}
+          {joiningDate && asOfDate && dutyDays > 0 && (
+            <div className="md:col-span-2 flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10">
+                <span className="text-[10px] text-white/40 uppercase tracking-wider">Total Period</span>
+                <span className="text-xs font-bold text-white">{dutyDays.toLocaleString('en-IN')} days</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10">
+                <span className="text-[10px] text-white/40 uppercase tracking-wider">Service Length</span>
+                <span className="text-xs font-bold text-white">{yearsDisplay}</span>
+              </div>
+              {category === 'temporary' && (
+                <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${yearsOfService >= 3 ? 'bg-[#30d158]/10 border-[#30d158]/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
+                  <span className="text-[10px] text-white/40 uppercase tracking-wider">Rate Applied</span>
+                  <span className={`text-xs font-bold ${yearsOfService >= 3 ? 'text-[#30d158]' : 'text-amber-400'}`}>
+                    {yearsOfService >= 3 ? '1/11 (≥3 yrs)' : '1/22 (<3 yrs)'}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Existing EL balance */}
+          <Field label="Existing EL Balance (days)" hint="Leave already accumulated before this period">
             <input
               type="number"
               min="0"
+              max="300"
               placeholder="e.g. 120"
               value={existingBalance}
               onChange={e => setExisting(e.target.value)}
@@ -223,22 +274,7 @@ export default function LeaveCalculator() {
             />
           </Field>
 
-          {/* Temporary: years of service */}
-          {category === 'temporary' && (
-            <Field label="Completed Years of Service">
-              <input
-                type="number"
-                min="0"
-                step="0.5"
-                placeholder="e.g. 2.5"
-                value={yearsOfService}
-                onChange={e => setYearsOfService(e.target.value)}
-                className={inputCls}
-              />
-            </Field>
-          )}
-
-          {/* Vacation: full vacation & availed */}
+          {/* Vacation dept: full vacation & availed */}
           {category === 'vacation' && (
             <>
               <Field label="Full Vacation Entitlement (days/year)">
@@ -278,7 +314,7 @@ export default function LeaveCalculator() {
             </Field>
           )}
 
-          {/* LPR toggle — permanent & temporary only */}
+          {/* LPR toggle */}
           {(category === 'permanent' || category === 'temporary') && (
             <div className="md:col-span-2">
               <label className="flex items-center gap-3 cursor-pointer select-none">
@@ -296,40 +332,46 @@ export default function LeaveCalculator() {
           )}
         </div>
 
+        {/* Prompt if no date entered */}
+        {!joiningDate && (
+          <div className="mt-6 text-center py-8 rounded-[16px] border border-dashed border-white/10">
+            <p className="text-sm text-white/30">Enter your Date of Joining above to calculate Earned Leave</p>
+          </div>
+        )}
+
         {/* ── Result ── */}
         {result && (
           <div className="mt-6 rounded-[16px] border border-[#64d2ff]/20 bg-[#64d2ff]/[0.05] p-5">
-            <div className="text-xs font-bold text-[#64d2ff] uppercase tracking-widest mb-3">Result</div>
+            <div className="text-xs font-bold text-[#64d2ff] uppercase tracking-widest mb-1">Result</div>
+            <p className="text-[10px] text-white/25 mb-3">
+              {fmtDate(joiningDate)} → {fmtDate(asOfDate)} · {dutyDays.toLocaleString('en-IN')} days
+            </p>
 
-            <ResultRow label="EL Earned this period" value={`${result.earned} days`} accent />
+            <ResultRow label="EL Earned this period"   value={`${result.earned} days`} accent />
             {result.cappedAt300 && (
-              <ResultRow
-                label="EL Credited (capped at 300-day limit)"
-                value={`${result.effectiveEarned} days`}
-                small
-              />
+              <ResultRow label="EL Credited (300-day cap)" value={`${result.effectiveEarned} days`} small />
             )}
-            <ResultRow label="Updated EL Balance" value={`${result.newBalance} days`} />
-            <ResultRow label="Max Accumulation Limit" value="300 days" small />
+            <ResultRow label="Updated EL Balance"      value={`${result.newBalance} days`} />
+            <ResultRow label="Max Accumulation Limit"  value="300 days" small />
             <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={`${result.maxGrant} days`} small />
-            <ResultRow label="Admissible Grant Now" value={`${result.canGrant} days`} accent />
+            <ResultRow label="Admissible Grant Now"    value={`${result.canGrant} days`} accent />
 
             <p className="mt-3 text-[11px] text-white/30 leading-relaxed">{result.rateNote}</p>
 
             {result.cappedAt300 && (
               <p className="mt-2 text-[11px] text-amber-400/70 leading-relaxed">
-                ⚠ Accumulation limit of 300 days would be exceeded. Only {result.effectiveEarned} days credited; officer ceases to earn further leave until balance drops below 300.
+                ⚠ Accumulation limit of 300 days exceeded. Only {result.effectiveEarned} days credited; officer ceases to earn further leave until balance drops below 300.
               </p>
             )}
           </div>
         )}
 
         <p className="mt-4 text-[11px] text-white/20 leading-relaxed">
-          Note: This calculator is for reference only. Actual entitlement is subject to audit and the competent authority's sanction as per Kerala Service Rules Part I.
+          Note: Calculation is based on total calendar days from joining date. Actual entitlement excludes periods spent on leave, EOL, and suspension, and is subject to audit and competent authority's sanction per KSR Part I.
         </p>
       </div>
 
-      {/* ── KSR Rules Reference ── */}
+      {/* ── KSR Rules Reference Table ── */}
       <div className="glass-card rounded-[20px] p-6 md:p-8 mb-10">
         <h2 className="text-base font-[900] text-white mb-4" style={{ fontFamily: "'Meera', sans-serif" }}>
           KSR Earned Leave Rules — Quick Reference
@@ -346,14 +388,14 @@ export default function LeaveCalculator() {
             </thead>
             <tbody>
               {[
-                ['Permanent (Non-Vacation)', '1/11 of duty days', '300 days', '180 days (300 for LPR)'],
-                ['Temporary / Officiating (<3 yrs)', '1/22 of duty days', '—', '—'],
-                ['Temporary / Officiating (≥3 yrs)', '1/11 of duty days', '—', '—'],
-                ['Vacation Dept — Full vacation availed', 'Nil', '—', '—'],
-                ['Vacation Dept — Partial vacation', '(Days not taken ÷ Full vacation) × 30', '—', '—'],
-                ['Vacation Dept — No vacation availed', '1/11 of duty days', '—', '—'],
-                ['Limited Period ≤1 year', '1/11, max 15 days total', '15 days', '15 days'],
-                ['Limited Period 1–5 years', '1/11, max 15 days/year', '60 days', '60 days'],
+                ['Permanent (Non-Vacation)',              '1/11 of duty days',                     '300 days', '180 days (300 for LPR)'],
+                ['Temporary / Officiating (<3 yrs)',      '1/22 of duty days',                     '—',        '—'],
+                ['Temporary / Officiating (≥3 yrs)',      '1/11 of duty days',                     '—',        '—'],
+                ['Vacation Dept — Full vacation availed', 'Nil',                                   '—',        '—'],
+                ['Vacation Dept — Partial vacation',      '(Days not taken ÷ Full vacation) × 30', '—',        '—'],
+                ['Vacation Dept — No vacation availed',   '1/11 of duty days',                     '—',        '—'],
+                ['Limited Period ≤1 year',                '1/11, max 15 days total',               '15 days',  '15 days'],
+                ['Limited Period 1–5 years',              '1/11, max 15 days/year',                '60 days',  '60 days'],
               ].map(([cat, rate, accum, grant]) => (
                 <tr key={cat} className="border-b border-white/[0.05] last:border-0">
                   <td className="py-2.5 pr-4 text-white/70 text-xs">{cat}</td>
@@ -378,13 +420,9 @@ export default function LeaveCalculator() {
         <p className="text-sm text-white/40 mb-6">
           Common questions on Earned Leave, Casual Leave, Maternity Leave, and other service benefits under Kerala Service Rules (KSR) Part I &amp; II.
         </p>
-
         <div className="space-y-3">
           {FAQ_DATA.map((item, i) => (
-            <div
-              key={i}
-              className="glass-card rounded-[16px] overflow-hidden border border-white/[0.07]"
-            >
+            <div key={i} className="glass-card rounded-[16px] overflow-hidden border border-white/[0.07]">
               <button
                 className="w-full text-left px-5 py-4 flex items-start justify-between gap-4 group"
                 onClick={() => setOpenFaq(openFaq === i ? null : i)}
