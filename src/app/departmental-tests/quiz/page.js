@@ -96,7 +96,20 @@ function QuizInner() {
 
   // ── BATCH BREAK SCREEN ──────────────────────────────────────────────────────
   if (phase === 'break') {
-    const batchCorrect = BATCH_SIZE - batchWrong.length; // approx
+    const hasMoreBatches = mainRemain.length > 0;
+    const nextBatchCount = Math.min(mainRemain.length, BATCH_SIZE);
+
+    function skipRevisionAndContinue() {
+      const nextBatch = mainRemain.slice(0, BATCH_SIZE);
+      setMainRemain(mainRemain.slice(BATCH_SIZE));
+      setActiveList(nextBatch);
+      setActiveIdx(0);
+      setBatchWrong([]);
+      setSelected(null);
+      setAnswered(false);
+      setPhase('main');
+    }
+
     return (
       <div className="min-h-screen bg-aurora text-white flex items-center justify-center px-4">
         <div className="max-w-[480px] w-full glass-card rounded-3xl p-8 text-center">
@@ -106,15 +119,18 @@ function QuizInner() {
           </h2>
           <p className="text-white/50 text-sm mb-6">
             You got <span className="text-[#ff453a] font-bold">{batchWrong.length}</span> wrong in the last batch.
-            <br />Let's revise them now.
+            {hasMoreBatches && (
+              <><br /><span className="text-white/30 text-xs mt-1 inline-block">{mainRemain.length} more question{mainRemain.length > 1 ? 's' : ''} remaining after this.</span></>
+            )}
           </p>
 
-          <div className="flex gap-3 justify-center mb-4 text-[13px]">
+          <div className="flex gap-3 justify-center mb-5 text-[13px]">
             <div className="px-4 py-2 rounded-xl" style={{ background: 'rgba(48,209,88,0.1)', color: '#30d158' }}>
-              Score so far: <span className="font-black">{score >= 0 ? score.toFixed(2) : score.toFixed(2)}</span>
+              Score so far: <span className="font-black">{score.toFixed(2)}</span>
             </div>
           </div>
 
+          {/* Start Revision */}
           <button
             onClick={() => {
               setActiveList(batchWrong);
@@ -125,15 +141,33 @@ function QuizInner() {
               setRevRound(r => r + 1);
               setPhase('revision');
             }}
-            className="w-full py-3.5 rounded-2xl text-[14px] font-bold border-none cursor-pointer text-white"
+            className="w-full py-3.5 rounded-2xl text-[14px] font-bold border-none cursor-pointer text-white mb-2"
             style={{ background: color }}>
-            Start Revision →
+            Start Revision ({batchWrong.length} questions) →
           </button>
-          <button
-            onClick={() => setPhase('done')}
-            className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-2 text-white/40 bg-transparent hover:text-white/60 transition-colors">
-            Skip & See Results
-          </button>
+
+          {/* Skip Revision — behaviour depends on whether more questions exist */}
+          {hasMoreBatches ? (
+            <>
+              <button
+                onClick={skipRevisionAndContinue}
+                className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 text-white/70 hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.07)', outline: '1px solid rgba(255,255,255,0.1)' }}>
+                Skip Revision — Next {nextBatchCount} Questions →
+              </button>
+              <button
+                onClick={() => setPhase('done')}
+                className="w-full py-3 rounded-2xl text-[12px] font-semibold border-none cursor-pointer mt-1 text-white/30 bg-transparent hover:text-white/50 transition-colors">
+                End Quiz &amp; See Results
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => setPhase('done')}
+              className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 text-white/40 bg-transparent hover:text-white/60 transition-colors">
+              Skip &amp; See Results
+            </button>
+          )}
         </div>
       </div>
     );
