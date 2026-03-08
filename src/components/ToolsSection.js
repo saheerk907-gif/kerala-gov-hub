@@ -63,6 +63,16 @@ const tools = [
     tags: ['DCRG', 'Gratuity', 'KSR', 'Death'],
   },
   {
+    icon: '💸',
+    title: 'Income Tax Calculator',
+    subtitle: 'FY 2025–26 (AY 2026–27)',
+    desc: 'New & Old Regime tax — HRA, 80C, GPF, SLI, NPS, Medisep, all deductions',
+    href: '/income-tax',
+    color: '#ff9f0a',
+    badge: 'NEW',
+    tags: ['New Regime', 'Old Regime', '80C', 'HRA'],
+  },
+  {
     icon: '📅',
     title: 'Leave Calculator',
     subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',

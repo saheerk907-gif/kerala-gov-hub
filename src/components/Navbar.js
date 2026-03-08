@@ -15,6 +15,7 @@ const NAV_ITEMS = [
       { label: 'DCRG Calculator',       sub: 'Retirement Gratuity',     href: '/dcrg',      badge: 'NEW'  },
       { label: 'DA Arrear Calculator',  sub: '11th PRC · Mar 2021',     href: '/da-arrear', badge: 'NEW'  },
       { label: 'GPF Calculator',        sub: 'Provident Fund',          href: '/gpf',       badge: null   },
+      { label: 'Income Tax Calculator',  sub: 'FY 2025-26 New/Old Regime', href: '/income-tax', badge: 'NEW' },
       { label: 'Leave Calculator',      sub: 'EL, CL, ML',              href: '/leave',     badge: 'NEW'  },
       { label: 'Medisep',              sub: 'Health Insurance Info',    href: '/medisep',   badge: null   },
     ],
