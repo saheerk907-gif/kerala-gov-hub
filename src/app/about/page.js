@@ -117,11 +117,20 @@ export default function AboutPage() {
           <div className="glass-card rounded-2xl p-6 md:p-8 mb-6">
             <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-4">Our Mission</h2>
             <p className="text-[14px] text-white/65 leading-relaxed mb-3">
-              Government service information is scattered across many websites, PDFs, and circulars. Our mission is to make this information <strong className="text-white/80">free, accessible, and easy to understand</strong> for every Kerala government employee — from a Class IV worker to a senior officer.
+              Information related to government service in Kerala is often scattered across circulars, official orders, and lengthy documents. For many employees, finding clear and reliable information about their own service benefits can be difficult.
             </p>
-            <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
-              ഓരോ കേരള ജീവനക്കാരനും തന്റെ സേവന ആനുകൂല്യങ്ങളെക്കുറിച്ച് ബോധവാന്മാരാകണം — ഇതാണ് ഞങ്ങളുടെ ലക്ഷ്യം.
+            <p className="text-[14px] text-white/65 leading-relaxed mb-5">
+              Our mission is to gather this information in one place and present it in a <strong className="text-white/80">simple, practical, and accessible</strong> manner. We aim to help every Kerala government employee clearly understand the rules, benefits, and schemes that affect their service and retirement.
             </p>
+            <div className="border-t border-white/[0.06] pt-5">
+              <div className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-3">ഞങ്ങളുടെ ദൗത്യം</div>
+              <p className="text-[14px] text-white/65 leading-relaxed mb-3" style={{ fontFamily: "'Meera', sans-serif" }}>
+                കേരള സർക്കാർ സർവീസുമായി ബന്ധപ്പെട്ട വിവരങ്ങൾ പലപ്പോഴും വിവിധ സർക്കുലറുകളിലും ഉത്തരവുകളിലും നീണ്ട ഔദ്യോഗിക രേഖകളിലുമായി ചിതറിക്കിടക്കുന്നതാണ്. അതുകൊണ്ട് തന്നെ ഒരു ജീവനക്കാരന് തന്റെ സേവന ആനുകൂല്യങ്ങളെക്കുറിച്ചുള്ള വ്യക്തമായ വിവരങ്ങൾ കണ്ടെത്തുന്നത് പലപ്പോഴും ബുദ്ധിമുട്ടാകാറുണ്ട്.
+              </p>
+              <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+                ഈ വിവരങ്ങൾ എല്ലാം ഒരേ സ്ഥലത്ത് സമാഹരിച്ച് ലളിതമായും വ്യക്തമായും അവതരിപ്പിക്കുകയാണ് ഞങ്ങളുടെ ലക്ഷ്യം. സേവനവുമായി ബന്ധപ്പെട്ട നിയമങ്ങളും ആനുകൂല്യങ്ങളും പദ്ധതികളും ഓരോ കേരള സർക്കാർ ജീവനക്കാരനും എളുപ്പത്തിൽ മനസ്സിലാക്കാൻ സഹായിക്കുകയാണ് ഈ വെബ്സൈറ്റിന്റെ പ്രധാന ഉദ്ദേശ്യം.
+              </p>
+            </div>
           </div>
 
           {/* Disclaimer note */}
