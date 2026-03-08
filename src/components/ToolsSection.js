@@ -67,9 +67,9 @@ const tools = [
     title: 'Leave Calculator',
     subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',
     desc: 'EL, CL, ML, Study Leave balance and encashment estimate',
-    href: '/prc',
+    href: '/leave',
     color: '#64d2ff',
-    badge: 'SOON',
+    badge: 'NEW',
     tags: ['EL', 'CL', 'ML', 'Encashment'],
   },
   {
