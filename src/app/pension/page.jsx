@@ -306,12 +306,17 @@ export default function PensionPage() {
           </div>
         </div>
 
-        {/* Guide link */}
-        <div className="mt-6 text-center">
+        {/* Guide + Forms links */}
+        <div className="mt-6 flex justify-center gap-6 flex-wrap">
           <Link href="/pension-calculation"
             className="text-[12px] font-bold no-underline transition-colors"
             style={{ color: '#2997ff' }}>
             How is pension calculated? Step-by-step guide →
+          </Link>
+          <Link href="/pension-forms"
+            className="text-[12px] font-bold no-underline transition-colors"
+            style={{ color: '#30d158' }}>
+            Download Pension Forms (24 forms) →
           </Link>
         </div>
 

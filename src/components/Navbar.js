@@ -11,6 +11,7 @@ const NAV_ITEMS = [
       { label: '12th PRC Calculator',   sub: 'Pay Revision 2024',      href: '/prc',       badge: 'NEW'  },
       { label: 'NPS vs APS',            sub: 'Pension Comparison',      href: '/nps-aps',   badge: 'NEW'  },
       { label: 'Pension Calculator',    sub: 'Monthly Pension',         href: '/pension',   badge: 'NEW'  },
+      { label: 'Pension Forms',         sub: 'Download official forms',  href: '/pension-forms', badge: 'NEW' },
       { label: 'DCRG Calculator',       sub: 'Retirement Gratuity',     href: '/dcrg',      badge: 'NEW'  },
       { label: 'DA Arrear Calculator',  sub: '11th PRC · Mar 2021',     href: '/da-arrear', badge: 'NEW'  },
       { label: 'GPF Calculator',        sub: 'Provident Fund',          href: '/gpf',       badge: null   },
