@@ -139,8 +139,8 @@ export default function PensionFormsPage() {
         <div className="rounded-2xl overflow-hidden"
           style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
-          {/* Table header */}
-          <div className="grid grid-cols-[80px_1fr_120px_100px] gap-0 px-5 py-3"
+          {/* Table header — desktop only */}
+          <div className="hidden md:grid grid-cols-[90px_1fr_130px_110px] gap-0 px-5 py-3"
             style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Form No.</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Title</div>
@@ -158,34 +158,52 @@ export default function PensionFormsPage() {
               const isLoading = loading === form.id;
               return (
                 <div key={form.id}
-                  className="grid grid-cols-[80px_1fr_120px_100px] gap-0 px-5 py-4 items-center transition-colors hover:bg-white/[0.02]"
+                  className="px-4 py-4 transition-colors hover:bg-white/[0.02] md:grid md:grid-cols-[90px_1fr_130px_110px] md:items-center md:gap-0"
                   style={{ borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
 
-                  {/* Form number */}
-                  <div>
-                    <span className="text-[13px] font-black px-2 py-0.5 rounded-lg"
+                  {/* Mobile: card layout — Desktop: row layout */}
+                  <div className="flex items-start justify-between md:contents">
+
+                    {/* Form number */}
+                    <span className="text-[12px] font-black px-2.5 py-1 rounded-lg flex-shrink-0"
                       style={{ background: `${color}15`, color }}>
                       {form.formNo}
                     </span>
+
+                    {/* Download button — shown top-right on mobile */}
+                    <button
+                      onClick={() => download(form)}
+                      disabled={isLoading}
+                      className="md:hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-black transition-all disabled:opacity-50 disabled:cursor-wait"
+                      style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>
+                      {isLoading ? (
+                        <span className="w-3 h-3 rounded-full border-2 border-current border-t-transparent animate-spin" />
+                      ) : (
+                        <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                          <path d="M6 1v7M3 6l3 3 3-3M1 10h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                      PDF
+                    </button>
                   </div>
 
                   {/* Title */}
-                  <div className="pr-4">
+                  <div className="mt-2 md:mt-0 md:pr-4">
                     <div className="text-[13px] text-white/75 leading-snug" style={{ fontFamily: "'Meera', sans-serif" }}>
                       {form.title}
                     </div>
                   </div>
 
                   {/* Category badge */}
-                  <div>
+                  <div className="mt-2 md:mt-0">
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full"
                       style={{ background: `${color}12`, color, border: `1px solid ${color}25` }}>
                       {form.category}
                     </span>
                   </div>
 
-                  {/* Download button */}
-                  <div className="text-right">
+                  {/* Download button — desktop only */}
+                  <div className="hidden md:flex md:justify-end">
                     <button
                       onClick={() => download(form)}
                       disabled={isLoading}
