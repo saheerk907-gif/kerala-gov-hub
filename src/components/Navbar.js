@@ -153,8 +153,11 @@ export default function Navbar() {
 
           {/* Brand */}
           <a href="/" className="flex items-center gap-3 no-underline group flex-shrink-0">
-            <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
-              className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
+            <picture>
+              <source srcSet="/logo.webp" type="image/webp" />
+              <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
+                className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
+            </picture>
             <div className="flex flex-col leading-tight">
               <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ

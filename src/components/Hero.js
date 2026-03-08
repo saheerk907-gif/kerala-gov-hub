@@ -57,7 +57,7 @@ export default function Hero() {
           <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />
 
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt="Kerala Gov Employee Hub Logo"
             width={120}
             height={120}

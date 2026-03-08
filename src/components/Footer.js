@@ -8,11 +8,11 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img
-                src="/logo.png"
-                alt="Kerala Gov Logo"
-                className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/30"
-              />
+              <picture>
+                <source srcSet="/logo.webp" type="image/webp" />
+                <img src="/logo.png" alt="Kerala Gov Logo"
+                  className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/30" />
+              </picture>
               <div>
                 <div className="text-[13px] font-bold text-white/85 leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
                   കേരള ജീവനക്കാര്യ ഹബ്
