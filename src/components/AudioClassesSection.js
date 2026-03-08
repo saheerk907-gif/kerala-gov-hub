@@ -105,7 +105,7 @@ export default function AudioClassesSection() {
 
   return (
     <section id="audio-classes" className="relative py-8 px-4 md:px-6">
-      <div className="max-w-[1300px] mx-auto">
+      <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
         <div className="mb-7">
