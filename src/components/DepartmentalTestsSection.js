@@ -48,7 +48,7 @@ export default function DepartmentalTestsSection() {
                   <div className="text-[13px] font-bold text-white/80 group-hover:text-white transition-colors leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
                     {d.label}
                   </div>
-                  <div className="text-[10px] mt-0.5 font-bold" style={{ color: d.color }}>
+                  <div className="text-[10px] mt-0.5 font-semibold text-white/35">
                     {count} tests
                   </div>
                 </div>
@@ -80,8 +80,8 @@ export default function DepartmentalTestsSection() {
                     </div>
                     <div className="text-[10px] text-white/30 font-sans mt-0.5">{test.name_en}</div>
                   </div>
-                  <div className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-lg flex-shrink-0 hidden sm:block"
-                    style={{ background: color + '18', color }}>
+                  <div className="text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-lg flex-shrink-0 hidden sm:block text-white/35"
+                    style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
                     {test.papers} Paper{test.papers > 1 ? 's' : ''}
                   </div>
                   <div className="text-white/20 group-hover:text-white/50 transition-all flex-shrink-0">→</div>
