@@ -4,7 +4,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 
 const NAV_ITEMS = [
   {
-    label: 'ടൂളുകൾ',
+    label: 'Tools',
     en: 'Tools',
     href: '#tools',
     dropdown: [
@@ -19,22 +19,22 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'ഉത്തരവുകൾ',
+    label: 'Govt Orders',
     en: 'Govt Orders',
     href: '#orders',
     dropdown: [
-      { label: 'എല്ലാ ഉത്തരവുകളും',   sub: 'All Government Orders',    href: '#orders'  },
-      { label: 'ക്ഷാമബത്ത (DA)',        sub: 'Dearness Allowance',       href: '#orders'  },
-      { label: 'ബോണസ് / ഉത്സവബത്ത',   sub: 'Bonus & Festival Allowance', href: '#orders' },
-      { label: 'മെഡിസെപ്',            sub: 'Medical Insurance Orders', href: '#orders'  },
-      { label: 'പെൻഷൻ',              sub: 'Pension Orders',            href: '#orders'  },
-      { label: 'ശമ്പളം / Pay',         sub: 'Pay Revision Orders',      href: '#orders'  },
+      { label: 'All Orders',            sub: 'All Government Orders',    href: '#orders'  },
+      { label: 'DA Orders',            sub: 'Dearness Allowance',       href: '#orders'  },
+      { label: 'Bonus / Festival',     sub: 'Bonus & Festival Allowance', href: '#orders' },
+      { label: 'MEDISEP',             sub: 'Medical Insurance Orders', href: '#orders'  },
+      { label: 'Pension',             sub: 'Pension Orders',            href: '#orders'  },
+      { label: 'Pay Revision',         sub: 'Pay Revision Orders',      href: '#orders'  },
       { label: 'GPF / NPS',            sub: 'Provident Fund Orders',    href: '#orders'  },
-      { label: 'അവധി / Leave',         sub: 'Leave Rule Orders',        href: '#orders'  },
+      { label: 'Leave',                sub: 'Leave Rule Orders',        href: '#orders'  },
     ],
   },
   {
-    label: 'പദ്ധതികൾ',
+    label: 'Schemes',
     en: 'Schemes',
     href: '#services',
     dropdown: [
@@ -47,7 +47,7 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'ടെസ്റ്റ്',
+    label: 'Dept Tests',
     en: 'Dept Tests',
     href: '/departmental-tests',
     dropdown: [
@@ -63,11 +63,11 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'ഫോറങ്ങൾ',
+    label: 'Forms',
     en: 'Forms',
     href: '/forms',
     dropdown: [
-      { label: 'എല്ലാ ഫോറങ്ങളും',      sub: 'All 65+ Government Forms',      href: '/forms',           badge: 'NEW' },
+      { label: 'All Forms',             sub: 'All 65+ Government Forms',      href: '/forms',           badge: 'NEW' },
       { label: 'Pension Forms (PRISM)', sub: 'Form 2, 4B, 5, 6, 8, 11…',     href: '/pension-forms',   badge: 'NEW' },
       { label: 'GPF Forms',             sub: 'PF Form A, B, B1, D, J',        href: '/forms?cat=GPF'               },
       { label: 'Leave Forms',           sub: 'Form 13 · Medical Certificate', href: '/forms?cat=Leave'             },
@@ -78,11 +78,11 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'വാർത്തകൾ',
+    label: 'Articles',
     en: 'Articles',
     href: '/articles',
     dropdown: [
-      { label: 'എല്ലാ ലേഖനങ്ങളും',   sub: 'All published articles',     href: '/articles'               },
+      { label: 'All Articles',        sub: 'All published articles',     href: '/articles'               },
       { label: 'MEDISEP Articles',    sub: 'Claim, complaint, FAQ',       href: '/articles?cat=medisep'  },
       { label: 'Pension Articles',    sub: 'Calculation, rules',          href: '/articles?cat=pension'  },
       { label: 'KSR Articles',        sub: 'Service rule updates',        href: '/articles?cat=ksr'      },
@@ -91,7 +91,7 @@ const NAV_ITEMS = [
     ],
   },
   {
-    label: 'പോർട്ടലുകൾ',
+    label: 'Portals',
     en: 'Portals',
     href: '#links',
     dropdown: [
@@ -278,8 +278,7 @@ export default function Navbar() {
                     className="w-full flex items-center justify-between py-4 px-2 text-left border-none bg-transparent cursor-pointer transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-[15px] font-semibold text-white/75" style={{ fontFamily: "'Meera', sans-serif" }}>{item.label}</span>
-                      <span className="text-[10px] text-white/25 font-sans">{item.en}</span>
+                      <span className="text-[15px] font-semibold text-white/75">{item.label}</span>
                     </div>
                     <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
                       className="text-white/30 transition-transform duration-200"
