@@ -70,9 +70,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-6 text-[11px] text-white/25 gap-2">
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-6 text-[11px] text-white/25 gap-3">
           <span>© 2026 Kerala Gov Employee Hub</span>
-          <span className="font-sans">For Kerala Government Employees</span>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            <a href="/about" className="hover:text-white/55 transition-colors no-underline">About</a>
+            <a href="/contact" className="hover:text-white/55 transition-colors no-underline">Contact</a>
+            <a href="/privacy-policy" className="hover:text-white/55 transition-colors no-underline">Privacy Policy</a>
+            <a href="/disclaimer" className="hover:text-white/55 transition-colors no-underline">Disclaimer</a>
+          </div>
         </div>
       </div>
     </footer>
