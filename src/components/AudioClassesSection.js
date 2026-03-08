@@ -19,7 +19,17 @@ export default function AudioClassesSection() {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [speed, setSpeed] = useState(1);
   const audioRef = useRef(null);
+
+  const SPEEDS = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+
+  function cycleSpeed() {
+    const idx = SPEEDS.indexOf(speed);
+    const next = SPEEDS[(idx + 1) % SPEEDS.length];
+    setSpeed(next);
+    if (audioRef.current) audioRef.current.playbackRate = next;
+  }
 
   useEffect(() => {
     async function fetchEpisodes() {
@@ -81,6 +91,7 @@ export default function AudioClassesSection() {
     setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.load();
+        audioRef.current.playbackRate = speed;
         audioRef.current.play().catch(() => {});
       }
     }, 50);
@@ -228,7 +239,7 @@ export default function AudioClassesSection() {
                 </div>
 
                 {/* Controls */}
-                <div className="flex items-center justify-center gap-4 mt-4">
+                <div className="flex items-center justify-center gap-3 mt-4">
                   <button onClick={() => skip(-10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/40 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     -10
                   </button>
@@ -249,6 +260,14 @@ export default function AudioClassesSection() {
                   </button>
                   <button onClick={() => skip(10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/40 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     +10
+                  </button>
+                  <button
+                    onClick={cycleSpeed}
+                    className="h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:scale-105 active:scale-95"
+                    style={{ background: speed !== 1 ? 'rgba(48,209,88,0.2)' : 'rgba(255,255,255,0.06)', color: speed !== 1 ? '#30d158' : 'rgba(255,255,255,0.5)', border: speed !== 1 ? '1px solid rgba(48,209,88,0.35)' : '1px solid transparent' }}
+                    title="Change playback speed"
+                  >
+                    {speed}×
                   </button>
                 </div>
 
