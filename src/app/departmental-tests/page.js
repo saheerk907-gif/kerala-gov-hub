@@ -10,15 +10,14 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 async function fetchQuizCounts() {
   try {
     const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/quiz_questions?select=test_id,paper_number`,
-      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      `${SUPABASE_URL}/rest/v1/rpc/get_quiz_counts`,
+      { method: 'POST', headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' }, body: '{}' }
     );
     const data = await res.json();
     if (!Array.isArray(data)) return {};
     const map = {};
     data.forEach(q => {
-      const key = `${q.test_id}_${q.paper_number}`;
-      map[key] = (map[key] || 0) + 1;
+      map[`${q.test_id}_${q.paper_number}`] = Number(q.count);
     });
     return map;
   } catch { return {}; }

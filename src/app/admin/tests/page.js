@@ -96,13 +96,14 @@ export default function AdminTests() {
   const fileRef = useRef();
 
   useEffect(() => {
-    api('quiz_questions?select=test_id,paper_number').then(data => {
+    fetch(`${SUPABASE_URL}/rest/v1/rpc/get_quiz_counts`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+      body: '{}',
+    }).then(r => r.json()).then(data => {
       if (!Array.isArray(data)) return;
       const map = {};
-      data.forEach(q => {
-        const key = `${q.test_id}_${q.paper_number}`;
-        map[key] = (map[key] || 0) + 1;
-      });
+      data.forEach(q => { map[`${q.test_id}_${q.paper_number}`] = Number(q.count); });
       setQCounts(map);
     });
   }, []);
@@ -128,10 +129,15 @@ export default function AdminTests() {
   }
 
   async function refreshCounts() {
-    const data = await api('quiz_questions?select=test_id,paper_number');
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_quiz_counts`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+    const data = await res.json();
     if (!Array.isArray(data)) return;
     const map = {};
-    data.forEach(q => { const key = `${q.test_id}_${q.paper_number}`; map[key] = (map[key] || 0) + 1; });
+    data.forEach(q => { map[`${q.test_id}_${q.paper_number}`] = Number(q.count); });
     setQCounts(map);
   }
 
