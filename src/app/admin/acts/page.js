@@ -1,8 +1,30 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const BUCKET = 'acts-pdfs';
+
+async function uploadPdf(file) {
+  const token = sessionStorage.getItem('admin_token');
+  const ext = file.name.split('.').pop();
+  const filename = `${Date.now()}-${file.name.replace(/[^a-z0-9.\-_]/gi, '_')}`;
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${filename}`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${token || SUPABASE_KEY}`,
+      'Content-Type': 'application/pdf',
+      'x-upsert': 'true',
+    },
+    body: file,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || 'Upload failed');
+  }
+  return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${filename}`;
+}
 
 const CATEGORIES = [
   { id: 'revenue',    label: 'Revenue / Land' },
@@ -55,6 +77,10 @@ export default function AdminActs() {
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState('');
   const [filterCat, setFilterCat] = useState('all');
+  const [pdfFile, setPdfFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState('');
+  const fileRef = useRef();
 
   useEffect(() => { loadActs(); }, []);
 
@@ -68,6 +94,9 @@ export default function AdminActs() {
   function openNew() {
     setForm(EMPTY);
     setEditId(null);
+    setPdfFile(null);
+    setUploadProgress('');
+    if (fileRef.current) fileRef.current.value = '';
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -88,6 +117,9 @@ export default function AdminActs() {
       is_published: act.is_published !== false,
     });
     setEditId(act.id);
+    setPdfFile(null);
+    setUploadProgress('');
+    if (fileRef.current) fileRef.current.value = '';
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -95,8 +127,26 @@ export default function AdminActs() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
+    let pdfUrl = form.pdf_url;
+
+    if (pdfFile) {
+      try {
+        setUploading(true);
+        setUploadProgress('Uploading PDF...');
+        pdfUrl = await uploadPdf(pdfFile);
+        setUploadProgress('PDF uploaded ✓');
+        setUploading(false);
+      } catch (err) {
+        setUploadProgress(`Upload failed: ${err.message}`);
+        setUploading(false);
+        setSaving(false);
+        return;
+      }
+    }
+
     const payload = {
       ...form,
+      pdf_url: pdfUrl,
       year: form.year ? Number(form.year) : null,
       slug: form.slug || slugify(form.title),
       updated_at: new Date().toISOString(),
@@ -111,6 +161,9 @@ export default function AdminActs() {
     setShowForm(false);
     setForm(EMPTY);
     setEditId(null);
+    setPdfFile(null);
+    setUploadProgress('');
+    if (fileRef.current) fileRef.current.value = '';
     loadActs();
   }
 
@@ -218,13 +271,34 @@ export default function AdminActs() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className={lbl}>PDF URL</label>
-                <input value={form.pdf_url} onChange={e => setForm(f => ({ ...f, pdf_url: e.target.value }))}
-                  placeholder="https://..." className={inp} />
-                <div className="text-[10px] text-[#6e6e73] mt-1">Upload PDF to Supabase Storage and paste URL here</div>
+                <label className={lbl}>PDF File Upload</label>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept="application/pdf"
+                  onChange={e => { setPdfFile(e.target.files[0] || null); setUploadProgress(''); }}
+                  className="w-full text-sm text-white/60 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#2997ff] file:text-white file:cursor-pointer cursor-pointer bg-[#1c1c1e] border border-white/10 rounded-xl px-3 py-2 outline-none"
+                />
+                {pdfFile && (
+                  <div className="text-[11px] text-[#30d158] mt-1.5 flex items-center gap-1">
+                    📄 {pdfFile.name} ({(pdfFile.size / 1024 / 1024).toFixed(2)} MB)
+                  </div>
+                )}
+                {uploadProgress && (
+                  <div className={`text-[11px] mt-1 ${uploadProgress.includes('failed') ? 'text-[#ff453a]' : 'text-[#30d158]'}`}>
+                    {uploadProgress}
+                  </div>
+                )}
+                {form.pdf_url && !pdfFile && (
+                  <div className="text-[10px] text-[#6e6e73] mt-1 flex items-center gap-2">
+                    Current: <a href={form.pdf_url} target="_blank" rel="noopener noreferrer" className="text-[#2997ff] hover:underline">View existing PDF</a>
+                    <button type="button" onClick={() => setForm(f => ({ ...f, pdf_url: '' }))}
+                      className="text-[#ff453a] bg-transparent border-none cursor-pointer text-[10px]">Remove</button>
+                  </div>
+                )}
               </div>
               <div>
-                <label className={lbl}>Official Source URL</label>
+                <label className={lbl}>Official Source URL (optional)</label>
                 <input value={form.official_url} onChange={e => setForm(f => ({ ...f, official_url: e.target.value }))}
                   placeholder="https://laobrelands.kerala.gov.in/..." className={inp} />
               </div>
@@ -245,9 +319,9 @@ export default function AdminActs() {
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button type="submit" disabled={saving}
+              <button type="submit" disabled={saving || uploading}
                 className="flex-1 py-3 bg-[#2997ff] text-white rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#0077ed] disabled:opacity-50 transition-all">
-                {saving ? 'Saving...' : editId ? 'Update Act' : 'Add Act'}
+                {uploading ? 'Uploading PDF...' : saving ? 'Saving...' : editId ? 'Update Act' : 'Add Act'}
               </button>
               <button type="button" onClick={() => setShowForm(false)}
                 className="px-6 py-3 bg-white/5 text-[#86868b] rounded-xl text-sm font-bold border-none cursor-pointer hover:text-white transition-all">
