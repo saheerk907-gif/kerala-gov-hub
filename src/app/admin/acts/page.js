@@ -80,6 +80,7 @@ export default function AdminActs() {
   const [pdfFile, setPdfFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
+  const [saveError, setSaveError] = useState('');
   const fileRef = useRef();
 
   useEffect(() => { loadActs(); }, []);
@@ -127,6 +128,7 @@ export default function AdminActs() {
   async function handleSubmit(e) {
     e.preventDefault();
     setSaving(true);
+    setSaveError('');
     let pdfUrl = form.pdf_url;
 
     if (pdfFile) {
@@ -151,20 +153,31 @@ export default function AdminActs() {
       slug: form.slug || slugify(form.title),
       updated_at: new Date().toISOString(),
     };
-    if (editId) {
-      await api(`acts_rules?id=eq.${editId}`, 'PATCH', payload);
-    } else {
-      payload.created_at = new Date().toISOString();
-      await api('acts_rules', 'POST', payload);
+    try {
+      let result;
+      if (editId) {
+        result = await api(`acts_rules?id=eq.${editId}`, 'PATCH', payload);
+      } else {
+        payload.created_at = new Date().toISOString();
+        result = await api('acts_rules', 'POST', payload);
+      }
+      if (result && result.code) {
+        setSaveError(`DB Error: ${result.message || result.code}`);
+        setSaving(false);
+        return;
+      }
+      setShowForm(false);
+      setForm(EMPTY);
+      setEditId(null);
+      setPdfFile(null);
+      setUploadProgress('');
+      setSaveError('');
+      if (fileRef.current) fileRef.current.value = '';
+      loadActs();
+    } catch (err) {
+      setSaveError(err.message || 'Unknown error');
     }
     setSaving(false);
-    setShowForm(false);
-    setForm(EMPTY);
-    setEditId(null);
-    setPdfFile(null);
-    setUploadProgress('');
-    if (fileRef.current) fileRef.current.value = '';
-    loadActs();
   }
 
   async function handleDelete(id, title) {
@@ -317,6 +330,12 @@ export default function AdminActs() {
                 className="w-4 h-4 accent-[#2997ff]" />
               <label htmlFor="is_published" className="text-sm text-white/70 cursor-pointer">Published (visible to public)</label>
             </div>
+
+            {saveError && (
+              <div className="text-[12px] text-[#ff453a] bg-[#ff453a]/10 px-4 py-3 rounded-xl border border-[#ff453a]/20">
+                ❌ {saveError}
+              </div>
+            )}
 
             <div className="flex gap-3 pt-2">
               <button type="submit" disabled={saving || uploading}
