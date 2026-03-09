@@ -68,7 +68,7 @@ export default function IncomeTaxFAQ() {
       <div className="mb-6">
         <h2
           className="text-[clamp(18px,2.5vw,26px)] font-[900] text-white mb-2 leading-tight"
-          style={{ fontFamily: "'Meera', sans-serif" }}
+          style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
         >
           Frequently Asked Questions — Income Tax for Kerala Government Employees
         </h2>

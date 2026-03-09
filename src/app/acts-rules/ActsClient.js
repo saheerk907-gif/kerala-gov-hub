@@ -60,7 +60,7 @@ export default function ActsClient({ acts }) {
                   color: active ? cat.color : 'rgba(255,255,255,0.4)',
                   outline: active ? `1px solid ${cat.color}40` : 'none',
                 }}>
-                {cat.icon} <span style={{ fontFamily: "'Meera', sans-serif" }}>{cat.label}</span>
+                {cat.icon} <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{cat.label}</span>
                 <span className="opacity-50">({count})</span>
               </button>
             );
@@ -74,7 +74,7 @@ export default function ActsClient({ acts }) {
       {filtered.length === 0 ? (
         <div className="text-center py-16 text-white/30">
           <div className="text-4xl mb-3">📭</div>
-          <div style={{ fontFamily: "'Meera', sans-serif" }}>ഒന്നും കണ്ടെത്തിയില്ല</div>
+          <div style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒന്നും കണ്ടെത്തിയില്ല</div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -102,7 +102,7 @@ export default function ActsClient({ acts }) {
                   {act.title}
                 </h2>
                 {act.title_ml && (
-                  <div className="text-[12px] text-white/40 mb-3" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <div className="text-[12px] text-white/40 mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {act.title_ml}
                   </div>
                 )}

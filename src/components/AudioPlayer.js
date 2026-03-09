@@ -112,7 +112,7 @@ export default function AudioPlayer({ limit }) {
                       </span>
                       {ep.duration_label && <span className="text-[10px] text-white/30">{ep.duration_label}</span>}
                     </div>
-                    <h3 className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <h3 className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {ep.title_ml}
                     </h3>
                     {ep.title_en && <p className="text-[11px] text-white/35 mt-0.5 truncate">{ep.title_en}</p>}
@@ -145,12 +145,12 @@ export default function AudioPlayer({ limit }) {
             <div className="flex items-center gap-3 mb-5">
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: 'rgba(48,209,88,0.15)' }}>🎙️</div>
               <div className="min-w-0">
-                <h3 className="text-[15px] font-bold text-white leading-snug" style={{ fontFamily: "'Meera', sans-serif" }}>{current.title_ml}</h3>
+                <h3 className="text-[15px] font-bold text-white leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.title_ml}</h3>
                 {current.title_en && <p className="text-[11px] text-white/40 mt-0.5 truncate">{current.title_en}</p>}
               </div>
             </div>
             {current.description_ml && (
-              <p className="text-[12px] text-white/40 mb-5 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>{current.description_ml}</p>
+              <p className="text-[12px] text-white/40 mb-5 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.description_ml}</p>
             )}
             <div className="mb-3">
               <div className="h-1.5 rounded-full cursor-pointer overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }} onClick={seekTo}>
@@ -178,7 +178,7 @@ export default function AudioPlayer({ limit }) {
         ) : (
           <div className="glass-card rounded-[24px] p-8 text-center">
             <div className="text-4xl mb-3">🎙️</div>
-            <p className="text-white/40 text-[13px]" style={{ fontFamily: "'Meera', sans-serif" }}>ഒരു episode തിരഞ്ഞെടുക്കൂ</p>
+            <p className="text-white/40 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു episode തിരഞ്ഞെടുക്കൂ</p>
             <p className="text-white/25 text-[11px] mt-1">Select an episode to start listening</p>
           </div>
         )}

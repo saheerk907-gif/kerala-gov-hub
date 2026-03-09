@@ -66,7 +66,7 @@ function FeaturedCard({ article }) {
             </span>
           </div>
           <h2 className="text-[clamp(22px,3.5vw,38px)] font-black text-white leading-tight mb-3 group-hover:text-white/90 transition-colors"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h2>
           {article.title_en && (
@@ -74,7 +74,7 @@ function FeaturedCard({ article }) {
           )}
           {article.summary_ml && (
             <p className="text-[14px] text-white/45 leading-relaxed max-w-2xl line-clamp-2"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {article.summary_ml.replace(/<[^>]+>/g, '')}
             </p>
           )}
@@ -118,7 +118,7 @@ function ArticleCard({ article }) {
             <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[15px] font-bold text-white leading-snug mb-1.5 group-hover:text-white/90 transition-colors line-clamp-2"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h3>
           {article.title_en && (
@@ -187,7 +187,7 @@ export default function ArticlesPage() {
               ← keralaemployees.in
             </Link>
             <h1 className="text-[clamp(28px,4vw,48px)] font-[900] tracking-tight text-white mt-4 mb-2"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ലേഖനങ്ങൾ
             </h1>
             <p className="text-[13px] text-white/35">Kerala government employees — articles, news, and guides</p>

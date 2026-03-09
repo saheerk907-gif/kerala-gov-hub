@@ -100,7 +100,7 @@ export default async function ArticleDetailPage({ params }) {
               {item.category || 'general'}
             </span>
             <h1 className="text-[clamp(24px,4vw,44px)] font-black tracking-tight leading-[1.15] mb-5"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {item.title_ml}
             </h1>
             {item.title_en && (
@@ -130,7 +130,7 @@ export default async function ArticleDetailPage({ params }) {
 
           {item.summary_ml && (
             <p className="text-[17px] text-[#aeaeb2] leading-relaxed mb-10 pl-5 border-l-2 border-[#2997ff]"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {stripHtml(item.summary_ml)}
             </p>
           )}
@@ -144,7 +144,7 @@ export default async function ArticleDetailPage({ params }) {
               style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.2)' }}>
               <div className="flex-1">
                 <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-1">Related Page</div>
-                <p className="text-sm text-[#86868b]" style={{ fontFamily: "'Meera', sans-serif" }}>
+                <p className="text-sm text-[#86868b]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   ഈ വിഷയത്തെ കുറിച്ചുള്ള കൂടുതൽ വിവരങ്ങൾ ഇവിടെ ലഭ്യമാണ്.
                 </p>
               </div>
@@ -169,7 +169,7 @@ export default async function ArticleDetailPage({ params }) {
         </div>
 
         <style dangerouslySetInnerHTML={{ __html: `
-          .article-content { font-family: 'Meera', Georgia, serif; line-height: 1.9; color: #aeaeb2; font-size: 1rem; }
+          .article-content { font-family: var(--font-noto-malayalam), Georgia, serif; line-height: 1.9; color: #aeaeb2; font-size: 1rem; }
           .article-content h2 { font-size: 1.4rem; font-weight: 800; color: white; margin: 2.5rem 0 1rem; }
           .article-content h3 { font-size: 1.1rem; font-weight: 700; color: #e5e5e7; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid #2997ff; }
           .article-content p { margin-bottom: 1.25rem; }

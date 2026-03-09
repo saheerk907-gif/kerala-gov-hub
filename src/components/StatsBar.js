@@ -51,7 +51,7 @@ function StatCard({ stat, index }) {
       </div>
 
       {/* Label */}
-      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 mb-3" style={{ fontFamily: "'Meera', sans-serif" }}>
+      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
         {stat.label_ml}
       </p>
 
@@ -63,7 +63,7 @@ function StatCard({ stat, index }) {
 
       <div className="flex items-center gap-2 justify-center">
         <div className="w-5 h-[1px]" style={{ background: `${color}50` }} />
-        <p className="text-[12px] font-semibold text-white/50" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <p className="text-[12px] font-semibold text-white/50" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           {stat.sub_text || 'ഔദ്യോഗിക കണക്കുകൾ'}
         </p>
         <div className="w-5 h-[1px]" style={{ background: `${color}50` }} />
@@ -115,7 +115,7 @@ export default function StatsBar() {
         {/* Section header */}
         <div className="flex flex-col items-center text-center mb-14">
           <div className="section-label mb-3">Dashboard</div>
-          <h2 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             കേരള സർക്കാർ ജീവനക്കാർ{' '}
             <span className="text-white/40">ഒരു നോട്ടത്തിൽ</span>
           </h2>

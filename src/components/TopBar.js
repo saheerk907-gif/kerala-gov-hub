@@ -110,7 +110,7 @@ export default function TopBar() {
           <span
             key={newsIdx}
             className="text-[11px] text-white/50 truncate font-medium animate-fade-up"
-            style={{ fontFamily: "'Meera', sans-serif" }}
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
           >
             {ticker[newsIdx]}
           </span>

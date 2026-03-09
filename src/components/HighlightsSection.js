@@ -18,7 +18,7 @@ export default function HighlightsSection({ highlights }) {
         {/* Header */}
         <div className="mb-14">
           <div className="section-label mb-3">Key Benefits</div>
-          <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ശമ്പളം, അവധി,{' '}
             <span>പെൻഷൻ വിവരങ്ങൾ</span>
           </h2>
@@ -51,7 +51,7 @@ export default function HighlightsSection({ highlights }) {
                   {h.icon}
                 </div>
 
-                <h3 className="text-[20px] font-bold mb-2.5 text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+                <h3 className="text-[20px] font-bold mb-2.5 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {h.title_ml}
                 </h3>
                 <p className="text-[13px] text-white/50 leading-relaxed max-w-[500px]">

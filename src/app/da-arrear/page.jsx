@@ -202,7 +202,7 @@ export default function DaArrearPage() {
             ← Home
           </Link>
           <div className="section-label mb-3">DA Arrear Tool</div>
-          <h1 className="text-[clamp(28px,5vw,52px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-3" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h1 className="text-[clamp(28px,5vw,52px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             DA Arrear Calculator
             <span className="text-white/35 ml-3 text-[clamp(18px,3vw,32px)]">Kerala 11th PRC</span>
           </h1>
@@ -222,7 +222,7 @@ export default function DaArrearPage() {
 
         {/* ── Info box ── */}
         <div className="glass-card rounded-2xl px-5 py-4 mb-6 border-l-2 border-[#ff9f0a]/50">
-          <p className="text-[12px] text-white/55 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <p className="text-[12px] text-white/55 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             <span className="text-[#ff9f0a] font-bold">Note:</span> Jul 2019 – Feb 2021 DA was fully paid with 11th PRC arrear via{' '}
             <span className="text-white/70 font-bold">G.O.(P)No.27/2021</span>. Arrear here starts from{' '}
             <span className="text-white/70 font-bold">March 2021</span>. Each month: DA Arrear = (DA Due% − DA Paid%) × Basic Pay.

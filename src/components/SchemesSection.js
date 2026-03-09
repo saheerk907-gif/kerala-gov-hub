@@ -23,7 +23,7 @@ export default function SchemesSection({ schemes }) {
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-14">
           <div className="section-label mb-3">Resources</div>
-          <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             സേവന ചട്ടങ്ങളും{' '}
             <span>ജീവനക്കാര്യ പദ്ധതികളും</span>
           </h2>
@@ -63,7 +63,7 @@ export default function SchemesSection({ schemes }) {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[18px] font-bold mb-1 text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+                <h3 className="text-[18px] font-bold mb-1 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {scheme.title_ml}
                 </h3>
                 <div className="text-[9px] font-black text-white/35 uppercase tracking-[0.2em] mb-3">

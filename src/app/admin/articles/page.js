@@ -252,7 +252,7 @@ export default function AdminArticles() {
             <input value={form.title_ml} onChange={e => setForm(f => ({ ...f, title_ml: e.target.value }))}
               placeholder="ലേഖനത്തിന്റെ തലക്കെട്ട്"
               className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors"
-              style={{ fontFamily: "'Meera', sans-serif" }} />
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
           </div>
 
           {/* Title EN */}
@@ -269,7 +269,7 @@ export default function AdminArticles() {
             <textarea value={form.summary_ml} onChange={e => setForm(f => ({ ...f, summary_ml: e.target.value }))}
               rows={3} placeholder="ചെറിയ വിവരണം — ഹോം പേജിൽ കാർഡിൽ കാണിക്കും"
               className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors resize-y"
-              style={{ fontFamily: "'Meera', sans-serif" }} />
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
           </div>
 
           {/* Full Content */}
@@ -383,7 +383,7 @@ export default function AdminArticles() {
                       {new Date(a.created_at).toLocaleDateString('en-IN')}
                     </span>
                   </div>
-                  <div className="text-sm font-semibold text-white/90 truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <div className="text-sm font-semibold text-white/90 truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {a.title_ml}
                   </div>
                   {a.title_en && <div className="text-xs text-[#6e6e73] truncate">{a.title_en}</div>}

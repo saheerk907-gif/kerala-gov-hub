@@ -243,7 +243,7 @@ export default function AdminActs() {
               <div>
                 <label className={lbl}>Title (Malayalam)</label>
                 <input value={form.title_ml} onChange={e => setForm(f => ({ ...f, title_ml: e.target.value }))}
-                  placeholder="കേരള ഭൂ നിയോഗ നിയമം" className={inp} style={{ fontFamily: "'Meera', sans-serif" }} />
+                  placeholder="കേരള ഭൂ നിയോഗ നിയമം" className={inp} style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
               </div>
             </div>
 
@@ -441,7 +441,7 @@ export default function AdminActs() {
                   {act.pdf_url && <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[#30d158]/10 text-[#30d158]">PDF</span>}
                 </div>
                 <div className="text-sm font-semibold text-white/80">{act.title}</div>
-                {act.title_ml && <div className="text-xs text-white/40 mt-0.5" style={{ fontFamily: "'Meera', sans-serif" }}>{act.title_ml}</div>}
+                {act.title_ml && <div className="text-xs text-white/40 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{act.title_ml}</div>}
                 {act.summary && <div className="text-xs text-[#6e6e73] mt-1 line-clamp-2">{act.summary}</div>}
                 <div className="text-[10px] text-[#6e6e73] mt-1">
                   /acts-rules/<span className="text-white/40">{act.slug}</span>

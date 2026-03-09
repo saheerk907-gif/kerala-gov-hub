@@ -32,7 +32,7 @@ const NewsRow = ({ date, title, category, link = '/news', index, isFirst }) => (
           </span>
           <span className="text-[10px] text-white/30">{date}</span>
         </div>
-        <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           {title}
         </h3>
       </div>
@@ -77,7 +77,7 @@ export default function NewsSection() {
       {/* Header */}
       <div className="mb-7">
         <div className="section-label mb-2">Latest</div>
-        <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           പുതിയ വാർത്തകൾ
         </h2>
         <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />

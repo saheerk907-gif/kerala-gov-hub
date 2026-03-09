@@ -118,7 +118,7 @@ const inputClass = 'w-full rounded-xl px-4 py-2.5 text-[14px] font-semibold outl
 
 function Label({ children, sub }) {
   return (
-    <label className="block text-[13px] font-bold text-white/70 mb-1.5" style={{ fontFamily: "'Meera', sans-serif" }}>
+    <label className="block text-[13px] font-bold text-white/70 mb-1.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
       {children}
       {sub && <span className="text-[10px] text-white/30 font-normal ml-1">{sub}</span>}
     </label>
@@ -200,7 +200,7 @@ export default function PensionPage() {
           </Link>
           <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-2">Kerala Service Rules — Part III</div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             പെൻഷൻ Calculator
           </h1>
           <p className="text-[12px] text-white/30 mt-1">

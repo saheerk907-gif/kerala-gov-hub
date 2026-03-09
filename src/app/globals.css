@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Meera&display=swap');
-
 /* ── Glass Theme Variables ─────────────────────────────── */
 :root {
   --glass-bg: rgba(255, 255, 255, 0.05);

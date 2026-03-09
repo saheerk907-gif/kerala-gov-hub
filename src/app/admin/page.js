@@ -51,7 +51,7 @@ export default function AdminDashboard() {
   return (
     <div className="p-4 md:p-8 bg-[#F5F7F9] min-h-screen">
       <div className="mb-10">
-        <h1 className="text-3xl font-bold text-[#1d1d1f] mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h1 className="text-3xl font-bold text-[#1d1d1f] mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           ഡാഷ്‌ബോർഡ്
         </h1>
         <p className="text-sm font-medium text-[#6e6e73]">Welcome to your professional admin panel</p>
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
               {c.icon}
             </div>
             <div className="text-4xl font-black mb-2 tracking-tight" style={{ color: c.color }}>{c.count}</div>
-            <div className="text-lg font-bold text-[#1d1d1f]" style={{ fontFamily: "'Meera', sans-serif" }}>{c.label}</div>
+            <div className="text-lg font-bold text-[#1d1d1f]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{c.label}</div>
             <div className="text-[10px] uppercase tracking-widest font-black text-[#6e6e73] opacity-60">{c.en}</div>
           </Link>
         ))}
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
               {a.icon}
             </div>
             <div>
-              <div className="text-[15px] font-bold text-[#1d1d1f]" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <div className="text-[15px] font-bold text-[#1d1d1f]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {a.label}
               </div>
               <div className="text-[10px] font-bold text-[#86868b] uppercase tracking-wider">

@@ -40,12 +40,12 @@ function FeaturedCard({ article }) {
             <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[clamp(18px,2.5vw,26px)] font-black text-white leading-tight mb-2 group-hover:text-white/90"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h3>
           {article.summary_ml && (
             <p className="text-[13px] text-white/40 line-clamp-2 mb-4"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {article.summary_ml.replace(/<[^>]+>/g, '')}
             </p>
           )}
@@ -87,7 +87,7 @@ function SmallCard({ article }) {
             <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[14px] font-bold text-white leading-snug mb-3 group-hover:text-white/90 line-clamp-3"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h3>
           <div className="flex items-center gap-1 text-[11px] font-bold" style={{ color }}>
@@ -134,7 +134,7 @@ export default function ArticlesSection() {
         <div>
           <div className="section-label mb-2">Articles</div>
           <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ലേഖനങ്ങൾ
           </h2>
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />

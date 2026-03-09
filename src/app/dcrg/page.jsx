@@ -191,7 +191,7 @@ export default function DCRGPage() {
             ← Back to Home
           </Link>
           <div className="section-label mb-2">Retirement Benefits</div>
-          <h1 className="text-[clamp(22px,4vw,42px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h1 className="text-[clamp(22px,4vw,42px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             DCRG <span className="text-white/40">Calculator</span>
           </h1>
           <p className="text-[13px] text-white/40 mt-1">Death-cum-Retirement Gratuity — Kerala Service Rules (KSR Rule 77)</p>

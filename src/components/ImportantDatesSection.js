@@ -59,7 +59,7 @@ export default function ImportantDatesSection() {
         {/* Header */}
         <div className="mb-12">
           <div className="section-label mb-3">Calendar</div>
-          <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             പ്രധാന തീയതികളും{' '}
             <span className="text-white/40">സമയ പരിധികളും</span>
           </h2>
@@ -85,7 +85,7 @@ export default function ImportantDatesSection() {
                 <span className="text-[28px] font-[900] leading-none" style={{ color: d.color }}>{d.day}</span>
               </div>
 
-              <h4 className="text-[11px] font-bold text-white/80 leading-tight mb-1.5" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <h4 className="text-[11px] font-bold text-white/80 leading-tight mb-1.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {d.title}
               </h4>
               <p className="text-[9px] text-white/35 leading-relaxed">

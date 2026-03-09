@@ -87,7 +87,7 @@ function QuizInner() {
     <div className="min-h-screen bg-aurora flex items-center justify-center text-white px-4">
       <div className="text-center">
         <div className="text-4xl mb-3">📭</div>
-        <p className="text-white/60 mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>ഇതുവരെ ചോദ്യങ്ങൾ ചേർത്തിട്ടില്ല</p>
+        <p className="text-white/60 mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഇതുവരെ ചോദ്യങ്ങൾ ചേർത്തിട്ടില്ല</p>
         <p className="text-white/30 text-sm mb-6">Questions not added yet for this paper</p>
         <Link href="/departmental-tests" className="text-[#2997ff] no-underline text-sm">← Back to Tests</Link>
       </div>
@@ -114,7 +114,7 @@ function QuizInner() {
       <div className="min-h-screen bg-aurora text-white flex items-center justify-center px-4">
         <div className="max-w-[480px] w-full glass-card rounded-3xl p-8 text-center">
           <div className="text-5xl mb-4">🔁</div>
-          <h2 className="text-[22px] font-black mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[22px] font-black mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             Revision Round {revRound + 1}
           </h2>
           <p className="text-white/50 text-sm mb-6">
@@ -190,7 +190,7 @@ function QuizInner() {
           {/* Result card */}
           <div className="glass-card rounded-3xl p-8 text-center mb-6">
             <div className="text-5xl mb-3">{grade.emoji}</div>
-            <h2 className="text-2xl font-black mb-1" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h2 className="text-2xl font-black mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {grade.label}
             </h2>
             <p className="text-white/40 text-sm mb-6">{test.name_ml} — Paper {paper}</p>
@@ -387,7 +387,7 @@ function QuizInner() {
           <div className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color }}>
             {dept?.icon} {dept?.en} — Paper {paper}
           </div>
-          <div className="text-[14px] font-semibold text-white/60" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <div className="text-[14px] font-semibold text-white/60" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {test.name_ml}
           </div>
         </div>

@@ -58,7 +58,7 @@ export default function AllNewsPage() {
               ← keralagovhub.in
             </Link>
             <h1 className="text-[clamp(26px,4vw,40px)] font-[900] tracking-[-0.03em] text-white mt-4 mb-2"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               എല്ലാ വാർത്തകളും
             </h1>
             <p className="text-[13px] text-white/35">Kerala government employee news — latest first</p>
@@ -96,7 +96,7 @@ export default function AllNewsPage() {
                       <span className="text-[10px] text-white/30">{formatDate(item.created_at)}</span>
                     </div>
                     <div className="text-[14px] font-semibold text-white/80 group-hover:text-white transition-colors leading-snug truncate"
-                      style={{ fontFamily: "'Meera', sans-serif" }}>
+                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {item.title_ml}
                     </div>
                   </div>

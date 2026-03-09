@@ -53,7 +53,7 @@ export default function AddNewsPage() {
 
         <div className="bg-white rounded-[40px] p-8 md:p-12 shadow-[0_20px_60px_rgba(0,0,0,0.03)] border border-gray-100">
           <div className="mb-10">
-            <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               പുതിയ വാർത്ത ചേർക്കുക
             </h1>
             <p className="text-gray-400 text-sm font-medium">വിവരങ്ങൾ താഴെ നൽകി പബ്ലിഷ് ചെയ്യുക</p>
@@ -67,7 +67,7 @@ export default function AddNewsPage() {
                   required
                   placeholder="വാർത്തയുടെ തലക്കെട്ട് മലയാളത്തിൽ..."
                   className="w-full px-6 py-4 bg-[#F8F9FA] border-none rounded-[20px] outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
-                  style={{ fontFamily: "'Meera', sans-serif" }}
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                   value={formData.title_ml}
                   onChange={(e) => setFormData({...formData, title_ml: e.target.value})}
                 />
@@ -91,7 +91,7 @@ export default function AddNewsPage() {
                   rows="4"
                   placeholder="വാർത്തയുടെ ചുരുക്കം ഇവിടെ നൽകുക..."
                   className="w-full px-6 py-4 bg-[#F8F9FA] border-none rounded-[20px] outline-none resize-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
-                  style={{ fontFamily: "'Meera', sans-serif" }}
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                   value={formData.summary_ml}
                   onChange={(e) => setFormData({...formData, summary_ml: e.target.value})}
                 />

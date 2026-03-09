@@ -189,7 +189,7 @@ export default function LeaveCalculator() {
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(100,210,255,0.15)', border: '1px solid rgba(100,210,255,0.25)' }}>📅</div>
           <div>
-            <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>Earned Leave Calculator</h1>
+            <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>Earned Leave Calculator</h1>
             <p className="text-xs text-white/40">Kerala Service Rules (KSR) Part I</p>
           </div>
         </div>
@@ -373,7 +373,7 @@ export default function LeaveCalculator() {
 
       {/* ── KSR Rules Reference Table ── */}
       <div className="glass-card rounded-[20px] p-6 md:p-8 mb-10">
-        <h2 className="text-base font-[900] text-white mb-4" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h2 className="text-base font-[900] text-white mb-4" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           KSR Earned Leave Rules — Quick Reference
         </h2>
         <div className="overflow-x-auto">
@@ -414,7 +414,7 @@ export default function LeaveCalculator() {
 
       {/* ── FAQ Section ── */}
       <section aria-label="Frequently Asked Questions on Kerala Service Rules Leave">
-        <h2 className="text-[clamp(18px,2.5vw,26px)] font-[900] text-white mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h2 className="text-[clamp(18px,2.5vw,26px)] font-[900] text-white mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           Frequently Asked Questions — KSR Leave Rules
         </h2>
         <p className="text-sm text-white/40 mb-6">

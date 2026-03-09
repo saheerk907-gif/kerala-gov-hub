@@ -16,7 +16,7 @@ export default function DepartmentalTestsSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
           <div>
             <div className="section-label mb-3">Exam Prep</div>
-            <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ഡിപ്പാർട്ട്‌മെന്റൽ{' '}
               <span>ടെസ്റ്റുകൾ</span>
             </h2>
@@ -45,7 +45,7 @@ export default function DepartmentalTestsSection() {
                   {d.icon}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[13px] font-bold text-white/80 group-hover:text-white transition-colors leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <div className="text-[13px] font-bold text-white/80 group-hover:text-white transition-colors leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {d.label}
                   </div>
                   <div className="text-[10px] mt-0.5 font-semibold text-white/35">
@@ -75,7 +75,7 @@ export default function DepartmentalTestsSection() {
                     {dept?.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[13px] font-semibold text-white/80 group-hover:text-white transition-colors truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <div className="text-[13px] font-semibold text-white/80 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {test.name_ml}
                     </div>
                     <div className="text-[10px] text-white/30 font-sans mt-0.5">{test.name_en}</div>

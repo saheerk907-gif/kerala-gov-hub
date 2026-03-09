@@ -168,7 +168,7 @@ export default function QuickInfoBar() {
           <div>
             <div className="section-label mb-2">Live Rates</div>
             <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ഇപ്പോഴത്തെ നിരക്കുകൾ{' '}<span className="text-white/35">ഒറ്റ നോട്ടത്തിൽ</span>
             </h2>
           </div>

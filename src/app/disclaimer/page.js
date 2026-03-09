@@ -111,7 +111,7 @@ export default function DisclaimerPage() {
               <p className="text-[13px] font-semibold mb-0.5" style={{ color: 'rgba(255,100,90,0.9)' }}>
                 This is NOT an official Government of Kerala website.
               </p>
-              <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,120,110,0.7)', fontFamily: "'Meera', sans-serif" }}>
+              <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,120,110,0.7)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 ഇത് കേരള സർക്കാരിന്റെ ഔദ്യോഗിക വെബ്സൈറ്റ് അല്ല. ഒരു സ്വതന്ത്ര വിവര ശേഖരം മാത്രമാണ്.
               </p>
             </div>
@@ -141,7 +141,7 @@ export default function DisclaimerPage() {
                     ))}
                   </div>
                 )}
-                <p className="text-[11.5px] text-white/30 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>{p.ml}</p>
+                <p className="text-[11.5px] text-white/30 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{p.ml}</p>
               </div>
             ))}
           </div>

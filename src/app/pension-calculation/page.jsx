@@ -93,7 +93,7 @@ const ROUNDING_RULES = [
 function Section({ title, children, color = '#2997ff' }) {
   return (
     <section className="space-y-5">
-      <h2 className="text-[22px] font-black text-white leading-snug" style={{ fontFamily: "'Meera', sans-serif" }}>
+      <h2 className="text-[22px] font-black text-white leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
         {title}
       </h2>
       {children}
@@ -116,7 +116,7 @@ function Card({ color = '#2997ff', label, children }) {
 
 function Body({ children }) {
   return (
-    <div className="text-[15px] text-[#aeaeb2] leading-[1.9]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
+    <div className="text-[15px] text-[#aeaeb2] leading-[1.9]" style={{ fontFamily: "var(--font-noto-malayalam), Georgia, serif" }}>
       {children}
     </div>
   );
@@ -156,7 +156,7 @@ export default function PensionCalculationPage() {
 
             <h1
               className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.15] mb-4"
-              style={{ fontFamily: "'Meera', sans-serif" }}
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
             >
               പെൻഷൻ കണക്കുകൂട്ടൽ
               <span className="block text-[0.55em] font-bold text-white/40 mt-1 tracking-normal">
@@ -164,7 +164,7 @@ export default function PensionCalculationPage() {
               </span>
             </h1>
 
-            <p className="text-[15px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "'Meera', serif" }}>
+            <p className="text-[15px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
               കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പ്രതിമാസ പെൻഷൻ,
               ശരാശരി വേതനം, അർദ്ധവർഷ യൂണിറ്റുകൾ എന്നിവ ഉപയോഗിച്ച് ഘട്ടം ഘട്ടമായി കണക്കാക്കുന്ന വിധം.
             </p>
@@ -205,8 +205,8 @@ export default function PensionCalculationPage() {
                 ].map(r => (
                   <div key={r.label} className="flex items-start gap-4">
                     <div className="flex-1">
-                      <div className="text-[13px] font-bold text-white/80" style={{ fontFamily: "'Meera', sans-serif" }}>{r.label}</div>
-                      <div className="text-[11px] text-white/35 mt-0.5" style={{ fontFamily: "'Meera', serif" }}>{r.desc}</div>
+                      <div className="text-[13px] font-bold text-white/80" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{r.label}</div>
+                      <div className="text-[11px] text-white/35 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.desc}</div>
                     </div>
                     <div className="text-[15px] font-black whitespace-nowrap" style={{ color: '#2997ff' }}>{r.value}</div>
                   </div>
@@ -253,10 +253,10 @@ export default function PensionCalculationPage() {
                 <tbody>
                   {AVERAGE_EMOLUMENTS_TABLE.map((row, i) => (
                     <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td className="px-5 py-3.5 font-bold text-white/80 align-top" style={{ fontFamily: "'Meera', sans-serif" }}>
+                      <td className="px-5 py-3.5 font-bold text-white/80 align-top" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                         {row.scenario}
                       </td>
-                      <td className="px-5 py-3.5 text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                      <td className="px-5 py-3.5 text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                         {row.treatment}
                       </td>
                     </tr>
@@ -313,8 +313,8 @@ export default function PensionCalculationPage() {
                     {s.step}
                   </div>
                   <div>
-                    <div className="text-[14px] font-bold text-white/80 mb-1" style={{ fontFamily: "'Meera', sans-serif" }}>{s.title}</div>
-                    <div className="text-[13px] text-[#aeaeb2]" style={{ fontFamily: "'Meera', serif" }}>{s.body}</div>
+                    <div className="text-[14px] font-bold text-white/80 mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{s.title}</div>
+                    <div className="text-[13px] text-[#aeaeb2]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.body}</div>
                   </div>
                 </div>
               ))}
@@ -334,9 +334,9 @@ export default function PensionCalculationPage() {
                   <tbody>
                     {ROUNDING_RULES.map((r, i) => (
                       <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td className="py-2.5 px-3 font-bold text-white/70" style={{ fontFamily: "'Meera', sans-serif" }}>{r.months}</td>
+                        <td className="py-2.5 px-3 font-bold text-white/70" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{r.months}</td>
                         <td className="py-2.5 px-3 font-black" style={{ color: '#ff9f0a' }}>{r.units}</td>
-                        <td className="py-2.5 px-3 text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>{r.note}</td>
+                        <td className="py-2.5 px-3 text-[#86868b]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.note}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -451,7 +451,7 @@ export default function PensionCalculationPage() {
                     <div className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: s.color }}>
                       {s.step}
                     </div>
-                    <div className="text-[12px] text-white/40" style={{ fontFamily: "'Meera', serif" }}>{s.desc}</div>
+                    <div className="text-[12px] text-white/40" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.desc}</div>
                   </div>
                   <div className={`font-black whitespace-nowrap ${s.bold ? 'text-[22px]' : 'text-[15px]'}`} style={{ color: s.color }}>
                     {s.value}
@@ -503,10 +503,10 @@ export default function PensionCalculationPage() {
                     style={{ background: c.color }}
                   />
                   <div>
-                    <div className="font-black text-[14px] mb-1" style={{ color: c.color, fontFamily: "'Meera', sans-serif" }}>
+                    <div className="font-black text-[14px] mb-1" style={{ color: c.color, fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {c.title}
                     </div>
-                    <div className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                    <div className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                       {c.body}
                     </div>
                   </div>
@@ -527,7 +527,7 @@ export default function PensionCalculationPage() {
                   style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
                 >
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
-                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {faq.name}
                     </span>
                     <span
@@ -538,7 +538,7 @@ export default function PensionCalculationPage() {
                     </span>
                   </summary>
                   <div className="px-5 pb-5 pt-1">
-                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                       {faq.acceptedAnswer.text}
                     </p>
                   </div>
@@ -555,7 +555,7 @@ export default function PensionCalculationPage() {
             <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-3">
               Pension Calculator
             </div>
-            <p className="text-[15px] text-[#86868b] mb-5" style={{ fontFamily: "'Meera', serif" }}>
+            <p className="text-[15px] text-[#86868b] mb-5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
               നിങ്ങളുടെ exact pension — KSR half-year units, Average Emoluments, DA — ഉൾപ്പെടെ
               കണക്കാക്കാൻ ഞങ്ങളുടെ free calculator ഉപയോഗിക്കൂ.
             </p>

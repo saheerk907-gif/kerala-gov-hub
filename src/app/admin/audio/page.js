@@ -122,7 +122,7 @@ export default function AdminAudioPage() {
           ← Dashboard
         </Link>
 
-        <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+        <h1 className="text-3xl font-bold mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           ഓഡിയോ ക്ലാസ്സുകൾ
         </h1>
         <p className="text-gray-400 text-sm font-medium mb-10">Upload and manage KSR awareness audio episodes</p>
@@ -138,7 +138,7 @@ export default function AdminAudioPage() {
                   required
                   placeholder="ക്ലാസ്സ് തലക്കെട്ട്..."
                   className="w-full px-5 py-3.5 bg-[#F8F9FA] border-none rounded-[16px] outline-none focus:ring-2 focus:ring-green-400 font-medium"
-                  style={{ fontFamily: "'Meera', sans-serif" }}
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                   value={form.title_ml}
                   onChange={e => setForm({ ...form, title_ml: e.target.value })}
                 />
@@ -181,7 +181,7 @@ export default function AdminAudioPage() {
                 rows="3"
                 placeholder="ക്ലാസ്സിനെ കുറിച്ച് ഒരു ചെറിയ വിവരണം..."
                 className="w-full px-5 py-3.5 bg-[#F8F9FA] border-none rounded-[16px] outline-none resize-none focus:ring-2 focus:ring-green-400 font-medium"
-                style={{ fontFamily: "'Meera', sans-serif" }}
+                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                 value={form.description_ml}
                 onChange={e => setForm({ ...form, description_ml: e.target.value })}
               />
@@ -224,7 +224,7 @@ export default function AdminAudioPage() {
                   {ep.episode_number}
                 </div>
                 <div className="flex-grow min-w-0">
-                  <p className="font-bold text-[15px] truncate" style={{ fontFamily: "'Meera', sans-serif" }}>{ep.title_ml}</p>
+                  <p className="font-bold text-[15px] truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{ep.title_ml}</p>
                   {ep.title_en && <p className="text-xs text-gray-400 truncate">{ep.title_en}</p>}
                   {ep.duration_label && <p className="text-xs text-gray-400">{ep.duration_label}</p>}
                 </div>

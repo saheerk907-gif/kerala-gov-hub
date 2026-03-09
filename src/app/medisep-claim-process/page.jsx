@@ -109,7 +109,7 @@ export default function MedisepClaimProcessPage() {
             <h1 className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.1] mb-4">
               MEDISEP Claim Process — Step-by-Step Guide
             </h1>
-            <p className="text-[16px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[16px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               കേരള ജീവനക്കാർക്ക് MEDISEP-ൽ cashless treatment ലഭിക്കാനും reimbursement claim ചെയ്യാനും ഉള്ള complete step-by-step guide. Documents, time limits, common mistakes — എല്ലാം ഒരിടത്ത്.
             </p>
             <div className="flex flex-wrap gap-2 mt-6 text-[11px]">
@@ -128,7 +128,7 @@ export default function MedisepClaimProcessPage() {
           {/* Intro */}
           <section>
             <h2 className="text-[22px] font-black text-white mb-4">MEDISEP Claim എന്താണ്?</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
+            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "var(--font-noto-malayalam), Georgia, serif" }}>
               <p>MEDISEP (Medical Insurance Scheme for Employees and Pensioners) ആണ് കേരള സർക്കാർ ജീവനക്കാർക്കും pensioners-നും ഉള്ള health insurance scheme. ഈ scheme-ൽ ₹5 lakh വരെ coverage ലഭ്യമാണ്. Claim process-ൽ രണ്ട് types ഉണ്ട്: Cashless Claim ഉം Reimbursement Claim ഉം.</p>
               <p><strong className="text-white">Cashless Claim:</strong> Empanelled hospital-ൽ ചികിത്സ ലഭിക്കുമ്പോൾ advance payment ഒന്നും ആവശ്യമില്ല. Hospital directly MEDISEP-ൽ നിന്ന് payment receive ചെയ്യും.</p>
               <p><strong className="text-white">Reimbursement Claim:</strong> Non-empanelled hospital-ൽ (emergency situations-ൽ) ചികിത്സ ലഭിക്കുമ്പോൾ ആദ്യം patient pay ചെയ്ത ശേഷം MEDISEP portal-ൽ claim submit ചെയ്ത് amount return ലഭിക്കുന്ന process.</p>
@@ -149,7 +149,7 @@ export default function MedisepClaimProcessPage() {
                   </div>
                   <div>
                     <div className="font-bold text-white mb-1">{s.title}</div>
-                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{s.body}</p>
+                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.body}</p>
                   </div>
                 </div>
               ))}
@@ -170,7 +170,7 @@ export default function MedisepClaimProcessPage() {
                   </div>
                   <div>
                     <div className="font-bold text-white mb-1">{s.title}</div>
-                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{s.body}</p>
+                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.body}</p>
                   </div>
                 </div>
               ))}
@@ -180,7 +180,7 @@ export default function MedisepClaimProcessPage() {
           {/* Documents */}
           <section>
             <h2 className="text-[22px] font-black text-white mb-4">Claim-ന് ആവശ്യമായ Documents</h2>
-            <p className="text-[14px] text-[#86868b] mb-6" style={{ fontFamily: "'Meera', serif" }}>
+            <p className="text-[14px] text-[#86868b] mb-6" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
               Claim reject ആകുന്നതിന്റെ ഏറ്റവും വലിയ കാരണം incomplete documents ആണ്. ഈ list കൂടെ കൊണ്ടുപോകുക:
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -188,7 +188,7 @@ export default function MedisepClaimProcessPage() {
                 <div key={i} className="flex items-start gap-3 p-4 rounded-xl"
                   style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <span className="text-[#30d158] mt-0.5 flex-shrink-0 text-xs">✓</span>
-                  <span className="text-[13px] text-[#c7c7cc]" style={{ fontFamily: "'Meera', serif" }}>{d}</span>
+                  <span className="text-[13px] text-[#c7c7cc]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{d}</span>
                 </div>
               ))}
             </div>
@@ -206,7 +206,7 @@ export default function MedisepClaimProcessPage() {
                 <div key={t.limit} className="p-5 rounded-2xl text-center"
                   style={{ background: `${t.color}08`, border: `1px solid ${t.color}25` }}>
                   <div className="text-2xl font-black mb-2" style={{ color: t.color }}>{t.limit}</div>
-                  <p className="text-[12px] text-[#86868b] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{t.desc}</p>
+                  <p className="text-[12px] text-[#86868b] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{t.desc}</p>
                 </div>
               ))}
             </div>
@@ -223,7 +223,7 @@ export default function MedisepClaimProcessPage() {
                     <span className="text-[#ff453a] flex-shrink-0 font-black text-sm mt-0.5">✕</span>
                     <div>
                       <div className="font-bold text-white/90 text-sm mb-1">{m.title}</div>
-                      <p className="text-[13px] text-[#86868b]" style={{ fontFamily: "'Meera', serif" }}>
+                      <p className="text-[13px] text-[#86868b]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                         <span className="text-[#30d158] font-bold">Fix: </span>{m.fix}
                       </p>
                     </div>
@@ -241,12 +241,12 @@ export default function MedisepClaimProcessPage() {
                 <details key={i} className="rounded-2xl overflow-hidden group"
                   style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
-                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "'Meera', sans-serif" }}>{faq.name}</span>
+                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{faq.name}</span>
                     <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
                       style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>+</span>
                   </summary>
                   <div className="px-5 pb-5 pt-1">
-                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                       {faq.acceptedAnswer.text}
                     </p>
                   </div>

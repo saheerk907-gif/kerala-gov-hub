@@ -78,7 +78,7 @@ export default function AboutPage() {
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3 leading-tight">
               Kerala Gov Employee Hub
             </h1>
-            <p className="text-[14px] text-white/45 max-w-[520px] mx-auto leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[14px] text-white/45 max-w-[520px] mx-auto leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               കേരള സർക്കാർ ജീവനക്കാർക്കായുള്ള സ്വതന്ത്ര വിവര പോർട്ടൽ
             </p>
           </div>
@@ -89,7 +89,7 @@ export default function AboutPage() {
             <p className="text-[14px] text-white/65 leading-relaxed mb-4">
               Kerala Gov Employee Hub (<strong className="text-white/80">keralaemployees.in</strong>) is an independent, non-official information portal dedicated to Kerala State Government employees. We aggregate, organise, and present government service-related information so that every employee can easily access what they need — without navigating dozens of official portals.
             </p>
-            <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ഈ പോർട്ടൽ കേരള സർക്കാർ ജീവനക്കാർക്ക് KSR ചട്ടങ്ങൾ, MEDISEP, പെൻഷൻ, ശമ്പള കണക്കുകൂട്ടൽ, സർക്കാർ ഉത്തരവുകൾ, ഫോമുകൾ, വകുപ്പ് പരീക്ഷ സഹായം എന്നിവ ഒരിടത്ത് ലഭ്യമാക്കുന്നു.
             </p>
           </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <div className="text-[13px] font-semibold text-white/80 leading-snug">{f.title}</div>
-                    <div className="text-[10.5px] text-white/35 mb-1" style={{ fontFamily: "'Meera', sans-serif" }}>{f.ml}</div>
+                    <div className="text-[10.5px] text-white/35 mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{f.ml}</div>
                     <div className="text-[11.5px] text-white/45 leading-relaxed">{f.desc}</div>
                   </div>
                 </div>
@@ -124,10 +124,10 @@ export default function AboutPage() {
             </p>
             <div className="border-t border-white/[0.06] pt-5">
               <div className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-3">ഞങ്ങളുടെ ദൗത്യം</div>
-              <p className="text-[14px] text-white/65 leading-relaxed mb-3" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <p className="text-[14px] text-white/65 leading-relaxed mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ സർവീസുമായി ബന്ധപ്പെട്ട വിവരങ്ങൾ പലപ്പോഴും വിവിധ സർക്കുലറുകളിലും ഉത്തരവുകളിലും നീണ്ട ഔദ്യോഗിക രേഖകളിലുമായി ചിതറിക്കിടക്കുന്നതാണ്. അതുകൊണ്ട് തന്നെ ഒരു ജീവനക്കാരന് തന്റെ സേവന ആനുകൂല്യങ്ങളെക്കുറിച്ചുള്ള വ്യക്തമായ വിവരങ്ങൾ കണ്ടെത്തുന്നത് പലപ്പോഴും ബുദ്ധിമുട്ടാകാറുണ്ട്.
               </p>
-              <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <p className="text-[14px] text-white/65 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 ഈ വിവരങ്ങൾ എല്ലാം ഒരേ സ്ഥലത്ത് സമാഹരിച്ച് ലളിതമായും വ്യക്തമായും അവതരിപ്പിക്കുകയാണ് ഞങ്ങളുടെ ലക്ഷ്യം. സേവനവുമായി ബന്ധപ്പെട്ട നിയമങ്ങളും ആനുകൂല്യങ്ങളും പദ്ധതികളും ഓരോ കേരള സർക്കാർ ജീവനക്കാരനും എളുപ്പത്തിൽ മനസ്സിലാക്കാൻ സഹായിക്കുകയാണ് ഈ വെബ്സൈറ്റിന്റെ പ്രധാന ഉദ്ദേശ്യം.
               </p>
             </div>

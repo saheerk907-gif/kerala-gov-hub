@@ -79,7 +79,7 @@ export default function AnnouncementBanner() {
                   {item.label}
                 </span>
                 <span className="text-[11px] font-medium text-white/55 group-hover:text-white/85 transition-colors"
-                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {item.text}
                 </span>
                 {item.sub && (

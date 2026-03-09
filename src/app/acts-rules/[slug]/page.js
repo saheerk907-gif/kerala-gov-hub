@@ -110,7 +110,7 @@ export default async function ActPage({ params }) {
             {act.title}
           </h1>
           {act.title_ml && (
-            <div className="text-[16px] text-white/50 mb-6" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <div className="text-[16px] text-white/50 mb-6" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {act.title_ml}
             </div>
           )}

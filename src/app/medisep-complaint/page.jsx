@@ -96,7 +96,7 @@ export default function MedisepComplaintPage() {
             <h1 className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.1] mb-4">
               MEDISEP Complaint — Grievance Filing Guide
             </h1>
-            <p className="text-[16px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[16px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               MEDISEP-ൽ claim reject ആയോ? Cashless treatment deny ആയോ? Payment delay ഉണ്ടോ? ഇവിടെ complaint ചെയ്യാനുള്ള complete guide — online portal, helpline, escalation process, time limits.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
@@ -118,7 +118,7 @@ export default function MedisepComplaintPage() {
           {/* Intro */}
           <section>
             <h2 className="text-[22px] font-black text-white mb-4">MEDISEP Complaint എന്തിനൊക്കെ ചെയ്യാം?</h2>
-            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "'Meera', Georgia, serif" }}>
+            <div className="space-y-4 text-[15px] text-[#aeaeb2] leading-[1.85]" style={{ fontFamily: "var(--font-noto-malayalam), Georgia, serif" }}>
               <p>MEDISEP scheme-ൽ ഉൾപ്പെടുന്ന ജീവനക്കാർക്കും pensioners-നും treatment-മായി ബന്ധപ്പെട്ട ഏത് problem-നും formal complaint ചെയ്യാൻ അവകാശം ഉണ്ട്. Grievance register ചെയ്ത ശേഷം ticket number ലഭിക്കും. ഇത് ഉപയോഗിച്ച് status track ചെയ്യാം.</p>
               <p>Complaint ചെയ്യാൻ മടിക്കരുത് — ഇത് നിങ്ങളുടെ legal right ആണ്. MEDISEP-ൽ ഒരു proper grievance redressal mechanism ഉണ്ട്.</p>
             </div>
@@ -129,7 +129,7 @@ export default function MedisepComplaintPage() {
                   <div className="w-2 h-2 rounded-full mt-1.5 flex-shrink-0" style={{ background: c.color }} />
                   <div>
                     <div className="text-[13px] font-bold text-white/90">{c.title}</div>
-                    <div className="text-[11px] text-[#86868b] mt-0.5" style={{ fontFamily: "'Meera', serif" }}>{c.desc}</div>
+                    <div className="text-[11px] text-[#86868b] mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{c.desc}</div>
                   </div>
                 </div>
               ))}
@@ -150,7 +150,7 @@ export default function MedisepComplaintPage() {
                   </div>
                   <div>
                     <div className="font-bold text-white mb-1">{s.title}</div>
-                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{s.body}</p>
+                    <p className="text-[14px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.body}</p>
                   </div>
                 </div>
               ))}
@@ -190,7 +190,7 @@ export default function MedisepComplaintPage() {
                     <div>
                       <div className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: m.color }}>{m.method}</div>
                       <a href={m.href} className="text-[17px] font-black text-white no-underline hover:underline">{m.contact}</a>
-                      <p className="text-[13px] text-[#86868b] mt-2 leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{m.details}</p>
+                      <p className="text-[13px] text-[#86868b] mt-2 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{m.details}</p>
                     </div>
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export default function MedisepComplaintPage() {
           {/* Escalation */}
           <section>
             <h2 className="text-[22px] font-black text-white mb-2">Problem Solve ആകുന്നില്ലെങ്കിൽ — Escalation Path</h2>
-            <p className="text-[13px] text-[#6e6e73] mb-8" style={{ fontFamily: "'Meera', serif" }}>
+            <p className="text-[13px] text-[#6e6e73] mb-8" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
               Level 1-ൽ response ലഭിക്കുന്നില്ലെങ്കിൽ ഓരോ level-ലേക്ക് escalate ചെയ്യാം
             </p>
             <div className="space-y-3">
@@ -240,7 +240,7 @@ export default function MedisepComplaintPage() {
                 <div key={i} className="flex gap-3 p-4 rounded-xl"
                   style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <span className="text-[#2997ff] font-black text-xs mt-0.5 flex-shrink-0">{i + 1}.</span>
-                  <p className="text-[13px] text-[#c7c7cc] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>{tip}</p>
+                  <p className="text-[13px] text-[#c7c7cc] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{tip}</p>
                 </div>
               ))}
             </div>
@@ -254,12 +254,12 @@ export default function MedisepComplaintPage() {
                 <details key={i} className="rounded-2xl overflow-hidden group"
                   style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
-                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "'Meera', sans-serif" }}>{faq.name}</span>
+                    <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{faq.name}</span>
                     <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
                       style={{ background: 'rgba(255,69,58,0.12)', color: '#ff453a' }}>+</span>
                   </summary>
                   <div className="px-5 pb-5 pt-1">
-                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "'Meera', serif" }}>
+                    <p className="text-[13px] text-[#aeaeb2] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
                       {faq.acceptedAnswer.text}
                     </p>
                   </div>

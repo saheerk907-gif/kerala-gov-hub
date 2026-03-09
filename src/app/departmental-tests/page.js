@@ -70,7 +70,7 @@ function TestsPageInner() {
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h1 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റുകൾ
           </h1>
           <p className="text-[14px] text-white/45">Kerala PSC — 30 departments, 64+ tests, syllabus & quiz</p>
@@ -98,7 +98,7 @@ function TestsPageInner() {
               onClick={() => { setActiveDept('all'); setExpanded(null); }}
               className="px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
               style={{ background: activeDept === 'all' ? '#ffffff20' : 'rgba(255,255,255,0.04)', color: activeDept === 'all' ? '#fff' : 'rgba(255,255,255,0.4)', outline: activeDept === 'all' ? '1px solid #ffffff30' : 'none' }}>
-              🗂️ <span style={{ fontFamily: "'Meera', sans-serif" }}>എല്ലാം</span> ({TESTS.length})
+              🗂️ <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>എല്ലാം</span> ({TESTS.length})
             </button>
             {DEPTS.map(d => {
               const count = countByDept[d.id] || 0;
@@ -108,7 +108,7 @@ function TestsPageInner() {
                   onClick={() => { setActiveDept(d.id); setExpanded(null); }}
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
                   style={{ background: active ? d.color + '20' : 'rgba(255,255,255,0.04)', color: active ? d.color : 'rgba(255,255,255,0.4)', outline: active ? `1px solid ${d.color}40` : 'none' }}>
-                  {d.icon} <span style={{ fontFamily: "'Meera', sans-serif" }}>{d.label}</span> <span className="opacity-50">({count})</span>
+                  {d.icon} <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span> <span className="opacity-50">({count})</span>
                 </button>
               );
             })}
@@ -139,7 +139,7 @@ function TestsPageInner() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[14px] font-semibold text-white/85 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+                      <span className="text-[14px] font-semibold text-white/85 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                         {test.name_ml}
                       </span>
                       {test.popular && <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded hidden sm:inline" style={{ background: color + '22', color }}>Popular</span>}
@@ -161,7 +161,7 @@ function TestsPageInner() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                       <div className="bg-white/[0.03] rounded-xl p-4">
                         <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color }}>ആർക്ക് ആവശ്യം</div>
-                        <div className="text-[13px] text-white/70 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>{test.for_ml}</div>
+                        <div className="text-[13px] text-white/70 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.for_ml}</div>
                       </div>
                       <div className="bg-white/[0.03] rounded-xl p-4">
                         <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color }}>പ്രധാന വിഷയങ്ങൾ</div>
@@ -176,7 +176,7 @@ function TestsPageInner() {
                     {test.note && (
                       <div className="mt-3 flex items-start gap-2 text-[12px] text-white/50 bg-white/[0.03] rounded-xl px-4 py-3">
                         <span>💡</span>
-                        <span style={{ fontFamily: "'Meera', sans-serif" }}>{test.note}</span>
+                        <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.note}</span>
                       </div>
                     )}
 
@@ -213,7 +213,7 @@ function TestsPageInner() {
         {filtered.length === 0 && (
           <div className="text-center py-16 text-white/30">
             <div className="text-4xl mb-3">🔍</div>
-            <div style={{ fontFamily: "'Meera', sans-serif" }}>ഒരു ടെസ്റ്റും കണ്ടെത്തിയില്ല</div>
+            <div style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു ടെസ്റ്റും കണ്ടെത്തിയില്ല</div>
           </div>
         )}
       </div>

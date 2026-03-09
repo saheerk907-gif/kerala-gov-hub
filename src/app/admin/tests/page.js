@@ -239,7 +239,7 @@ export default function AdminTests() {
               className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-left border-none cursor-pointer transition-all"
               style={{ background: activeDept === d.id ? d.color + '20' : 'transparent', color: activeDept === d.id ? d.color : 'rgba(255,255,255,0.5)' }}>
               <span>{d.icon}</span>
-              <span style={{ fontFamily: "'Meera', sans-serif" }}>{d.label}</span>
+              <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span>
             </button>
           ))}
         </div>
@@ -252,7 +252,7 @@ export default function AdminTests() {
             const color = dept?.color || '#2997ff';
             return (
               <div key={test.id}>
-                <div className="text-[12px] text-white/60 px-2 py-1.5 font-semibold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+                <div className="text-[12px] text-white/60 px-2 py-1.5 font-semibold leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {test.name_ml}
                 </div>
                 <div className="flex flex-wrap gap-1 px-2 mb-1">
@@ -289,7 +289,7 @@ export default function AdminTests() {
           <>
             {/* Header */}
             <div className="mb-5">
-              <div className="text-lg font-bold leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>{selectedTest.name_ml}</div>
+              <div className="text-lg font-bold leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{selectedTest.name_ml}</div>
               <div className="text-xs text-[#6e6e73]">Paper {selectedPaper} — {questions.length} questions</div>
             </div>
 

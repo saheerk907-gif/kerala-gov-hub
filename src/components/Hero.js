@@ -4,8 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 
 export default function Hero() {
-  const meeraStyle = { fontFamily: "'Meera', sans-serif" };
-
   return (
     <section className="relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-8 overflow-hidden">
 
@@ -75,12 +73,12 @@ export default function Hero() {
         </div>
 
         {/* English SEO title — immediately tells Google & new visitors what this site is */}
-        <p className="text-[11px] font-black uppercase tracking-[0.25em] text-white/35 mb-2">
+        <p className="text-[11px] font-black uppercase tracking-[0.25em] text-white/55 mb-2">
           Kerala Government Employees Portal
         </p>
 
         {/* Title */}
-        <div className="flex flex-col gap-3" style={meeraStyle}>
+        <div className="flex flex-col gap-3">
           <h1 className="text-[clamp(40px,7.5vw,84px)] font-bold leading-[1] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
             കേരള സർക്കാർ
           </h1>
@@ -93,9 +91,8 @@ export default function Hero() {
 
         {/* Subtitle */}
         <p
-          className="mt-4 text-[clamp(13px,1.8vw,16px)] text-white/55 max-w-[580px] leading-relaxed font-medium px-4"
-          style={meeraStyle}
-        >
+          className="mt-4 text-[clamp(13px,1.8vw,16px)] text-white/70 max-w-[580px] leading-relaxed font-medium px-4"
+                 >
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
@@ -113,8 +110,8 @@ export default function Hero() {
             <a
               key={label}
               href={href}
-              className="px-3 py-1 rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.1)' }}
+              className="px-4 py-2 min-h-[36px] inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
+              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.1)' }}
             >
               {label}
             </a>

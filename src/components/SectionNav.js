@@ -62,7 +62,7 @@ export default function SectionNav() {
               }}
             >
               <span className="text-sm">{s.icon}</span>
-              <span className="hidden sm:inline" style={{ fontFamily: "'Meera', sans-serif" }}>{s.labelMl}</span>
+              <span className="hidden sm:inline" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{s.labelMl}</span>
               <span className="sm:hidden font-sans">{s.label}</span>
             </button>
           ))}

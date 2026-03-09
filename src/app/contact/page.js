@@ -58,7 +58,7 @@ export default function ContactPage() {
           <div className="mb-10 text-center">
             <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Contact</span>
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Get in Touch</h1>
-            <p className="text-[14px] text-white/45 leading-relaxed" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[14px] text-white/45 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               നിങ്ങളുടെ ചോദ്യങ്ങൾ, നിർദ്ദേശങ്ങൾ, അല്ലെങ്കിൽ പ്രശ്‌നങ്ങൾ ഞങ്ങളെ അറിയിക്കൂ
             </p>
           </div>

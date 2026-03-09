@@ -105,7 +105,7 @@ export default function DepartmentResourcesSection() {
         {/* Header */}
         <div className="mb-12">
           <div className="section-label mb-3">Resources by Department</div>
-          <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             വകുപ്പ് അനുസരിച്ചുള്ള{' '}
             <span className="text-white/40">വിവര ശേഖരം</span>
           </h2>
@@ -127,7 +127,7 @@ export default function DepartmentResourcesSection() {
                   {dept.icon}
                 </div>
                 <div>
-                  <div className="text-[14px] font-bold text-white/85" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <div className="text-[14px] font-bold text-white/85" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {dept.title_ml}
                   </div>
                   <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: dept.color + 'aa' }}>
@@ -144,7 +144,7 @@ export default function DepartmentResourcesSection() {
                     href={link.href}
                     className="group flex items-center justify-between py-1.5 px-2 rounded-lg no-underline hover:bg-white/[0.05] transition-all duration-150"
                   >
-                    <span className="text-[12px] text-white/50 group-hover:text-white/80 transition-colors font-medium" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <span className="text-[12px] text-white/50 group-hover:text-white/80 transition-colors font-medium" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {link.label}
                     </span>
                     <span className="text-white/15 group-hover:text-white/50 group-hover:translate-x-0.5 transition-all text-[11px]">→</span>

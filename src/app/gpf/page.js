@@ -86,7 +86,7 @@ export default async function GpfPage() {
                       {new Date(post.created_at).toLocaleDateString('ml-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
                     </div>
                     <h3 className="text-lg font-bold text-white/90 group-hover:text-white mb-2 transition-colors"
-                      style={{ fontFamily: "'Meera', sans-serif" }}>
+                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {post.title_ml}
                     </h3>
                     {post.summary_ml && (

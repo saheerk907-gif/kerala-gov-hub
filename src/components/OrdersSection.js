@@ -40,7 +40,7 @@ export default function OrdersSection({ orders }) {
         {/* Header */}
         <div className="mb-5">
           <div className="section-label mb-2">Latest Updates</div>
-          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             സർക്കാർ ഉത്തരവുകൾ
           </h2>
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#ff9f0a] to-transparent mt-2 rounded-full" />
@@ -57,7 +57,7 @@ export default function OrdersSection({ orders }) {
             onChange={e => handleSearch(e.target.value)}
             placeholder="ഉത്തരവ് തിരയുക..."
             className="w-full pl-10 pr-4 py-2.5 rounded-xl text-[13px] text-white placeholder-white/30 outline-none transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: "'Meera', sans-serif" }}
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}
             onFocus={e => e.target.style.borderColor = 'rgba(255,159,10,0.4)'}
             onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
           />
@@ -71,7 +71,7 @@ export default function OrdersSection({ orders }) {
         {/* Orders list */}
         <div>
           {currentOrders.length === 0 ? (
-            <div className="text-center py-10 text-white/30 text-[13px]" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <div className="text-center py-10 text-white/30 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               "{query}" എന്നതിന് ഫലങ്ങൾ ഒന്നും കിട്ടിയില്ല.
             </div>
           ) : currentOrders.map((o, i) => o.pdf_url ? (
@@ -93,7 +93,7 @@ export default function OrdersSection({ orders }) {
                       </span>
                       <span className="text-[10px] text-white/30">{formatDate(o.go_date)}</span>
                     </div>
-                    <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {o.title_ml}
                     </h3>
                   </div>
@@ -114,7 +114,7 @@ export default function OrdersSection({ orders }) {
                     </span>
                     <span className="text-[10px] text-white/25">{formatDate(o.go_date)}</span>
                   </div>
-                  <h3 className="text-[15px] font-bold leading-snug text-white/60 truncate" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <h3 className="text-[15px] font-bold leading-snug text-white/60 truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {o.title_ml}
                   </h3>
                 </div>

@@ -48,12 +48,12 @@ export default function TrendingArticle() {
                 <span className="text-[9px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
               </div>
               <p className="text-[14px] font-bold text-white/90 leading-snug line-clamp-2 mb-2"
-                style={{ fontFamily: "'Meera', sans-serif" }}>
+                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {article.title_ml}
               </p>
               {summary && (
                 <p className="text-[11px] text-white/40 line-clamp-2 leading-relaxed mb-2"
-                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {summary}
                 </p>
               )}
@@ -79,7 +79,7 @@ export default function TrendingArticle() {
             )}
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white/90 truncate group-hover:text-white transition-colors"
-                style={{ fontFamily: "'Meera', sans-serif" }}>
+                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {article.title_ml}
               </p>
               {summary && (

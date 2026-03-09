@@ -170,7 +170,7 @@ export default function MedisepFaqPage() {
               20 ചോദ്യങ്ങൾ · ഉത്തരങ്ങൾ
             </div>
             <h1 className="text-[clamp(28px,5vw,52px)] font-black tracking-tight leading-[1.1] mb-4"
-              style={{ fontFamily: "'Meera', sans-serif" }}>
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               MEDISEP സംശയങ്ങൾക്ക് ഉത്തരം
             </h1>
             <p className="text-base text-[#86868b] max-w-xl leading-relaxed">
@@ -199,7 +199,7 @@ export default function MedisepFaqPage() {
           {SECTIONS.map((section) => (
             <section key={section.heading}>
               <h2 className="text-[18px] font-black uppercase tracking-widest mb-6 pb-3 border-b"
-                style={{ color: section.color, borderColor: `${section.color}25`, fontFamily: "'Meera', sans-serif" }}>
+                style={{ color: section.color, borderColor: `${section.color}25`, fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {section.heading}
               </h2>
               <div className="space-y-3">
@@ -207,7 +207,7 @@ export default function MedisepFaqPage() {
                   <details key={i} className="group rounded-2xl overflow-hidden"
                     style={{ border: `1px solid rgba(255,255,255,0.07)`, background: 'rgba(255,255,255,0.025)' }}>
                     <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none select-none"
-                      style={{ fontFamily: "'Meera', sans-serif" }}>
+                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       <span className="text-[15px] font-bold text-white/90 leading-snug">{faq.q}</span>
                       <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
                         style={{ background: `${section.color}18`, color: section.color, border: `1px solid ${section.color}30` }}>
@@ -216,7 +216,7 @@ export default function MedisepFaqPage() {
                     </summary>
                     <div className="px-6 pb-6 pt-1">
                       <p className="text-[14px] text-[#aeaeb2] leading-[1.85]"
-                        style={{ fontFamily: "'Meera', Georgia, serif" }}>
+                        style={{ fontFamily: "var(--font-noto-malayalam), Georgia, serif" }}>
                         {faq.a}
                       </p>
                     </div>

@@ -444,7 +444,7 @@ function FormsContent() {
             Finance Department · Government of Kerala
           </div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             Government Forms
           </h1>
           <p className="text-[13px] text-white/35 mt-1">
@@ -520,7 +520,7 @@ function FormsContent() {
 
                   {/* Title + date */}
                   <div className="md:pr-4">
-                    <div className="text-[13px] text-white/75 leading-snug" style={{ fontFamily: "'Meera', sans-serif" }}>
+                    <div className="text-[13px] text-white/75 leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {form.title}
                     </div>
                     <div className="text-[10px] text-white/25 mt-0.5">{form.date}</div>

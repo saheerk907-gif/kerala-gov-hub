@@ -106,7 +106,7 @@ export default function PayCalculator() {
     <section id="calculator" className="relative z-[1]">
       {/* Header */}
       <div className="section-label mb-3">Pay Revision</div>
-      <h2 className="text-[clamp(28px,4.5vw,48px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+      <h2 className="text-[clamp(28px,4.5vw,48px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
         12th PRC{' '}
         <span className="bg-gradient-to-r from-[#30d158] to-[#2997ff] bg-clip-text text-transparent">
           ശമ്പള കണക്കുകൂട്ടൽ

@@ -1,7 +1,22 @@
 import './globals.css';
+import { Plus_Jakarta_Sans, Noto_Sans_Malayalam } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-plus-jakarta',
+  weight: ['300', '400', '500', '600', '700', '800'],
+});
+
+const notoMalayalam = Noto_Sans_Malayalam({
+  subsets: ['malayalam'],
+  display: 'swap',
+  variable: '--font-noto-malayalam',
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+});
 
 const BASE_URL = 'https://keralaemployees.in';
 
@@ -40,15 +55,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ml">
+    <html lang="ml" className={`${plusJakarta.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+Malayalam:wght@300;400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

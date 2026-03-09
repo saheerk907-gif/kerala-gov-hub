@@ -28,7 +28,7 @@ export default async function ActsRulesPage() {
           {/* Header */}
           <div className="mb-10">
             <div className="text-[10px] font-bold uppercase tracking-[3px] text-[#2997ff] mb-3">Kerala Government</div>
-            <h1 className="text-[clamp(28px,4.5vw,48px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h1 className="text-[clamp(28px,4.5vw,48px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               നിയമങ്ങളും{' '}
               <span className="bg-gradient-to-r from-[#2997ff] to-[#bf5af2] bg-clip-text text-transparent">
                 ചട്ടങ്ങളും

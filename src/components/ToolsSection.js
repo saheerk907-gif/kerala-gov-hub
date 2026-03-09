@@ -123,7 +123,7 @@ export default function ToolsSection() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <div className="section-label mb-1">Tools & Calculators</div>
-            <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ടൂളുകൾ
             </h2>
           </div>
@@ -167,7 +167,7 @@ export default function ToolsSection() {
               </div>
 
               {/* Title */}
-              <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {t.title}
               </h3>
               <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/35">

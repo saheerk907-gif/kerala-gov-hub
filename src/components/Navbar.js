@@ -173,7 +173,7 @@ export default function Navbar() {
                 className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             </picture>
             <div className="flex flex-col leading-tight">
-              <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
               <span className="text-[9px] font-semibold text-white/30 uppercase tracking-widest font-sans hidden sm:block">
@@ -193,7 +193,7 @@ export default function Navbar() {
                     onClick={() => setOpenDropdown(isOpen ? null : item.en)}
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-all border-none bg-transparent cursor-pointer"
                     style={{
-                      fontFamily: "'Meera', sans-serif",
+                      fontFamily: "var(--font-noto-malayalam), sans-serif",
                       color: isOpen ? '#ffffff' : 'rgba(255,255,255,0.55)',
                       background: isOpen ? 'rgba(255,255,255,0.07)' : 'transparent',
                     }}
@@ -237,7 +237,7 @@ export default function Navbar() {
                             <div className="min-w-0">
                               <div className="flex items-center gap-2">
                                 <span className="text-[12.5px] font-semibold text-white/70 group-hover/item:text-white transition-colors leading-snug"
-                                  style={{ fontFamily: "'Meera', sans-serif" }}>
+                                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                                   {d.label}
                                 </span>
                                 {d.badge && (
@@ -346,7 +346,7 @@ export default function Navbar() {
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-[13px] font-medium text-white/60" style={{ fontFamily: "'Meera', sans-serif" }}>{d.label}</span>
+                              <span className="text-[13px] font-medium text-white/60" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span>
                               {d.badge && (
                                 <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide"
                                   style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)', color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.35)' }}>

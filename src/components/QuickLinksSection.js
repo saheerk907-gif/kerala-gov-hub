@@ -25,7 +25,7 @@ export default function QuickLinksSection({ links }) {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
             <div className="section-label mb-2">Quick Access</div>
-            <h2 className="text-[clamp(24px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h2 className="text-[clamp(24px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ഔദ്യോഗിക പോർട്ടലുകൾ
             </h2>
           </div>
@@ -56,7 +56,7 @@ export default function QuickLinksSection({ links }) {
                 </div>
 
                 <div className="min-w-0">
-                  <div className="text-[13px] font-bold text-white/80 truncate group-hover:text-white transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+                  <div className="text-[13px] font-bold text-white/80 truncate group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {l.title_ml}
                   </div>
                   <div className="text-[9px] font-bold text-white/25 uppercase tracking-wider">

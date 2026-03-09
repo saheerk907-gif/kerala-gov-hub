@@ -325,7 +325,7 @@ export default function NPSvsAPSPage() {
               ← {ml ? 'ഹോം' : 'Back to Home'}
             </Link>
             <div className="section-label mb-2">Pension Comparison Tool</div>
-            <h1 className="text-[clamp(22px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <h1 className="text-[clamp(22px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               NPS vs APS {ml ? 'കാൽക്കുലേറ്റർ' : 'Calculator'}
             </h1>
             <p className="text-[13px] text-white/35 mt-1">

@@ -14,7 +14,7 @@ export default function Footer() {
                   className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/30" />
               </picture>
               <div>
-                <div className="text-[13px] font-bold text-white/85 leading-tight" style={{ fontFamily: "'Meera', sans-serif" }}>
+                <div className="text-[13px] font-bold text-white/85 leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   കേരള ജീവനക്കാര്യ ഹബ്
                 </div>
                 <div className="text-[9px] text-white/30 font-sans uppercase tracking-widest">
@@ -22,7 +22,7 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-            <p className="text-[12px] text-white/35 leading-relaxed max-w-[280px]" style={{ fontFamily: "'Meera', sans-serif" }}>
+            <p className="text-[12px] text-white/35 leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               കേരള സംസ്ഥാന സർക്കാർ ജീവനക്കാർക്കായുള്ള സമഗ്ര വിവര ശേഖരം.
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-4">പദ്ധതികൾ</h4>
             {['സർവ്വീസ് ചട്ടങ്ങൾ', 'മെഡിസെപ്', 'ജി.പി.എഫ്', 'എൻ.പി.എസ്', 'എസ്.എൽ.ഐ', 'ജി.ഐ.എസ്'].map(s => (
-              <a key={s} href="#services" className="block text-[12px] text-white/35 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <a key={s} href="#services" className="block text-[12px] text-white/35 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {s}
               </a>
             ))}
@@ -41,7 +41,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-4">വിഭവങ്ങൾ</h4>
             {[['#orders', 'ഉത്തരവുകൾ'], ['#benefits', 'ശമ്പളം & ബത്ത'], ['#benefits', 'അവധി ചട്ടങ്ങൾ'], ['#benefits', 'പെൻഷൻ']].map(([h, s]) => (
-              <a key={s} href={h} className="block text-[12px] text-white/35 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "'Meera', sans-serif" }}>
+              <a key={s} href={h} className="block text-[12px] text-white/35 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {s}
               </a>
             ))}

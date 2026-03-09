@@ -15,7 +15,7 @@ export default function AudioClassesPage() {
           </Link>
           <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-2">KSR Awareness</div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
-            style={{ fontFamily: "'Meera', sans-serif" }}>
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ഓഡിയോ ക്ലാസ്സുകൾ
           </h1>
           <p className="text-[13px] text-white/35 mt-1">

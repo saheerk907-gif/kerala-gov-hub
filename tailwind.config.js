@@ -8,8 +8,8 @@ module.exports = {
         accent: { blue: '#2997ff', green: '#30d158', orange: '#ff9f0a', purple: '#bf5af2', red: '#ff453a', teal: '#64d2ff', pink: '#ff375f', gold: '#ffd60a' },
       },
       fontFamily: {
-        malayalam: ['"Noto Sans Malayalam"', 'sans-serif'],
-        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+        malayalam: ['var(--font-noto-malayalam)', '"Noto Sans Malayalam"', 'sans-serif'],
+        sans: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', 'sans-serif'],
       },
     },
   },
