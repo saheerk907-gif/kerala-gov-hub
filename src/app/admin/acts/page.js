@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import RichTextEditor from '@/components/RichTextEditor';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -274,19 +275,23 @@ export default function AdminActs() {
 
             <div>
               <label className={lbl}>Summary *</label>
-              <textarea required rows={5} value={form.summary}
-                onChange={e => setForm(f => ({ ...f, summary: e.target.value }))}
-                placeholder="Write a detailed summary of the act — what it covers, who it applies to, key provisions... (This text appears in Google search results)"
-                className={inp + ' resize-y'} />
+              <RichTextEditor
+                value={form.summary}
+                onChange={val => setForm(f => ({ ...f, summary: val }))}
+                placeholder="Write a detailed summary — what it covers, who it applies to, key provisions... (This text appears in Google search results)"
+                minHeight={200}
+              />
               <div className="text-[10px] text-[#6e6e73] mt-1">This appears as Google snippet. Write clearly for SEO.</div>
             </div>
 
             <div>
-              <label className={lbl}>Key Provisions (one per line)</label>
-              <textarea rows={5} value={form.key_points}
-                onChange={e => setForm(f => ({ ...f, key_points: e.target.value }))}
-                placeholder="Government can assign waste land to landless poor&#10;Assignment is non-transferable for 12 years&#10;Assigned land cannot be used for non-agricultural purposes&#10;Violation leads to resumption of land"
-                className={inp + ' resize-y'} />
+              <label className={lbl}>Key Provisions</label>
+              <RichTextEditor
+                value={form.key_points}
+                onChange={val => setForm(f => ({ ...f, key_points: val }))}
+                placeholder="List the key provisions of this act — use bullet points for clarity"
+                minHeight={160}
+              />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

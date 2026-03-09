@@ -172,3 +172,30 @@ html[data-theme="light"] canvas {
   background: rgba(41,151,255,0.15);
   color: var(--accent-blue);
 }
+
+/* ── Rich text content (Acts & Rules public pages) ──── */
+.act-content h1, .act-content h2, .act-content h3 {
+  color: white;
+  font-weight: 700;
+  margin: 16px 0 8px;
+}
+.act-content h1 { font-size: 1.3em; }
+.act-content h2 { font-size: 1.15em; }
+.act-content h3 { font-size: 1.05em; }
+.act-content p  { margin: 8px 0; }
+.act-content ul, .act-content ol {
+  padding-left: 1.5em;
+  margin: 8px 0;
+}
+.act-content li { margin: 6px 0; }
+.act-content strong { color: rgba(255,255,255,0.95); font-weight: 700; }
+.act-content em { font-style: italic; }
+.act-content blockquote {
+  border-left: 3px solid #2997ff;
+  padding-left: 12px;
+  color: rgba(255,255,255,0.5);
+  margin: 10px 0;
+}
+.act-content .ql-align-center { text-align: center; }
+.act-content .ql-align-right  { text-align: right; }
+.act-content .ql-align-justify{ text-align: justify; }

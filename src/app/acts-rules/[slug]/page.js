@@ -63,9 +63,6 @@ export default async function ActPage({ params }) {
   if (!act) notFound();
 
   const cat = getCatInfo(act.category);
-  const keyPoints = act.key_points
-    ? act.key_points.split('\n').map(p => p.trim()).filter(Boolean)
-    : [];
   const tags = act.tags ? act.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
 
   const jsonLd = {
@@ -142,25 +139,17 @@ export default async function ActPage({ params }) {
           {act.summary && (
             <div className="glass-card rounded-2xl p-6 mb-6">
               <div className="text-[10px] font-black uppercase tracking-widest text-[#2997ff] mb-4">📖 Summary</div>
-              <p className="text-[14px] text-white/75 leading-[1.8] whitespace-pre-line">{act.summary}</p>
+              <div className="act-content text-[14px] text-white/75 leading-[1.8]"
+                dangerouslySetInnerHTML={{ __html: act.summary }} />
             </div>
           )}
 
           {/* Key Points */}
-          {keyPoints.length > 0 && (
+          {act.key_points && (
             <div className="glass-card rounded-2xl p-6 mb-6">
               <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-4">✅ Key Provisions</div>
-              <ul className="space-y-3">
-                {keyPoints.map((point, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[13px] text-white/70 leading-relaxed">
-                    <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black mt-0.5"
-                      style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>
-                      {i + 1}
-                    </span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
+              <div className="act-content text-[13px] text-white/70 leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: act.key_points }} />
             </div>
           )}
 
