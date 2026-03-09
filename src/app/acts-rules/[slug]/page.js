@@ -145,11 +145,20 @@ export default async function ActPage({ params }) {
           )}
 
           {/* Key Points */}
-          {act.key_points && (
+          {act.key_points && act.key_points.split('\n').filter(Boolean).length > 0 && (
             <div className="glass-card rounded-2xl p-6 mb-6">
               <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-4">✅ Key Provisions</div>
-              <div className="act-content text-[13px] text-white/70 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: act.key_points }} />
+              <ul className="space-y-3">
+                {act.key_points.split('\n').filter(Boolean).map((point, i) => (
+                  <li key={i} className="flex items-start gap-3 text-[13px] text-white/70 leading-relaxed">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black mt-0.5"
+                      style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>
+                      {i + 1}
+                    </span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 

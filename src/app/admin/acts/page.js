@@ -82,6 +82,7 @@ export default function AdminActs() {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
   const [saveError, setSaveError] = useState('');
+  const [newProvision, setNewProvision] = useState('');
   const fileRef = useRef();
 
   useEffect(() => { loadActs(); }, []);
@@ -98,6 +99,7 @@ export default function AdminActs() {
     setEditId(null);
     setPdfFile(null);
     setUploadProgress('');
+    setNewProvision('');
     if (fileRef.current) fileRef.current.value = '';
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -285,13 +287,51 @@ export default function AdminActs() {
             </div>
 
             <div>
-              <label className={lbl}>Key Provisions</label>
-              <RichTextEditor
-                value={form.key_points}
-                onChange={val => setForm(f => ({ ...f, key_points: val }))}
-                placeholder="List the key provisions of this act — use bullet points for clarity"
-                minHeight={160}
-              />
+              <label className={lbl}>Key Provisions (one by one)</label>
+              {/* Existing provisions list */}
+              {form.key_points && form.key_points.split('\n').filter(Boolean).length > 0 && (
+                <div className="flex flex-col gap-2 mb-3">
+                  {form.key_points.split('\n').filter(Boolean).map((point, i) => (
+                    <div key={i} className="flex items-start gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-2.5">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black mt-0.5"
+                        style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>{i + 1}</span>
+                      <span className="flex-1 text-[13px] text-white/75 leading-snug">{point}</span>
+                      <button type="button"
+                        onClick={() => setForm(f => ({ ...f, key_points: f.key_points.split('\n').filter(Boolean).filter((_, idx) => idx !== i).join('\n') }))}
+                        className="text-[#ff453a] bg-transparent border-none cursor-pointer text-base flex-shrink-0 hover:opacity-70">✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* Add new provision */}
+              <div className="flex gap-2">
+                <input
+                  value={newProvision}
+                  onChange={e => setNewProvision(e.target.value)}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      const p = newProvision.trim();
+                      if (!p) return;
+                      setForm(f => ({ ...f, key_points: f.key_points ? f.key_points + '\n' + p : p }));
+                      setNewProvision('');
+                    }
+                  }}
+                  placeholder="Type a provision and press Enter or click Add..."
+                  className={inp + ' flex-1'}
+                />
+                <button type="button"
+                  onClick={() => {
+                    const p = newProvision.trim();
+                    if (!p) return;
+                    setForm(f => ({ ...f, key_points: f.key_points ? f.key_points + '\n' + p : p }));
+                    setNewProvision('');
+                  }}
+                  className="px-4 py-2.5 bg-[#30d158] text-white rounded-xl text-sm font-bold border-none cursor-pointer hover:bg-[#28b34a] transition-all flex-shrink-0">
+                  + Add
+                </button>
+              </div>
+              <div className="text-[10px] text-[#6e6e73] mt-1">Press Enter or click Add after each provision</div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
