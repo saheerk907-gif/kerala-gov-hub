@@ -2,7 +2,7 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { getCatInfo } from '../ActsClient';
+import { getCatInfo } from '@/lib/actsData';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 86400;
