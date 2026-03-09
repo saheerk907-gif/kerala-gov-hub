@@ -166,6 +166,13 @@ export default function AdminActs() {
         setSaving(false);
         return;
       }
+      // Revalidate the public page so edits show immediately
+      const savedSlug = payload.slug;
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'act', slug: savedSlug }),
+      });
       setShowForm(false);
       setForm(EMPTY);
       setEditId(null);
