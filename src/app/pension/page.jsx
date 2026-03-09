@@ -120,7 +120,7 @@ function Label({ children, sub }) {
   return (
     <label className="block text-[13px] font-bold text-white/70 mb-1.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
       {children}
-      {sub && <span className="text-[10px] text-white/30 font-normal ml-1">{sub}</span>}
+      {sub && <span className="text-[10px] text-white/50 font-normal ml-1">{sub}</span>}
     </label>
   );
 }
@@ -195,15 +195,15 @@ export default function PensionPage() {
         {/* Header */}
         <div className="mb-8">
           <Link href="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/30 hover:text-white/60 no-underline transition-colors mb-3">
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
             ← Back to Home
           </Link>
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-2">Kerala Service Rules — Part III</div>
+          <div className="text-[10px] font-black uppercase tracking-widest text-white/45 mb-2">Kerala Service Rules — Part III</div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             പെൻഷൻ Calculator
           </h1>
-          <p className="text-[12px] text-white/30 mt-1">
+          <p className="text-[12px] text-white/50 mt-1">
             Basic Pension · Family Pension · DCRG · Commutation Value
           </p>
         </div>

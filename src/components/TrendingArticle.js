@@ -52,7 +52,7 @@ export default function TrendingArticle() {
                 {article.title_ml}
               </p>
               {summary && (
-                <p className="text-[11px] text-white/40 line-clamp-2 leading-relaxed mb-2"
+                <p className="text-[11px] text-white/60 line-clamp-2 leading-relaxed mb-2"
                   style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {summary}
                 </p>
@@ -83,7 +83,7 @@ export default function TrendingArticle() {
                 {article.title_ml}
               </p>
               {summary && (
-                <p className="text-[11px] text-white/35 truncate">{summary}</p>
+                <p className="text-[11px] text-white/55 truncate">{summary}</p>
               )}
             </div>
             <div className="flex-shrink-0 flex items-center gap-1.5 text-[12px] font-bold text-[#ff9f0a]">

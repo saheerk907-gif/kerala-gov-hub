@@ -265,7 +265,7 @@ export default function AdminTests() {
                         className="px-2.5 py-1 rounded-lg text-[11px] font-bold border-none cursor-pointer transition-all"
                         style={{
                           background: active ? color + '30' : 'rgba(255,255,255,0.06)',
-                          color: active ? color : count > 0 ? '#30d158' : 'rgba(255,255,255,0.35)',
+                          color: active ? color : count > 0 ? '#30d158' : 'rgba(255,255,255,0.60)',
                           outline: active ? `1px solid ${color}40` : 'none',
                         }}>
                         P{p} {count > 0 ? `(${count})` : ''}
@@ -335,7 +335,7 @@ export default function AdminTests() {
                       {csvPreview.map((q, i) => (
                         <div key={i} className="bg-white/[0.04] rounded-xl px-4 py-2.5">
                           <div className="text-[12px] font-semibold text-white/80 mb-1">{i + 1}. {q.question}</div>
-                          <div className="flex gap-3 text-[10px] text-white/40">
+                          <div className="flex gap-3 text-[10px] text-white/60">
                             {['a', 'b', 'c', 'd'].map(opt => (
                               <span key={opt} style={{ color: q.correct_answer === opt ? '#30d158' : undefined }}>
                                 {opt.toUpperCase()}. {q[`option_${opt}`]}

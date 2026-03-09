@@ -147,7 +147,7 @@ export default function ToolsSection() {
                 </span>
               )}
               {t.badge === 'SOON' && (
-                <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/30 border border-white/[0.08]">
+                <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/50 border border-white/[0.08]">
                   SOON
                 </span>
               )}
@@ -170,7 +170,7 @@ export default function ToolsSection() {
               <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {t.title}
               </h3>
-              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/35">
+              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/55">
                 {t.subtitle}
               </div>
 

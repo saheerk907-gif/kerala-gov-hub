@@ -59,7 +59,7 @@ function FeaturedCard({ article }) {
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
               {cat?.en || article.category}
             </span>
-            <span className="text-[11px] text-white/35">{formatDate(article.created_at)}</span>
+            <span className="text-[11px] text-white/55">{formatDate(article.created_at)}</span>
             <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
               style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}>
               Featured
@@ -115,14 +115,14 @@ function ArticleCard({ article }) {
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
               {cat?.en || article.category}
             </span>
-            <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
+            <span className="text-[10px] text-white/50">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[15px] font-bold text-white leading-snug mb-1.5 group-hover:text-white/90 transition-colors line-clamp-2"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h3>
           {article.title_en && (
-            <p className="text-[11px] text-white/40 mb-2 line-clamp-1">{article.title_en}</p>
+            <p className="text-[11px] text-white/60 mb-2 line-clamp-1">{article.title_en}</p>
           )}
           <div className="flex items-center gap-1.5 text-[12px] font-bold" style={{ color }}>
             വായിക്കുക
@@ -183,14 +183,14 @@ export default function ArticlesPage() {
 
           {/* Header */}
           <div className="mb-10">
-            <Link href="/" className="text-[12px] text-white/30 hover:text-white no-underline transition-colors">
+            <Link href="/" className="text-[12px] text-white/50 hover:text-white no-underline transition-colors">
               ← keralaemployees.in
             </Link>
             <h1 className="text-[clamp(28px,4vw,48px)] font-[900] tracking-tight text-white mt-4 mb-2"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               ലേഖനങ്ങൾ
             </h1>
-            <p className="text-[13px] text-white/35">Kerala government employees — articles, news, and guides</p>
+            <p className="text-[13px] text-white/55">Kerala government employees — articles, news, and guides</p>
           </div>
 
           {/* Category tabs */}
@@ -200,7 +200,7 @@ export default function ArticlesPage() {
                 className="px-4 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
                 style={activeCat === cat.value
                   ? { background: '#2997ff', color: 'white' }
-                  : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.08)' }
+                  : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.08)' }
                 }>
                 {cat.label}
               </button>
@@ -216,7 +216,7 @@ export default function ArticlesPage() {
               ))}
             </div>
           ) : articles.length === 0 ? (
-            <div className="text-center py-24 text-white/30">
+            <div className="text-center py-24 text-white/50">
               <div className="text-5xl mb-4">📭</div>
               <p>ഈ category-ൽ ലേഖനങ്ങൾ ഒന്നും ഇല്ല.</p>
             </div>

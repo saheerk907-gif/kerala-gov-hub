@@ -108,7 +108,7 @@ function Field({ label, hint, children }) {
     <div>
       <label className={labelCls}>{label}</label>
       {children}
-      {hint && <p className="mt-1 text-[10px] text-white/25">{hint}</p>}
+      {hint && <p className="mt-1 text-[10px] text-white/45">{hint}</p>}
     </div>
   );
 }
@@ -116,7 +116,7 @@ function Field({ label, hint, children }) {
 function ResultRow({ label, value, accent, small }) {
   return (
     <div className={`flex justify-between items-center ${small ? 'py-1.5' : 'py-2.5'} border-b border-white/[0.06] last:border-0`}>
-      <span className={small ? 'text-xs text-white/40' : 'text-sm text-white/65'}>{label}</span>
+      <span className={small ? 'text-xs text-white/60' : 'text-sm text-white/65'}>{label}</span>
       <span className={`font-bold tabular-nums ${small ? 'text-sm' : 'text-base'} ${accent ? 'text-[#64d2ff]' : 'text-white'}`}>{value}</span>
     </div>
   );
@@ -190,7 +190,7 @@ export default function LeaveCalculator() {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(100,210,255,0.15)', border: '1px solid rgba(100,210,255,0.25)' }}>📅</div>
           <div>
             <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>Earned Leave Calculator</h1>
-            <p className="text-xs text-white/40">Kerala Service Rules (KSR) Part I</p>
+            <p className="text-xs text-white/60">Kerala Service Rules (KSR) Part I</p>
           </div>
         </div>
 
@@ -208,7 +208,7 @@ export default function LeaveCalculator() {
                 }`}
               >
                 <div className="text-xs font-bold leading-tight">{c.label}</div>
-                <div className="text-[10px] text-white/35 mt-0.5">{c.sub}</div>
+                <div className="text-[10px] text-white/55 mt-0.5">{c.sub}</div>
               </button>
             ))}
           </div>
@@ -243,16 +243,16 @@ export default function LeaveCalculator() {
           {joiningDate && asOfDate && dutyDays > 0 && (
             <div className="md:col-span-2 flex flex-wrap gap-3">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10">
-                <span className="text-[10px] text-white/40 uppercase tracking-wider">Total Period</span>
+                <span className="text-[10px] text-white/60 uppercase tracking-wider">Total Period</span>
                 <span className="text-xs font-bold text-white">{dutyDays.toLocaleString('en-IN')} days</span>
               </div>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10">
-                <span className="text-[10px] text-white/40 uppercase tracking-wider">Service Length</span>
+                <span className="text-[10px] text-white/60 uppercase tracking-wider">Service Length</span>
                 <span className="text-xs font-bold text-white">{yearsDisplay}</span>
               </div>
               {category === 'temporary' && (
                 <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${yearsOfService >= 3 ? 'bg-[#30d158]/10 border-[#30d158]/30' : 'bg-amber-500/10 border-amber-500/30'}`}>
-                  <span className="text-[10px] text-white/40 uppercase tracking-wider">Rate Applied</span>
+                  <span className="text-[10px] text-white/60 uppercase tracking-wider">Rate Applied</span>
                   <span className={`text-xs font-bold ${yearsOfService >= 3 ? 'text-[#30d158]' : 'text-amber-400'}`}>
                     {yearsOfService >= 3 ? '1/11 (≥3 yrs)' : '1/22 (<3 yrs)'}
                   </span>
@@ -335,7 +335,7 @@ export default function LeaveCalculator() {
         {/* Prompt if no date entered */}
         {!joiningDate && (
           <div className="mt-6 text-center py-8 rounded-[16px] border border-dashed border-white/10">
-            <p className="text-sm text-white/30">Enter your Date of Joining above to calculate Earned Leave</p>
+            <p className="text-sm text-white/50">Enter your Date of Joining above to calculate Earned Leave</p>
           </div>
         )}
 
@@ -343,7 +343,7 @@ export default function LeaveCalculator() {
         {result && (
           <div className="mt-6 rounded-[16px] border border-[#64d2ff]/20 bg-[#64d2ff]/[0.05] p-5">
             <div className="text-xs font-bold text-[#64d2ff] uppercase tracking-widest mb-1">Result</div>
-            <p className="text-[10px] text-white/25 mb-3">
+            <p className="text-[10px] text-white/45 mb-3">
               {fmtDate(joiningDate)} → {fmtDate(asOfDate)} · {dutyDays.toLocaleString('en-IN')} days
             </p>
 
@@ -356,7 +356,7 @@ export default function LeaveCalculator() {
             <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={`${result.maxGrant} days`} small />
             <ResultRow label="Admissible Grant Now"    value={`${result.canGrant} days`} accent />
 
-            <p className="mt-3 text-[11px] text-white/30 leading-relaxed">{result.rateNote}</p>
+            <p className="mt-3 text-[11px] text-white/50 leading-relaxed">{result.rateNote}</p>
 
             {result.cappedAt300 && (
               <p className="mt-2 text-[11px] text-amber-400/70 leading-relaxed">
@@ -366,7 +366,7 @@ export default function LeaveCalculator() {
           </div>
         )}
 
-        <p className="mt-4 text-[11px] text-white/20 leading-relaxed">
+        <p className="mt-4 text-[11px] text-white/40 leading-relaxed">
           Note: Calculation is based on total calendar days from joining date. Actual entitlement excludes periods spent on leave, EOL, and suspension, and is subject to audit and competent authority's sanction per KSR Part I.
         </p>
       </div>
@@ -380,10 +380,10 @@ export default function LeaveCalculator() {
           <table className="w-full text-sm border-collapse">
             <thead>
               <tr className="border-b border-white/10">
-                <th className="text-left text-[10px] uppercase tracking-wider text-white/40 font-bold py-2 pr-4">Category</th>
-                <th className="text-left text-[10px] uppercase tracking-wider text-white/40 font-bold py-2 pr-4">Rate</th>
-                <th className="text-left text-[10px] uppercase tracking-wider text-white/40 font-bold py-2 pr-4">Max Accum.</th>
-                <th className="text-left text-[10px] uppercase tracking-wider text-white/40 font-bold py-2">Max Grant</th>
+                <th className="text-left text-[10px] uppercase tracking-wider text-white/60 font-bold py-2 pr-4">Category</th>
+                <th className="text-left text-[10px] uppercase tracking-wider text-white/60 font-bold py-2 pr-4">Rate</th>
+                <th className="text-left text-[10px] uppercase tracking-wider text-white/60 font-bold py-2 pr-4">Max Accum.</th>
+                <th className="text-left text-[10px] uppercase tracking-wider text-white/60 font-bold py-2">Max Grant</th>
               </tr>
             </thead>
             <tbody>
@@ -407,7 +407,7 @@ export default function LeaveCalculator() {
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-[11px] text-white/25">
+        <p className="mt-3 text-[11px] text-white/45">
           Fractions: &lt;0.5 ignored · ≥0.5 counted as 1 full day (KSR Part I rounding rule)
         </p>
       </div>
@@ -417,7 +417,7 @@ export default function LeaveCalculator() {
         <h2 className="text-[clamp(18px,2.5vw,26px)] font-[900] text-white mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           Frequently Asked Questions — KSR Leave Rules
         </h2>
-        <p className="text-sm text-white/40 mb-6">
+        <p className="text-sm text-white/60 mb-6">
           Common questions on Earned Leave, Casual Leave, Maternity Leave, and other service benefits under Kerala Service Rules (KSR) Part I &amp; II.
         </p>
         <div className="space-y-3">
@@ -431,7 +431,7 @@ export default function LeaveCalculator() {
                 <h3 className="text-sm font-semibold text-white/80 group-hover:text-white transition-colors leading-snug">
                   {item.q}
                 </h3>
-                <span className={`flex-shrink-0 w-5 h-5 rounded-full border border-white/20 flex items-center justify-center text-white/40 text-xs transition-transform duration-200 mt-0.5 ${openFaq === i ? 'rotate-45' : ''}`}>
+                <span className={`flex-shrink-0 w-5 h-5 rounded-full border border-white/20 flex items-center justify-center text-white/60 text-xs transition-transform duration-200 mt-0.5 ${openFaq === i ? 'rotate-45' : ''}`}>
                   +
                 </span>
               </button>

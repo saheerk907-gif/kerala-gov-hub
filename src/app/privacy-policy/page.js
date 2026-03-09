@@ -77,9 +77,9 @@ export default function PrivacyPolicyPage() {
 
           {/* Header */}
           <div className="mb-10">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Legal</span>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">Legal</span>
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Privacy Policy</h1>
-            <p className="text-[13px] text-white/35">Last updated: {LAST_UPDATED}</p>
+            <p className="text-[13px] text-white/55">Last updated: {LAST_UPDATED}</p>
           </div>
 
           {/* Intro */}
@@ -105,9 +105,9 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Footer note */}
-          <p className="mt-8 text-[12px] text-white/25 text-center">
+          <p className="mt-8 text-[12px] text-white/45 text-center">
             For any privacy-related concerns, email us at{' '}
-            <a href="mailto:kerala.employees.gov@gmail.com" className="text-white/40 hover:text-white/70 transition-colors">
+            <a href="mailto:kerala.employees.gov@gmail.com" className="text-white/60 hover:text-white/70 transition-colors">
               kerala.employees.gov@gmail.com
             </a>
           </p>

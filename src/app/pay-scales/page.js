@@ -188,7 +188,7 @@ export default function PayScalesPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search by scale no. or pay amount..."
-              className="w-full max-w-sm px-4 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-sm text-white/90 outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/25"
+              className="w-full max-w-sm px-4 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-sm text-white/90 outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/45"
             />
           </div>
 
@@ -198,10 +198,10 @@ export default function PayScalesPage() {
               <table className="w-full min-w-[600px]">
                 <thead>
                   <tr className="border-b border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                    <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/40 w-20">Scale</th>
-                    <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/40">Scale of Pay</th>
-                    <th className="text-right px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/40 w-32">Minimum</th>
-                    <th className="text-right px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/40 w-32">Maximum</th>
+                    <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60 w-20">Scale</th>
+                    <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60">Scale of Pay</th>
+                    <th className="text-right px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60 w-32">Minimum</th>
+                    <th className="text-right px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60 w-32">Maximum</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -221,7 +221,7 @@ export default function PayScalesPage() {
                   ))}
                   {filtered.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-4 py-10 text-center text-white/40 text-sm">
+                      <td colSpan={4} className="px-4 py-10 text-center text-white/60 text-sm">
                         No matching pay scales found.
                       </td>
                     </tr>
@@ -231,7 +231,7 @@ export default function PayScalesPage() {
             </div>
           </div>
 
-          <div className="mt-4 text-[11px] text-white/30 leading-relaxed">
+          <div className="mt-4 text-[11px] text-white/50 leading-relaxed">
             ℹ️ ഡാറ്റ ഉറവിടം: Kerala Finance Department (finance.kerala.gov.in). ഔദ്യോഗിക സർക്കാർ ഉത്തരവുകൾ പ്രകാരം ഏറ്റവും കൃത്യമായ വിവരങ്ങൾക്ക് ബന്ധപ്പെട്ട GO-കൾ പരിശോധിക്കുക.
           </div>
         </div>

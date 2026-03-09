@@ -53,7 +53,7 @@ export default function RichTextEditor({ value, onChange, placeholder = '', minH
           line-height: 1.7;
         }
         .rich-editor-wrap .ql-editor.ql-blank::before {
-          color: rgba(255,255,255,0.25);
+          color: rgba(255,255,255,0.50);
           font-style: normal;
         }
         .rich-editor-wrap .ql-toolbar .ql-stroke { stroke: rgba(255,255,255,0.5); }

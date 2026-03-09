@@ -83,7 +83,7 @@ export default function AnnouncementBanner() {
                   {item.text}
                 </span>
                 {item.sub && (
-                  <span className="text-[10px] text-white/25 font-sans flex-shrink-0">{item.sub}</span>
+                  <span className="text-[10px] text-white/45 font-sans flex-shrink-0">{item.sub}</span>
                 )}
                 <span className="text-white/10 mx-1 flex-shrink-0">◆</span>
               </a>
@@ -93,7 +93,7 @@ export default function AnnouncementBanner() {
 
         {/* Dismiss */}
         <button onClick={() => setDismissed(true)}
-          className="flex-shrink-0 px-3 h-full text-white/20 hover:text-white/60 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
+          className="flex-shrink-0 px-3 h-full text-white/40 hover:text-white/60 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
           style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
           ×
         </button>

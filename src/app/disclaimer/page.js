@@ -95,9 +95,9 @@ export default function DisclaimerPage() {
 
           {/* Header */}
           <div className="mb-10">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Legal</span>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">Legal</span>
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Disclaimer</h1>
-            <p className="text-[13px] text-white/35">Last updated: {LAST_UPDATED}</p>
+            <p className="text-[13px] text-white/55">Last updated: {LAST_UPDATED}</p>
           </div>
 
           {/* Alert banner */}
@@ -141,16 +141,16 @@ export default function DisclaimerPage() {
                     ))}
                   </div>
                 )}
-                <p className="text-[11.5px] text-white/30 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{p.ml}</p>
+                <p className="text-[11.5px] text-white/50 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{p.ml}</p>
               </div>
             ))}
           </div>
 
-          <p className="mt-8 text-[12px] text-white/25 text-center">
+          <p className="mt-8 text-[12px] text-white/45 text-center">
             Questions?{' '}
-            <a href="/contact" className="text-white/40 hover:text-white/70 transition-colors">Contact us</a>
+            <a href="/contact" className="text-white/60 hover:text-white/70 transition-colors">Contact us</a>
             {' '}·{' '}
-            <a href="/privacy-policy" className="text-white/40 hover:text-white/70 transition-colors">Privacy Policy</a>
+            <a href="/privacy-policy" className="text-white/60 hover:text-white/70 transition-colors">Privacy Policy</a>
           </p>
 
         </div>

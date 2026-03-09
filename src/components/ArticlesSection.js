@@ -37,14 +37,14 @@ function FeaturedCard({ article }) {
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
               {article.category || 'general'}
             </span>
-            <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
+            <span className="text-[10px] text-white/50">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[clamp(18px,2.5vw,26px)] font-black text-white leading-tight mb-2 group-hover:text-white/90"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             {article.title_ml}
           </h3>
           {article.summary_ml && (
-            <p className="text-[13px] text-white/40 line-clamp-2 mb-4"
+            <p className="text-[13px] text-white/60 line-clamp-2 mb-4"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {article.summary_ml.replace(/<[^>]+>/g, '')}
             </p>
@@ -84,7 +84,7 @@ function SmallCard({ article }) {
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
               {article.category || 'general'}
             </span>
-            <span className="text-[10px] text-white/30">{formatDate(article.created_at)}</span>
+            <span className="text-[10px] text-white/50">{formatDate(article.created_at)}</span>
           </div>
           <h3 className="text-[14px] font-bold text-white leading-snug mb-3 group-hover:text-white/90 line-clamp-3"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>

@@ -159,7 +159,7 @@ export default function PensionCalculationPage() {
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
             >
               പെൻഷൻ കണക്കുകൂട്ടൽ
-              <span className="block text-[0.55em] font-bold text-white/40 mt-1 tracking-normal">
+              <span className="block text-[0.55em] font-bold text-white/60 mt-1 tracking-normal">
                 Pension Calculation — A Step-by-Step Guide
               </span>
             </h1>
@@ -206,7 +206,7 @@ export default function PensionCalculationPage() {
                   <div key={r.label} className="flex items-start gap-4">
                     <div className="flex-1">
                       <div className="text-[13px] font-bold text-white/80" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{r.label}</div>
-                      <div className="text-[11px] text-white/35 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.desc}</div>
+                      <div className="text-[11px] text-white/55 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.desc}</div>
                     </div>
                     <div className="text-[15px] font-black whitespace-nowrap" style={{ color: '#2997ff' }}>{r.value}</div>
                   </div>
@@ -326,9 +326,9 @@ export default function PensionCalculationPage() {
                 <table className="w-full text-[12px]">
                   <thead>
                     <tr>
-                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">ബാക്കി മാസങ്ങൾ</th>
-                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">Units</th>
-                      <th className="text-left py-2 px-3 text-white/40 font-black uppercase text-[10px] tracking-widest">കുറിപ്പ്</th>
+                      <th className="text-left py-2 px-3 text-white/60 font-black uppercase text-[10px] tracking-widest">ബാക്കി മാസങ്ങൾ</th>
+                      <th className="text-left py-2 px-3 text-white/60 font-black uppercase text-[10px] tracking-widest">Units</th>
+                      <th className="text-left py-2 px-3 text-white/60 font-black uppercase text-[10px] tracking-widest">കുറിപ്പ്</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -451,7 +451,7 @@ export default function PensionCalculationPage() {
                     <div className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: s.color }}>
                       {s.step}
                     </div>
-                    <div className="text-[12px] text-white/40" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.desc}</div>
+                    <div className="text-[12px] text-white/60" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{s.desc}</div>
                   </div>
                   <div className={`font-black whitespace-nowrap ${s.bold ? 'text-[22px]' : 'text-[15px]'}`} style={{ color: s.color }}>
                     {s.value}

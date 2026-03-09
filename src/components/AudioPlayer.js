@@ -110,14 +110,14 @@ export default function AudioPlayer({ limit }) {
                         style={isActive ? { background: 'rgba(48,209,88,0.25)', color: '#30d158' } : { background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.4)' }}>
                         EP {ep.episode_number}
                       </span>
-                      {ep.duration_label && <span className="text-[10px] text-white/30">{ep.duration_label}</span>}
+                      {ep.duration_label && <span className="text-[10px] text-white/50">{ep.duration_label}</span>}
                     </div>
                     <h3 className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {ep.title_ml}
                     </h3>
-                    {ep.title_en && <p className="text-[11px] text-white/35 mt-0.5 truncate">{ep.title_en}</p>}
+                    {ep.title_en && <p className="text-[11px] text-white/55 mt-0.5 truncate">{ep.title_en}</p>}
                   </div>
-                  <svg className="w-4 h-4 text-white/20 group-hover:text-white/60 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/60 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
                   </svg>
                 </button>
@@ -146,29 +146,29 @@ export default function AudioPlayer({ limit }) {
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: 'rgba(48,209,88,0.15)' }}>🎙️</div>
               <div className="min-w-0">
                 <h3 className="text-[15px] font-bold text-white leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.title_ml}</h3>
-                {current.title_en && <p className="text-[11px] text-white/40 mt-0.5 truncate">{current.title_en}</p>}
+                {current.title_en && <p className="text-[11px] text-white/60 mt-0.5 truncate">{current.title_en}</p>}
               </div>
             </div>
             {current.description_ml && (
-              <p className="text-[12px] text-white/40 mb-5 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.description_ml}</p>
+              <p className="text-[12px] text-white/60 mb-5 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.description_ml}</p>
             )}
             <div className="mb-3">
               <div className="h-1.5 rounded-full cursor-pointer overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }} onClick={seekTo}>
                 <div className="h-full rounded-full transition-all" style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #30d158, #34e35a)' }} />
               </div>
               <div className="flex justify-between mt-1.5">
-                <span className="text-[10px] text-white/30">{formatTime(currentTime)}</span>
-                <span className="text-[10px] text-white/30">{formatTime(duration)}</span>
+                <span className="text-[10px] text-white/50">{formatTime(currentTime)}</span>
+                <span className="text-[10px] text-white/50">{formatTime(duration)}</span>
               </div>
             </div>
             <div className="flex items-center justify-center gap-3 mt-4">
-              <button onClick={() => skip(-10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/40 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>-10</button>
+              <button onClick={() => skip(-10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>-10</button>
               <button onClick={() => playEpisode(current)} className="w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95" style={{ background: 'linear-gradient(135deg, #30d158, #25a244)' }}>
                 {playing
                   ? <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
                   : <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>}
               </button>
-              <button onClick={() => skip(10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/40 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>+10</button>
+              <button onClick={() => skip(10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>+10</button>
               <button onClick={cycleSpeed} className="h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:scale-105 active:scale-95"
                 style={{ background: speed !== 1 ? 'rgba(48,209,88,0.2)' : 'rgba(255,255,255,0.06)', color: speed !== 1 ? '#30d158' : 'rgba(255,255,255,0.5)', border: speed !== 1 ? '1px solid rgba(48,209,88,0.35)' : '1px solid transparent' }}
                 title="Change playback speed">{speed}×</button>
@@ -178,8 +178,8 @@ export default function AudioPlayer({ limit }) {
         ) : (
           <div className="glass-card rounded-[24px] p-8 text-center">
             <div className="text-4xl mb-3">🎙️</div>
-            <p className="text-white/40 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു episode തിരഞ്ഞെടുക്കൂ</p>
-            <p className="text-white/25 text-[11px] mt-1">Select an episode to start listening</p>
+            <p className="text-white/60 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു episode തിരഞ്ഞെടുക്കൂ</p>
+            <p className="text-white/45 text-[11px] mt-1">Select an episode to start listening</p>
           </div>
         )}
       </div>

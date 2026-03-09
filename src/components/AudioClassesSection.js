@@ -15,7 +15,7 @@ export default function AudioClassesSection() {
               ഓഡിയോ ക്ലാസ്സുകൾ
             </h2>
             <div className="h-[2px] w-10 bg-gradient-to-r from-[#30d158] to-transparent mt-2 rounded-full" />
-            <p className="text-white/40 text-[13px] mt-1">Kerala Service Rules — Awareness Classes for Govt Employees</p>
+            <p className="text-white/60 text-[13px] mt-1">Kerala Service Rules — Awareness Classes for Govt Employees</p>
           </div>
           <Link href="/audio-classes"
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[12px] font-bold no-underline transition-all hover:bg-[#30d158]/10 flex-shrink-0"

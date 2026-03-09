@@ -265,7 +265,7 @@ export default async function NewsDetailPage({ params }) {
               {/* Source attribution */}
               {item.source_url && (
                 <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
-                  <span className="text-[11px] text-white/25 uppercase tracking-widest">
+                  <span className="text-[11px] text-white/45 uppercase tracking-widest">
                     Source · {sourceDomain(item.source_url)}
                   </span>
                   <a href={item.source_url} target="_blank" rel="noopener noreferrer"

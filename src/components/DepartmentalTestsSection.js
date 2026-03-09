@@ -48,7 +48,7 @@ export default function DepartmentalTestsSection() {
                   <div className="text-[13px] font-bold text-white/80 group-hover:text-white transition-colors leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {d.label}
                   </div>
-                  <div className="text-[10px] mt-0.5 font-semibold text-white/35">
+                  <div className="text-[10px] mt-0.5 font-semibold text-white/55">
                     {count} tests
                   </div>
                 </div>
@@ -59,7 +59,7 @@ export default function DepartmentalTestsSection() {
 
         {/* Popular tests */}
         <div className="mb-4">
-          <div className="text-[11px] font-black uppercase tracking-[0.15em] text-white/30 mb-4">Popular Tests</div>
+          <div className="text-[11px] font-black uppercase tracking-[0.15em] text-white/50 mb-4">Popular Tests</div>
           <div className="flex flex-col gap-2">
             {popular.map(test => {
               const dept = DEPTS.find(d => d.id === test.dept);
@@ -78,13 +78,13 @@ export default function DepartmentalTestsSection() {
                     <div className="text-[13px] font-semibold text-white/80 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {test.name_ml}
                     </div>
-                    <div className="text-[10px] text-white/30 font-sans mt-0.5">{test.name_en}</div>
+                    <div className="text-[10px] text-white/50 font-sans mt-0.5">{test.name_en}</div>
                   </div>
-                  <div className="text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-lg flex-shrink-0 hidden sm:block text-white/35"
+                  <div className="text-[9px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-lg flex-shrink-0 hidden sm:block text-white/55"
                     style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
                     {test.papers} Paper{test.papers > 1 ? 's' : ''}
                   </div>
-                  <div className="text-white/20 group-hover:text-white/50 transition-all flex-shrink-0">→</div>
+                  <div className="text-white/40 group-hover:text-white/50 transition-all flex-shrink-0">→</div>
                 </Link>
               );
             })}

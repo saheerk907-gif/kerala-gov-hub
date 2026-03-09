@@ -65,7 +65,7 @@ export default function HighlightsSection({ highlights }) {
                       .map(t => (
                         <span
                           key={t.id}
-                          className="px-3 py-1 rounded-full text-[10px] font-bold text-white/40 bg-white/[0.06] border border-white/[0.08]"
+                          className="px-3 py-1 rounded-full text-[10px] font-bold text-white/60 bg-white/[0.06] border border-white/[0.08]"
                         >
                           {t.tag_ml}
                         </span>

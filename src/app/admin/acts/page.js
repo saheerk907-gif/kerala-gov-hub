@@ -434,17 +434,17 @@ export default function AdminActs() {
                     style={{ background: '#2997ff18', color: '#2997ff' }}>
                     {CATEGORIES.find(c => c.id === act.category)?.label}
                   </span>
-                  {act.year && <span className="text-[10px] text-white/30">{act.year}</span>}
+                  {act.year && <span className="text-[10px] text-white/50">{act.year}</span>}
                   {!act.is_published && (
                     <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[#ff453a]/10 text-[#ff453a]">Draft</span>
                   )}
                   {act.pdf_url && <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[#30d158]/10 text-[#30d158]">PDF</span>}
                 </div>
                 <div className="text-sm font-semibold text-white/80">{act.title}</div>
-                {act.title_ml && <div className="text-xs text-white/40 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{act.title_ml}</div>}
+                {act.title_ml && <div className="text-xs text-white/60 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{act.title_ml}</div>}
                 {act.summary && <div className="text-xs text-[#6e6e73] mt-1 line-clamp-2">{act.summary}</div>}
                 <div className="text-[10px] text-[#6e6e73] mt-1">
-                  /acts-rules/<span className="text-white/40">{act.slug}</span>
+                  /acts-rules/<span className="text-white/60">{act.slug}</span>
                 </div>
               </div>
               <div className="flex gap-2 flex-shrink-0">

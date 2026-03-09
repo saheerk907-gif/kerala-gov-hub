@@ -82,7 +82,7 @@ export default function TopBar() {
     >
       {/* Left — Social icons */}
       <div className="flex items-center gap-1">
-        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/25 mr-2">Follow</span>
+        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/45 mr-2">Follow</span>
         {socials.map(s => (
           <a
             key={s.label}
@@ -91,9 +91,9 @@ export default function TopBar() {
             rel="noopener noreferrer"
             title={s.label}
             className="flex items-center justify-center w-6 h-6 rounded-md transition-all duration-200 hover:scale-110"
-            style={{ color: 'rgba(255,255,255,0.35)' }}
+            style={{ color: 'rgba(255,255,255,0.60)' }}
             onMouseEnter={e => { e.currentTarget.style.color = s.color; e.currentTarget.style.background = `${s.color}18`; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; e.currentTarget.style.background = 'transparent'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.60)'; e.currentTarget.style.background = 'transparent'; }}
           >
             {s.icon}
           </a>
@@ -125,7 +125,7 @@ export default function TopBar() {
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] font-bold text-white/35 no-underline hover:text-white/80 transition-colors px-1.5 py-0.5 rounded hover:bg-white/[0.05]"
+              className="text-[10px] font-bold text-white/55 no-underline hover:text-white/80 transition-colors px-1.5 py-0.5 rounded hover:bg-white/[0.05]"
             >
               {p.label}
             </a>
@@ -138,7 +138,7 @@ export default function TopBar() {
         <div className="w-px h-4 bg-white/10 mx-2" />
 
         {/* Date */}
-        <span className="text-[10px] font-semibold text-white/30 whitespace-nowrap">
+        <span className="text-[10px] font-semibold text-white/50 whitespace-nowrap">
           📅 {dateStr}
         </span>
       </div>

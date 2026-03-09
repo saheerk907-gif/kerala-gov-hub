@@ -126,7 +126,7 @@ const fmt = v => '₹' + v.toLocaleString('en-IN');
 function GlassInput({ label, value, onChange, type = 'number', min, max, step = 1, children }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/40">{label}</label>
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       {children ?? (
         <input
           type={type}
@@ -146,7 +146,7 @@ function ResultRow({ label, value, color, big, sub }) {
     <div className="flex items-start justify-between gap-4 py-3 border-b border-white/[0.05] last:border-0">
       <div>
         <div className="text-[13px] text-white/60">{label}</div>
-        {sub && <div className="text-[11px] text-white/30 mt-0.5">{sub}</div>}
+        {sub && <div className="text-[11px] text-white/50 mt-0.5">{sub}</div>}
       </div>
       <div className={`font-black whitespace-nowrap ${big ? 'text-[22px]' : 'text-[16px]'}`} style={{ color: color ?? '#fff' }}>
         {value}
@@ -187,14 +187,14 @@ export default function DCRGPage() {
 
         {/* Page title */}
         <div className="mb-8">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/35 hover:text-white/70 no-underline transition-colors mb-3">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/55 hover:text-white/70 no-underline transition-colors mb-3">
             ← Back to Home
           </Link>
           <div className="section-label mb-2">Retirement Benefits</div>
           <h1 className="text-[clamp(22px,4vw,42px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-            DCRG <span className="text-white/40">Calculator</span>
+            DCRG <span className="text-white/60">Calculator</span>
           </h1>
-          <p className="text-[13px] text-white/40 mt-1">Death-cum-Retirement Gratuity — Kerala Service Rules (KSR Rule 77)</p>
+          <p className="text-[13px] text-white/60 mt-1">Death-cum-Retirement Gratuity — Kerala Service Rules (KSR Rule 77)</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -205,7 +205,7 @@ export default function DCRGPage() {
             {/* Type toggle */}
             <div className="rounded-2xl p-5"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">Gratuity Type</div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">Gratuity Type</div>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'retirement', label: 'Retirement DCRG', icon: '🎖️' },
@@ -228,7 +228,7 @@ export default function DCRGPage() {
             {/* Pay details */}
             <div className="rounded-2xl p-5 flex flex-col gap-4"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/30">Pay Details</div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/50">Pay Details</div>
 
               <GlassInput label="Last Basic Pay (₹)" value={basic} onChange={setBasic} min={10000} max={300000} step={500} />
 
@@ -263,7 +263,7 @@ export default function DCRGPage() {
               {/* DA display + override */}
               <div className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between">
-                  <label className="text-[11px] font-bold uppercase tracking-widest text-white/40">DA Rate (%)</label>
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">DA Rate (%)</label>
                   <button
                     onClick={() => setManualDA(v => !v)}
                     className="text-[10px] font-bold transition-colors"
@@ -282,7 +282,7 @@ export default function DCRGPage() {
                   <div className="rounded-xl px-3 py-2.5 text-sm font-bold flex items-center justify-between"
                     style={{ background: 'rgba(41,151,255,0.08)', border: '1px solid rgba(41,151,255,0.2)' }}>
                     <span style={{ color: '#2997ff' }}>{autoDA}%</span>
-                    <span className="text-[10px] text-white/30">auto from date</span>
+                    <span className="text-[10px] text-white/50">auto from date</span>
                   </div>
                 )}
               </div>
@@ -291,12 +291,12 @@ export default function DCRGPage() {
             {/* Service details */}
             <div className="rounded-2xl p-5 flex flex-col gap-4"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/30">Qualifying Service</div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/50">Qualifying Service</div>
               <div className="grid grid-cols-2 gap-3">
                 <GlassInput label="Years" value={serviceYears} onChange={setServiceYears} min={0} max={40} />
                 <GlassInput label="Months" value={serviceMonths} onChange={setServiceMonths} min={0} max={11} />
               </div>
-              <div className="text-[11px] text-white/30 leading-relaxed">
+              <div className="text-[11px] text-white/50 leading-relaxed">
                 Maximum qualifying service for DCRG: <strong className="text-white/50">33 years (66 half-years)</strong>.
                 Months ≥ 3 in any half-year period are counted as a full half-year.
               </div>
@@ -327,7 +327,7 @@ export default function DCRGPage() {
                       ⚠ Capped at ₹20,00,000 (maximum limit)
                     </div>
                   )}
-                  <div className="text-[12px] text-white/40 mt-2">
+                  <div className="text-[12px] text-white/60 mt-2">
                     {retireType === 'death'
                       ? result.totalMonths < 12
                         ? '< 1 year service → 2 months\' emoluments'
@@ -346,7 +346,7 @@ export default function DCRGPage() {
             {/* Breakdown */}
             <div className="rounded-2xl p-5"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">Calculation Breakdown</div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">Calculation Breakdown</div>
 
               <ResultRow label="Last Basic Pay"  value={fmt(basic)} />
               <ResultRow label={`DA @ ${effectiveDA}%`} value={fmt(result.daAmt)} color="#2997ff" />
@@ -365,9 +365,9 @@ export default function DCRGPage() {
             {/* KSR Note */}
             <div className="rounded-2xl p-5"
               style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">KSR Rule 77 — DCRG Rules</div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/45 mb-3">KSR Rule 77 — DCRG Rules</div>
               <div className="flex flex-col gap-2 mb-4">
-                <div className="text-[11px] font-bold text-white/40 mb-1">Death Gratuity (no min service required)</div>
+                <div className="text-[11px] font-bold text-white/60 mb-1">Death Gratuity (no min service required)</div>
                 {[
                   { range: '< 1 year service',   amount: '2 × monthly LE'  },
                   { range: '1 – 5 years',         amount: '6 × monthly LE'  },
@@ -375,13 +375,13 @@ export default function DCRGPage() {
                   { range: '20+ years',            amount: 'LE × yrs ÷ 2 (min 12×, max 16.5×)' },
                 ].map(row => (
                   <div key={row.range} className="flex justify-between text-[11px]">
-                    <span className="text-white/35">{row.range}</span>
+                    <span className="text-white/55">{row.range}</span>
                     <span className="text-white/55 font-semibold">{row.amount}</span>
                   </div>
                 ))}
               </div>
               <div className="pt-3 border-t border-white/[0.06] flex flex-col gap-1.5">
-                <div className="text-[11px] font-bold text-white/40 mb-1">Retirement DCRG</div>
+                <div className="text-[11px] font-bold text-white/60 mb-1">Retirement DCRG</div>
                 {[
                   { label: 'Formula',            value: 'LE × qualifying years ÷ 2' },
                   { label: 'Min qualifying svc', value: '5 years' },
@@ -390,7 +390,7 @@ export default function DCRGPage() {
                   { label: 'Service rounding',   value: '6 months + 1 day → full year' },
                 ].map(r => (
                   <div key={r.label} className="flex justify-between text-[11px]">
-                    <span className="text-white/30">{r.label}</span>
+                    <span className="text-white/50">{r.label}</span>
                     <span className="text-white/55 font-semibold">{r.value}</span>
                   </div>
                 ))}
@@ -400,7 +400,7 @@ export default function DCRGPage() {
             {/* DA reference table */}
             <div className="rounded-2xl p-5"
               style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/25 mb-3">
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/45 mb-3">
                 {prc} PRC — DA Rate Reference
               </div>
               <div className="flex flex-col gap-1 max-h-48 overflow-y-auto pr-1">

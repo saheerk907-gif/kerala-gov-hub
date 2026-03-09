@@ -79,7 +79,7 @@ function QuizInner() {
 
   if (loading) return (
     <div className="min-h-screen bg-aurora flex items-center justify-center">
-      <div className="text-white/40 text-sm">Loading questions...</div>
+      <div className="text-white/60 text-sm">Loading questions...</div>
     </div>
   );
 
@@ -88,7 +88,7 @@ function QuizInner() {
       <div className="text-center">
         <div className="text-4xl mb-3">📭</div>
         <p className="text-white/60 mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഇതുവരെ ചോദ്യങ്ങൾ ചേർത്തിട്ടില്ല</p>
-        <p className="text-white/30 text-sm mb-6">Questions not added yet for this paper</p>
+        <p className="text-white/50 text-sm mb-6">Questions not added yet for this paper</p>
         <Link href="/departmental-tests" className="text-[#2997ff] no-underline text-sm">← Back to Tests</Link>
       </div>
     </div>
@@ -120,7 +120,7 @@ function QuizInner() {
           <p className="text-white/50 text-sm mb-6">
             You got <span className="text-[#ff453a] font-bold">{batchWrong.length}</span> wrong in the last batch.
             {hasMoreBatches && (
-              <><br /><span className="text-white/30 text-xs mt-1 inline-block">{mainRemain.length} more question{mainRemain.length > 1 ? 's' : ''} remaining after this.</span></>
+              <><br /><span className="text-white/50 text-xs mt-1 inline-block">{mainRemain.length} more question{mainRemain.length > 1 ? 's' : ''} remaining after this.</span></>
             )}
           </p>
 
@@ -157,14 +157,14 @@ function QuizInner() {
               </button>
               <button
                 onClick={() => setPhase('done')}
-                className="w-full py-3 rounded-2xl text-[12px] font-semibold border-none cursor-pointer mt-1 text-white/30 bg-transparent hover:text-white/50 transition-colors">
+                className="w-full py-3 rounded-2xl text-[12px] font-semibold border-none cursor-pointer mt-1 text-white/50 bg-transparent hover:text-white/50 transition-colors">
                 End Quiz &amp; See Results
               </button>
             </>
           ) : (
             <button
               onClick={() => setPhase('done')}
-              className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 text-white/40 bg-transparent hover:text-white/60 transition-colors">
+              className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 text-white/60 bg-transparent hover:text-white/60 transition-colors">
               Skip &amp; See Results
             </button>
           )}
@@ -193,13 +193,13 @@ function QuizInner() {
             <h2 className="text-2xl font-black mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {grade.label}
             </h2>
-            <p className="text-white/40 text-sm mb-6">{test.name_ml} — Paper {paper}</p>
+            <p className="text-white/60 text-sm mb-6">{test.name_ml} — Paper {paper}</p>
 
             {/* Big score */}
             <div className="text-[64px] font-black leading-none mb-1" style={{ color: grade.col }}>
               {finalScore < 0 ? finalScore.toFixed(2) : finalScore % 1 === 0 ? finalScore : finalScore.toFixed(2)}
             </div>
-            <div className="text-white/30 text-sm mb-6">Final Score</div>
+            <div className="text-white/50 text-sm mb-6">Final Score</div>
 
             {/* Score bar */}
             <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-6">
@@ -217,13 +217,13 @@ function QuizInner() {
                 <div key={s.label} className="rounded-2xl py-4"
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <div className="text-[22px] font-black" style={{ color: s.col }}>{s.value}</div>
-                  <div className="text-[10px] text-white/35 mt-0.5">{s.label}</div>
+                  <div className="text-[10px] text-white/55 mt-0.5">{s.label}</div>
                 </div>
               ))}
             </div>
 
             {/* Marking scheme reminder */}
-            <div className="rounded-xl px-4 py-3 mb-6 text-[11px] text-white/35 flex justify-center gap-6"
+            <div className="rounded-xl px-4 py-3 mb-6 text-[11px] text-white/55 flex justify-center gap-6"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
               <span>✓ Correct = <span className="text-[#30d158] font-bold">+1</span></span>
               <span>✗ Wrong = <span className="text-[#ff453a] font-bold">−0.33</span></span>
@@ -256,7 +256,7 @@ function QuizInner() {
           </div>
 
           {/* Answer review */}
-          <div className="text-[11px] font-black uppercase tracking-widest text-white/25 mb-3 px-1">
+          <div className="text-[11px] font-black uppercase tracking-widest text-white/45 mb-3 px-1">
             Answer Review
           </div>
           <div className="flex flex-col gap-2">
@@ -272,7 +272,7 @@ function QuizInner() {
                     </div>
                   )}
                   {r.explanation && (
-                    <div className="text-[11px] text-white/30 mt-1">💡 {r.explanation}</div>
+                    <div className="text-[11px] text-white/50 mt-1">💡 {r.explanation}</div>
                   )}
                 </div>
                 <div className="text-[11px] font-black flex-shrink-0"
@@ -370,8 +370,8 @@ function QuizInner() {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <Link href="/departmental-tests" className="text-[12px] text-white/40 hover:text-white no-underline transition-colors">← Back</Link>
-          <div className="flex items-center gap-3 text-[12px] text-white/40">
+          <Link href="/departmental-tests" className="text-[12px] text-white/60 hover:text-white no-underline transition-colors">← Back</Link>
+          <div className="flex items-center gap-3 text-[12px] text-white/60">
             {isRevision && (
               <span className="px-2 py-0.5 rounded-full text-[10px] font-black"
                 style={{ background: '#ff9f0a22', color: '#ff9f0a', border: '1px solid #ff9f0a33' }}>
@@ -401,7 +401,7 @@ function QuizInner() {
         {/* Live score bar */}
         <div className="flex items-center gap-4 mb-6 px-1 text-[12px]">
           <div className="flex items-center gap-1.5">
-            <span className="text-white/30">Score</span>
+            <span className="text-white/50">Score</span>
             <span className="font-black text-[15px]"
               style={{ color: score < 0 ? '#ff453a' : score > 0 ? '#30d158' : 'rgba(255,255,255,0.5)' }}>
               {score < 0 ? score.toFixed(2) : score % 1 === 0 ? score : score.toFixed(2)}
@@ -409,7 +409,7 @@ function QuizInner() {
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <span className="text-[#30d158] font-bold">✓ {totalCorrect}</span>
-            <span className="text-white/20">|</span>
+            <span className="text-white/40">|</span>
             <span className="text-[#ff453a] font-bold">✗ {totalWrong}</span>
           </div>
         </div>
@@ -417,7 +417,7 @@ function QuizInner() {
         {/* Question card */}
         <div className="glass-card rounded-3xl p-6 mb-4"
           style={isRevision ? { borderColor: 'rgba(255,159,10,0.25)', background: 'rgba(255,159,10,0.04)' } : {}}>
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-3">
+          <div className="text-[10px] font-black uppercase tracking-widest text-white/45 mb-3">
             Question {questionNum} {isRevision ? '· Revision' : ''}
           </div>
           <div className="text-[15px] font-semibold text-white leading-relaxed mb-6">{q.question}</div>

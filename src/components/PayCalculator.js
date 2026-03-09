@@ -99,8 +99,8 @@ export default function PayCalculator() {
   const netHike   = result ? result.rev.net   - result.cur.net   : 0;
   const grossHike = result ? result.rev.gross - result.cur.gross : 0;
 
-  const inputCls = "w-full px-3 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-sm text-white/90 font-semibold outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/25";
-  const labelCls = "block text-[10px] font-bold uppercase tracking-widest text-white/35 mb-1.5";
+  const inputCls = "w-full px-3 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-sm text-white/90 font-semibold outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/45";
+  const labelCls = "block text-[10px] font-bold uppercase tracking-widest text-white/55 mb-1.5";
 
   return (
     <section id="calculator" className="relative z-[1]">
@@ -126,7 +126,7 @@ export default function PayCalculator() {
           <label className={labelCls}>Basic Pay (₹)</label>
           <input type="number" value={basicPay} onChange={e => setBasicPay(e.target.value)}
             placeholder="e.g. 45600" className={inputCls} />
-          <div className="text-[10px] text-white/35 mt-1 mb-4">അടിസ്ഥാന ശമ്പളം നൽകുക</div>
+          <div className="text-[10px] text-white/55 mt-1 mb-4">അടിസ്ഥാന ശമ്പളം നൽകുക</div>
 
           <label className={labelCls}>Increments (After 01.07.2024)</label>
           <div className="flex gap-2 flex-wrap">
@@ -152,11 +152,11 @@ export default function PayCalculator() {
 
           <div className="grid grid-cols-3 gap-2 mb-4 p-3 bg-white/[0.04] rounded-xl border border-white/[0.08]">
             <div className="text-center">
-              <div className="text-[9px] text-white/35 uppercase mb-1">Merged</div>
+              <div className="text-[9px] text-white/55 uppercase mb-1">Merged</div>
               <div className="text-base font-bold text-white/90">31%</div>
             </div>
             <div className="text-center">
-              <div className="text-[9px] text-white/35 uppercase mb-1">Now</div>
+              <div className="text-[9px] text-white/55 uppercase mb-1">Now</div>
               <div className="text-base font-bold text-white/90">{daP}%</div>
             </div>
             <div className="text-center bg-[#2997ff]/10 rounded-lg p-1">
@@ -184,7 +184,7 @@ export default function PayCalculator() {
             {['NPS','OPS'].map(t => (
               <button key={t} onClick={() => setPensionType(t)}
                 className={`flex-1 py-2 text-xs font-bold transition-all ${
-                  pensionType === t ? 'bg-[#2997ff] text-white' : 'bg-white/[0.04] text-white/35'
+                  pensionType === t ? 'bg-[#2997ff] text-white' : 'bg-white/[0.04] text-white/55'
                 }`}>
                 {t}
               </button>
@@ -211,7 +211,7 @@ export default function PayCalculator() {
                 className={`py-2 px-1 rounded-xl text-[11px] font-bold transition-all ${
                   selectedFitment === i
                     ? 'bg-[#30d158] text-white'
-                    : 'bg-white/[0.04] border border-white/[0.08] text-white/35'
+                    : 'bg-white/[0.04] border border-white/[0.08] text-white/55'
                 }`}>{f.label}</button>
             ))}
           </div>
@@ -236,7 +236,7 @@ export default function PayCalculator() {
                 <div className="text-[9px] text-white/60 uppercase mb-1 sm:mb-2">ഇപ്പോൾ</div>
                 <div className="text-xl sm:text-2xl font-black">{fmt(result.cur.net)}</div>
               </div>
-              <div className="text-center text-white/40 text-xl px-1">→</div>
+              <div className="text-center text-white/60 text-xl px-1">→</div>
               <div className="bg-white/20 rounded-xl p-3 sm:p-4 text-center border border-white/30 backdrop-blur-sm">
                 <div className="text-[9px] text-white/90 uppercase mb-1 sm:mb-2 font-bold text-[#30d158]">പുതിയ ശമ്പളം</div>
                 <div className="text-2xl sm:text-3xl font-black text-white">{fmt(result.rev.net)}</div>
@@ -281,7 +281,7 @@ export default function PayCalculator() {
              <div className="text-[10px] font-bold uppercase tracking-widest text-[#2997ff] mb-4">📋 Detailed Comparison</div>
              <table className="w-full text-xs min-w-[500px]">
                <thead>
-                 <tr className="border-b border-white/[0.08] text-white/35">
+                 <tr className="border-b border-white/[0.08] text-white/55">
                    <th className="text-left py-2">Component</th>
                    <th className="text-right py-2">Current</th>
                    <th className="text-right py-2 text-[#30d158]">Revised</th>

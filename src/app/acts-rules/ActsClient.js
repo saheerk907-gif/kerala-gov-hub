@@ -33,7 +33,7 @@ export default function ActsClient({ acts }) {
     <>
       {/* Search */}
       <div className="relative mb-6">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none text-sm">🔍</span>
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none text-sm">🔍</span>
         <input
           type="text"
           value={search}
@@ -42,7 +42,7 @@ export default function ActsClient({ acts }) {
           className="w-full pl-10 pr-10 py-3.5 bg-white/[0.05] border border-white/10 rounded-2xl text-[14px] text-white placeholder-white/25 outline-none focus:border-[#2997ff] transition-colors"
         />
         {search && (
-          <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white bg-transparent border-none cursor-pointer">✕</button>
+          <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white bg-transparent border-none cursor-pointer">✕</button>
         )}
       </div>
 
@@ -68,11 +68,11 @@ export default function ActsClient({ acts }) {
         </div>
       )}
 
-      <div className="text-[11px] text-white/25 mb-5">{filtered.length} നിയമങ്ങൾ</div>
+      <div className="text-[11px] text-white/45 mb-5">{filtered.length} നിയമങ്ങൾ</div>
 
       {/* Acts Grid */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 text-white/30">
+        <div className="text-center py-16 text-white/50">
           <div className="text-4xl mb-3">📭</div>
           <div style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒന്നും കണ്ടെത്തിയില്ല</div>
         </div>
@@ -93,7 +93,7 @@ export default function ActsClient({ acts }) {
                     {cat.icon} {cat.en}
                   </span>
                   {act.year && (
-                    <span className="text-[10px] text-white/30 font-semibold">{act.year}</span>
+                    <span className="text-[10px] text-white/50 font-semibold">{act.year}</span>
                   )}
                 </div>
 
@@ -102,7 +102,7 @@ export default function ActsClient({ acts }) {
                   {act.title}
                 </h2>
                 {act.title_ml && (
-                  <div className="text-[12px] text-white/40 mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                  <div className="text-[12px] text-white/60 mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {act.title_ml}
                   </div>
                 )}
@@ -118,7 +118,7 @@ export default function ActsClient({ acts }) {
                 {tags.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {tags.slice(0, 4).map((tag, i) => (
-                      <span key={i} className="text-[10px] px-2 py-0.5 rounded-lg bg-white/[0.05] text-white/40">{tag}</span>
+                      <span key={i} className="text-[10px] px-2 py-0.5 rounded-lg bg-white/[0.05] text-white/60">{tag}</span>
                     ))}
                   </div>
                 )}

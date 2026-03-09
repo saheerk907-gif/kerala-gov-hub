@@ -437,17 +437,17 @@ function FormsContent() {
         {/* Header */}
         <div className="mb-8">
           <Link href="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/30 hover:text-white/60 no-underline transition-colors mb-3">
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
             ← Back to Home
           </Link>
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-2">
+          <div className="text-[10px] font-black uppercase tracking-widest text-white/45 mb-2">
             Finance Department · Government of Kerala
           </div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             Government Forms
           </h1>
-          <p className="text-[13px] text-white/35 mt-1">
+          <p className="text-[13px] text-white/55 mt-1">
             {FORMS.length} official forms across {CATEGORIES.length - 1} categories — Finance Department, Kerala
           </p>
         </div>
@@ -472,7 +472,7 @@ function FormsContent() {
                 className="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all"
                 style={{
                   background: active ? `${color}22` : 'rgba(255,255,255,0.04)',
-                  color: active ? color : 'rgba(255,255,255,0.40)',
+                  color: active ? color : 'rgba(255,255,255,0.65)',
                   border: `1px solid ${active ? color : 'rgba(255,255,255,0.07)'}`,
                 }}>
                 {cat}
@@ -484,7 +484,7 @@ function FormsContent() {
           })}
         </div>
 
-        <div className="text-[11px] text-white/25 mb-4">{filtered.length} form{filtered.length !== 1 ? 's' : ''} found</div>
+        <div className="text-[11px] text-white/45 mb-4">{filtered.length} form{filtered.length !== 1 ? 's' : ''} found</div>
 
         {/* Forms list */}
         <div className="rounded-2xl overflow-hidden"
@@ -493,14 +493,14 @@ function FormsContent() {
           {/* Table header */}
           <div className="hidden md:grid grid-cols-[120px_1fr_130px_100px] gap-0 px-5 py-3"
             style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Form No.</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Title</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Category</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30 text-right">Download</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Form No.</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Title</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Category</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50 text-right">Download</div>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="px-5 py-12 text-center text-white/30 text-[14px]">No forms found</div>
+            <div className="px-5 py-12 text-center text-white/50 text-[14px]">No forms found</div>
           ) : (
             filtered.map((form, i) => {
               const color = CAT_COLOR[form.category] || '#2997ff';
@@ -523,7 +523,7 @@ function FormsContent() {
                     <div className="text-[13px] text-white/75 leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {form.title}
                     </div>
-                    <div className="text-[10px] text-white/25 mt-0.5">{form.date}</div>
+                    <div className="text-[10px] text-white/45 mt-0.5">{form.date}</div>
                   </div>
 
                   {/* Category */}
@@ -552,7 +552,7 @@ function FormsContent() {
         </div>
 
         {/* Source note */}
-        <div className="mt-6 flex items-start gap-2 text-[11px] text-white/25">
+        <div className="mt-6 flex items-start gap-2 text-[11px] text-white/45">
           <span>ℹ</span>
           <span>
             Forms sourced from{' '}

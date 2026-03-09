@@ -195,7 +195,7 @@ function DOBSelector({ value, onChange, label }) {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/40">{label}</label>
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <div className="grid grid-cols-3 gap-1.5">
         <select value={dy} onChange={sel(setDy, 'dy')} className={inp} style={bg}>
           {Array.from({ length: daysInMonth }, (_, i) => (
@@ -213,7 +213,7 @@ function DOBSelector({ value, onChange, label }) {
           ))}
         </select>
       </div>
-      <div className="text-[10px] text-white/25">Day / Month / Year · Kerala employees retire in birth month</div>
+      <div className="text-[10px] text-white/45">Day / Month / Year · Kerala employees retire in birth month</div>
     </div>
   );
 }
@@ -222,7 +222,7 @@ function DOBSelector({ value, onChange, label }) {
 function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/40">{label}</label>
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <div className="relative">
         <input
           type="number" value={value === 0 ? '' : value} placeholder="0"
@@ -231,9 +231,9 @@ function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }
           className="w-full rounded-xl px-3 py-2.5 text-white text-sm font-semibold outline-none"
           style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
         />
-        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 text-[11px] font-bold">{suffix}</span>}
+        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-[11px] font-bold">{suffix}</span>}
       </div>
-      {help && <div className="text-[10px] text-white/25">{help}</div>}
+      {help && <div className="text-[10px] text-white/45">{help}</div>}
     </div>
   );
 }
@@ -242,7 +242,7 @@ function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }
 function JoinYearSelector({ value, onChange, label }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/40">{label}</label>
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <select value={value} onChange={e => onChange(Number(e.target.value))}
         className="w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none"
         style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
@@ -250,7 +250,7 @@ function JoinYearSelector({ value, onChange, label }) {
           <option key={y} value={y}>{y}</option>
         ))}
       </select>
-      <div className="text-[10px] text-white/25">NPS applicable from 2004</div>
+      <div className="text-[10px] text-white/45">NPS applicable from 2004</div>
     </div>
   );
 }
@@ -321,14 +321,14 @@ export default function NPSvsAPSPage() {
         {/* Header */}
         <div className="mb-8 flex items-start justify-between flex-wrap gap-4">
           <div>
-            <Link href="/" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/30 hover:text-white/60 no-underline transition-colors mb-3">
+            <Link href="/" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
               ← {ml ? 'ഹോം' : 'Back to Home'}
             </Link>
             <div className="section-label mb-2">Pension Comparison Tool</div>
             <h1 className="text-[clamp(22px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               NPS vs APS {ml ? 'കാൽക്കുലേറ്റർ' : 'Calculator'}
             </h1>
-            <p className="text-[13px] text-white/35 mt-1">
+            <p className="text-[13px] text-white/55 mt-1">
               {ml ? 'കേരള സർക്കാർ ജീവനക്കാർക്കുള്ള പെൻഷൻ കാൽക്കുലേറ്റർ' : 'Kerala Government Employees — Pension Projection with Pay Revision Schedule'}
             </p>
           </div>
@@ -350,7 +350,7 @@ export default function NPSvsAPSPage() {
 
         {/* ── Inputs ─────────────────────────────────────────────────────────── */}
         <div className="rounded-2xl p-6 mb-6" style={CARD}>
-          <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-5">
+          <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-5">
             {ml ? 'നിങ്ങളുടെ വിവരങ്ങൾ' : 'Your Service Details'}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
@@ -386,7 +386,7 @@ export default function NPSvsAPSPage() {
             <div className="text-[15px] font-bold text-white/60 mb-2">
               {ml ? 'വിവരങ്ങൾ നൽകുക' : 'Fill in your details above'}
             </div>
-            <div className="text-[12px] text-white/30">
+            <div className="text-[12px] text-white/50">
               {ml ? 'Basic Pay, DA%, ചേർന്ന വർഷം നൽകിയാൽ ഫലം ലഭിക്കും' : 'Enter Basic Pay, DA% and joining year to see your pension comparison'}
             </div>
           </div>
@@ -396,11 +396,11 @@ export default function NPSvsAPSPage() {
 
           {/* ── Face-off ──────────────────────────────────────────────────────── */}
           <div className="rounded-2xl p-6 mb-6" style={CARD}>
-            <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+            <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
               {ml ? 'മാസ പെൻഷൻ താരതമ്യം' : 'Monthly Pension Face-Off'}
             </div>
 
-            <div className="text-[12px] text-white/40 mb-5 flex items-center gap-2">
+            <div className="text-[12px] text-white/60 mb-5 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse inline-block" />
               {ml ? 'വിരമിക്കൽ:' : 'Retirement:'} <strong className="text-white">{retMonthName} {R.retYear}</strong>
               &nbsp;·&nbsp;{R.serviceYears} {ml ? 'വർഷം' : 'yrs service'}
@@ -416,7 +416,7 @@ export default function NPSvsAPSPage() {
                 <div className="text-[38px] font-black text-[#30d158] leading-none mb-2">
                   <Anim value={pvOn ? R.apsPV : R.apsP} />
                 </div>
-                <div className="text-[11px] text-white/35 mb-3">
+                <div className="text-[11px] text-white/55 mb-3">
                   {(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} &nbsp;·&nbsp; /month
                 </div>
                 <div className="flex gap-2 justify-center flex-wrap">
@@ -433,7 +433,7 @@ export default function NPSvsAPSPage() {
                 <div className="text-[38px] font-black text-[#2997ff] leading-none mb-2">
                   <Anim value={pvOn ? R.npsPV : R.npsP} />
                 </div>
-                <div className="text-[11px] text-white/35 mb-3">
+                <div className="text-[11px] text-white/55 mb-3">
                   40% @ {annRate}% &nbsp;·&nbsp; + {fmt(pvOn ? R.lumpPV : R.lump)} {ml ? 'ഒറ്റത്തവണ' : 'lump sum'}
                 </div>
                 <div className="flex gap-2 justify-center flex-wrap">
@@ -450,7 +450,7 @@ export default function NPSvsAPSPage() {
                 {R.apsP > R.npsP ? '🛡️ APS' : '📊 NPS'} {ml ? 'കൂടുതൽ' : 'pays'} {fmtF(Math.abs(R.apsP - R.npsP))}/{ml ? 'മാസം' : 'month'} {ml ? 'നൽകുന്നു' : 'more'}
               </div>
               {R.brk && R.apsP > R.npsP && (
-                <div className="text-[11px] text-white/35 mt-1">
+                <div className="text-[11px] text-white/55 mt-1">
                   APS {ml ? 'ഒറ്റത്തവണ തുക' : 'recovers'} {fmt(R.lump)} {ml ? 'ഏകദേശം' : 'lump sum in ~'}<strong className="text-white">{R.brk} {ml ? 'വർഷം' : 'yrs'}</strong>
                 </div>
               )}
@@ -480,11 +480,11 @@ export default function NPSvsAPSPage() {
               { label: ml ? 'സേവനം' : 'Service',                value: null, text: `${R.serviceYears} yrs`,    sub: `→ ${retMonthName} ${R.retYear}`, color: '#bf5af2' },
             ].map((s, i) => (
               <div key={i} className="rounded-2xl p-4" style={CARD}>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-white/30 mb-2">{s.label}</div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">{s.label}</div>
                 <div className="text-[20px] font-black leading-none mb-1" style={{ color: s.color }}>
                   {s.text ? s.text : <Anim value={s.value} />}
                 </div>
-                {s.sub && <div className="text-[10px] text-white/30">{s.sub}</div>}
+                {s.sub && <div className="text-[10px] text-white/50">{s.sub}</div>}
               </div>
             ))}
           </div>
@@ -521,7 +521,7 @@ export default function NPSvsAPSPage() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {/* Corpus breakdown pie */}
                 <div className="rounded-2xl p-5" style={CARD}>
-                  <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">🍩 NPS Corpus Sources</div>
+                  <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">🍩 NPS Corpus Sources</div>
                   <ResponsiveContainer width="100%" height={220}>
                     <PieChart>
                       <Pie data={[
@@ -539,7 +539,7 @@ export default function NPSvsAPSPage() {
 
                 {/* Retirement split */}
                 <div className="rounded-2xl p-5" style={CARD}>
-                  <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">💰 {ml ? 'വിരമിക്കൽ ഭാഗം' : 'Retirement Split'}</div>
+                  <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">💰 {ml ? 'വിരമിക്കൽ ഭാഗം' : 'Retirement Split'}</div>
                   <ResponsiveContainer width="100%" height={220}>
                     <PieChart>
                       <Pie data={[
@@ -557,14 +557,14 @@ export default function NPSvsAPSPage() {
 
               {/* Pay revision timeline */}
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">🕐 {ml ? 'പേ റിവിഷൻ ടൈംലൈൻ' : 'Pay Revision Timeline'}</div>
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">🕐 {ml ? 'പേ റിവിഷൻ ടൈംലൈൻ' : 'Pay Revision Timeline'}</div>
                 <div className="flex gap-3 overflow-x-auto pb-2">
                   {R.data.filter(d => d.isRev).map(d => (
                     <div key={d.year} className="rounded-xl p-3 flex-shrink-0 min-w-[150px]"
                       style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(41,151,255,0.2)' }}>
                       <div className="text-[10px] font-black text-[#2997ff] mb-1">{d.revLabel}</div>
                       <div className="text-[11px] text-white/50">Basic: {fmtF(d.basic)}</div>
-                      <div className="text-[11px] text-white/35">DA: {d.daPct}%</div>
+                      <div className="text-[11px] text-white/55">DA: {d.daPct}%</div>
                     </div>
                   ))}
                 </div>
@@ -572,7 +572,7 @@ export default function NPSvsAPSPage() {
 
               {/* Key facts */}
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">📝 {ml ? 'പ്രധാന വസ്തുതകൾ' : 'Key Facts'}</div>
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">📝 {ml ? 'പ്രധാന വസ്തുതകൾ' : 'Key Facts'}</div>
                 <div className="grid gap-2.5">
                   {[
                     { type: 'ok',   text: ml ? 'APS: 30+ വർഷം സേവനത്തിന് Last Basic-ന്റെ 50%. കുറഞ്ഞ സേവനം: (വർഷം÷60)×Basic.' : 'APS: 50% of last Basic for 30+ yrs service. Less service: (Yrs÷60)×Basic.' },
@@ -598,7 +598,7 @@ export default function NPSvsAPSPage() {
           {tab === 'growth' && (
             <div className="flex flex-col gap-5">
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
                   📈 {ml ? 'ശമ്പള വളർച്ച' : 'Salary Growth'} {pvOn && <span className="text-[#30d158] ml-2">— Today's ₹</span>}
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
@@ -616,7 +616,7 @@ export default function NPSvsAPSPage() {
               </div>
 
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
                   🏦 NPS Corpus Growth ({ml ? 'Return:' : 'Return:'} {npsRet}%)
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
@@ -644,7 +644,7 @@ export default function NPSvsAPSPage() {
           {tab === 'pension' && (
             <div className="flex flex-col gap-5">
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
                   📊 {ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension'} · APS +{postDR}%/yr · NPS Fixed
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
@@ -661,7 +661,7 @@ export default function NPSvsAPSPage() {
               </div>
 
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
                   💰 {ml ? 'മൊത്തം പെൻഷൻ' : 'Cumulative Pension'}
                 </div>
                 <ResponsiveContainer width="100%" height={280}>
@@ -688,7 +688,7 @@ export default function NPSvsAPSPage() {
               </div>
 
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/30 mb-4">
+                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
                   📐 {ml ? 'APS മേൽക്കൈ' : 'APS Advantage vs NPS'}
                 </div>
                 <ResponsiveContainer width="100%" height={220}>
@@ -719,7 +719,7 @@ export default function NPSvsAPSPage() {
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
                       {['Year','Basic','DA%','Gross','Emp','Govt','Monthly','Corpus',...(pvOn?['PV Corpus']:[])].map(h => (
-                        <th key={h} className="px-4 py-3 text-left font-black uppercase tracking-widest text-white/25 whitespace-nowrap text-[9px]">{h}</th>
+                        <th key={h} className="px-4 py-3 text-left font-black uppercase tracking-widest text-white/45 whitespace-nowrap text-[9px]">{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -737,18 +737,18 @@ export default function NPSvsAPSPage() {
                         <td className="px-4 py-2.5 text-[#ff9f0a]/70">{fmtF(r.nG)}</td>
                         <td className="px-4 py-2.5 text-[#30d158]/80 font-semibold">{fmtF(r.mC)}</td>
                         <td className="px-4 py-2.5 text-[#2997ff] font-bold">{fmt(r.corpus)}</td>
-                        {pvOn && <td className="px-4 py-2.5 text-white/35">{fmt(r.corpusPV)}</td>}
+                        {pvOn && <td className="px-4 py-2.5 text-white/55">{fmt(r.corpusPV)}</td>}
                       </tr>
                     ))}
                   </tbody>
                   <tfoot>
                     <tr style={{ borderTop: '2px solid rgba(255,255,255,0.08)' }}>
-                      <td colSpan={4} className="px-4 py-3 font-bold text-white/40 text-[10px]">TOTALS →</td>
+                      <td colSpan={4} className="px-4 py-3 font-bold text-white/60 text-[10px]">TOTALS →</td>
                       <td className="px-4 py-3 font-bold text-[#ff453a]">{fmt(R.empC)}</td>
                       <td className="px-4 py-3 font-bold text-[#ff9f0a]">{fmt(R.govC)}</td>
                       <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.totC)}</td>
                       <td className="px-4 py-3 font-black text-[#2997ff]">{fmt(R.fC)}</td>
-                      {pvOn && <td className="px-4 py-3 font-bold text-white/35">{fmt(Math.round(R.fC * R.rIA))}</td>}
+                      {pvOn && <td className="px-4 py-3 font-bold text-white/55">{fmt(Math.round(R.fC * R.rIA))}</td>}
                     </tr>
                   </tfoot>
                 </table>
@@ -759,7 +759,7 @@ export default function NPSvsAPSPage() {
         </>)}
 
         {/* Disclaimer */}
-        <div className="mt-8 text-[11px] text-white/20 text-center leading-relaxed">
+        <div className="mt-8 text-[11px] text-white/40 text-center leading-relaxed">
           ⚠️ {ml
             ? 'ഈ കാൽക്കുലേറ്റർ ഒരു ഏകദേശ ചിത്രം മാത്രം. ഔദ്യോഗിക കണക്കുകൾക്ക് പെൻഷൻ വിഭാഗവുമായി ബന്ധപ്പെടുക.'
             : 'Illustrative only. Actual amounts depend on pay scales, promotions, DA rates & NPS performance. Consult your pension section for official figures.'}

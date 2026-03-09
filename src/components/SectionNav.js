@@ -58,7 +58,7 @@ export default function SectionNav() {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-bold whitespace-nowrap border-none cursor-pointer transition-all flex-shrink-0"
               style={{
                 background: active === s.id ? 'rgba(41,151,255,0.15)' : 'transparent',
-                color: active === s.id ? '#2997ff' : 'rgba(255,255,255,0.45)',
+                color: active === s.id ? '#2997ff' : 'rgba(255,255,255,0.65)',
               }}
             >
               <span className="text-sm">{s.icon}</span>

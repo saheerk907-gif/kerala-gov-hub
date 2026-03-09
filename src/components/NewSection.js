@@ -30,7 +30,7 @@ const NewsRow = ({ date, title, category, link = '/news', index, isFirst }) => (
           >
             {isFirst ? 'BREAKING' : category}
           </span>
-          <span className="text-[10px] text-white/30">{date}</span>
+          <span className="text-[10px] text-white/50">{date}</span>
         </div>
         <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           {title}
@@ -38,7 +38,7 @@ const NewsRow = ({ date, title, category, link = '/news', index, isFirst }) => (
       </div>
 
       {/* Arrow */}
-      <svg className="w-4 h-4 text-white/25 group-hover:text-white/70 group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-4 h-4 text-white/45 group-hover:text-white/70 group-hover:translate-x-1 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
       </svg>
     </div>
@@ -106,7 +106,7 @@ export default function NewsSection() {
         </div>
       ) : (
         <div className="glass-card p-10 text-center rounded-[20px]">
-          <p className="text-white/40">വാർത്തകൾ ലഭ്യമല്ല.</p>
+          <p className="text-white/60">വാർത്തകൾ ലഭ്യമല്ല.</p>
         </div>
       )}
 
@@ -114,7 +114,7 @@ export default function NewsSection() {
         <div className="mt-4">
           <Link href="/news"
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
-            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.45)' }}>
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.65)' }}>
             എല്ലാ വാർത്തകളും കാണുക
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
               <path d="M9 5l7 7-7 7" />

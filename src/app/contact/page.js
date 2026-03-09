@@ -56,7 +56,7 @@ export default function ContactPage() {
 
           {/* Header */}
           <div className="mb-10 text-center">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Contact</span>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">Contact</span>
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Get in Touch</h1>
             <p className="text-[14px] text-white/45 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               നിങ്ങളുടെ ചോദ്യങ്ങൾ, നിർദ്ദേശങ്ങൾ, അല്ലെങ്കിൽ പ്രശ്‌നങ്ങൾ ഞങ്ങളെ അറിയിക്കൂ
@@ -91,7 +91,7 @@ export default function ContactPage() {
                     {icon}
                   </div>
                   <div>
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-white/25 mb-0.5">{label}</div>
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-white/45 mb-0.5">{label}</div>
                     {href
                       ? <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="text-[12.5px] text-white/60 hover:text-white/90 transition-colors no-underline">{value}</a>
                       : <span className="text-[12.5px] text-white/60">{value}</span>
@@ -109,9 +109,9 @@ export default function ContactPage() {
                     <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#30d158" strokeWidth="2.5" strokeLinecap="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </div>
                   <div className="text-[15px] font-semibold text-white/80">Message Sent!</div>
-                  <div className="text-[13px] text-white/40">We'll get back to you within 48 hours.</div>
+                  <div className="text-[13px] text-white/60">We'll get back to you within 48 hours.</div>
                   <button onClick={() => { setStatus(null); setForm({ name: '', email: '', subject: '', message: '' }); }}
-                    className="mt-2 text-[12px] text-white/30 hover:text-white/60 transition-colors border-none bg-transparent cursor-pointer underline">
+                    className="mt-2 text-[12px] text-white/50 hover:text-white/60 transition-colors border-none bg-transparent cursor-pointer underline">
                     Send another message
                   </button>
                 </div>
@@ -119,7 +119,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-[11px] font-semibold text-white/35 uppercase tracking-wider mb-1.5">Name</label>
+                      <label className="block text-[11px] font-semibold text-white/55 uppercase tracking-wider mb-1.5">Name</label>
                       <input name="name" value={form.name} onChange={handleChange} required placeholder="Your name"
                         style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
@@ -127,7 +127,7 @@ export default function ContactPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-white/35 uppercase tracking-wider mb-1.5">Email</label>
+                      <label className="block text-[11px] font-semibold text-white/55 uppercase tracking-wider mb-1.5">Email</label>
                       <input name="email" type="email" value={form.email} onChange={handleChange} required placeholder="your@email.com"
                         style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
@@ -136,7 +136,7 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-white/35 uppercase tracking-wider mb-1.5">Subject</label>
+                    <label className="block text-[11px] font-semibold text-white/55 uppercase tracking-wider mb-1.5">Subject</label>
                     <select name="subject" value={form.subject} onChange={handleChange} required
                       style={{ ...inputStyle, cursor: 'pointer' }}
                       onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
@@ -147,7 +147,7 @@ export default function ContactPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-[11px] font-semibold text-white/35 uppercase tracking-wider mb-1.5">Message</label>
+                    <label className="block text-[11px] font-semibold text-white/55 uppercase tracking-wider mb-1.5">Message</label>
                     <textarea name="message" value={form.message} onChange={handleChange} required rows={5}
                       placeholder="Write your message here…"
                       style={{ ...inputStyle, resize: 'vertical', minHeight: '110px' }}

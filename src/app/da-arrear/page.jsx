@@ -189,8 +189,8 @@ export default function DaArrearPage() {
     window.open(`https://web.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
-  const inputCls = "w-full px-3 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-[13px] text-white/90 font-semibold outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/20";
-  const labelCls = "block text-[9px] font-black uppercase tracking-[0.18em] text-white/35 mb-1.5";
+  const inputCls = "w-full px-3 py-2.5 bg-white/[0.06] border border-white/[0.1] rounded-xl text-[13px] text-white/90 font-semibold outline-none focus:border-[#2997ff] focus:bg-white/[0.09] transition-all placeholder:text-white/40";
+  const labelCls = "block text-[9px] font-black uppercase tracking-[0.18em] text-white/55 mb-1.5";
 
   return (
     <div className="min-h-screen bg-aurora pt-[88px] pb-20 px-4 md:px-6">
@@ -198,13 +198,13 @@ export default function DaArrearPage() {
 
         {/* ── Page header ── */}
         <div className="mb-10">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-[11px] text-white/30 no-underline hover:text-white/60 transition-colors mb-6">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-[11px] text-white/50 no-underline hover:text-white/60 transition-colors mb-6">
             ← Home
           </Link>
           <div className="section-label mb-3">DA Arrear Tool</div>
           <h1 className="text-[clamp(28px,5vw,52px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             DA Arrear Calculator
-            <span className="text-white/35 ml-3 text-[clamp(18px,3vw,32px)]">Kerala 11th PRC</span>
+            <span className="text-white/55 ml-3 text-[clamp(18px,3vw,32px)]">Kerala 11th PRC</span>
           </h1>
           <p className="text-[14px] text-white/45 max-w-[640px] leading-relaxed">
             Month-wise DA arrear from March 2021 onwards — with increment & promotion support. Based on official Kerala Finance Dept G.O.s.
@@ -213,7 +213,7 @@ export default function DaArrearPage() {
           {/* G.O. tags */}
           <div className="flex flex-wrap gap-2 mt-4">
             {GO_ORDERS.slice(-4).map(o => (
-              <span key={o.go} className="text-[9px] font-bold px-2.5 py-1 rounded-full text-white/35 bg-white/[0.05] border border-white/[0.08]">
+              <span key={o.go} className="text-[9px] font-bold px-2.5 py-1 rounded-full text-white/55 bg-white/[0.05] border border-white/[0.08]">
                 {o.go}
               </span>
             ))}
@@ -252,7 +252,7 @@ export default function DaArrearPage() {
                 <div>
                   <label className={labelCls}>Date of Joining</label>
                   <input type="date" className={inputCls} value={emp.doj} onChange={e => handleDOJ(e.target.value)} />
-                  <p className="text-[10px] text-white/30 mt-1">Arrear start adjusts automatically</p>
+                  <p className="text-[10px] text-white/50 mt-1">Arrear start adjusts automatically</p>
                 </div>
                 <div className="flex items-end">
                   <div className="w-full px-4 py-3 rounded-xl text-[12px] font-semibold leading-snug"
@@ -273,17 +273,17 @@ export default function DaArrearPage() {
                 <div>
                   <label className={labelCls}>Initial Basic Pay (₹)</label>
                   <input type="number" className={inputCls} value={pay.basic} onChange={e => setPay(x => ({ ...x, basic: e.target.value }))} placeholder="e.g. 35700" min="0" />
-                  <p className="text-[10px] text-white/30 mt-1">Basic pay at arrear start (11th PRC)</p>
+                  <p className="text-[10px] text-white/50 mt-1">Basic pay at arrear start (11th PRC)</p>
                 </div>
                 <div>
                   <label className={labelCls}>Arrear From</label>
                   <input type="month" className={inputCls} value={pay.from} onChange={e => setPay(x => ({ ...x, from: e.target.value }))} />
-                  <p className="text-[10px] text-white/30 mt-1">Default: Mar 2021</p>
+                  <p className="text-[10px] text-white/50 mt-1">Default: Mar 2021</p>
                 </div>
                 <div>
                   <label className={labelCls}>Arrear To</label>
                   <input type="month" className={inputCls} value={pay.to} onChange={e => setPay(x => ({ ...x, to: e.target.value }))} />
-                  <p className="text-[10px] text-white/30 mt-1">Up to and including this month</p>
+                  <p className="text-[10px] text-white/50 mt-1">Up to and including this month</p>
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function DaArrearPage() {
               <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center gap-2.5">
                 <span>📈</span>
                 <span className="text-[13px] font-bold text-white/75">Increments & Promotions</span>
-                <span className="text-[10px] text-white/30 ml-auto">optional — leave blank if basic never changed</span>
+                <span className="text-[10px] text-white/50 ml-auto">optional — leave blank if basic never changed</span>
               </div>
               <div className="p-5">
                 {payRows.length > 0 && (
@@ -317,7 +317,7 @@ export default function DaArrearPage() {
                           <label className={labelCls}>New Basic Pay (₹)</label>
                           <input type="number" className={inputCls} value={row.basic} onChange={e => updateRow(row.id, 'basic', e.target.value)} placeholder="e.g. 36800" />
                         </div>
-                        <button onClick={() => delPayRow(row.id)} className="mb-0.5 w-9 h-10 flex items-center justify-center rounded-xl text-white/30 hover:text-[#ff453a] hover:bg-[#ff453a]/10 transition-all text-lg border border-white/[0.07]">
+                        <button onClick={() => delPayRow(row.id)} className="mb-0.5 w-9 h-10 flex items-center justify-center rounded-xl text-white/50 hover:text-[#ff453a] hover:bg-[#ff453a]/10 transition-all text-lg border border-white/[0.07]">
                           ×
                         </button>
                       </div>
@@ -363,12 +363,12 @@ export default function DaArrearPage() {
                 <div className="text-[clamp(32px,6vw,52px)] font-[900] text-[#30d158] leading-none tracking-tight font-sans">
                   {inr(result.totalArrear)}
                 </div>
-                <div className="text-[12px] text-white/40 mt-2">{mLabel(result.from)} → {mLabel(result.to)}</div>
+                <div className="text-[12px] text-white/60 mt-2">{mLabel(result.from)} → {mLabel(result.to)}</div>
               </div>
               <div className="text-center">
-                <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-1">Period</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-white/60 mb-1">Period</div>
                 <div className="text-5xl font-[900] text-white/80 font-sans">{result.months}</div>
-                <div className="text-[11px] text-white/35">months</div>
+                <div className="text-[11px] text-white/55">months</div>
               </div>
             </div>
 
@@ -381,7 +381,7 @@ export default function DaArrearPage() {
                 { label: 'Net Arrear',    val: inr(result.totalArrear),  color: '#c8960c' },
               ].map(s => (
                 <div key={s.label} className="glass-card rounded-xl p-4">
-                  <div className="text-[9px] font-black uppercase tracking-[0.15em] text-white/30 mb-2">{s.label}</div>
+                  <div className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2">{s.label}</div>
                   <div className="text-[15px] font-[900] font-sans" style={{ color: s.color }}>{s.val}</div>
                 </div>
               ))}
@@ -397,7 +397,7 @@ export default function DaArrearPage() {
                     ['Department', result.emp.dept], ['PEN', result.emp.pen],
                     ['Date of Joining', result.emp.doj], ['Arrear Period', `${mLabel(result.from)} → ${mLabel(result.to)}`],
                   ].map(([l, v]) => v ? (
-                    <div key={l}><span className="text-white/30 text-[10px] uppercase tracking-wider">{l}</span><div className="text-white/75 font-semibold mt-0.5">{v}</div></div>
+                    <div key={l}><span className="text-white/50 text-[10px] uppercase tracking-wider">{l}</span><div className="text-white/75 font-semibold mt-0.5">{v}</div></div>
                   ) : null)}
                 </div>
               </div>
@@ -414,7 +414,7 @@ export default function DaArrearPage() {
                   <thead>
                     <tr style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                       {['Month','Basic Pay','DA Due %','DA Due (₹)','DA Paid %','DA Paid (₹)','Arrear (₹)'].map(h => (
-                        <th key={h} className={`py-3 px-4 text-[9px] font-black uppercase tracking-widest text-white/35 ${h === 'Month' ? 'text-left' : 'text-right'}`}>{h}</th>
+                        <th key={h} className={`py-3 px-4 text-[9px] font-black uppercase tracking-widest text-white/55 ${h === 'Month' ? 'text-left' : 'text-right'}`}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -429,9 +429,9 @@ export default function DaArrearPage() {
                         <tr key={i} style={{ background: 'rgba(41,151,255,0.07)', borderTop: '1px solid rgba(41,151,255,0.2)' }}>
                           <td colSpan={7} className="py-2 px-4 text-[11px] font-bold text-white/50">
                             DA Due: <span className="text-[#2997ff]">{row.duePct}%</span>
-                            &ensp;|&ensp;Paid: <span className="text-white/40">{row.paidPct}%</span>
+                            &ensp;|&ensp;Paid: <span className="text-white/60">{row.paidPct}%</span>
                             &ensp;|&ensp;Arrear Rate: <span className="text-[#30d158]">{row.duePct - row.paidPct}%</span>
-                            <span className="text-white/30"> = {inr(row.basic * (row.duePct - row.paidPct) / 100)}/month</span>
+                            <span className="text-white/50"> = {inr(row.basic * (row.duePct - row.paidPct) / 100)}/month</span>
                           </td>
                         </tr>
                       );
@@ -443,9 +443,9 @@ export default function DaArrearPage() {
                           <td className="py-2.5 px-4 text-right text-white/60 font-sans">{Math.round(row.basic).toLocaleString('en-IN')}</td>
                           <td className="py-2.5 px-4 text-right text-white/60">{row.duePct}%</td>
                           <td className="py-2.5 px-4 text-right text-[#30d158]/80 font-sans">{Math.round(row.daDue).toLocaleString('en-IN')}</td>
-                          <td className="py-2.5 px-4 text-right text-white/40">{row.paidPct}%</td>
+                          <td className="py-2.5 px-4 text-right text-white/60">{row.paidPct}%</td>
                           <td className="py-2.5 px-4 text-right text-[#ff453a]/70 font-sans">{Math.round(row.daPaid).toLocaleString('en-IN')}</td>
-                          <td className={`py-2.5 px-4 text-right font-black font-sans ${arr > 0 ? 'text-[#30d158]' : arr < 0 ? 'text-[#ff453a]' : 'text-white/25'}`}>
+                          <td className={`py-2.5 px-4 text-right font-black font-sans ${arr > 0 ? 'text-[#30d158]' : arr < 0 ? 'text-[#ff453a]' : 'text-white/45'}`}>
                             {Math.round(arr).toLocaleString('en-IN')}
                           </td>
                         </tr>
@@ -455,9 +455,9 @@ export default function DaArrearPage() {
                     {/* Grand total */}
                     <tr style={{ background: 'rgba(200,150,12,0.08)', borderTop: '2px solid rgba(200,150,12,0.3)' }}>
                       <td className="py-3 px-4 text-[12px] font-black text-white/80">TOTAL ({result.months} months)</td>
-                      <td colSpan={2} className="py-3 px-4 text-right text-white/25">—</td>
+                      <td colSpan={2} className="py-3 px-4 text-right text-white/45">—</td>
                       <td className="py-3 px-4 text-right font-black text-[#30d158] font-sans">{Math.round(result.totalDue).toLocaleString('en-IN')}</td>
-                      <td className="py-3 px-4 text-right text-white/25">—</td>
+                      <td className="py-3 px-4 text-right text-white/45">—</td>
                       <td className="py-3 px-4 text-right font-black text-[#ff453a] font-sans">{Math.round(result.totalPaid).toLocaleString('en-IN')}</td>
                       <td className="py-3 px-4 text-right font-black text-[#c8960c] text-[14px] font-sans">{Math.round(result.totalArrear).toLocaleString('en-IN')}</td>
                     </tr>
@@ -465,7 +465,7 @@ export default function DaArrearPage() {
                 </table>
               </div>
               <div className="px-5 py-3 border-t border-white/[0.05]">
-                <p className="text-[10px] text-white/25 leading-relaxed">
+                <p className="text-[10px] text-white/45 leading-relaxed">
                   * DA rates as per Kerala Finance Dept G.O.s — 11th Pay Revision (w.e.f 01/07/2019). Jul 2019–Feb 2021 DA fully settled via G.O.(P)No.27/2021. Latest: G.O.(P)No.27/2026/Fin dt.20/02/2026. Verify before official disbursement. Income Tax not included.
                 </p>
               </div>

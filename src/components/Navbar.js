@@ -176,7 +176,7 @@ export default function Navbar() {
               <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
-              <span className="text-[9px] font-semibold text-white/30 uppercase tracking-widest font-sans hidden sm:block">
+              <span className="text-[9px] font-semibold text-white/50 uppercase tracking-widest font-sans hidden sm:block">
                 Kerala Gov Employee Hub
               </span>
             </div>
@@ -220,11 +220,11 @@ export default function Navbar() {
                     >
                       {/* Header */}
                       <div className="px-4 py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/25">{item.en}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">{item.en}</span>
                       </div>
 
                       {/* Items */}
-                      <div className={`p-1.5 ${cols === 2 ? 'grid grid-cols-2' : 'flex flex-col'}`}>
+                      <div className={`p-3 ${cols === 2 ? 'grid grid-cols-2' : 'flex flex-col'}`}>
                         {item.dropdown.map((d) => (
                           <a
                             key={d.label}
@@ -244,13 +244,13 @@ export default function Navbar() {
                                   <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide flex-shrink-0"
                                     style={{
                                       background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)',
-                                      color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.35)',
+                                      color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.60)',
                                     }}>
                                     {d.badge}
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[10.5px] text-white/28 mt-0.5 leading-none">{d.sub}</div>
+                              <div className="text-[10.5px] text-white/50 mt-0.5 leading-none">{d.sub}</div>
                             </div>
                             {d.external && (
                               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
@@ -275,7 +275,7 @@ export default function Navbar() {
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
             title="Search (Ctrl+K)"
-            className="flex items-center gap-2 rounded-lg px-2.5 h-8 transition-all duration-200 border-none cursor-pointer flex-shrink-0 hidden sm:flex"
+            className="flex items-center gap-2 rounded-lg px-2.5 h-12 min-w-[48px] transition-all duration-200 border-none cursor-pointer flex-shrink-0 hidden sm:flex"
             style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
           >
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -283,13 +283,13 @@ export default function Navbar() {
               <path d="M21 21l-4.35-4.35" />
             </svg>
             <span className="text-[11px] font-medium hidden md:block">Search</span>
-            <kbd className="hidden lg:flex items-center text-[10px] text-white/25 border border-white/10 rounded px-1 py-0.5 font-mono leading-none">⌘K</kbd>
+            <kbd className="hidden lg:flex items-center text-[10px] text-white/45 border border-white/10 rounded px-1 py-0.5 font-mono leading-none">⌘K</kbd>
           </button>
           {/* Mobile search icon only */}
           <button
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
+            className="flex sm:hidden items-center justify-center w-12 h-12 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
             style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
           >
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -299,7 +299,7 @@ export default function Navbar() {
           </button>
           <ThemeToggle />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
-            className="lg:hidden flex flex-col gap-[5px] p-2 bg-transparent border-none cursor-pointer">
+            className="lg:hidden flex flex-col gap-[5px] p-3 min-w-[48px] min-h-[48px] items-center justify-center bg-transparent border-none cursor-pointer">
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
@@ -327,7 +327,7 @@ export default function Navbar() {
                       <span className="text-[15px] font-semibold text-white/75">{item.label}</span>
                     </div>
                     <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
-                      className="text-white/30 transition-transform duration-200"
+                      className="text-white/50 transition-transform duration-200"
                       style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
                       <path d="M1 3l4 4 4-4" />
                     </svg>
@@ -349,12 +349,12 @@ export default function Navbar() {
                               <span className="text-[13px] font-medium text-white/60" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span>
                               {d.badge && (
                                 <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide"
-                                  style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)', color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.35)' }}>
+                                  style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)', color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.60)' }}>
                                   {d.badge}
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-white/25 mt-0.5">{d.sub}</div>
+                            <div className="text-[10px] text-white/45 mt-0.5">{d.sub}</div>
                           </div>
                           {d.external && (
                             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"

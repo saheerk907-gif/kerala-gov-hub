@@ -216,7 +216,7 @@ export default function SearchModal({ open, onClose }) {
         {/* Input */}
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/[0.07]">
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"
-            strokeLinecap="round" className="text-white/30 flex-shrink-0">
+            strokeLinecap="round" className="text-white/50 flex-shrink-0">
             <circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" />
           </svg>
           <input
@@ -232,11 +232,11 @@ export default function SearchModal({ open, onClose }) {
           )}
           {query && !loading && (
             <button onClick={() => setQuery('')}
-              className="text-white/25 hover:text-white/55 transition-colors border-none bg-transparent cursor-pointer text-lg leading-none p-0">
+              className="text-white/45 hover:text-white/55 transition-colors border-none bg-transparent cursor-pointer text-lg leading-none p-2 min-w-[48px] min-h-[48px] flex items-center justify-center">
               ×
             </button>
           )}
-          <kbd className="hidden sm:flex items-center text-[10px] text-white/20 border border-white/10 rounded px-1.5 py-0.5 font-mono">ESC</kbd>
+          <kbd className="hidden sm:flex items-center text-[10px] text-white/40 border border-white/10 rounded px-1.5 py-0.5 font-mono">ESC</kbd>
         </div>
 
         {/* Results */}
@@ -244,13 +244,13 @@ export default function SearchModal({ open, onClose }) {
           {/* No query: show popular */}
           {!query.trim() && (
             <div className="px-4 pt-3 pb-1">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/25">Popular</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/45">Popular</span>
             </div>
           )}
 
           {/* No results */}
           {query.trim() && allResults.length === 0 && !loading && (
-            <div className="py-12 text-center text-white/25 text-sm">
+            <div className="py-12 text-center text-white/45 text-sm">
               <div className="text-3xl mb-3">🔍</div>
               No results for &ldquo;{query}&rdquo;
             </div>
@@ -289,7 +289,7 @@ export default function SearchModal({ open, onClose }) {
                               </svg>
                             )}
                           </div>
-                          {item.sub && <div className="text-[11px] text-white/28 truncate mt-0.5">{item.sub}</div>}
+                          {item.sub && <div className="text-[11px] text-white/50 truncate mt-0.5">{item.sub}</div>}
                         </div>
                         <span
                           className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded flex-shrink-0"
@@ -307,7 +307,7 @@ export default function SearchModal({ open, onClose }) {
         </div>
 
         {/* Footer hints */}
-        <div className="px-4 py-2.5 border-t border-white/[0.05] flex items-center gap-4 text-[10px] text-white/20">
+        <div className="px-4 py-2.5 border-t border-white/[0.05] flex items-center gap-4 text-[10px] text-white/40">
           <span className="flex items-center gap-1">
             <kbd className="border border-white/10 rounded px-1 py-0.5 font-mono">↑↓</kbd> navigate
           </span>

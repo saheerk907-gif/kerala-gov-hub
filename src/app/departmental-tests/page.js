@@ -64,7 +64,7 @@ function TestsPageInner() {
       <div className="max-w-[1100px] mx-auto px-4 md:px-6 py-12">
 
         {/* Back */}
-        <Link href="/" className="inline-flex items-center gap-2 text-[12px] text-white/40 hover:text-white no-underline mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-[12px] text-white/60 hover:text-white no-underline mb-8 transition-colors">
           ← keralagovhub.in
         </Link>
 
@@ -78,7 +78,7 @@ function TestsPageInner() {
 
         {/* Search */}
         <div className="relative mb-6">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none">🔍</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 pointer-events-none">🔍</span>
           <input
             type="text"
             value={search}
@@ -87,7 +87,7 @@ function TestsPageInner() {
             className="w-full pl-10 pr-10 py-3.5 bg-white/[0.05] border border-white/10 rounded-2xl text-[14px] text-white placeholder-white/25 outline-none focus:border-white/25 transition-colors"
           />
           {search && (
-            <button onClick={() => { setSearch(''); setExpanded(null); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white border-none bg-transparent cursor-pointer">✕</button>
+            <button onClick={() => { setSearch(''); setExpanded(null); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white border-none bg-transparent cursor-pointer">✕</button>
           )}
         </div>
 
@@ -115,7 +115,7 @@ function TestsPageInner() {
           </div>
         )}
 
-        <div className="text-[11px] text-white/25 mb-4">{filtered.length} ടെസ്റ്റുകൾ</div>
+        <div className="text-[11px] text-white/45 mb-4">{filtered.length} ടെസ്റ്റുകൾ</div>
 
         {/* Test List */}
         <div className="flex flex-col gap-2">
@@ -144,14 +144,14 @@ function TestsPageInner() {
                       </span>
                       {test.popular && <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded hidden sm:inline" style={{ background: color + '22', color }}>Popular</span>}
                     </div>
-                    <div className="text-[11px] text-white/30 font-sans mt-0.5 truncate">{test.name_en}</div>
+                    <div className="text-[11px] text-white/50 font-sans mt-0.5 truncate">{test.name_en}</div>
                   </div>
                   <div className="text-[10px] font-bold whitespace-nowrap hidden sm:block flex-shrink-0" style={{ color }}>
                     {test.papers} Paper{test.papers > 1 ? 's' : ''}
                   </div>
                   <div className="text-[9px] font-black uppercase px-2 py-1 rounded-lg hidden md:block flex-shrink-0"
                     style={{ background: color + '15', color }}>{dept?.en}</div>
-                  <div className="text-white/20 group-hover:text-white/50 flex-shrink-0 transition-all"
+                  <div className="text-white/40 group-hover:text-white/50 flex-shrink-0 transition-all"
                     style={{ transform: isOpen ? 'rotate(90deg)' : 'none' }}>→</div>
                 </button>
 
@@ -182,7 +182,7 @@ function TestsPageInner() {
 
                     {/* Paper Quiz Buttons */}
                     <div className="mt-4">
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">Quiz എടുക്കുക</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2">Quiz എടുക്കുക</div>
                       <div className="flex gap-2 flex-wrap">
                         {papers.map(p => {
                           const hasQ = hasQuiz(test.id, p);
@@ -211,7 +211,7 @@ function TestsPageInner() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-white/30">
+          <div className="text-center py-16 text-white/50">
             <div className="text-4xl mb-3">🔍</div>
             <div style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു ടെസ്റ്റും കണ്ടെത്തിയില്ല</div>
           </div>

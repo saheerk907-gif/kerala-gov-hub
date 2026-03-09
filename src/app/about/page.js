@@ -74,7 +74,7 @@ export default function AboutPage() {
 
           {/* Hero */}
           <div className="mb-12 text-center">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">About Us</span>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">About Us</span>
             <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3 leading-tight">
               Kerala Gov Employee Hub
             </h1>
@@ -85,7 +85,7 @@ export default function AboutPage() {
 
           {/* Who we are */}
           <div className="glass-card rounded-2xl p-6 md:p-8 mb-6">
-            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-4">Who We Are</h2>
+            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/50 mb-4">Who We Are</h2>
             <p className="text-[14px] text-white/65 leading-relaxed mb-4">
               Kerala Gov Employee Hub (<strong className="text-white/80">keralaemployees.in</strong>) is an independent, non-official information portal dedicated to Kerala State Government employees. We aggregate, organise, and present government service-related information so that every employee can easily access what they need — without navigating dozens of official portals.
             </p>
@@ -96,7 +96,7 @@ export default function AboutPage() {
 
           {/* What we offer */}
           <div className="glass-card rounded-2xl p-6 md:p-8 mb-6">
-            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-6">What We Offer</h2>
+            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/50 mb-6">What We Offer</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {FEATURES.map((f) => (
                 <div key={f.title} className="flex gap-4 p-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <div className="text-[13px] font-semibold text-white/80 leading-snug">{f.title}</div>
-                    <div className="text-[10.5px] text-white/35 mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{f.ml}</div>
+                    <div className="text-[10.5px] text-white/55 mb-1" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{f.ml}</div>
                     <div className="text-[11.5px] text-white/45 leading-relaxed">{f.desc}</div>
                   </div>
                 </div>
@@ -115,7 +115,7 @@ export default function AboutPage() {
 
           {/* Mission */}
           <div className="glass-card rounded-2xl p-6 md:p-8 mb-6">
-            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-4">Our Mission</h2>
+            <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/50 mb-4">Our Mission</h2>
             <p className="text-[14px] text-white/65 leading-relaxed mb-3">
               Information related to government service in Kerala is often scattered across circulars, official orders, and lengthy documents. For many employees, finding clear and reliable information about their own service benefits can be difficult.
             </p>
@@ -123,7 +123,7 @@ export default function AboutPage() {
               Our mission is to gather this information in one place and present it in a <strong className="text-white/80">simple, practical, and accessible</strong> manner. We aim to help every Kerala government employee clearly understand the rules, benefits, and schemes that affect their service and retirement.
             </p>
             <div className="border-t border-white/[0.06] pt-5">
-              <div className="text-[11px] font-black uppercase tracking-[0.25em] text-white/30 mb-3">ഞങ്ങളുടെ ദൗത്യം</div>
+              <div className="text-[11px] font-black uppercase tracking-[0.25em] text-white/50 mb-3">ഞങ്ങളുടെ ദൗത്യം</div>
               <p className="text-[14px] text-white/65 leading-relaxed mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ സർവീസുമായി ബന്ധപ്പെട്ട വിവരങ്ങൾ പലപ്പോഴും വിവിധ സർക്കുലറുകളിലും ഉത്തരവുകളിലും നീണ്ട ഔദ്യോഗിക രേഖകളിലുമായി ചിതറിക്കിടക്കുന്നതാണ്. അതുകൊണ്ട് തന്നെ ഒരു ജീവനക്കാരന് തന്റെ സേവന ആനുകൂല്യങ്ങളെക്കുറിച്ചുള്ള വ്യക്തമായ വിവരങ്ങൾ കണ്ടെത്തുന്നത് പലപ്പോഴും ബുദ്ധിമുട്ടാകാറുണ്ട്.
               </p>

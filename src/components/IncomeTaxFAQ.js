@@ -72,7 +72,7 @@ export default function IncomeTaxFAQ() {
         >
           Frequently Asked Questions — Income Tax for Kerala Government Employees
         </h2>
-        <p className="text-sm text-white/40 leading-relaxed">
+        <p className="text-sm text-white/60 leading-relaxed">
           Answers to the most common income tax questions for Kerala state government employees — New Regime vs Old Regime, Section 80C deductions, HRA exemption, NPS benefits, TDS calculation, and more. All answers are based on Income Tax Act 1961 provisions for FY 2025-26 (AY 2026-27).
         </p>
       </div>
@@ -118,7 +118,7 @@ export default function IncomeTaxFAQ() {
         ))}
       </div>
 
-      <p className="mt-6 text-[11px] text-white/20 leading-relaxed text-center">
+      <p className="mt-6 text-[11px] text-white/40 leading-relaxed text-center">
         All information is based on Income Tax Act 1961, Income Tax Rules 1962, and Finance Act 2025 (Budget 2025) for FY 2025-26 / AY 2026-27. Consult a qualified tax professional for personalised advice.
       </p>
     </section>

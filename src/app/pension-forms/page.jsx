@@ -86,15 +86,15 @@ export default function PensionFormsPage() {
         {/* Header */}
         <div className="mb-8">
           <Link href="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/30 hover:text-white/60 no-underline transition-colors mb-3">
+            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
             ← Back to Home
           </Link>
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/25 mb-2">Kerala Pension — PRISM</div>
+          <div className="text-[10px] font-black uppercase tracking-widest text-white/45 mb-2">Kerala Pension — PRISM</div>
           <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             Pension Forms
           </h1>
-          <p className="text-[13px] text-white/35 mt-1">
+          <p className="text-[13px] text-white/55 mt-1">
             {FORMS.length} official forms — sourced from PRISM, Finance Department, Government of Kerala
           </p>
         </div>
@@ -120,7 +120,7 @@ export default function PensionFormsPage() {
                 background: category === cat
                   ? (cat === 'All' ? '#2997ff' : CATEGORY_COLORS[cat] || '#2997ff')
                   : 'rgba(255,255,255,0.05)',
-                color: category === cat ? '#fff' : 'rgba(255,255,255,0.45)',
+                color: category === cat ? '#fff' : 'rgba(255,255,255,0.65)',
                 border: `1px solid ${category === cat
                   ? (cat === 'All' ? '#2997ff' : CATEGORY_COLORS[cat] || '#2997ff')
                   : 'rgba(255,255,255,0.08)'}`,
@@ -131,7 +131,7 @@ export default function PensionFormsPage() {
         </div>
 
         {/* Count */}
-        <div className="text-[11px] text-white/25 mb-4">
+        <div className="text-[11px] text-white/45 mb-4">
           {filtered.length} of {FORMS.length} forms
         </div>
 
@@ -142,14 +142,14 @@ export default function PensionFormsPage() {
           {/* Table header — desktop only */}
           <div className="hidden md:grid grid-cols-[90px_1fr_130px_110px] gap-0 px-5 py-3"
             style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Form No.</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Title</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30">Category</div>
-            <div className="text-[10px] font-black uppercase tracking-widest text-white/30 text-right">Download</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Form No.</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Title</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Category</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/50 text-right">Download</div>
           </div>
 
           {filtered.length === 0 ? (
-            <div className="px-5 py-12 text-center text-white/30 text-[14px]">
+            <div className="px-5 py-12 text-center text-white/50 text-[14px]">
               No forms found for "{search}"
             </div>
           ) : (
@@ -231,7 +231,7 @@ export default function PensionFormsPage() {
         </div>
 
         {/* Source note */}
-        <div className="mt-6 flex items-start gap-2 text-[11px] text-white/25">
+        <div className="mt-6 flex items-start gap-2 text-[11px] text-white/45">
           <span>ℹ</span>
           <span>
             Forms sourced from{' '}

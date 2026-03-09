@@ -107,7 +107,7 @@ export default function DepartmentResourcesSection() {
           <div className="section-label mb-3">Resources by Department</div>
           <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             വകുപ്പ് അനുസരിച്ചുള്ള{' '}
-            <span className="text-white/40">വിവര ശേഖരം</span>
+            <span className="text-white/60">വിവര ശേഖരം</span>
           </h2>
         </div>
 

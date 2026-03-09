@@ -98,10 +98,10 @@ export default async function ActPage({ params }) {
               {cat.icon} {cat.en}
             </span>
             {act.act_number && (
-              <span className="text-[11px] text-white/40 font-semibold">{act.act_number}</span>
+              <span className="text-[11px] text-white/60 font-semibold">{act.act_number}</span>
             )}
             {act.year && (
-              <span className="text-[11px] text-white/40 font-semibold">{act.year}</span>
+              <span className="text-[11px] text-white/60 font-semibold">{act.year}</span>
             )}
           </div>
 
@@ -165,7 +165,7 @@ export default async function ActPage({ params }) {
           {/* Tags */}
           {tags.length > 0 && (
             <div className="mb-8">
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-3">Tags</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-3">Tags</div>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag, i) => (
                   <span key={i} className="text-[11px] px-3 py-1 rounded-lg bg-white/[0.06] text-white/50 border border-white/[0.08]">
@@ -177,7 +177,7 @@ export default async function ActPage({ params }) {
           )}
 
           {/* Disclaimer */}
-          <div className="rounded-2xl p-4 text-[11px] text-white/40 leading-relaxed"
+          <div className="rounded-2xl p-4 text-[11px] text-white/60 leading-relaxed"
             style={{ background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.15)' }}>
             ⚠️ ഈ സംക്ഷേപം വിവരണ ആവശ്യങ്ങൾക്കുള്ളതാണ്. നിയമ ആവശ്യങ്ങൾക്ക് ഔദ്യോഗിക നിയമ ഗ്രന്ഥം പരിശോധിക്കുക.
           </div>

@@ -66,7 +66,7 @@ export default function SchemesSection({ schemes }) {
                 <h3 className="text-[18px] font-bold mb-1 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {scheme.title_ml}
                 </h3>
-                <div className="text-[9px] font-black text-white/35 uppercase tracking-[0.2em] mb-3">
+                <div className="text-[9px] font-black text-white/55 uppercase tracking-[0.2em] mb-3">
                   {scheme.subtitle_en || scheme.title_en}
                 </div>
                 <p className="text-[13px] text-white/55 leading-relaxed mb-5 font-medium">
@@ -77,7 +77,7 @@ export default function SchemesSection({ schemes }) {
                 {scheme.scheme_tags?.length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-2">
                     {scheme.scheme_tags.map(t => (
-                      <span key={t.id} className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white/40 bg-white/[0.06] border border-white/[0.08]">
+                      <span key={t.id} className="px-2.5 py-1 rounded-full text-[10px] font-bold text-white/60 bg-white/[0.06] border border-white/[0.08]">
                         {t.tag_ml}
                       </span>
                     ))}

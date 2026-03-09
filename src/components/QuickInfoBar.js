@@ -74,7 +74,7 @@ function DACard() {
         <div className="flex items-start justify-between mb-1">
           <div>
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[#2997ff]/70 mb-1">Current DA Rate</div>
-            <div className="text-[11px] text-white/40">11th PRC · ക്ഷാമബത്ത</div>
+            <div className="text-[11px] text-white/60">11th PRC · ക്ഷാമബത്ത</div>
           </div>
           <span className="flex items-center gap-1 text-[10px] font-bold text-[#30d158] px-2 py-1 rounded-full"
             style={{ background: 'rgba(48,209,88,0.1)', border: '1px solid rgba(48,209,88,0.2)' }}>
@@ -87,7 +87,7 @@ function DACard() {
           <span className="text-[28px] font-black text-[#2997ff] mb-2">%</span>
         </div>
 
-        <div className="text-[12px] text-white/40 mb-4">Effective <span className="text-white/70 font-semibold">July 2024</span> onwards</div>
+        <div className="text-[12px] text-white/60 mb-4">Effective <span className="text-white/70 font-semibold">July 2024</span> onwards</div>
 
         {/* Sparkline */}
         <div className="mt-auto">
@@ -115,7 +115,7 @@ function DACard() {
           </svg>
           <div className="flex justify-between mt-1">
             {DA_HISTORY.map((d, i) => (
-              <span key={i} className="text-[8px] text-white/25 font-medium">{d.label}</span>
+              <span key={i} className="text-[8px] text-white/45 font-medium">{d.label}</span>
             ))}
           </div>
         </div>
@@ -147,8 +147,8 @@ function StatPill({ stat, index }) {
     >
       <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ background: stat.color }} />
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] text-white/35 font-semibold uppercase tracking-wider truncate">{stat.label}</div>
-        <div className="text-[11px] text-white/25 truncate">{stat.sub}</div>
+        <div className="text-[10px] text-white/55 font-semibold uppercase tracking-wider truncate">{stat.label}</div>
+        <div className="text-[11px] text-white/45 truncate">{stat.sub}</div>
       </div>
       <div className="text-[20px] font-[900] tracking-tight flex-shrink-0" style={{ color: stat.color }}>
         {stat.value}
@@ -169,10 +169,10 @@ export default function QuickInfoBar() {
             <div className="section-label mb-2">Live Rates</div>
             <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-              ഇപ്പോഴത്തെ നിരക്കുകൾ{' '}<span className="text-white/35">ഒറ്റ നോട്ടത്തിൽ</span>
+              ഇപ്പോഴത്തെ നിരക്കുകൾ{' '}<span className="text-white/55">ഒറ്റ നോട്ടത്തിൽ</span>
             </h2>
           </div>
-          <span className="text-[10px] text-white/25 font-bold uppercase tracking-widest">FY 2025-26</span>
+          <span className="text-[10px] text-white/45 font-bold uppercase tracking-widest">FY 2025-26</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-4">

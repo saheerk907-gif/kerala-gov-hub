@@ -29,7 +29,7 @@ export default function QuickLinksSection({ links }) {
               ഔദ്യോഗിക പോർട്ടലുകൾ
             </h2>
           </div>
-          <p className="text-[13px] text-white/40 max-w-[340px] md:text-right font-medium">
+          <p className="text-[13px] text-white/60 max-w-[340px] md:text-right font-medium">
             ജീവനക്കാർക്ക് നിത്യേന ആവശ്യമുള്ള പ്രധാന വെബ്സൈറ്റുകൾ.
           </p>
         </div>
@@ -59,7 +59,7 @@ export default function QuickLinksSection({ links }) {
                   <div className="text-[13px] font-bold text-white/80 truncate group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {l.title_ml}
                   </div>
-                  <div className="text-[9px] font-bold text-white/25 uppercase tracking-wider">
+                  <div className="text-[9px] font-bold text-white/45 uppercase tracking-wider">
                     Explore →
                   </div>
                 </div>

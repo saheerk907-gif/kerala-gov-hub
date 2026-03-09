@@ -61,7 +61,7 @@ export default function ImportantDatesSection() {
           <div className="section-label mb-3">Calendar</div>
           <h2 className="text-[clamp(26px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             പ്രധാന തീയതികളും{' '}
-            <span className="text-white/40">സമയ പരിധികളും</span>
+            <span className="text-white/60">സമയ പരിധികളും</span>
           </h2>
         </div>
 
@@ -88,7 +88,7 @@ export default function ImportantDatesSection() {
               <h4 className="text-[11px] font-bold text-white/80 leading-tight mb-1.5" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {d.title}
               </h4>
-              <p className="text-[9px] text-white/35 leading-relaxed">
+              <p className="text-[9px] text-white/55 leading-relaxed">
                 {d.desc}
               </p>
             </div>
@@ -96,7 +96,7 @@ export default function ImportantDatesSection() {
         </div>
 
         {/* Note */}
-        <p className="text-[11px] text-white/25 mt-6 text-center">
+        <p className="text-[11px] text-white/45 mt-6 text-center">
           * Dates are indicative. Verify from official circulars — finance.kerala.gov.in
         </p>
       </div>
