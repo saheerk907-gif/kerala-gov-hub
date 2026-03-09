@@ -19,6 +19,7 @@ const staticRoutes = [
   { url: '/dcrg', changeFrequency: 'monthly', priority: 0.8 },
   // Calculators
   { url: '/prc', changeFrequency: 'monthly', priority: 0.85 },
+  { url: '/pay-scales', changeFrequency: 'yearly', priority: 0.85 },
   { url: '/da-arrear', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/nps-aps', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/gpf', changeFrequency: 'monthly', priority: 0.75 },

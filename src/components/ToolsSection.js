@@ -92,6 +92,16 @@ const tools = [
     badge: 'NEW',
     tags: ['DA Arrear', 'G.O.', 'Month-wise', 'Print'],
   },
+  {
+    icon: '📋',
+    title: 'Pay Scales / ശമ്പള സ്കെയിൽ',
+    subtitle: '11th PRC · S1–S27',
+    desc: 'Kerala Govt pay scales — 11th, 10th, 9th PRC. Master scale & all revised scales.',
+    href: '/pay-scales',
+    color: '#2997ff',
+    badge: null,
+    tags: ['11th PRC', '10th PRC', 'Master Scale', 'S1-S27'],
+  },
 ];
 
 export default function ToolsSection() {
