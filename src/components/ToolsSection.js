@@ -102,6 +102,16 @@ const tools = [
     badge: null,
     tags: ['11th PRC', '10th PRC', 'Master Scale', 'S1-S27'],
   },
+  {
+    icon: '⚖️',
+    title: 'Acts & Rules / നിയമങ്ങൾ',
+    subtitle: 'Kerala Government Laws',
+    desc: 'Land Assignment Act, Labour Laws, Forest Act, KER — PDF & summary of all major Kerala acts.',
+    href: '/acts-rules',
+    color: '#bf5af2',
+    badge: 'NEW',
+    tags: ['Land Act', 'Labour', 'Forest', 'PDF'],
+  },
 ];
 
 export default function ToolsSection() {

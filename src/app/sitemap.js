@@ -17,6 +17,8 @@ const staticRoutes = [
   { url: '/pension-calculation', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/pension-forms', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/dcrg', changeFrequency: 'monthly', priority: 0.8 },
+  // Acts & Rules
+  { url: '/acts-rules', changeFrequency: 'weekly', priority: 0.90 },
   // Calculators
   { url: '/prc', changeFrequency: 'monthly', priority: 0.85 },
   { url: '/pay-scales', changeFrequency: 'yearly', priority: 0.85 },
@@ -67,6 +69,23 @@ export default async function sitemap() {
     // if fetch fails, sitemap still works with static routes
   }
 
+  // Fetch all acts for dynamic routes
+  let actsRoutes = [];
+  try {
+    const { data } = await supabase
+      .from('acts_rules')
+      .select('slug, updated_at')
+      .eq('is_published', true);
+    if (data) {
+      actsRoutes = data.map(a => ({
+        url: `${BASE_URL}/acts-rules/${a.slug}`,
+        lastModified: new Date(a.updated_at || new Date()),
+        changeFrequency: 'monthly',
+        priority: 0.85,
+      }));
+    }
+  } catch {}
+
   // Fetch all article IDs for dynamic routes
   let articleRoutes = [];
   try {
@@ -94,5 +113,5 @@ export default async function sitemap() {
     priority: route.priority,
   }));
 
-  return [...statics, ...newsRoutes, ...articleRoutes];
+  return [...statics, ...actsRoutes, ...newsRoutes, ...articleRoutes];
 }

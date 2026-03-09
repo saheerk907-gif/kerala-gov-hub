@@ -10,6 +10,7 @@ const navItems = [
   { href: '/admin/articles', label: 'ലേഖനങ്ങൾ',   icon: '✍️', en: 'Articles' },
   { href: '/admin/orders',   label: 'ഉത്തരവുകൾ',  icon: '📄', en: 'Orders' },
   { href: '/admin/tests',    label: 'Quiz / Tests', icon: '🧠', en: 'Quiz Questions' },
+  { href: '/admin/acts',     label: 'നിയമങ്ങൾ',    icon: '⚖️', en: 'Acts & Rules' },
   { href: '/admin/schemes',  label: 'പദ്ധതികൾ',    icon: '📋', en: 'Schemes' },
   { href: '/admin/links',    label: 'ലിങ്കുകൾ',    icon: '🔗', en: 'Links' },
 ];
