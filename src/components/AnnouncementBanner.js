@@ -53,11 +53,11 @@ export default function AnnouncementBanner() {
         {/* BREAKING label */}
         <div
           className="flex items-center gap-2 px-4 h-full flex-shrink-0 border-r"
-          style={{ background: '#ff453a', borderColor: 'rgba(255,255,255,0.1)' }}
+          style={{ background: 'rgba(41,151,255,0.85)', borderColor: 'rgba(255,255,255,0.1)' }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white whitespace-nowrap">
-            Breaking
+            Live
           </span>
         </div>
 

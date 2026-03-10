@@ -82,18 +82,30 @@ export default function OrdersSection({ orders }) {
                 rel="noopener noreferrer"
                 className="block no-underline group"
               >
-                <div className={`glass-card glow-top relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-3 ${i === 0 ? 'border-[#ff9f0a]/30 bg-[#ff9f0a]/[0.06]' : ''}`}>
-                  <div className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-lg ${i === 0 ? 'bg-[#ff9f0a]/20 text-[#ff9f0a]' : 'bg-white/[0.06] text-white/50'}`}>
-                    {o.is_pinned ? '📌' : '📄'}
+                <div className={`glass-card glow-top relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-3 ${o.is_pinned ? 'border-[#ff9f0a]/30 bg-[#ff9f0a]/[0.06]' : ''}`}>
+                  <div className={`flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${o.is_pinned ? 'bg-[#ff9f0a]/20' : 'bg-white/[0.06]'}`}>
+                    {o.is_pinned ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2L8 8H3l4 4-1.5 7L12 16l6.5 3L17 12l4-4h-5L12 2z"/>
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                      </svg>
+                    )}
                   </div>
                   <div className="flex-grow min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${i === 0 ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-white/[0.08] text-white/50'}`}>
-                        {i === 0 ? 'NEW' : (o.go_number?.split('/')[0] || 'GO')}
+                      <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-white/[0.08] text-white/50'}`}>
+                        {o.is_pinned ? 'PINNED' : (o.go_number?.split('/')[0] || 'GO')}
                       </span>
                       <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
                     </div>
-                    <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                    <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {o.title_ml}
                     </h3>
                   </div>
