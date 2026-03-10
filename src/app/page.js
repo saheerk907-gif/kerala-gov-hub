@@ -48,10 +48,10 @@ export default async function HomePage() {
       {/* 4 & 5. Orders + News — side by side */}
       <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-          <ScrollReveal direction="up" delay={0}>
+          <ScrollReveal direction="up" delay={100}>
             <OrdersSection orders={orders} />
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={0}>
+          <ScrollReveal direction="up" delay={200}>
             <section id="news">
               <NewSection news={news} />
             </section>
@@ -60,27 +60,27 @@ export default async function HomePage() {
       </div>
 
       {/* 5b. Articles */}
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal direction="up" delay={100}>
         <ArticlesSection />
       </ScrollReveal>
 
       {/* 6. Audio Classes */}
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal direction="up" delay={100}>
         <AudioClassesSection />
       </ScrollReveal>
 
       {/* 7. Departmental Tests */}
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal direction="up" delay={100}>
         <DepartmentalTestsSection />
       </ScrollReveal>
 
       {/* 7. Schemes */}
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal direction="up" delay={100}>
         <SchemesSection schemes={schemes} />
       </ScrollReveal>
 
       {/* 8. Quick Links — portals users need daily */}
-      <ScrollReveal direction="up" delay={0}>
+      <ScrollReveal direction="up" delay={100}>
         <QuickLinksSection links={quickLinks} />
       </ScrollReveal>
 

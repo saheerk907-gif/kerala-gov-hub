@@ -16,8 +16,8 @@ export default function Hero() {
           fill
           priority
           fetchPriority="high"
-          className="object-cover object-[center_40%] opacity-[0.18]"
-          style={{ filter: 'grayscale(60%) brightness(0.9) contrast(1.05)' }}
+          className="object-cover object-[center_40%] opacity-[0.28]"
+          style={{ filter: 'grayscale(30%) brightness(0.85) contrast(1.1)' }}
           sizes="100vw"
         />
         {/* Vignette — darken edges, keep center clear for logo */}
@@ -39,7 +39,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
 
         {/* Live badge */}
-        <div className="glass-pill flex items-center gap-2.5 px-5 py-2 rounded-full mb-6 animate-bounce-slow">
+        <div className="glass-pill flex items-center gap-2.5 px-5 py-2 rounded-full mb-6">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
