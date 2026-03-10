@@ -61,7 +61,7 @@ export default function Hero() {
         </div>
 
         {/* Kicker — SEO label above the main title */}
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/45 mb-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/65 mb-3">
           Kerala Government Employees Portal
         </p>
 
@@ -80,7 +80,7 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-[clamp(12px,1.6vw,15px)] text-white/60 max-w-[520px] leading-relaxed font-medium px-2 mb-5">
+        <p className="text-[clamp(12px,1.6vw,15px)] text-white/80 max-w-[520px] leading-relaxed font-medium px-2 mb-5">
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
@@ -99,7 +99,7 @@ export default function Hero() {
               key={label}
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.60)', border: '1px solid rgba(255,255,255,0.09)' }}
+              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.78)', border: '1px solid rgba(255,255,255,0.15)' }}
             >
               {label}
             </a>

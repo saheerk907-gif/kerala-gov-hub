@@ -67,7 +67,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="font-malayalam bg-[#121416] text-white antialiased overflow-x-hidden min-h-screen">
+      <body className="font-sans bg-[#121416] text-white antialiased overflow-x-hidden min-h-screen">
         <GoogleAnalytics />
         <Navbar />
         <main>{children}</main>

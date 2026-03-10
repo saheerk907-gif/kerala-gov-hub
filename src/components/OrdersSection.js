@@ -103,7 +103,7 @@ export default function OrdersSection({ orders }) {
                       <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-white/[0.08] text-white/50'}`}>
                         {o.is_pinned ? 'PINNED' : (o.go_number?.split('/')[0] || 'GO')}
                       </span>
-                      <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
+                      <span className="text-[10px] text-white/70">{formatDate(o.go_date)}</span>
                     </div>
                     <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {o.title_ml}
@@ -124,7 +124,7 @@ export default function OrdersSection({ orders }) {
                     <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.08] text-white/60">
                       {o.go_number?.split('/')[0] || 'GO'}
                     </span>
-                    <span className="text-[10px] text-white/45">{formatDate(o.go_date)}</span>
+                    <span className="text-[10px] text-white/65">{formatDate(o.go_date)}</span>
                   </div>
                   <h3 className="text-[15px] font-bold leading-snug text-white/60 truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {o.title_ml}

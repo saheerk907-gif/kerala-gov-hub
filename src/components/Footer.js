@@ -22,7 +22,7 @@ export default function Footer() {
                 </div>
               </div>
             </div>
-            <p className="text-[12px] text-white/55 leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            <p className="text-[12px] text-white/75 leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               കേരള സംസ്ഥാന സർക്കാർ ജീവനക്കാർക്കായുള്ള സമഗ്ര വിവര ശേഖരം.
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function Footer() {
           <div>
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-4">പദ്ധതികൾ</h3>
             {['സർവ്വീസ് ചട്ടങ്ങൾ', 'മെഡിസെപ്', 'ജി.പി.എഫ്', 'എൻ.പി.എസ്', 'എസ്.എൽ.ഐ', 'ജി.ഐ.എസ്'].map(s => (
-              <a key={s} href="#services" className="block text-[12px] text-white/55 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              <a key={s} href="#services" className="block text-[12px] text-white/72 no-underline py-0.5 hover:text-white/90 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {s}
               </a>
             ))}
@@ -41,7 +41,7 @@ export default function Footer() {
           <div>
             <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-4">വിഭവങ്ങൾ</h3>
             {[['#orders', 'ഉത്തരവുകൾ'], ['#benefits', 'ശമ്പളം & ബത്ത'], ['#benefits', 'അവധി ചട്ടങ്ങൾ'], ['#benefits', 'പെൻഷൻ']].map(([h, s]) => (
-              <a key={s} href={h} className="block text-[12px] text-white/55 no-underline py-0.5 hover:text-white/80 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              <a key={s} href={h} className="block text-[12px] text-white/72 no-underline py-0.5 hover:text-white/90 transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {s}
               </a>
             ))}
@@ -56,7 +56,7 @@ export default function Footer() {
               ['https://www.finance.kerala.gov.in', 'ധനകാര്യ വകുപ്പ്'],
               ['https://www.kerala.gov.in', 'Kerala.gov.in'],
             ].map(([u, s]) => (
-              <a key={s} href={u} target="_blank" rel="noopener noreferrer" className="block text-[12px] text-white/55 no-underline py-0.5 hover:text-white/80 transition-colors">
+              <a key={s} href={u} target="_blank" rel="noopener noreferrer" className="block text-[12px] text-white/72 no-underline py-0.5 hover:text-white/90 transition-colors">
                 {s}
               </a>
             ))}

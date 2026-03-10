@@ -176,7 +176,7 @@ export default function Navbar() {
               <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
-              <span className="text-[9px] font-semibold text-white/50 uppercase tracking-widest font-sans hidden sm:block">
+              <span className="text-[9px] font-semibold text-white/65 uppercase tracking-widest font-sans hidden sm:block">
                 Kerala Gov Employee Hub
               </span>
             </div>
@@ -220,7 +220,7 @@ export default function Navbar() {
                     >
                       {/* Header */}
                       <div className="px-4 py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/45">{item.en}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/65">{item.en}</span>
                       </div>
 
                       {/* Items */}
@@ -250,7 +250,7 @@ export default function Navbar() {
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[10.5px] text-white/50 mt-0.5 leading-none">{d.sub}</div>
+                              <div className="text-[10.5px] text-white/70 mt-0.5 leading-none">{d.sub}</div>
                             </div>
                             {d.external && (
                               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
@@ -354,7 +354,7 @@ export default function Navbar() {
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-white/45 mt-0.5">{d.sub}</div>
+                            <div className="text-[10px] text-white/70 mt-0.5">{d.sub}</div>
                           </div>
                           {d.external && (
                             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"

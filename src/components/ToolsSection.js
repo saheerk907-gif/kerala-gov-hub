@@ -170,7 +170,7 @@ export default function ToolsSection() {
               <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {t.title}
               </h3>
-              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/55">
+              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/70">
                 {t.subtitle}
               </div>
 

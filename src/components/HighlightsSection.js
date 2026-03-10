@@ -22,7 +22,7 @@ export default function HighlightsSection({ highlights }) {
             ശമ്പളം, അവധി,{' '}
             <span>പെൻഷൻ വിവരങ്ങൾ</span>
           </h2>
-          <p className="text-[15px] text-white/50 leading-relaxed max-w-[580px] mt-4">
+          <p className="text-[15px] text-white/75 leading-relaxed max-w-[580px] mt-4">
             കേരള സർക്കാർ ജീവനക്കാരുടെ സാമ്പത്തിക സുരക്ഷയും ക്ഷേമവും ഉറപ്പാക്കുന്ന സമഗ്ര ആനുകൂല്യങ്ങൾ.
           </p>
         </div>
@@ -54,7 +54,7 @@ export default function HighlightsSection({ highlights }) {
                 <h3 className="text-[20px] font-bold mb-2.5 text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {h.title_ml}
                 </h3>
-                <p className="text-[13px] text-white/50 leading-relaxed max-w-[500px]">
+                <p className="text-[13px] text-white/75 leading-relaxed max-w-[500px]">
                   {h.description_ml}
                 </p>
 
@@ -65,7 +65,7 @@ export default function HighlightsSection({ highlights }) {
                       .map(t => (
                         <span
                           key={t.id}
-                          className="px-3 py-1 rounded-full text-[10px] font-bold text-white/60 bg-white/[0.06] border border-white/[0.08]"
+                          className="px-3 py-1 rounded-full text-[10px] font-bold text-white/75 bg-white/[0.06] border border-white/[0.12]"
                         >
                           {t.tag_ml}
                         </span>

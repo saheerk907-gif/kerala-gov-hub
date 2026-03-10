@@ -35,7 +35,7 @@ export default function FAQSection({ faqs, accentColor = '#2997ff' }) {
             </button>
             {open === i && (
               <div className="px-5 pb-5">
-                <p className="text-[13px] text-white/55 leading-relaxed"
+                <p className="text-[13px] text-white/78 leading-relaxed"
                   style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {faq.a}
                 </p>
