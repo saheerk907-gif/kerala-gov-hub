@@ -76,7 +76,7 @@ export default function OrdersSection({ orders }) {
         ) : currentOrders.map((o) => o.pdf_url ? (
           <a key={o.id} href={o.pdf_url} target="_blank" rel="noopener noreferrer" className="block no-underline group">
             <div className={`glass-card glow-top relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-3 ${o.is_pinned ? 'border-[#ff9f0a]/30 bg-[#ff9f0a]/[0.06]' : ''}`}>
-              <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}>
+              <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={o.is_pinned ? { background: 'rgba(255,159,10,0.20)', border: '1px solid rgba(255,159,10,0.35)' } : { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}>
                 {o.is_pinned ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2L8 8H3l4 4-1.5 7L12 16l6.5 3L17 12l4-4h-5L12 2z"/>
@@ -108,7 +108,7 @@ export default function OrdersSection({ orders }) {
           </a>
         ) : (
           <div key={o.id} className="glass-card relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] mb-3 opacity-40 cursor-not-allowed">
-            <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}>
+            <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>

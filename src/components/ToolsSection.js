@@ -160,7 +160,7 @@ export default function ToolsSection() {
               {/* Icon */}
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center text-xl mb-2.5 transition-transform duration-200 group-hover:scale-105"
-                style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}
+                style={{ background: t.color + '20', border: `1px solid ${t.color}35` }}
               >
                 {t.icon}
               </div>
