@@ -46,7 +46,7 @@ export default function DepartmentalTestsSection() {
               >
                 <div
                   className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm"
-                  style={{ background: d.color + '18', border: `1px solid ${d.color}28` }}
+                  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}
                 >
                   {d.icon}
                 </div>
