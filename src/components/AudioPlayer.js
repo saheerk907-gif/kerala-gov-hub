@@ -12,7 +12,6 @@ function formatTime(secs) {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-// limit: number of episodes to show (undefined = all)
 export default function AudioPlayer({ limit }) {
   const [episodes,    setEpisodes]    = useState([]);
   const [loading,     setLoading]     = useState(true);
@@ -82,53 +81,74 @@ export default function AudioPlayer({ limit }) {
 
   if (!loading && episodes.length === 0) return null;
 
-  const visible     = limit ? episodes.slice(0, limit) : episodes;
-  const hasMore     = limit && episodes.length > limit;
+  const visible = limit ? episodes.slice(0, limit) : episodes;
+  const hasMore = limit && episodes.length > limit;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-5 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-4 items-start">
 
       {/* Episode list */}
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-2">
         {loading
-          ? [1, 2, 3, 4].map(i => <div key={i} className="glass-card h-[72px] rounded-[20px] animate-pulse" />)
+          ? [1, 2, 3, 4].map(i => <div key={i} className="glass-card h-[68px] rounded-[20px] animate-pulse" />)
           : visible.map(ep => {
               const isActive = current?.id === ep.id;
               return (
-                <button key={ep.id} onClick={() => playEpisode(ep)}
+                <button
+                  key={ep.id}
+                  onClick={() => playEpisode(ep)}
                   className="glass-card glow-top w-full text-left flex items-center gap-4 p-4 rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group"
-                  style={isActive ? { borderColor: 'rgba(48,209,88,0.35)', background: 'rgba(48,209,88,0.07)' } : {}}>
-                  <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center text-base transition-all"
-                    style={isActive ? { background: 'rgba(48,209,88,0.25)', color: '#30d158' } : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.4)' }}>
+                  style={isActive ? { borderColor: 'rgba(255,255,255,0.22)' } : {}}
+                >
+                  {/* Play/pause icon */}
+                  <div
+                    className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    style={isActive
+                      ? { background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.95)' }
+                      : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}
+                  >
                     {isActive && playing
-                      ? <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-                      : <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>}
+                      ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+                      : <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>}
                   </div>
+
                   <div className="flex-grow min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                        style={isActive ? { background: 'rgba(48,209,88,0.25)', color: '#30d158' } : { background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.4)' }}>
+                      <span
+                        className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                        style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.65)' }}
+                      >
                         EP {ep.episode_number}
                       </span>
-                      {ep.duration_label && <span className="text-[10px] text-white/50">{ep.duration_label}</span>}
+                      {ep.duration_label && (
+                        <span className="text-[10px] text-white/65">{ep.duration_label}</span>
+                      )}
                     </div>
-                    <h3 className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                    <h3
+                      className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate"
+                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                    >
                       {ep.title_ml}
                     </h3>
-                    {ep.title_en && <p className="text-[11px] text-white/55 mt-0.5 truncate">{ep.title_en}</p>}
+                    {ep.title_en && (
+                      <p className="text-[11px] text-white/65 mt-0.5 truncate">{ep.title_en}</p>
+                    )}
                   </div>
-                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/60 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/65 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
                   </svg>
                 </button>
               );
             })}
 
-        {/* View All button */}
+        {/* View all — neutral style matching other sections */}
         {hasMore && (
-          <Link href="/audio-classes"
+          <Link
+            href="/audio-classes"
             className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08] mt-1"
-            style={{ background: 'rgba(48,209,88,0.07)', color: '#30d158', border: '1px solid rgba(48,209,88,0.2)' }}>
+            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.09)' }}
+          >
             എല്ലാ ക്ലാസ്സുകളും കാണുക ({episodes.length} Episodes)
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
               <path d="M9 5l7 7-7 7"/>
@@ -137,49 +157,114 @@ export default function AudioPlayer({ limit }) {
         )}
       </div>
 
-      {/* Player */}
+      {/* Player panel — plain glass, no color tint */}
       <div className="lg:sticky lg:top-24">
         {current ? (
-          <div className="glass-card glow-top rounded-[24px] p-6" style={{ borderColor: 'rgba(48,209,88,0.2)', background: 'rgba(48,209,88,0.04)' }}>
-            <div className="text-[9px] font-black uppercase tracking-[0.2em] text-[#30d158] mb-4">Now Playing</div>
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0" style={{ background: 'rgba(48,209,88,0.15)' }}>🎙️</div>
+          <div className="glass-card rounded-[24px] p-5">
+            <div
+              className="text-[9px] font-black uppercase tracking-[0.2em] text-white/65 mb-4"
+            >
+              Now Playing
+            </div>
+
+            {/* Track info */}
+            <div className="flex items-center gap-3 mb-4">
+              <div
+                className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </div>
               <div className="min-w-0">
-                <h3 className="text-[15px] font-bold text-white leading-snug" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.title_ml}</h3>
-                {current.title_en && <p className="text-[11px] text-white/60 mt-0.5 truncate">{current.title_en}</p>}
+                <h3
+                  className="text-[14px] font-bold text-white leading-snug line-clamp-2"
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                >
+                  {current.title_ml}
+                </h3>
+                {current.title_en && (
+                  <p className="text-[11px] text-white/65 mt-0.5 truncate">{current.title_en}</p>
+                )}
               </div>
             </div>
-            {current.description_ml && (
-              <p className="text-[12px] text-white/60 mb-5 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{current.description_ml}</p>
-            )}
-            <div className="mb-3">
-              <div className="h-1.5 rounded-full cursor-pointer overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }} onClick={seekTo}>
-                <div className="h-full rounded-full transition-all" style={{ width: `${progress}%`, background: 'linear-gradient(90deg, #30d158, #34e35a)' }} />
+
+            {/* Progress bar */}
+            <div className="mb-4">
+              <div
+                className="h-1.5 rounded-full cursor-pointer overflow-hidden"
+                style={{ background: 'rgba(255,255,255,0.10)' }}
+                onClick={seekTo}
+              >
+                <div
+                  className="h-full rounded-full transition-all"
+                  style={{ width: `${progress}%`, background: 'rgba(255,255,255,0.75)' }}
+                />
               </div>
               <div className="flex justify-between mt-1.5">
-                <span className="text-[10px] text-white/50">{formatTime(currentTime)}</span>
-                <span className="text-[10px] text-white/50">{formatTime(duration)}</span>
+                <span className="text-[10px] text-white/65">{formatTime(currentTime)}</span>
+                <span className="text-[10px] text-white/65">{formatTime(duration)}</span>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <button onClick={() => skip(-10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>-10</button>
-              <button onClick={() => playEpisode(current)} className="w-14 h-14 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95" style={{ background: 'linear-gradient(135deg, #30d158, #25a244)' }}>
-                {playing
-                  ? <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-                  : <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>}
+
+            {/* Controls */}
+            <div className="flex items-center justify-center gap-2.5">
+              <button
+                onClick={() => skip(-10)}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
+                style={{ background: 'rgba(255,255,255,0.07)' }}
+              >
+                -10
               </button>
-              <button onClick={() => skip(10)} className="w-9 h-9 rounded-full flex items-center justify-center text-white/60 hover:text-white/80 transition-colors text-[11px] font-bold" style={{ background: 'rgba(255,255,255,0.06)' }}>+10</button>
-              <button onClick={cycleSpeed} className="h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:scale-105 active:scale-95"
-                style={{ background: speed !== 1 ? 'rgba(48,209,88,0.2)' : 'rgba(255,255,255,0.06)', color: speed !== 1 ? '#30d158' : 'rgba(255,255,255,0.5)', border: speed !== 1 ? '1px solid rgba(48,209,88,0.35)' : '1px solid transparent' }}
-                title="Change playback speed">{speed}×</button>
+              <button
+                onClick={() => playEpisode(current)}
+                className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.18)' }}
+              >
+                {playing
+                  ? <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+                  : <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>}
+              </button>
+              <button
+                onClick={() => skip(10)}
+                className="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
+                style={{ background: 'rgba(255,255,255,0.07)' }}
+              >
+                +10
+              </button>
+              <button
+                onClick={cycleSpeed}
+                className="h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:bg-white/10"
+                style={{
+                  background: speed !== 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
+                  color: speed !== 1 ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)',
+                  border: '1px solid rgba(255,255,255,0.10)',
+                }}
+                title="Change playback speed"
+              >
+                {speed}×
+              </button>
             </div>
             <audio ref={audioRef} src={current.audio_url} preload="metadata" />
           </div>
         ) : (
           <div className="glass-card rounded-[24px] p-8 text-center">
-            <div className="text-4xl mb-3">🎙️</div>
-            <p className="text-white/60 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു episode തിരഞ്ഞെടുക്കൂ</p>
-            <p className="text-white/45 text-[11px] mt-1">Select an episode to start listening</p>
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'rgba(255,255,255,0.07)' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+            <p className="text-white/75 text-[13px]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              ഒരു episode തിരഞ്ഞെടുക്കൂ
+            </p>
+            <p className="text-white/55 text-[11px] mt-1">Select an episode to start listening</p>
           </div>
         )}
       </div>
