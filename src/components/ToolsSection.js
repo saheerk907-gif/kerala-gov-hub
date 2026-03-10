@@ -120,13 +120,12 @@ export default function ToolsSection() {
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="section-label mb-1">Tools & Calculators</div>
-            <h2 className="text-[clamp(20px,3vw,30px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-              ടൂളുകൾ
-            </h2>
-          </div>
+        <div className="mb-6">
+          <div className="section-label mb-2">Tools & Calculators</div>
+          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            ടൂളുകൾ
+          </h2>
+          <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
         </div>
 
         {/* 2-col on mobile, 4-col on desktop — 8 items = 4+4 clean */}

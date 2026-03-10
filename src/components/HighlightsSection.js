@@ -17,11 +17,11 @@ export default function HighlightsSection({ highlights }) {
 
         {/* Header */}
         <div className="mb-14">
-          <div className="section-label mb-3">Key Benefits</div>
-          <h2 className="text-[clamp(28px,4.5vw,50px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-            ശമ്പളം, അവധി,{' '}
-            <span>പെൻഷൻ വിവരങ്ങൾ</span>
+          <div className="section-label mb-2">Key Benefits</div>
+          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            ശമ്പളം, അവധി, പെൻഷൻ വിവരങ്ങൾ
           </h2>
+          <div className="h-[2px] w-10 bg-gradient-to-r from-[#30d158] to-transparent mt-2 rounded-full" />
           <p className="text-[15px] text-white/75 leading-relaxed max-w-[580px] mt-4">
             കേരള സർക്കാർ ജീവനക്കാരുടെ സാമ്പത്തിക സുരക്ഷയും ക്ഷേമവും ഉറപ്പാക്കുന്ന സമഗ്ര ആനുകൂല്യങ്ങൾ.
           </p>
