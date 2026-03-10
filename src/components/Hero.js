@@ -58,16 +58,6 @@ export default function Hero() {
             }}
           />
 
-          {/* Edition badge — overlaid on logo bottom-right */}
-          <div className="absolute -bottom-1 -right-1 z-20 glass-pill flex items-center gap-1.5 px-2.5 py-1 rounded-full">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500" />
-            </span>
-            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/70">
-              2025–26
-            </span>
-          </div>
         </div>
 
         {/* Kicker — SEO label above the main title */}
@@ -116,31 +106,24 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 items-center">
-          <a
-            href="#tools"
-            className="px-9 py-3.5 bg-white text-[#121416] rounded-full text-[13px] font-black uppercase tracking-wider hover:bg-[#c8960c] hover:text-white transition-all duration-300 shadow-[0_8px_32px_rgba(255,255,255,0.12)] hover:shadow-[0_8px_32px_rgba(200,150,12,0.35)] hover:scale-105 no-underline"
-          >
-            വിഭവങ്ങൾ കാണുക
-          </a>
-          <a
-            href="#orders"
-            className="px-9 py-3.5 text-white/80 border border-white/20 rounded-full text-[13px] font-black uppercase tracking-wider glass-pill hover:border-white/40 hover:text-white transition-all duration-300 hover:scale-105 no-underline"
-          >
-            പുതിയ ഉത്തരവുകൾ
-          </a>
-        </div>
+        {/* Scroll down button */}
+        <button
+          onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          className="group flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
+          aria-label="Scroll to explore"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/40 group-hover:text-white/70 transition-colors">
+            Explore
+          </span>
+          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/5 transition-all duration-300 group-hover:translate-y-1">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="text-white/50 group-hover:text-white/80 transition-colors">
+              <path d="M2 4l4 4 4-4"/>
+            </svg>
+          </div>
+        </button>
 
       </div>
 
-      {/* ── Scroll indicator ──────────────────────────────── */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 opacity-25 pointer-events-none">
-        <div className="w-px h-5 bg-white/60" />
-        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round">
-          <path d="M1 1l4 4 4-4"/>
-        </svg>
-      </div>
 
     </section>
   );
