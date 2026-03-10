@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const LAST_UPDATED = 'March 2026';
@@ -89,15 +90,17 @@ const POINTS = [
 
 export default function DisclaimerPage() {
   return (
+    <>
+    <Navbar />
     <div className="relative min-h-screen bg-aurora overflow-x-hidden">
       <div className="pt-24 pb-8 px-4 md:px-6">
         <div className="max-w-[780px] mx-auto">
 
           {/* Header */}
           <div className="mb-10">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">Legal</span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Disclaimer</h1>
-            <p className="text-[13px] text-white/55">Last updated: {LAST_UPDATED}</p>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/65 mb-4">Legal</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Disclaimer</h1>
+            <p className="text-[13px] text-white/70">Last updated: {LAST_UPDATED}</p>
           </div>
 
           {/* Alert banner */}
@@ -126,9 +129,9 @@ export default function DisclaimerPage() {
                     style={{ background: 'rgba(255,159,10,0.12)', color: '#ff9f0a' }}>
                     {p.icon}
                   </div>
-                  <h2 className="text-[14px] font-bold text-white/80 leading-snug">{p.title}</h2>
+                  <h2 className="text-[14px] font-bold text-white/90 leading-snug">{p.title}</h2>
                 </div>
-                <p className="text-[13px] text-white/55 leading-relaxed mb-2">{p.content}</p>
+                <p className="text-[13px] text-white/75 leading-relaxed mb-2">{p.content}</p>
                 {p.links && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {p.links.map(l => (
@@ -141,21 +144,22 @@ export default function DisclaimerPage() {
                     ))}
                   </div>
                 )}
-                <p className="text-[11.5px] text-white/50 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{p.ml}</p>
+                <p className="text-[11.5px] text-white/65 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{p.ml}</p>
               </div>
             ))}
           </div>
 
-          <p className="mt-8 text-[12px] text-white/45 text-center">
+          <p className="mt-8 text-[12px] text-white/65 text-center">
             Questions?{' '}
-            <a href="/contact" className="text-white/60 hover:text-white/70 transition-colors">Contact us</a>
+            <a href="/contact" className="text-white/80 hover:text-white transition-colors">Contact us</a>
             {' '}·{' '}
-            <a href="/privacy-policy" className="text-white/60 hover:text-white/70 transition-colors">Privacy Policy</a>
+            <a href="/privacy-policy" className="text-white/80 hover:text-white transition-colors">Privacy Policy</a>
           </p>
 
         </div>
       </div>
       <Footer />
     </div>
+    </>
   );
 }

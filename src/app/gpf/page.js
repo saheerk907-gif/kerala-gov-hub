@@ -25,7 +25,7 @@ export default async function GpfPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-black text-white">
+      <main className="min-h-screen bg-aurora text-white">
         <div className="relative pt-32 pb-20 px-6 overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #001a08 0%, #000f05 60%, #000 100%)' }}>
           <div className="absolute inset-0 opacity-30"
@@ -34,8 +34,8 @@ export default async function GpfPage() {
             style={{ background: 'linear-gradient(90deg, transparent, #30d15850, transparent)' }} />
 
           <div className="relative max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
-              <a href="/" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Home</a>
+            <div className="flex items-center gap-2 text-xs text-white/60 mb-8">
+              <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
               <span>›</span>
               <span className="text-[#30d158]">GPF</span>
             </div>
@@ -46,9 +46,9 @@ export default async function GpfPage() {
             <h1 className="text-[clamp(36px,6vw,64px)] font-black tracking-tight leading-[1.05] mb-4">
               {scheme.title_ml || 'ജനറൽ പ്രൊവിഡന്റ് ഫണ്ട്'}
             </h1>
-            <p className="text-lg text-[#6e6e73] font-medium mb-4">General Provident Fund — Mandatory Savings for Government Employees</p>
+            <p className="text-lg text-white/75 font-medium mb-4">General Provident Fund — Mandatory Savings for Government Employees</p>
             {scheme.description_ml && (
-              <p className="text-base text-[#86868b] leading-relaxed max-w-2xl">{scheme.description_ml}</p>
+              <p className="text-base text-white/70 leading-relaxed max-w-2xl">{scheme.description_ml}</p>
             )}
             <div className="grid grid-cols-3 gap-4 mt-10 max-w-xl">
               {[
@@ -58,7 +58,7 @@ export default async function GpfPage() {
               ].map(s => (
                 <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                   <div className="text-xl font-black text-[#30d158]">{s.value}</div>
-                  <div className="text-[10px] text-[#6e6e73] mt-1">{s.label}</div>
+                  <div className="text-[10px] text-white/65 mt-1">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -90,7 +90,7 @@ export default async function GpfPage() {
                       {post.title_ml}
                     </h3>
                     {post.summary_ml && (
-                      <p className="text-sm text-[#86868b] leading-relaxed line-clamp-3">{post.summary_ml}</p>
+                      <p className="text-sm text-white/70 leading-relaxed line-clamp-3">{post.summary_ml}</p>
                     )}
                     <span className="inline-block mt-3 text-xs font-bold text-[#30d158]">വായിക്കുക →</span>
                   </Link>
@@ -100,7 +100,7 @@ export default async function GpfPage() {
           )}
 
           {!scheme.content_ml && posts.length === 0 && (
-            <div className="text-center py-20 text-[#6e6e73]">
+            <div className="text-center py-20 text-white/60">
               <div className="text-5xl mb-4">💰</div>
               <p>Content coming soon.</p>
             </div>

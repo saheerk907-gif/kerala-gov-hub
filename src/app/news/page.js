@@ -54,14 +54,14 @@ export default function AllNewsPage() {
 
           {/* Header */}
           <div className="mb-10">
-            <Link href="/" className="text-[12px] text-white/55 hover:text-white no-underline transition-colors">
+            <Link href="/" className="text-[12px] text-white/70 hover:text-white no-underline transition-colors">
               ← keralagovhub.in
             </Link>
             <h1 className="text-[clamp(26px,4vw,40px)] font-[900] tracking-[-0.03em] text-white mt-4 mb-2"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               എല്ലാ വാർത്തകളും
             </h1>
-            <p className="text-[13px] text-white/55">Kerala government employee news — latest first</p>
+            <p className="text-[13px] text-white/72">Kerala government employee news — latest first</p>
           </div>
 
           {/* News list */}
@@ -83,7 +83,7 @@ export default function AllNewsPage() {
                   style={i === 0 ? { border: '1px solid rgba(41,151,255,0.2)', background: 'rgba(41,151,255,0.05)' } : {}}>
 
                   {/* Index */}
-                  <div className="text-[11px] font-black text-white/40 w-6 flex-shrink-0 text-right">{i + 1}</div>
+                  <div className="text-[11px] font-black text-white/55 w-6 flex-shrink-0 text-right">{i + 1}</div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
@@ -93,17 +93,17 @@ export default function AllNewsPage() {
                           Latest
                         </span>
                       )}
-                      <span className="text-[10px] text-white/50">{formatDate(item.created_at)}</span>
+                      <span className="text-[10px] text-white/65">{formatDate(item.created_at)}</span>
                     </div>
-                    <div className="text-[14px] font-semibold text-white/80 group-hover:text-white transition-colors leading-snug truncate"
+                    <div className="text-[14px] font-semibold text-white/90 group-hover:text-white transition-colors leading-snug truncate"
                       style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       {item.title_ml}
                     </div>
                   </div>
 
-                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all flex-shrink-0"
+                  <svg className="w-4 h-4 text-white/55 group-hover:text-white/80 group-hover:translate-x-0.5 transition-all flex-shrink-0"
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
               ))}
@@ -114,7 +114,7 @@ export default function AllNewsPage() {
           {hasMore && !loading && (
             <button onClick={loadMore} disabled={loadingMore}
               className="w-full mt-6 py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50"
-              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}>
+              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)' }}>
               {loadingMore ? 'Loading...' : 'കൂടുതൽ വാർത്തകൾ കാണുക'}
             </button>
           )}

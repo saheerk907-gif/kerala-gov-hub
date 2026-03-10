@@ -24,7 +24,7 @@ export default async function NpsPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-black text-white">
+      <main className="min-h-screen bg-aurora text-white">
         <div className="relative pt-32 pb-20 px-6 overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #1a0000 0%, #0f0000 60%, #000 100%)' }}>
           <div className="absolute inset-0 opacity-30"
@@ -33,8 +33,8 @@ export default async function NpsPage() {
             style={{ background: 'linear-gradient(90deg, transparent, #ff453a50, transparent)' }} />
 
           <div className="relative max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
-              <a href="/" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Home</a>
+            <div className="flex items-center gap-2 text-xs text-white/60 mb-8">
+              <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
               <span>›</span>
               <span className="text-[#ff453a]">NPS</span>
             </div>
@@ -45,9 +45,9 @@ export default async function NpsPage() {
             <h1 className="text-[clamp(36px,6vw,64px)] font-black tracking-tight leading-[1.05] mb-4">
               {scheme.title_ml || 'നാഷണൽ പെൻഷൻ സ്കീം'}
             </h1>
-            <p className="text-lg text-[#6e6e73] font-medium mb-4">National Pension System — For Employees Appointed After 01.04.2013</p>
+            <p className="text-lg text-white/75 font-medium mb-4">National Pension System — For Employees Appointed After 01.04.2013</p>
             {scheme.description_ml && (
-              <p className="text-base text-[#86868b] leading-relaxed max-w-2xl">{scheme.description_ml}</p>
+              <p className="text-base text-white/70 leading-relaxed max-w-2xl">{scheme.description_ml}</p>
             )}
             <div className="grid grid-cols-3 gap-4 mt-10 max-w-xl">
               {[
@@ -57,7 +57,7 @@ export default async function NpsPage() {
               ].map(s => (
                 <div key={s.label} className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
                   <div className="text-xl font-black text-[#ff453a]">{s.value}</div>
-                  <div className="text-[10px] text-[#6e6e73] mt-1">{s.label}</div>
+                  <div className="text-[10px] text-white/65 mt-1">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -68,7 +68,7 @@ export default async function NpsPage() {
           {scheme.content_ml ? (
             <div className="scheme-content" dangerouslySetInnerHTML={{ __html: scheme.content_ml }} />
           ) : (
-            <div className="text-center py-20 text-[#6e6e73]">
+            <div className="text-center py-20 text-white/60">
               <div className="text-5xl mb-4">📊</div>
               <p>Content coming soon.</p>
             </div>

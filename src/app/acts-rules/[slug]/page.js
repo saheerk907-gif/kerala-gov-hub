@@ -79,14 +79,14 @@ export default async function ActPage({ params }) {
     <>
       <Navbar />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <main className="min-h-screen bg-black text-white pt-[100px]">
+      <main className="min-h-screen bg-aurora text-white pt-[100px]">
         <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8 flex-wrap">
-            <a href="/" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Home</a>
+          <div className="flex items-center gap-2 text-xs text-white/60 mb-8 flex-wrap">
+            <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
             <span>›</span>
-            <Link href="/acts-rules" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Acts & Rules</Link>
+            <Link href="/acts-rules" className="hover:text-white transition-colors no-underline text-white/60">Acts & Rules</Link>
             <span>›</span>
             <span className="text-[#2997ff] truncate">{act.title}</span>
           </div>
@@ -110,7 +110,7 @@ export default async function ActPage({ params }) {
             {act.title}
           </h1>
           {act.title_ml && (
-            <div className="text-[16px] text-white/50 mb-6" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            <div className="text-[16px] text-white/72 mb-6" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {act.title_ml}
             </div>
           )}
@@ -150,7 +150,7 @@ export default async function ActPage({ params }) {
               <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-4">✅ Key Provisions</div>
               <ul className="space-y-3">
                 {act.key_points.split('\n').filter(Boolean).map((point, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[13px] text-white/70 leading-relaxed">
+                  <li key={i} className="flex items-start gap-3 text-[13px] text-white/82 leading-relaxed">
                     <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black mt-0.5"
                       style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>
                       {i + 1}
@@ -165,10 +165,10 @@ export default async function ActPage({ params }) {
           {/* Tags */}
           {tags.length > 0 && (
             <div className="mb-8">
-              <div className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-3">Tags</div>
+              <div className="text-[10px] font-black uppercase tracking-widest text-white/65 mb-3">Tags</div>
               <div className="flex flex-wrap gap-2">
                 {tags.map((tag, i) => (
-                  <span key={i} className="text-[11px] px-3 py-1 rounded-lg bg-white/[0.06] text-white/50 border border-white/[0.08]">
+                  <span key={i} className="text-[11px] px-3 py-1 rounded-lg bg-white/[0.06] text-white/70 border border-white/[0.08]">
                     {tag}
                   </span>
                 ))}

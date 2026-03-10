@@ -15,12 +15,12 @@ export default async function ActsRulesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-black text-white pt-[100px]">
+      <main className="min-h-screen bg-aurora text-white pt-[100px]">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-10">
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
-            <a href="/" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Home</a>
+          <div className="flex items-center gap-2 text-xs text-white/60 mb-8">
+            <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
             <span>›</span>
             <span className="text-[#2997ff]">Acts & Rules</span>
           </div>
@@ -34,7 +34,7 @@ export default async function ActsRulesPage() {
                 ചട്ടങ്ങളും
               </span>
             </h1>
-            <p className="text-[15px] text-white/50 leading-relaxed max-w-[620px]">
+            <p className="text-[15px] text-white/75 leading-relaxed max-w-[620px]">
               കേരള സർക്കാർ ജീവനക്കാർക്ക് ആവശ്യമായ പ്രധാന നിയമങ്ങളും ചട്ടങ്ങളും — PDF, സംക്ഷേപം, പ്രധാന വ്യവസ്ഥകൾ.
             </p>
           </div>

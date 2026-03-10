@@ -52,8 +52,8 @@ export default async function ArticleDetailPage({ params }) {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-black flex items-center justify-center">
-          <div className="text-center text-[#6e6e73]">
+        <main className="min-h-screen bg-aurora flex items-center justify-center">
+          <div className="text-center text-white/60">
             <div className="text-5xl mb-4">📭</div>
             <p>ലേഖനം കണ്ടെത്താനായില്ല</p>
             <a href="/articles" className="inline-block mt-6 px-6 py-3 rounded-xl text-sm font-bold no-underline"
@@ -79,7 +79,7 @@ export default async function ArticleDetailPage({ params }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <Navbar />
-      <main className="min-h-screen bg-black text-white">
+      <main className="min-h-screen bg-aurora text-white">
         {/* Hero */}
         <div className="relative pt-32 pb-12 px-6 overflow-hidden"
           style={{ background: 'linear-gradient(135deg, #0a0a12 0%, #050508 60%, #000 100%)' }}>
@@ -88,10 +88,10 @@ export default async function ArticleDetailPage({ params }) {
           <div className="absolute top-0 left-0 right-0 h-px"
             style={{ background: 'linear-gradient(90deg, transparent, #2997ff30, transparent)' }} />
           <div className="relative max-w-3xl mx-auto">
-            <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
-              <a href="/" className="hover:text-white transition-colors no-underline text-[#6e6e73]">Home</a>
+            <div className="flex items-center gap-2 text-xs text-white/60 mb-8">
+              <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
               <span>›</span>
-              <a href="/articles" className="hover:text-white transition-colors no-underline text-[#6e6e73]">ലേഖനങ്ങൾ</a>
+              <a href="/articles" className="hover:text-white transition-colors no-underline text-white/60">ലേഖനങ്ങൾ</a>
               <span>›</span>
               <span className="capitalize text-[#2997ff]">{item.category || 'general'}</span>
             </div>
@@ -104,15 +104,15 @@ export default async function ArticleDetailPage({ params }) {
               {item.title_ml}
             </h1>
             {item.title_en && (
-              <p className="text-base text-[#6e6e73] mb-4 font-medium">{item.title_en}</p>
+              <p className="text-base text-white/70 mb-4 font-medium">{item.title_en}</p>
             )}
-            <div className="flex items-center gap-4 text-xs text-[#6e6e73]">
+            <div className="flex items-center gap-4 text-xs text-white/60">
               <span>{new Date(item.created_at).toLocaleDateString('ml-IN', {
                 year: 'numeric', month: 'long', day: 'numeric'
               })}</span>
               {item.source_url && (
                 <a href={item.source_url} target="_blank" rel="noopener noreferrer"
-                  className="hover:text-white transition-colors no-underline text-[#6e6e73]">
+                  className="hover:text-white transition-colors no-underline text-white/60">
                   Source ↗
                 </a>
               )}
@@ -144,7 +144,7 @@ export default async function ArticleDetailPage({ params }) {
               style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.2)' }}>
               <div className="flex-1">
                 <div className="text-[10px] font-black uppercase tracking-widest text-[#30d158] mb-1">Related Page</div>
-                <p className="text-sm text-[#86868b]" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                <p className="text-sm text-white/70" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   ഈ വിഷയത്തെ കുറിച്ചുള്ള കൂടുതൽ വിവരങ്ങൾ ഇവിടെ ലഭ്യമാണ്.
                 </p>
               </div>

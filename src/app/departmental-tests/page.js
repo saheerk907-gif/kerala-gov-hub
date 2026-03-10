@@ -2,6 +2,8 @@
 import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import { DEPTS, TESTS, getDeptColor } from '@/lib/testsData';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -60,11 +62,11 @@ function TestsPageInner() {
   }
 
   return (
-    <div className="min-h-screen bg-aurora text-white">
+    <div className="min-h-screen bg-aurora text-white pt-24">
       <div className="max-w-[1100px] mx-auto px-4 md:px-6 py-12">
 
         {/* Back */}
-        <Link href="/" className="inline-flex items-center gap-2 text-[12px] text-white/60 hover:text-white no-underline mb-8 transition-colors">
+        <Link href="/" className="inline-flex items-center gap-2 text-[12px] text-white/75 hover:text-white no-underline mb-8 transition-colors">
           ← keralagovhub.in
         </Link>
 
@@ -73,7 +75,7 @@ function TestsPageInner() {
           <h1 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight mb-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റുകൾ
           </h1>
-          <p className="text-[14px] text-white/45">Kerala PSC — 30 departments, 64+ tests, syllabus & quiz</p>
+          <p className="text-[14px] text-white/70">Kerala PSC — 30 departments, 64+ tests, syllabus & quiz</p>
         </div>
 
         {/* Search */}
@@ -97,7 +99,7 @@ function TestsPageInner() {
             <button
               onClick={() => { setActiveDept('all'); setExpanded(null); }}
               className="px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
-              style={{ background: activeDept === 'all' ? '#ffffff20' : 'rgba(255,255,255,0.04)', color: activeDept === 'all' ? '#fff' : 'rgba(255,255,255,0.4)', outline: activeDept === 'all' ? '1px solid #ffffff30' : 'none' }}>
+              style={{ background: activeDept === 'all' ? '#ffffff20' : 'rgba(255,255,255,0.04)', color: activeDept === 'all' ? '#fff' : 'rgba(255,255,255,0.65)', outline: activeDept === 'all' ? '1px solid #ffffff30' : 'none' }}>
               🗂️ <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>എല്ലാം</span> ({TESTS.length})
             </button>
             {DEPTS.map(d => {
@@ -107,7 +109,7 @@ function TestsPageInner() {
                 <button key={d.id}
                   onClick={() => { setActiveDept(d.id); setExpanded(null); }}
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
-                  style={{ background: active ? d.color + '20' : 'rgba(255,255,255,0.04)', color: active ? d.color : 'rgba(255,255,255,0.4)', outline: active ? `1px solid ${d.color}40` : 'none' }}>
+                  style={{ background: active ? d.color + '20' : 'rgba(255,255,255,0.04)', color: active ? d.color : 'rgba(255,255,255,0.65)', outline: active ? `1px solid ${d.color}40` : 'none' }}>
                   {d.icon} <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span> <span className="opacity-50">({count})</span>
                 </button>
               );
@@ -115,7 +117,7 @@ function TestsPageInner() {
           </div>
         )}
 
-        <div className="text-[11px] text-white/45 mb-4">{filtered.length} ടെസ്റ്റുകൾ</div>
+        <div className="text-[11px] text-white/65 mb-4">{filtered.length} ടെസ്റ്റുകൾ</div>
 
         {/* Test List */}
         <div className="flex flex-col gap-2">
@@ -139,12 +141,12 @@ function TestsPageInner() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-[14px] font-semibold text-white/85 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                      <span className="text-[14px] font-semibold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                         {test.name_ml}
                       </span>
                       {test.popular && <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded hidden sm:inline" style={{ background: color + '22', color }}>Popular</span>}
                     </div>
-                    <div className="text-[11px] text-white/50 font-sans mt-0.5 truncate">{test.name_en}</div>
+                    <div className="text-[11px] text-white/70 font-sans mt-0.5 truncate">{test.name_en}</div>
                   </div>
                   <div className="text-[10px] font-bold whitespace-nowrap hidden sm:block flex-shrink-0" style={{ color }}>
                     {test.papers} Paper{test.papers > 1 ? 's' : ''}
@@ -161,13 +163,13 @@ function TestsPageInner() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
                       <div className="bg-white/[0.03] rounded-xl p-4">
                         <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color }}>ആർക്ക് ആവശ്യം</div>
-                        <div className="text-[13px] text-white/70 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.for_ml}</div>
+                        <div className="text-[13px] text-white/85 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.for_ml}</div>
                       </div>
                       <div className="bg-white/[0.03] rounded-xl p-4">
                         <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color }}>പ്രധാന വിഷയങ്ങൾ</div>
                         <div className="flex flex-wrap gap-1.5">
                           {test.topics.map((topic, i) => (
-                            <span key={i} className="text-[11px] px-2 py-0.5 rounded-lg text-white/55 bg-white/[0.05]">{topic}</span>
+                            <span key={i} className="text-[11px] px-2 py-0.5 rounded-lg text-white/75 bg-white/[0.05]">{topic}</span>
                           ))}
                         </div>
                       </div>
@@ -176,13 +178,13 @@ function TestsPageInner() {
                     {test.note && (
                       <div className="mt-3 flex items-start gap-2 text-[12px] text-white/50 bg-white/[0.03] rounded-xl px-4 py-3">
                         <span>💡</span>
-                        <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.note}</span>
+                        <span className="text-white/70" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{test.note}</span>
                       </div>
                     )}
 
                     {/* Paper Quiz Buttons */}
                     <div className="mt-4">
-                      <div className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-2">Quiz എടുക്കുക</div>
+                      <div className="text-[10px] font-black uppercase tracking-widest text-white/65 mb-2">Quiz എടുക്കുക</div>
                       <div className="flex gap-2 flex-wrap">
                         {papers.map(p => {
                           const hasQ = hasQuiz(test.id, p);
@@ -211,7 +213,7 @@ function TestsPageInner() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-16 text-white/50">
+          <div className="text-center py-16 text-white/65">
             <div className="text-4xl mb-3">🔍</div>
             <div style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>ഒരു ടെസ്റ്റും കണ്ടെത്തിയില്ല</div>
           </div>
@@ -223,8 +225,12 @@ function TestsPageInner() {
 
 export default function DepartmentalTestsPage() {
   return (
-    <Suspense>
-      <TestsPageInner />
-    </Suspense>
+    <>
+      <Navbar />
+      <Suspense>
+        <TestsPageInner />
+      </Suspense>
+      <Footer />
+    </>
   );
 }

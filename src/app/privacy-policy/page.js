@@ -1,3 +1,4 @@
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 const LAST_UPDATED = 'March 2026';
@@ -71,22 +72,24 @@ const SECTIONS = [
 
 export default function PrivacyPolicyPage() {
   return (
+    <>
+    <Navbar />
     <div className="relative min-h-screen bg-aurora overflow-x-hidden">
       <div className="pt-24 pb-8 px-4 md:px-6">
         <div className="max-w-[760px] mx-auto">
 
           {/* Header */}
           <div className="mb-10">
-            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/50 mb-4">Legal</span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white/90 mb-3">Privacy Policy</h1>
-            <p className="text-[13px] text-white/55">Last updated: {LAST_UPDATED}</p>
+            <span className="inline-block text-[10px] font-black uppercase tracking-[0.3em] text-white/65 mb-4">Legal</span>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Privacy Policy</h1>
+            <p className="text-[13px] text-white/70">Last updated: {LAST_UPDATED}</p>
           </div>
 
           {/* Intro */}
           <div className="glass-card rounded-2xl p-6 md:p-8 mb-6">
-            <p className="text-[14px] text-white/65 leading-relaxed">
-              Kerala Gov Employee Hub (&ldquo;<strong className="text-white/80">we</strong>&rdquo;, &ldquo;<strong className="text-white/80">us</strong>&rdquo;, or &ldquo;<strong className="text-white/80">our</strong>&rdquo;) operates{' '}
-              <strong className="text-white/80">keralaemployees.in</strong>. This Privacy Policy explains what information we collect when you visit this site, how we use it, and the choices you have. By using this site, you agree to the practices described here.
+            <p className="text-[14px] text-white/80 leading-relaxed">
+              Kerala Gov Employee Hub (&ldquo;<strong className="text-white">we</strong>&rdquo;, &ldquo;<strong className="text-white">us</strong>&rdquo;, or &ldquo;<strong className="text-white">our</strong>&rdquo;) operates{' '}
+              <strong className="text-white">keralaemployees.in</strong>. This Privacy Policy explains what information we collect when you visit this site, how we use it, and the choices you have. By using this site, you agree to the practices described here.
             </p>
           </div>
 
@@ -94,10 +97,10 @@ export default function PrivacyPolicyPage() {
           <div className="flex flex-col gap-4">
             {SECTIONS.map((s) => (
               <div key={s.title} className="glass-card rounded-2xl p-6">
-                <h2 className="text-[13px] font-bold text-white/80 mb-3">{s.title}</h2>
+                <h2 className="text-[13px] font-bold text-white/90 mb-3">{s.title}</h2>
                 <div className="flex flex-col gap-2">
                   {s.content.map((para, i) => (
-                    <p key={i} className="text-[13px] text-white/55 leading-relaxed">{para}</p>
+                    <p key={i} className="text-[13px] text-white/75 leading-relaxed">{para}</p>
                   ))}
                 </div>
               </div>
@@ -105,9 +108,9 @@ export default function PrivacyPolicyPage() {
           </div>
 
           {/* Footer note */}
-          <p className="mt-8 text-[12px] text-white/45 text-center">
+          <p className="mt-8 text-[12px] text-white/65 text-center">
             For any privacy-related concerns, email us at{' '}
-            <a href="mailto:kerala.employees.gov@gmail.com" className="text-white/60 hover:text-white/70 transition-colors">
+            <a href="mailto:kerala.employees.gov@gmail.com" className="text-white/80 hover:text-white transition-colors">
               kerala.employees.gov@gmail.com
             </a>
           </p>
@@ -116,5 +119,6 @@ export default function PrivacyPolicyPage() {
       </div>
       <Footer />
     </div>
+    </>
   );
 }
