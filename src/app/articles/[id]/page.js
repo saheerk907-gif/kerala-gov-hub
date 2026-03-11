@@ -183,6 +183,10 @@ export default async function ArticleDetailPage({ params }) {
           .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
           .article-content th { background: rgba(41,151,255,0.1); color: white; padding: 10px 14px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
           .article-content td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+          .article-content .ql-align-justify { text-align: justify; }
+          .article-content .ql-align-center  { text-align: center; }
+          .article-content .ql-align-right   { text-align: right; }
+          .article-content .ql-align-left    { text-align: left; }
         ` }} />
       </main>
       <Footer />
