@@ -170,8 +170,8 @@ export default async function ArticleDetailPage({ params }) {
 
         <style dangerouslySetInnerHTML={{ __html: `
           .article-content { font-family: var(--font-noto-malayalam), Georgia, serif; line-height: 1.9; color: #aeaeb2; font-size: 1rem; }
-          .article-content h2 { font-size: 1.4rem; font-weight: 800; color: white; margin: 2.5rem 0 1rem; }
-          .article-content h3 { font-size: 1.1rem; font-weight: 700; color: #e5e5e7; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid #2997ff; }
+          .article-content h2 { font-size: 1.4rem; font-weight: 800; color: white; margin: 2.5rem 0 1rem; text-align: justify; }
+          .article-content h3 { font-size: 1.1rem; font-weight: 700; color: #e5e5e7; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid #2997ff; text-align: justify; }
           .article-content p { margin-bottom: 1.25rem; }
           .article-content b, .article-content strong { color: white; font-weight: 700; }
           .article-content a { color: #2997ff; text-decoration: underline; }
