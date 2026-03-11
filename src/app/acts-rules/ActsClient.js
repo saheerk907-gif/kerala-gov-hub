@@ -110,7 +110,7 @@ export default function ActsClient({ acts }) {
                 {/* Summary excerpt */}
                 {act.summary && (
                   <p className="text-[12px] text-white/50 leading-relaxed mb-4 line-clamp-3 flex-1">
-                    {act.summary}
+                    {act.summary.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim()}
                   </p>
                 )}
 
