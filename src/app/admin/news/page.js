@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function AddNewsPage() {
   const [loading, setLoading] = useState(false);
@@ -86,14 +87,11 @@ export default function AddNewsPage() {
 
               <div>
                 <label className="block text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3 ml-2">Summary / Content (Malayalam)</label>
-                <textarea 
-                  required
-                  rows="4"
-                  placeholder="വാർത്തയുടെ ചുരുക്കം ഇവിടെ നൽകുക..."
-                  className="w-full px-6 py-4 bg-[#F8F9FA] border-none rounded-[20px] outline-none resize-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
-                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                <RichTextEditor
                   value={formData.summary_ml}
-                  onChange={(e) => setFormData({...formData, summary_ml: e.target.value})}
+                  onChange={(val) => setFormData({...formData, summary_ml: val})}
+                  placeholder="വാർത്തയുടെ ചുരുക്കം ഇവിടെ നൽകുക..."
+                  minHeight={180}
                 />
               </div>
             </div>

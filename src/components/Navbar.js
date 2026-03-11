@@ -166,14 +166,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between px-4 md:px-6 h-14">
 
           {/* Brand */}
-          <a href="/" className="flex items-center gap-3 no-underline group flex-shrink-0">
-            <picture>
+          <a href="/" className="flex items-center gap-2 no-underline group min-w-0 shrink">
+            <picture className="flex-shrink-0">
               <source srcSet="/logo.webp" type="image/webp" />
               <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
                 className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             </picture>
-            <div className="flex flex-col leading-tight">
-              <span className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            <div className="flex flex-col leading-tight min-w-0">
+              <span className="text-[12px] sm:text-[14px] font-bold text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
               <span className="text-[9px] font-semibold text-white/65 uppercase tracking-widest font-sans hidden sm:block">
@@ -269,7 +269,7 @@ export default function Navbar() {
           </nav>
 
           {/* Theme toggle + Mobile hamburger */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
           {/* Search button */}
           <button
             onClick={() => setSearchOpen(true)}

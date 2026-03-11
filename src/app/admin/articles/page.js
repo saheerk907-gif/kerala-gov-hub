@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import RichTextEditor from '@/components/RichTextEditor';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -266,22 +267,25 @@ export default function AdminArticles() {
           {/* Summary */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">സംക്ഷിപ്തം (Summary) <span className="normal-case font-normal">— article card-ൽ കാണിക്കും</span></label>
-            <textarea value={form.summary_ml} onChange={e => setForm(f => ({ ...f, summary_ml: e.target.value }))}
-              rows={3} placeholder="ചെറിയ വിവരണം — ഹോം പേജിൽ കാർഡിൽ കാണിക്കും"
-              className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors resize-y"
-              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
+            <RichTextEditor
+              value={form.summary_ml}
+              onChange={val => setForm(f => ({ ...f, summary_ml: val }))}
+              placeholder="ചെറിയ വിവരണം — ഹോം പേജിൽ കാർഡിൽ കാണിക്കും"
+              minHeight={120}
+            />
           </div>
 
           {/* Full Content */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
               പൂർണ്ണ ഉള്ളടക്കം (Full Content)
-              <span className="ml-2 normal-case font-normal text-[#6e6e73]">— HTML: &lt;h3&gt; &lt;p&gt; &lt;b&gt; &lt;ul&gt; &lt;li&gt; &lt;br&gt; supported</span>
             </label>
-            <textarea value={form.content_ml} onChange={e => setForm(f => ({ ...f, content_ml: e.target.value }))}
-              rows={14} placeholder="<h3>വിഭാഗം 1</h3>&#10;<p>ഇവിടെ ഉള്ളടക്കം എഴുതുക...</p>&#10;<ul>&#10;  <li>പോയിന്റ് 1</li>&#10;  <li>പോയിന്റ് 2</li>&#10;</ul>"
-              className="w-full px-4 py-3 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors resize-y font-mono"
-              style={{ lineHeight: 1.6 }} />
+            <RichTextEditor
+              value={form.content_ml}
+              onChange={val => setForm(f => ({ ...f, content_ml: val }))}
+              placeholder="ഇവിടെ ലേഖനത്തിന്റെ പൂർണ്ണ ഉള്ളടക്കം എഴുതുക..."
+              minHeight={320}
+            />
           </div>
 
           {/* Image Upload */}
