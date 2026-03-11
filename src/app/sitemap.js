@@ -37,6 +37,11 @@ const staticRoutes = [
   { url: '/nps', changeFrequency: 'monthly', priority: 0.75 },
   { url: '/ksr', changeFrequency: 'monthly', priority: 0.8 },
   { url: '/kerala-service-rules', changeFrequency: 'monthly', priority: 0.7 },
+  // Info pages
+  { url: '/about', changeFrequency: 'yearly', priority: 0.5 },
+  { url: '/contact', changeFrequency: 'yearly', priority: 0.5 },
+  { url: '/privacy-policy', changeFrequency: 'monthly', priority: 0.4 },
+  { url: '/disclaimer', changeFrequency: 'monthly', priority: 0.4 },
   // Departmental Tests
   { url: '/departmental-tests', changeFrequency: 'weekly', priority: 0.85 },
   { url: '/departmental-tests/quiz', changeFrequency: 'monthly', priority: 0.75 },

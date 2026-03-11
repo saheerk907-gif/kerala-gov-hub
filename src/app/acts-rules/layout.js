@@ -7,6 +7,13 @@ export const metadata = {
     title: 'Kerala Acts & Rules — Important Laws for Government Employees',
     description: 'Complete collection of Kerala Government Acts and Rules with PDF downloads and summaries.',
     url: 'https://keralaemployees.in/acts-rules',
+    images: [{ url: 'https://keralaemployees.in/og-image.png', width: 1200, height: 630, alt: 'Kerala Acts & Rules' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Kerala Acts & Rules — Important Laws for Government Employees',
+    description: 'Complete collection of Kerala Government Acts and Rules with PDF downloads and summaries.',
+    images: [{ url: 'https://keralaemployees.in/og-image.png' }],
   },
 };
 

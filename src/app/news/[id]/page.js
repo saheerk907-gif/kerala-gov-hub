@@ -3,7 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { buildArticleJsonLd } from '@/lib/seo';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { id } = params;
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
       publishedTime: item.created_at,
       images: item.image_url ? [{ url: item.image_url }] : [],
     },
-    twitter: { card: 'summary_large_image', title, description, images: item.image_url ? [item.image_url] : [] },
+    twitter: { card: 'summary_large_image', title, description, images: item.image_url ? [{ url: item.image_url }] : [] },
   };
 }
 

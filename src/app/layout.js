@@ -34,6 +34,7 @@ export const metadata = {
   creator: 'Kerala Employees',
   publisher: 'Kerala Employees',
   robots: { index: true, follow: true },
+  themeColor: '#121416',
   openGraph: {
     type: 'website',
     locale: 'ml_IN',
