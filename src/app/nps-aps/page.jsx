@@ -18,7 +18,7 @@ const NPS_APS_FAQS = [
   },
   {
     q: 'What is the employer contribution in NPS for Kerala?',
-    a: 'In NPS, the employee contributes 10% of Basic Pay + DA, and the government (employer) contributes 14% of Basic Pay + DA to the NPS corpus. Both amounts are invested in the NPS fund.',
+    a: 'In NPS, the employee contributes 10% of Basic Pay + DA, and the government (employer) contributes 10% of Basic Pay + DA to the NPS corpus. Both amounts are invested in the NPS fund.',
   },
   {
     q: 'Can I switch from NPS to APS in Kerala?',
