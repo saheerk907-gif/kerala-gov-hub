@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -34,6 +34,8 @@ async function refreshToken() {
   return null;
 }
 
+const IDLE_TIMEOUT = 30 * 60 * 1000; // 30 minutes
+
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
   const [checking, setChecking] = useState(true);
@@ -42,13 +44,26 @@ export default function AdminLayout({ children }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loggingIn, setLoggingIn] = useState(false);
+  const lastActivity = useRef(Date.now());
+  const idleTimer = useRef(null);
+
+  function resetIdle() {
+    lastActivity.current = Date.now();
+  }
+
+  function startIdleCheck() {
+    idleTimer.current = setInterval(() => {
+      if (Date.now() - lastActivity.current > IDLE_TIMEOUT) {
+        handleLogout();
+      }
+    }, 60 * 1000); // check every minute
+  }
 
   useEffect(() => {
     async function check() {
       const token = sessionStorage.getItem('admin_token');
       if (token) {
-        // Try to refresh proactively
-        const newToken = await refreshToken();
+        await refreshToken();
         setAuthed(true);
       }
       setChecking(false);
@@ -59,6 +74,17 @@ export default function AdminLayout({ children }) {
     const interval = setInterval(refreshToken, 50 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (!authed) return;
+    const events = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+    events.forEach(e => window.addEventListener(e, resetIdle, { passive: true }));
+    startIdleCheck();
+    return () => {
+      events.forEach(e => window.removeEventListener(e, resetIdle));
+      clearInterval(idleTimer.current);
+    };
+  }, [authed]);
 
   async function handleLogin(e) {
     e.preventDefault();

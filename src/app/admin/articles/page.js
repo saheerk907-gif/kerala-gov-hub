@@ -165,7 +165,7 @@ export default function AdminArticles() {
         await api(`articles?id=eq.${editId}`, 'PATCH', payload);
         await fetch('/api/revalidate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '' },
           body: JSON.stringify({ id: editId }),
         });
       } else {
@@ -175,7 +175,7 @@ export default function AdminArticles() {
         if (newId) {
           await fetch('/api/revalidate', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '' },
             body: JSON.stringify({ id: newId }),
           });
         }

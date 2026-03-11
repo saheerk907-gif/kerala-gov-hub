@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   try {
+    const secret = request.headers.get('x-revalidate-secret');
+    if (!secret || secret !== process.env.REVALIDATE_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { id, slug, type } = await request.json();
 
     if (type === 'act') {

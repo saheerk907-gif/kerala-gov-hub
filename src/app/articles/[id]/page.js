@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { buildArticleJsonLd } from '@/lib/seo';
+import { sanitize } from '@/lib/sanitize';
 
 export const revalidate = 3600;
 
@@ -136,10 +137,10 @@ export default async function ArticleDetailPage({ params }) {
           )}
 
           {item.content_ml && (
-            <div className="article-content" dangerouslySetInnerHTML={{ __html: item.content_ml }} />
+            <div className="article-content" dangerouslySetInnerHTML={{ __html: sanitize(item.content_ml) }} />
           )}
 
-          {item.internal_link && (
+          {item.internal_link && item.internal_link.startsWith('/') && !item.internal_link.startsWith('//') && (
             <div className="mt-8 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
               style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.2)' }}>
               <div className="flex-1">
