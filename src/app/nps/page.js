@@ -166,12 +166,6 @@ export default async function NpsPage() {
                   sub: 'Compare NPS corpus projection with Assured Pension Scheme',
                   icon: '⚖️',
                 },
-                {
-                  href: '/pension',
-                  title: 'Pension Calculator',
-                  sub: 'Calculate monthly pension and DCRG for Kerala employees',
-                  icon: '🧮',
-                },
               ].map(c => (
                 <Link key={c.href} href={c.href}
                   className="group flex items-start gap-4 p-5 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
