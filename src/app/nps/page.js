@@ -155,34 +155,7 @@ export default async function NpsPage() {
 
         <div className="max-w-4xl mx-auto px-6 py-16 flex flex-col gap-20">
 
-          {/* ── 3. CALCULATOR LINKS ─────────────────────────────── */}
-          <section>
-            <SectionLabel label="Calculators" />
-            <h2 className="text-2xl font-black text-white mb-6">NPS Calculators</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                {
-                  href: '/nps-aps',
-                  title: 'NPS vs APS Calculator',
-                  sub: 'Compare NPS corpus projection with Assured Pension Scheme',
-                  icon: '⚖️',
-                },
-              ].map(c => (
-                <Link key={c.href} href={c.href}
-                  className="group flex items-start gap-4 p-5 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
-                  style={{ background: `${PURPLE}08`, border: `1px solid ${PURPLE}20` }}>
-                  <span className="text-3xl">{c.icon}</span>
-                  <div>
-                    <div className="font-bold text-white group-hover:text-white transition-colors mb-1">{c.title}</div>
-                    <div className="text-xs text-white/55 leading-relaxed">{c.sub}</div>
-                    <span className="inline-block mt-2 text-xs font-bold" style={{ color: PURPLE }}>Open →</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          {/* ── 3b. NPS CORPUS CALCULATOR ───────────────────────── */}
+          {/* ── 3. NPS CORPUS CALCULATOR ────────────────────────── */}
           <section>
             <SectionLabel label="Calculator" />
             <h2 className="text-2xl font-black text-white mb-2">NPS Corpus Calculator</h2>
@@ -190,6 +163,24 @@ export default async function NpsPage() {
               Estimate your NPS corpus and monthly pension at retirement based on your current pay and service years.
             </p>
             <NpsCorpusCalculator />
+
+            {/* NPS vs APS teaser — below calc */}
+            <Link href="/nps-aps"
+              className="group mt-8 flex items-center justify-between gap-4 p-5 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+              style={{ background: 'linear-gradient(135deg, rgba(191,90,242,0.10), rgba(100,210,255,0.06))', border: '1px solid rgba(191,90,242,0.25)' }}>
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: PURPLE }}>
+                  Must Try ⚡
+                </div>
+                <div className="font-black text-white text-lg leading-tight mb-1">
+                  NPS-ൽ നിന്ന് APS-ലേക്ക് മാറണോ? ആദ്യം ഇത് കാണൂ
+                </div>
+                <div className="text-xs text-white/55">
+                  Compare your NPS corpus vs guaranteed APS pension — see which gives you more money after retirement.
+                </div>
+              </div>
+              <span className="text-3xl flex-shrink-0 group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
           </section>
 
           {/* ── 4. NPS DOCUMENTS ────────────────────────────────── */}

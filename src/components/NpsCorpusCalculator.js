@@ -9,16 +9,69 @@ function fmtINR(n) {
   return `₹${Math.round(n).toLocaleString('en-IN')}`;
 }
 
-function SliderRow({ label, sublabel, value, min, max, step, onChange, display }) {
+/* Number input + slider combo */
+function NumberSliderRow({ label, sublabel, value, min, max, step, onChange, prefix = '', suffix = '' }) {
+  const [raw, setRaw] = useState('');
+  const [editing, setEditing] = useState(false);
+
+  function handleBlur() {
+    setEditing(false);
+    const parsed = Number(String(raw).replace(/,/g, ''));
+    if (!isNaN(parsed)) onChange(Math.min(max, Math.max(min, parsed)));
+    setRaw('');
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <span className="text-sm font-semibold text-white/90">{label}</span>
+          {sublabel && <div className="text-[10px] text-white/40 mt-0.5">{sublabel}</div>}
+        </div>
+        {/* Editable number chip */}
+        <div className="flex items-center rounded-lg px-2.5 py-1 flex-shrink-0"
+          style={{ background: 'rgba(191,90,242,0.10)', border: '1px solid rgba(191,90,242,0.25)' }}>
+          {prefix && <span className="text-xs text-white/50 mr-1">{prefix}</span>}
+          <input
+            type="text"
+            inputMode="numeric"
+            value={editing ? raw : (suffix ? `${value}` : value.toLocaleString('en-IN'))}
+            onFocus={() => { setEditing(true); setRaw(String(value)); }}
+            onChange={e => setRaw(e.target.value)}
+            onBlur={handleBlur}
+            onKeyDown={e => e.key === 'Enter' && e.target.blur()}
+            className="bg-transparent outline-none text-sm font-black tabular-nums text-right"
+            style={{ color: PURPLE, width: `${Math.max(String(value).length, 4) + 1}ch` }}
+          />
+          {suffix && <span className="text-xs text-white/50 ml-1">{suffix}</span>}
+        </div>
+      </div>
+      <input
+        type="range"
+        min={min} max={max} step={step} value={Math.min(value, max)}
+        onChange={e => onChange(Number(e.target.value))}
+        className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+        style={{ accentColor: PURPLE }}
+      />
+      <div className="flex justify-between text-[10px] text-white/25">
+        <span>{prefix}{min.toLocaleString('en-IN')}{suffix}</span>
+        <span>{prefix}{max.toLocaleString('en-IN')}{suffix}</span>
+      </div>
+    </div>
+  );
+}
+
+/* Slider-only row for percentages */
+function SliderRow({ label, sublabel, value, min, max, step, onChange, suffix = '' }) {
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
         <div>
           <span className="text-sm font-semibold text-white/90">{label}</span>
-          {sublabel && <span className="text-xs text-white/45 ml-2">{sublabel}</span>}
+          {sublabel && <div className="text-[10px] text-white/40 mt-0.5">{sublabel}</div>}
         </div>
         <span className="text-sm font-black tabular-nums" style={{ color: PURPLE }}>
-          {display ?? value}
+          {value}{suffix}
         </span>
       </div>
       <input
@@ -28,28 +81,33 @@ function SliderRow({ label, sublabel, value, min, max, step, onChange, display }
         className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
         style={{ accentColor: PURPLE }}
       />
-      <div className="flex justify-between text-[10px] text-white/30">
-        <span>{display ? display.replace(/[\d,.]+/, min) : min}</span>
-        <span>{display ? display.replace(/[\d,.]+/, max) : max}</span>
+      <div className="flex justify-between text-[10px] text-white/25">
+        <span>{min}{suffix}</span>
+        <span>{max}{suffix}</span>
       </div>
     </div>
   );
 }
 
 export default function NpsCorpusCalculator() {
-  const [basicPay,      setBasicPay]      = useState(25000);
-  const [daPercent,     setDaPercent]     = useState(35);
-  const [currentAge,    setCurrentAge]    = useState(30);
-  const [retirementAge, setRetirementAge] = useState(56);
-  const [stepUp,        setStepUp]        = useState(5);
-  const [roi,           setRoi]           = useState(10);
-  const [annuityRatio,  setAnnuityRatio]  = useState(40);
-  const [annuityRate,   setAnnuityRate]   = useState(6);
+  const [basicPay,       setBasicPay]       = useState(25000);
+  const [existingCorpus, setExistingCorpus] = useState(0);
+  const [daPercent,      setDaPercent]      = useState(35);
+  const [currentAge,     setCurrentAge]     = useState(30);
+  const [retirementAge,  setRetirementAge]  = useState(56);
+  const [stepUp,         setStepUp]         = useState(5);
+  const [roi,            setRoi]            = useState(10);
+  const [annuityRatio,   setAnnuityRatio]   = useState(40);
+  const [annuityRate,    setAnnuityRate]    = useState(6);
 
   const result = useMemo(() => {
     const years = Math.max(retirementAge - currentAge, 1);
-    const monthlyContrib = basicPay * (1 + daPercent / 100) * 0.20; // 10% emp + 10% govt
-    const r = roi / 100 / 12; // monthly rate
+    const N = years * 12;
+    const monthlyContrib = basicPay * (1 + daPercent / 100) * 0.20;
+    const r = roi / 100 / 12;
+
+    // FV of existing corpus
+    const fvExisting = existingCorpus * Math.pow(1 + r, N);
 
     // FV of contributions with annual step-up
     let fvContrib = 0;
@@ -60,19 +118,18 @@ export default function NpsCorpusCalculator() {
       if (r === 0) {
         fvContrib += c * 12;
       } else {
-        // FV of 12 equal end-of-month payments, then grown for remaining (years-y-1) years
         fvContrib += c * ((Math.pow(1 + r, 12) - 1) / r) * Math.pow(1 + r, (years - y - 1) * 12);
       }
     }
 
-    const totalCorpus   = fvContrib;
-    const annuityCorpus = totalCorpus * annuityRatio / 100;
-    const lumpSum       = totalCorpus - annuityCorpus;
+    const totalCorpus    = fvExisting + fvContrib;
+    const annuityCorpus  = totalCorpus * annuityRatio / 100;
+    const lumpSum        = totalCorpus - annuityCorpus;
     const monthlyPension = annuityCorpus * annuityRate / 100 / 12;
-    const totalGains    = totalCorpus - totalInvested;
+    const totalGains     = totalCorpus - totalInvested - existingCorpus;
 
     return { monthlyContrib, totalInvested, totalCorpus, annuityCorpus, lumpSum, monthlyPension, totalGains, years };
-  }, [basicPay, daPercent, currentAge, retirementAge, stepUp, roi, annuityRatio, annuityRate]);
+  }, [basicPay, existingCorpus, daPercent, currentAge, retirementAge, stepUp, roi, annuityRatio, annuityRate]);
 
   const gainPct = result.totalInvested > 0
     ? ((result.totalGains / result.totalInvested) * 100).toFixed(0)
@@ -85,18 +142,26 @@ export default function NpsCorpusCalculator() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-2xl"
         style={{ background: 'rgba(191,90,242,0.04)', border: '1px solid rgba(191,90,242,0.14)' }}>
 
-        <SliderRow
+        <NumberSliderRow
           label="Current Basic Pay"
-          value={basicPay} min={10000} max={150000} step={1000}
-          onChange={setBasicPay}
-          display={`₹${basicPay.toLocaleString('en-IN')}`}
+          value={basicPay} min={10000} max={200000} step={1000}
+          onChange={setBasicPay} prefix="₹"
         />
-        <SliderRow
+        <NumberSliderRow
           label="Current DA"
           value={daPercent} min={0} max={60} step={1}
-          onChange={setDaPercent}
-          display={`${daPercent}%`}
+          onChange={setDaPercent} suffix="%"
         />
+
+        {/* Existing corpus — full width */}
+        <div className="md:col-span-2">
+          <NumberSliderRow
+            label="Existing NPS Corpus"
+            sublabel="Current balance in your PRAN account (enter 0 if new)"
+            value={existingCorpus} min={0} max={5000000} step={10000}
+            onChange={setExistingCorpus} prefix="₹"
+          />
+        </div>
 
         {/* Auto-calculated monthly contribution */}
         <div className="md:col-span-2 flex items-center justify-between px-4 py-3 rounded-xl"
@@ -112,53 +177,47 @@ export default function NpsCorpusCalculator() {
           </div>
         </div>
 
-        <SliderRow
+        <NumberSliderRow
           label="Current Age"
           value={currentAge} min={18} max={55} step={1}
           onChange={v => { setCurrentAge(v); if (v >= retirementAge) setRetirementAge(v + 1); }}
-          display={`${currentAge} yrs`}
+          suffix=" yrs"
         />
-        <SliderRow
+        <NumberSliderRow
           label="Retirement Age"
           value={retirementAge} min={Math.max(currentAge + 1, 45)} max={60} step={1}
-          onChange={setRetirementAge}
-          display={`${retirementAge} yrs`}
+          onChange={setRetirementAge} suffix=" yrs"
         />
 
         <SliderRow
           label="Annual Contribution Step-up"
           sublabel="due to increments / DA hikes"
           value={stepUp} min={0} max={20} step={1}
-          onChange={setStepUp}
-          display={`${stepUp}%`}
+          onChange={setStepUp} suffix="%"
         />
         <SliderRow
           label="Expected ROI"
           sublabel="historical NPS avg ~10-12%"
           value={roi} min={5} max={15} step={0.5}
-          onChange={setRoi}
-          display={`${roi}%`}
+          onChange={setRoi} suffix="%"
         />
 
         <SliderRow
           label="Annuity %"
           sublabel="min 40% as per NPS rules"
           value={annuityRatio} min={40} max={100} step={5}
-          onChange={setAnnuityRatio}
-          display={`${annuityRatio}%`}
+          onChange={setAnnuityRatio} suffix="%"
         />
         <SliderRow
           label="Expected Annuity Rate"
           sublabel="from insurance company"
           value={annuityRate} min={4} max={10} step={0.5}
-          onChange={setAnnuityRate}
-          display={`${annuityRate}%`}
+          onChange={setAnnuityRate} suffix="%"
         />
       </div>
 
       {/* ── Results ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Total Corpus — hero card */}
         <div className="sm:col-span-2 p-6 rounded-2xl text-center"
           style={{ background: 'linear-gradient(135deg, rgba(191,90,242,0.15), rgba(191,90,242,0.05))', border: '1px solid rgba(191,90,242,0.3)' }}>
           <div className="text-xs font-black uppercase tracking-widest text-white/50 mb-1">
@@ -168,35 +227,22 @@ export default function NpsCorpusCalculator() {
             {fmtINR(result.totalCorpus)}
           </div>
           <div className="text-xs text-white/45 mt-1">
-            After {result.years} years · Total Invested: {fmtINR(result.totalInvested)} · Gains: {fmtINR(result.totalGains)} ({gainPct}%)
+            After {result.years} years · Invested: {fmtINR(result.totalInvested)} · Gains: {fmtINR(result.totalGains)} ({gainPct}%)
           </div>
         </div>
 
-        <ResultCard
-          icon="💰"
-          label="Lump Sum Withdrawal"
+        <ResultCard icon="💰" label="Lump Sum Withdrawal"
           sublabel={`${100 - annuityRatio}% of corpus — tax-free`}
-          value={fmtINR(result.lumpSum)}
-        />
-        <ResultCard
-          icon="📈"
-          label="Annuity Corpus"
+          value={fmtINR(result.lumpSum)} />
+        <ResultCard icon="📈" label="Annuity Corpus"
           sublabel={`${annuityRatio}% used to buy pension`}
-          value={fmtINR(result.annuityCorpus)}
-        />
-        <ResultCard
-          icon="🏦"
-          label="Estimated Monthly Pension"
+          value={fmtINR(result.annuityCorpus)} />
+        <ResultCard icon="🏦" label="Estimated Monthly Pension"
           sublabel={`At ${annuityRate}% annuity rate`}
-          value={fmtINR(result.monthlyPension)}
-          highlight
-        />
-        <ResultCard
-          icon="📅"
-          label="Contribution Period"
-          sublabel="Years of service under NPS"
-          value={`${result.years} years`}
-        />
+          value={fmtINR(result.monthlyPension)} highlight />
+        <ResultCard icon="📅" label="Contribution Period"
+          sublabel="Years of NPS contributions"
+          value={`${result.years} years`} />
       </div>
 
       {/* ── Disclaimer ── */}
