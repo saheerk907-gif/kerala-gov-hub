@@ -69,7 +69,7 @@ export async function getNpsDocuments() {
     .from('nps_documents')
     .select('*')
     .order('created_at', { ascending: false });
-  if (error) throw error;
+  if (error) return [];
   return data || [];
 }
 
@@ -79,7 +79,7 @@ export async function getNpsArticles() {
     .select('*')
     .eq('category', 'nps')
     .order('created_at', { ascending: false });
-  if (error) throw error;
+  if (error) return [];
   return data || [];
 }
 
