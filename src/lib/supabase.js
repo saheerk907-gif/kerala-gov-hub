@@ -64,6 +64,32 @@ export async function getAudioClasses() {
   return data;
 }
 
+export async function getNpsDocuments() {
+  const { data, error } = await supabase
+    .from('nps_documents')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+}
+
+export async function getNpsArticles() {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .eq('category', 'nps')
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data || [];
+}
+
+export async function submitNpsQuery(name, question) {
+  const { error } = await supabase
+    .from('nps_queries')
+    .insert([{ name, question }]);
+  if (error) throw error;
+}
+
 export const addNews = async (newsData) => {
   const { data, error } = await supabase
     .from('news')
