@@ -99,6 +99,61 @@ function ageFromDob(dob) {
   return age;
 }
 
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function DobPicker({ value, onChange }) {
+  const [day,   setDay]   = useState('');
+  const [month, setMonth] = useState('');
+  const [year,  setYear]  = useState('');
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, i) => currentYear - 18 - i); // 18 to 68 years ago
+  const daysInMonth = month && year ? new Date(year, month, 0).getDate() : 31;
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  function update(d, m, y) {
+    if (d && m && y) {
+      const iso = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      onChange(iso);
+    }
+  }
+
+  const selectStyle = {
+    background: 'rgba(191,90,242,0.06)',
+    border: '1px solid rgba(191,90,242,0.25)',
+    color: 'rgba(255,255,255,0.9)',
+    colorScheme: 'dark',
+  };
+
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {/* Day */}
+      <select value={day} onChange={e => { setDay(e.target.value); update(e.target.value, month, year); }}
+        className="rounded-xl px-3 py-2.5 text-sm outline-none appearance-none text-center cursor-pointer"
+        style={selectStyle}>
+        <option value="">Day</option>
+        {days.map(d => <option key={d} value={d}>{String(d).padStart(2,'0')}</option>)}
+      </select>
+
+      {/* Month */}
+      <select value={month} onChange={e => { setMonth(e.target.value); update(day, e.target.value, year); }}
+        className="rounded-xl px-3 py-2.5 text-sm outline-none appearance-none text-center cursor-pointer"
+        style={selectStyle}>
+        <option value="">Month</option>
+        {MONTHS.map((m, i) => <option key={i} value={i + 1}>{m.slice(0,3)}</option>)}
+      </select>
+
+      {/* Year */}
+      <select value={year} onChange={e => { setYear(e.target.value); update(day, month, e.target.value); }}
+        className="rounded-xl px-3 py-2.5 text-sm outline-none appearance-none text-center cursor-pointer"
+        style={selectStyle}>
+        <option value="">Year</option>
+        {years.map(y => <option key={y} value={y}>{y}</option>)}
+      </select>
+    </div>
+  );
+}
+
 export default function NpsCorpusCalculator() {
   const [basicPay,       setBasicPay]       = useState(25000);
   const [existingCorpus, setExistingCorpus] = useState(0);
@@ -188,34 +243,21 @@ export default function NpsCorpusCalculator() {
           </div>
         </div>
 
-        {/* Date of Birth */}
-        <div className="flex flex-col gap-1.5">
+        {/* Date of Birth — 3 dropdowns */}
+        <div className="flex flex-col gap-2">
           <span className="text-sm font-semibold text-white/90">Date of Birth</span>
-          <div className="flex items-center gap-3">
-            <input
-              type="date"
-              value={dob}
-              max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
-              onChange={e => {
-                setDob(e.target.value);
-                const age = ageFromDob(e.target.value);
-                if (age !== null && age >= 18 && age <= 55) {
-                  setCurrentAge(age);
-                  if (age >= retirementAge) setRetirementAge(Math.min(age + 1, 60));
-                }
-              }}
-              className="flex-1 rounded-xl px-3 py-2.5 text-sm text-white bg-transparent outline-none"
-              style={{ border: '1px solid rgba(191,90,242,0.25)', background: 'rgba(191,90,242,0.05)', colorScheme: 'dark' }}
-            />
-            {dob && (
-              <span className="text-sm font-black flex-shrink-0" style={{ color: PURPLE }}>
-                {currentAge} yrs
-              </span>
-            )}
-          </div>
-          {!dob && (
-            <p className="text-[10px] text-white/35">Or use the age slider below</p>
-          )}
+          <DobPicker value={dob} onChange={val => {
+            setDob(val);
+            const age = ageFromDob(val);
+            if (age !== null && age >= 18 && age <= 55) {
+              setCurrentAge(age);
+              if (age >= retirementAge) setRetirementAge(Math.min(age + 1, 60));
+            }
+          }} />
+          {dob
+            ? <p className="text-[11px] font-bold" style={{ color: PURPLE }}>Age: {currentAge} years</p>
+            : <p className="text-[10px] text-white/35">Or use the age slider below</p>
+          }
         </div>
 
         <NumberSliderRow
