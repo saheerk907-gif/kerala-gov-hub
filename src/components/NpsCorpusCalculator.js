@@ -89,12 +89,23 @@ function SliderRow({ label, sublabel, value, min, max, step, onChange, suffix = 
   );
 }
 
+function ageFromDob(dob) {
+  if (!dob) return null;
+  const today = new Date();
+  const birth = new Date(dob);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
 export default function NpsCorpusCalculator() {
   const [basicPay,       setBasicPay]       = useState(25000);
   const [existingCorpus, setExistingCorpus] = useState(0);
   const [daPercent,      setDaPercent]      = useState(35);
+  const [dob,            setDob]            = useState('');
   const [currentAge,     setCurrentAge]     = useState(30);
-  const [retirementAge,  setRetirementAge]  = useState(56);
+  const [retirementAge,  setRetirementAge]  = useState(60);
   const [stepUp,         setStepUp]         = useState(5);
   const [roi,            setRoi]            = useState(10);
   const [annuityRatio,   setAnnuityRatio]   = useState(40);
@@ -177,10 +188,41 @@ export default function NpsCorpusCalculator() {
           </div>
         </div>
 
+        {/* Date of Birth */}
+        <div className="flex flex-col gap-1.5">
+          <span className="text-sm font-semibold text-white/90">Date of Birth</span>
+          <div className="flex items-center gap-3">
+            <input
+              type="date"
+              value={dob}
+              max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split('T')[0]}
+              onChange={e => {
+                setDob(e.target.value);
+                const age = ageFromDob(e.target.value);
+                if (age !== null && age >= 18 && age <= 55) {
+                  setCurrentAge(age);
+                  if (age >= retirementAge) setRetirementAge(Math.min(age + 1, 60));
+                }
+              }}
+              className="flex-1 rounded-xl px-3 py-2.5 text-sm text-white bg-transparent outline-none"
+              style={{ border: '1px solid rgba(191,90,242,0.25)', background: 'rgba(191,90,242,0.05)', colorScheme: 'dark' }}
+            />
+            {dob && (
+              <span className="text-sm font-black flex-shrink-0" style={{ color: PURPLE }}>
+                {currentAge} yrs
+              </span>
+            )}
+          </div>
+          {!dob && (
+            <p className="text-[10px] text-white/35">Or use the age slider below</p>
+          )}
+        </div>
+
         <NumberSliderRow
           label="Current Age"
+          sublabel={dob ? 'Auto-calculated from DOB' : ''}
           value={currentAge} min={18} max={55} step={1}
-          onChange={v => { setCurrentAge(v); if (v >= retirementAge) setRetirementAge(v + 1); }}
+          onChange={v => { setCurrentAge(v); setDob(''); if (v >= retirementAge) setRetirementAge(Math.min(v + 1, 60)); }}
           suffix=" yrs"
         />
         <NumberSliderRow
