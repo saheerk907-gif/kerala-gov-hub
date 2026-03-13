@@ -67,11 +67,12 @@ const faqJsonLd = {
 };
 
 export default async function NpsPage() {
-  const [{ data: schemeData }, documents, articles] = await Promise.all([
-    supabase.from('schemes').select('*').eq('slug', 'nps').single().catch(() => ({ data: null })),
+  const [schemeResult, documents, articles] = await Promise.all([
+    supabase.from('schemes').select('*').eq('slug', 'nps').single(),
     getNpsDocuments(),
     getNpsArticles(),
   ]);
+  const schemeData = schemeResult?.data || null;
 
   const scheme = schemeData || {};
 
