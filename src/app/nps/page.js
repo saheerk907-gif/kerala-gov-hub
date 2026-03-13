@@ -2,6 +2,7 @@ import { supabase, getNpsDocuments, getNpsArticles } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NpsQueryForm from '@/components/NpsQueryForm';
+import NpsCorpusCalculator from '@/components/NpsCorpusCalculator';
 import Link from 'next/link';
 import { buildMetadata } from '@/lib/seo';
 
@@ -179,6 +180,16 @@ export default async function NpsPage() {
                 </Link>
               ))}
             </div>
+          </section>
+
+          {/* ── 3b. NPS CORPUS CALCULATOR ───────────────────────── */}
+          <section>
+            <SectionLabel label="Calculator" />
+            <h2 className="text-2xl font-black text-white mb-2">NPS Corpus Calculator</h2>
+            <p className="text-sm text-white/50 mb-8">
+              Estimate your NPS corpus and monthly pension at retirement based on your current pay and service years.
+            </p>
+            <NpsCorpusCalculator />
           </section>
 
           {/* ── 4. NPS DOCUMENTS ────────────────────────────────── */}
