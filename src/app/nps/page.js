@@ -2,7 +2,6 @@ import { supabase, getNpsDocuments, getNpsArticles } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NpsQueryForm from '@/components/NpsQueryForm';
-import NpsCorpusCalculator from '@/components/NpsCorpusCalculator';
 import NpsGovOrders from '@/components/NpsGovOrders';
 import Link from 'next/link';
 import { buildMetadata } from '@/lib/seo';
@@ -156,18 +155,98 @@ export default async function NpsPage() {
 
         <div className="max-w-4xl mx-auto px-6 py-16 flex flex-col gap-20">
 
-          {/* ── 3. NPS CORPUS CALCULATOR ────────────────────────── */}
+          {/* ── 3. WHAT IS NPS ──────────────────────────────────── */}
+          <section>
+            <SectionLabel label="What is NPS?" />
+            <h2 className="text-2xl font-black text-white mb-4">NPS എന്താണ്?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="p-6 rounded-2xl" style={{ background: `${PURPLE}06`, border: `1px solid ${PURPLE}18` }}>
+                <div className="text-2xl mb-3">📋</div>
+                <h3 className="text-sm font-black text-white mb-2">ദേശീയ പെൻഷൻ സ്കീം</h3>
+                <p className="text-xs text-white/60 leading-relaxed" style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
+                  NPS (National Pension System) കേന്ദ്ര സർക്കാർ 2004-ൽ ആരംഭിച്ച ഒരു defined-contribution pension scheme ആണ്. കേരള സർക്കാർ 2013 ഏപ്രിൽ 1 മുതൽ നിയമിതരായ എല്ലാ ജീവനക്കാർക്കും ഇത് ബാധകമാണ്.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl" style={{ background: 'rgba(100,210,255,0.06)', border: '1px solid rgba(100,210,255,0.18)' }}>
+                <div className="text-2xl mb-3">💼</div>
+                <h3 className="text-sm font-black text-white mb-2">PRAN Account</h3>
+                <p className="text-xs text-white/60 leading-relaxed" style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
+                  ഓരോ ജീവനക്കാർക്കും ഒരു Permanent Retirement Account Number (PRAN) നൽകുന്നു. ജീവനക്കാരന്റെ 10% + സർക്കാരിന്റെ 10% (Basic + DA) ഓരോ മാസവും ഈ അക്കൗണ്ടിൽ നിക്ഷേപിക്കുന്നു.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl" style={{ background: 'rgba(48,209,88,0.06)', border: '1px solid rgba(48,209,88,0.18)' }}>
+                <div className="text-2xl mb-3">📈</div>
+                <h3 className="text-sm font-black text-white mb-2">Market-Linked Returns</h3>
+                <p className="text-xs text-white/60 leading-relaxed">
+                  Your NPS corpus grows through investments in government securities, corporate bonds, and equities. Returns are market-linked — not guaranteed — but regulated fund managers (like SBI, LIC, UTI) manage the risk.
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl" style={{ background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.18)' }}>
+                <div className="text-2xl mb-3">🏦</div>
+                <h3 className="text-sm font-black text-white mb-2">Retirement Exit Rules</h3>
+                <p className="text-xs text-white/60 leading-relaxed">
+                  At age 60, you can withdraw up to <strong className="text-white/80">60% tax-free</strong> as a lump sum. The remaining minimum <strong className="text-white/80">40%</strong> must be used to purchase an annuity (monthly pension) from an IRDAI-registered insurer.
+                </p>
+              </div>
+            </div>
+
+            {/* Old vs New pension comparison strip */}
+            <div className="p-5 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-3">Quick Comparison</p>
+              <div className="grid grid-cols-3 gap-4 text-center text-xs">
+                <div>
+                  <div className="font-black text-white/30 mb-1">Old Pension</div>
+                  <div className="text-white/55">50% last salary guaranteed</div>
+                  <div className="text-white/35 text-[10px] mt-1">Pre-2013 employees</div>
+                </div>
+                <div className="border-x border-white/[0.07] px-4">
+                  <div className="font-black mb-1" style={{ color: PURPLE }}>NPS</div>
+                  <div className="text-white/55">Market-linked corpus</div>
+                  <div className="text-white/35 text-[10px] mt-1">Post Apr 2013 employees</div>
+                </div>
+                <div>
+                  <div className="font-black text-white/30 mb-1">APS</div>
+                  <div className="text-white/55">50% last salary assured</div>
+                  <div className="text-white/35 text-[10px] mt-1">Opt-in for NPS employees</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ── 4. NPS CALCULATOR CTA ───────────────────────────── */}
           <section>
             <SectionLabel label="Calculator" />
             <h2 className="text-2xl font-black text-white mb-2">NPS Corpus Calculator</h2>
-            <p className="text-sm text-white/50 mb-8">
+            <p className="text-sm text-white/50 mb-6">
               Estimate your NPS corpus and monthly pension at retirement based on your current pay and service years.
             </p>
-            <NpsCorpusCalculator />
 
-            {/* NPS vs APS teaser — below calc */}
+            <Link href="/nps/calculator"
+              className="group flex items-center justify-between gap-6 p-7 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+              style={{ background: `linear-gradient(135deg, ${PURPLE}12, ${PURPLE}06)`, border: `1px solid ${PURPLE}30` }}>
+              <div>
+                <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: PURPLE }}>
+                  📊 Open Calculator
+                </div>
+                <div className="font-black text-white text-xl leading-tight mb-2">
+                  NPS Corpus Calculator
+                </div>
+                <div className="text-sm text-white/55">
+                  Basic Pay, DA, Retirement Age, Expected Returns — get your full corpus projection with lump sum and monthly pension breakdown.
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold"
+                  style={{ background: PURPLE, color: 'white' }}>
+                  Calculator തുറക്കൂ →
+                </div>
+              </div>
+              <div className="text-6xl flex-shrink-0 opacity-30 group-hover:opacity-50 transition-opacity hidden sm:block">
+                🧮
+              </div>
+            </Link>
+
+            {/* NPS vs APS teaser */}
             <Link href="/nps-aps"
-              className="group mt-8 flex items-center justify-between gap-4 p-5 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+              className="group mt-4 flex items-center justify-between gap-4 p-5 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
               style={{ background: 'linear-gradient(135deg, rgba(191,90,242,0.10), rgba(100,210,255,0.06))', border: '1px solid rgba(191,90,242,0.25)' }}>
               <div>
                 <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: PURPLE }}>
@@ -184,7 +263,7 @@ export default async function NpsPage() {
             </Link>
           </section>
 
-          {/* ── 4. NPS DOCUMENTS ────────────────────────────────── */}
+          {/* ── 5. NPS DOCUMENTS ────────────────────────────────── */}
           <section>
             <SectionLabel label="Documents" />
             <h2 className="text-2xl font-black text-white mb-6">NPS Documents & Circulars</h2>
@@ -223,18 +302,17 @@ export default async function NpsPage() {
             )}
           </section>
 
-          {/* ── 5. NPS GOVERNMENT ORDERS ────────────────────────── */}
+          {/* ── 6. NPS GOVERNMENT ORDERS ────────────────────────── */}
           <section>
             <SectionLabel label="Government Orders" />
             <h2 className="text-2xl font-black text-white mb-2">NPS ഉത്തരവുകളും സർക്കുലറുകളും</h2>
             <p className="text-sm text-white/50 mb-8">
               Official Government Orders, Circulars, and Notices related to NPS from Kerala Finance Department.
-              Search by order number or subject to find what you need.
             </p>
-            <NpsGovOrders />
+            <NpsGovOrders previewMode previewLimit={5} />
           </section>
 
-          {/* ── 6. NPS ARTICLES ─────────────────────────────────── */}
+          {/* ── 7. NPS ARTICLES ─────────────────────────────────── */}
           {articles.length > 0 && (
             <section>
               <SectionLabel label="Articles" />

@@ -89,7 +89,51 @@ const TYPE_COLORS = {
 
 const ALL_TYPES = ['All', 'GO', 'Circular', 'Notice', 'Letter', 'Gazette', 'Guidelines'];
 
-export default function NpsGovOrders() {
+function OrderRow({ order }) {
+  const typeStyle = TYPE_COLORS[order.type] || TYPE_COLORS.GO;
+  return (
+    <a
+      href={order.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-start gap-4 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:border-white/20"
+      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
+    >
+      <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-base mt-0.5"
+        style={{ background: typeStyle.bg }}>
+        📄
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <span
+            className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
+            style={{ background: typeStyle.bg, color: typeStyle.color }}
+          >
+            {typeStyle.label}
+          </span>
+          {order.date && (
+            <span className="text-[10px] text-white/30">{order.date}</span>
+          )}
+        </div>
+        <div className="text-xs font-bold text-white/80 mb-0.5 leading-snug">
+          {order.orderNo}
+        </div>
+        <div
+          className="text-[11px] text-white/50 leading-relaxed line-clamp-2"
+          style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}
+        >
+          {order.subject}
+        </div>
+      </div>
+      <span className="text-white/20 group-hover:text-white/50 flex-shrink-0 text-sm mt-1 transition-colors">
+        ↗
+      </span>
+    </a>
+  );
+}
+
+/* previewMode: shows first `previewLimit` items + "Show More" link, no search/filter */
+export default function NpsGovOrders({ previewMode = false, previewLimit = 5 }) {
   const [query, setQuery] = useState('');
   const [activeType, setActiveType] = useState('All');
 
@@ -104,6 +148,28 @@ export default function NpsGovOrders() {
       return matchType && matchQuery;
     });
   }, [query, activeType]);
+
+  if (previewMode) {
+    const preview = NPS_ORDERS.slice(0, previewLimit);
+    return (
+      <div>
+        <div className="flex flex-col gap-2">
+          {preview.map((order, i) => <OrderRow key={i} order={order} />)}
+        </div>
+        <a
+          href="/nps/orders"
+          className="mt-5 flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-bold no-underline transition-all hover:-translate-y-0.5"
+          style={{ background: `${PURPLE}10`, color: PURPLE, border: `1px solid ${PURPLE}25` }}
+        >
+          എല്ലാ ഉത്തരവുകളും കാണൂ — {NPS_ORDERS.length} Orders
+          <span className="text-base">→</span>
+        </a>
+        <p className="mt-4 text-[10px] text-white/25 text-center">
+          Source: Kerala Finance Department · finance.kerala.gov.in
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -163,54 +229,7 @@ export default function NpsGovOrders() {
         </div>
       ) : (
         <div className="flex flex-col gap-2">
-          {filtered.map((order, i) => {
-            const typeStyle = TYPE_COLORS[order.type] || TYPE_COLORS.GO;
-            return (
-              <a
-                key={i}
-                href={order.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-start gap-4 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:border-white/20"
-                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
-              >
-                {/* Icon */}
-                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-base mt-0.5"
-                  style={{ background: typeStyle.bg }}>
-                  📄
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span
-                      className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded"
-                      style={{ background: typeStyle.bg, color: typeStyle.color }}
-                    >
-                      {typeStyle.label}
-                    </span>
-                    {order.date && (
-                      <span className="text-[10px] text-white/30">{order.date}</span>
-                    )}
-                  </div>
-                  <div className="text-xs font-bold text-white/80 mb-0.5 leading-snug">
-                    {order.orderNo}
-                  </div>
-                  <div
-                    className="text-[11px] text-white/50 leading-relaxed line-clamp-2"
-                    style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}
-                  >
-                    {order.subject}
-                  </div>
-                </div>
-
-                {/* Arrow */}
-                <span className="text-white/20 group-hover:text-white/50 flex-shrink-0 text-sm mt-1 transition-colors">
-                  ↗
-                </span>
-              </a>
-            );
-          })}
+          {filtered.map((order, i) => <OrderRow key={i} order={order} />)}
         </div>
       )}
 
