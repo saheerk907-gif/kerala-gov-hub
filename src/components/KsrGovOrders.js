@@ -43,14 +43,11 @@ const ALL_TYPES = ['All', 'GO', 'Circular', 'Notice', 'Amendment'];
 
 function OrderRow({ order }) {
   const typeStyle = TYPE_COLORS[order.type] || TYPE_COLORS.GO;
+  const isDirectPdf = order.pdf_url && !order.pdf_url.includes('finance.kerala.gov.in');
+
   return (
-    <a
-      href={order.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-start gap-4 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5 hover:border-white/20"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}
-    >
+    <div className="flex items-start gap-4 p-4 rounded-xl transition-all"
+      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
       <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-base mt-0.5"
         style={{ background: typeStyle.bg }}>
         📄
@@ -61,18 +58,33 @@ function OrderRow({ order }) {
             style={{ background: typeStyle.bg, color: typeStyle.color }}>
             {typeStyle.label}
           </span>
-          {order.date && (
-            <span className="text-[10px] text-white/30">{order.date}</span>
-          )}
+          {order.date && <span className="text-[10px] text-white/30">{order.date}</span>}
         </div>
         <div className="text-xs font-bold text-white/80 mb-0.5 leading-snug">{order.orderNo}</div>
         <div className="text-[11px] text-white/50 leading-relaxed line-clamp-2"
           style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
           {order.subject}
         </div>
+        <div className="mt-2 flex items-center gap-3">
+          {isDirectPdf && (
+            <a href={order.pdf_url} target="_blank" rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[10px] font-bold no-underline px-2.5 py-1 rounded-lg"
+              style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>
+              ⬇ Download PDF
+            </a>
+          )}
+          {order.url && (
+            <a href={order.url} target="_blank" rel="noopener noreferrer"
+              className="text-[10px] text-white/30 no-underline hover:text-white/60 transition-colors">
+              Source ↗
+            </a>
+          )}
+          {!isDirectPdf && !order.url && (
+            <span className="text-[10px] text-white/20">PDF not available</span>
+          )}
+        </div>
       </div>
-      <span className="text-white/20 group-hover:text-white/50 flex-shrink-0 text-sm mt-1 transition-colors">↗</span>
-    </a>
+    </div>
   );
 }
 

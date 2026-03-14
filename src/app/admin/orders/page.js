@@ -21,7 +21,6 @@ const CATEGORIES = [
 const EMPTY = {
   title_ml: '', title_en: '', go_number: '', go_date: '',
   category: 'general', description_ml: '', pdf_url: '',
-  source_url: 'https://www.finance.kerala.gov.in',
   is_published: true, is_pinned: false,
 };
 
@@ -195,11 +194,6 @@ export default function AdminOrders() {
                   : <div className="text-xs text-[#ff453a]/80 mt-1">PDF ഇല്ലാത്ത ഉത്തരവുകൾ പബ്ലിക് പേജിൽ ക്ലിക്ക് ചെയ്യാൻ കഴിയില്ല. PDF upload ചെയ്യുക.</div>
                 }
               </div>
-              <div>
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Source URL</label>
-                <input value={form.source_url} onChange={e => setForm(f => ({...f, source_url: e.target.value}))}
-                  placeholder="https://www.finance.kerala.gov.in" className={inp} />
-              </div>
               <div className="flex gap-6">
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={form.is_published} onChange={e => setForm(f => ({...f, is_published: e.target.checked}))} />
@@ -252,7 +246,7 @@ export default function AdminOrders() {
                     className="text-[10px] text-[#30d158] font-bold no-underline hover:underline whitespace-nowrap">✓ PDF</a>
                 : <span className="text-[10px] text-[#ff453a] font-bold whitespace-nowrap">No PDF</span>
               }
-              <button onClick={() => { setForm({ title_ml: o.title_ml||'', title_en: o.title_en||'', go_number: o.go_number||'', go_date: o.go_date||'', category: o.category||'general', description_ml: o.description_ml||'', pdf_url: o.pdf_url||'', source_url: o.source_url||'', is_published: o.is_published, is_pinned: o.is_pinned }); setEditId(o.id); setShowForm(true); }}
+              <button onClick={() => { setForm({ title_ml: o.title_ml||'', title_en: o.title_en||'', go_number: o.go_number||'', go_date: o.go_date||'', category: o.category||'general', description_ml: o.description_ml||'', pdf_url: o.pdf_url||'', is_published: o.is_published, is_pinned: o.is_pinned }); setEditId(o.id); setShowForm(true); }}
                 className="px-3 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer transition-all">
                 Edit
               </button>
