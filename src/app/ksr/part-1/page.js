@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
   keywords: ['KSR Part I', 'Kerala Service Rules Part 1', 'KSR pay rules', 'KSR transfer rules', 'KSR promotion rules'],
 });
 
-const BLUE = '#2997ff';
+const COLOR = '#2997ff';
 
 const TOPICS = [
   { icon: '💼', label: 'Appointments & Probation' },
@@ -40,100 +40,108 @@ export default async function KsrPart1Page() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#121416] text-white">
+      <main className="min-h-screen bg-aurora text-white pt-[100px]">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
 
-        {/* HERO */}
-        <div className="relative pt-32 pb-16 px-6 overflow-hidden bg-[#121416]">
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(41,151,255,0.12), transparent)' }} />
-          <div className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: 'linear-gradient(90deg, transparent, rgba(41,151,255,0.4), transparent)' }} />
-
-          <div className="relative max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 text-xs text-white/50 mb-8 flex-wrap">
-              <a href="/" className="hover:text-white transition-colors no-underline text-white/50">Home</a>
-              <span>›</span>
-              <Link href="/ksr" className="hover:text-white transition-colors no-underline text-white/50">KSR</Link>
-              <span>›</span>
-              <span style={{ color: BLUE }}>Part I</span>
-            </div>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6"
-              style={{ color: BLUE, border: `1px solid ${BLUE}30`, background: `${BLUE}10` }}>
-              📗 KSR Part I
-            </div>
-
-            <h1 className="text-[clamp(30px,5vw,52px)] font-black tracking-tight leading-[1.05] mb-3">
-              {scheme.title_ml || 'KSR Part I — General Service Conditions'}
-            </h1>
-            {scheme.title_en && (
-              <p className="text-base text-white/60 mb-2">{scheme.title_en}</p>
-            )}
-            <p className="text-sm text-white/45 mb-10">
-              Appointments · Pay · Allowances · Transfers · Promotions · Joining Time · Deputation
-            </p>
-
-            {/* Topic chips */}
-            <div className="flex flex-wrap gap-2">
-              {TOPICS.map(t => (
-                <span key={t.label}
-                  className="text-xs font-semibold text-white/65 px-3 py-1.5 rounded-full"
-                  style={{ background: `${BLUE}08`, border: `1px solid ${BLUE}18` }}>
-                  {t.icon} {t.label}
-                </span>
-              ))}
-            </div>
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-white/60 mb-8 flex-wrap">
+            <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
+            <span>›</span>
+            <Link href="/ksr" className="hover:text-white transition-colors no-underline text-white/60">KSR</Link>
+            <span>›</span>
+            <span style={{ color: COLOR }}>Part I</span>
           </div>
-        </div>
 
-        {/* CONTENT */}
-        <div className="max-w-4xl mx-auto px-6 pb-20">
+          {/* Badge */}
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
+              style={{ background: `${COLOR}18`, color: COLOR }}>
+              📗 KSR Part I
+            </span>
+            <span className="text-[11px] text-white/60 font-semibold">General Service Conditions</span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-[clamp(24px,4vw,40px)] font-[900] tracking-[-0.03em] leading-tight mb-2 text-white">
+            {scheme.title_ml || 'KSR Part I — General Service Conditions'}
+          </h1>
+          {scheme.title_en && (
+            <div className="text-base text-white/70 mb-4">{scheme.title_en}</div>
+          )}
+          <p className="text-sm text-white/50 mb-8">
+            Appointments · Pay · Allowances · Transfers · Promotions · Joining Time · Deputation
+          </p>
+
+          {/* Topic chips */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {TOPICS.map(t => (
+              <span key={t.label}
+                className="text-xs font-semibold text-white/70 px-3 py-1.5 rounded-lg"
+                style={{ background: `${COLOR}10`, border: `1px solid ${COLOR}22` }}>
+                {t.icon} {t.label}
+              </span>
+            ))}
+          </div>
+
+          {/* Description */}
           {scheme.description_ml && (
-            <p className="text-base text-white/70 leading-relaxed mb-10 pb-10 border-b border-white/[0.06]"
-              style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
-              {scheme.description_ml}
-            </p>
+            <div className="glass-card rounded-2xl p-5 mb-6">
+              <p className="text-sm text-white/75 leading-relaxed"
+                style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
+                {scheme.description_ml}
+              </p>
+            </div>
           )}
 
+          {/* Main content */}
           {scheme.content_ml ? (
-            <KsrContent html={scheme.content_ml} accentColor={BLUE} />
+            <div className="glass-card rounded-2xl p-6 mb-6">
+              <div className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: COLOR }}>
+                📋 Full Content
+              </div>
+              <KsrContent html={scheme.content_ml} accentColor={COLOR} />
+            </div>
           ) : (
-            <EmptyContent part="Part I" />
+            <div className="glass-card rounded-2xl p-10 mb-6 text-center">
+              <div className="text-5xl mb-4">📖</div>
+              <p className="text-white/60 font-semibold mb-2">Content Coming Soon</p>
+              <p className="text-sm text-white/35">
+                KSR Part I detailed rules will appear here once uploaded from the admin panel.
+              </p>
+            </div>
           )}
 
           {/* Key Rules in Part I */}
-          <div className="mt-12 mb-4">
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Key Rules in Part I</p>
+          <div className="mb-8">
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">Key Rules in Part I</div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { icon: '⏱️', rule: 'Rule 61–67',  label: 'Joining Time on Transfer',  slug: 'joining-time',  desc: 'Joining time allowed on transfer between stations' },
-                { icon: '🚌', rule: 'SR 46–60',    label: 'Transfer TA Rules',          slug: 'transfer-ta',   desc: 'Travel allowance for transfer of station' },
-                { icon: '⚖️', rule: 'KCS Rules',   label: 'Disciplinary Proceedings',  slug: 'disciplinary',  desc: 'Minor & major penalties, charge memo, suspension' },
+                { icon: '⏱️', rule: 'Rule 61–67', label: 'Joining Time on Transfer',  slug: 'joining-time',  desc: 'Joining time allowed on transfer between stations' },
+                { icon: '🚌', rule: 'SR 46–60',   label: 'Transfer TA Rules',          slug: 'transfer-ta',   desc: 'Travel allowance for transfer of station' },
+                { icon: '⚖️', rule: 'KCS Rules',  label: 'Disciplinary Proceedings',  slug: 'disciplinary',  desc: 'Minor & major penalties, charge memo, suspension' },
               ].map(r => (
                 <Link key={r.slug} href={`/ksr/rules/${r.slug}`}
-                  className="group flex flex-col gap-2 p-4 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
-                  style={{ background: `${BLUE}06`, border: `1px solid ${BLUE}18` }}>
+                  className="group glass-card flex flex-col gap-2 p-4 rounded-2xl no-underline transition-all hover:-translate-y-0.5">
                   <div className="flex items-center gap-2">
                     <span className="text-xl">{r.icon}</span>
                     <div>
-                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: BLUE }}>{r.rule}</div>
+                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: COLOR }}>{r.rule}</div>
                       <div className="text-sm font-bold text-white leading-tight">{r.label}</div>
                     </div>
                   </div>
                   <p className="text-xs text-white/50 leading-relaxed">{r.desc}</p>
-                  <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: BLUE }}>View details →</span>
+                  <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: COLOR }}>View details →</span>
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Nav to other parts */}
-          <div className="mt-16 pt-8 border-t border-white/[0.06]">
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Other KSR Parts</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+          {/* Other parts */}
+          <div className="mb-8">
+            <div className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-4">Other KSR Parts</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <Link href="/ksr/part-2"
-                className="flex items-center justify-between gap-3 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5"
-                style={{ background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.18)' }}>
+                className="glass-card flex items-center justify-between gap-3 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5">
                 <div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-[#ff9f0a] mb-0.5">Part II</div>
                   <div className="text-sm font-bold text-white">Leave Rules</div>
@@ -141,8 +149,7 @@ export default async function KsrPart1Page() {
                 <span className="text-white/30">→</span>
               </Link>
               <Link href="/ksr/part-3"
-                className="flex items-center justify-between gap-3 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5"
-                style={{ background: 'rgba(191,90,242,0.06)', border: '1px solid rgba(191,90,242,0.18)' }}>
+                className="glass-card flex items-center justify-between gap-3 p-4 rounded-xl no-underline transition-all hover:-translate-y-0.5">
                 <div>
                   <div className="text-[10px] font-black uppercase tracking-widest text-[#bf5af2] mb-0.5">Part III</div>
                   <div className="text-sm font-bold text-white">Pension Rules</div>
@@ -150,28 +157,12 @@ export default async function KsrPart1Page() {
                 <span className="text-white/30">→</span>
               </Link>
             </div>
-            <Link href="/ksr"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-              style={{ background: `${BLUE}10`, color: BLUE, border: `1px solid ${BLUE}25` }}>
-              ← Back to KSR
-            </Link>
           </div>
+
+          <Link href="/ksr" className="text-sm no-underline hover:underline" style={{ color: COLOR }}>← Back to KSR</Link>
         </div>
       </main>
       <Footer />
     </>
   );
 }
-
-function EmptyContent({ part }) {
-  return (
-    <div className="text-center py-20 rounded-2xl" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="text-5xl mb-4">📖</div>
-      <p className="text-white/60 font-semibold mb-2">Content Coming Soon</p>
-      <p className="text-sm text-white/35">
-        KSR {part} detailed rules will appear here once uploaded from the admin panel.
-      </p>
-    </div>
-  );
-}
-

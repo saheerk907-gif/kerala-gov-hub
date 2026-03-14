@@ -7,7 +7,6 @@ import { notFound } from 'next/navigation';
 
 export const revalidate = 60;
 
-// All valid rule slugs and their metadata
 const RULE_META = {
   'earned-leave': {
     title: 'Earned Leave (EL)',
@@ -15,6 +14,8 @@ const RULE_META = {
     ruleRef: 'KSR Part II, Rules 14–22',
     icon: '🏖️',
     color: '#ff9f0a',
+    part: 'part-2',
+    partLabel: 'KSR Part II',
     tags: ['EL accumulation', 'Leave encashment', 'Leave salary', 'Max 360 days'],
   },
   'joining-time': {
@@ -23,6 +24,8 @@ const RULE_META = {
     ruleRef: 'KSR Part I, Rules 61–67',
     icon: '⏱️',
     color: '#2997ff',
+    part: 'part-1',
+    partLabel: 'KSR Part I',
     tags: ['Transfer TA', 'Distance calculation', 'Public holidays', 'Max 8 days'],
   },
   'maternity-leave': {
@@ -31,6 +34,8 @@ const RULE_META = {
     ruleRef: 'KSR Part II, Rule 101',
     icon: '👶',
     color: '#ff453a',
+    part: 'part-2',
+    partLabel: 'KSR Part II',
     tags: ['180 days', '2 confinements', 'Full pay', 'Counts as duty'],
   },
   'study-leave': {
@@ -39,6 +44,8 @@ const RULE_META = {
     ruleRef: 'KSR Part II, Rule 107',
     icon: '📚',
     color: '#30d158',
+    part: 'part-2',
+    partLabel: 'KSR Part II',
     tags: ['5 years service', 'Max 24 months', 'Bond required', 'Higher studies'],
   },
   'transfer-ta': {
@@ -47,6 +54,8 @@ const RULE_META = {
     ruleRef: 'KSR SR 46–60',
     icon: '🚌',
     color: '#64d2ff',
+    part: 'part-1',
+    partLabel: 'KSR Part I',
     tags: ['Transportation', 'Personal effects', 'Family TA', 'Road mileage'],
   },
   'dcrg': {
@@ -55,6 +64,8 @@ const RULE_META = {
     ruleRef: 'KSR Part III, Rule 77',
     icon: '🎖️',
     color: '#c8960c',
+    part: 'part-3',
+    partLabel: 'KSR Part III',
     tags: ['Rule 77', 'Max ₹20 lakh', 'Death gratuity', 'Retirement gratuity'],
   },
   'family-pension': {
@@ -63,6 +74,8 @@ const RULE_META = {
     ruleRef: 'KSR Part III, Rule 83',
     icon: '👨‍👩‍👧',
     color: '#bf5af2',
+    part: 'part-3',
+    partLabel: 'KSR Part III',
     tags: ['30% of salary', 'Spouse eligibility', 'Children eligibility', 'Enhanced pension'],
   },
   'disciplinary': {
@@ -71,6 +84,8 @@ const RULE_META = {
     ruleRef: 'KCS (CCA) Rules 1960',
     icon: '⚖️',
     color: '#ff453a',
+    part: 'part-1',
+    partLabel: 'KSR Part I',
     tags: ['Minor penalty', 'Major penalty', 'Charge memo', 'Suspension'],
   },
 };
@@ -101,64 +116,68 @@ export default async function KsrRulePage({ params }) {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-[#121416] text-white">
+      <main className="min-h-screen bg-aurora text-white pt-[100px]">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-10">
 
-        {/* HERO */}
-        <div className="relative pt-32 pb-16 px-6 overflow-hidden bg-[#121416]">
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: `radial-gradient(ellipse 70% 50% at 50% 0%, ${COLOR}18, transparent)` }} />
-          <div className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: `linear-gradient(90deg, transparent, ${COLOR}40, transparent)` }} />
-
-          <div className="relative max-w-4xl mx-auto">
-            <div className="flex items-center gap-2 text-xs text-white/50 mb-8 flex-wrap">
-              <a href="/" className="hover:text-white transition-colors no-underline text-white/50">Home</a>
-              <span>›</span>
-              <Link href="/ksr" className="hover:text-white transition-colors no-underline text-white/50">KSR</Link>
-              <span>›</span>
-              <span className="text-white/50">Rules</span>
-              <span>›</span>
-              <span style={{ color: COLOR }}>{meta.title}</span>
-            </div>
-
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6"
-              style={{ color: COLOR, border: `1px solid ${COLOR}30`, background: `${COLOR}10` }}>
-              {meta.icon} {meta.ruleRef}
-            </div>
-
-            <h1 className="text-[clamp(28px,5vw,50px)] font-black tracking-tight leading-[1.05] mb-3"
-              style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
-              {scheme.title_ml || meta.titleMl}
-            </h1>
-            {scheme.title_en && (
-              <p className="text-base text-white/60 mb-3">{scheme.title_en}</p>
-            )}
-
-            <div className="flex flex-wrap gap-2 mt-6">
-              {meta.tags.map(tag => (
-                <span key={tag}
-                  className="text-xs font-semibold text-white/60 px-3 py-1.5 rounded-full"
-                  style={{ background: `${COLOR}08`, border: `1px solid ${COLOR}18` }}>
-                  {tag}
-                </span>
-              ))}
-            </div>
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-white/60 mb-8 flex-wrap">
+            <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
+            <span>›</span>
+            <Link href="/ksr" className="hover:text-white transition-colors no-underline text-white/60">KSR</Link>
+            <span>›</span>
+            <Link href={`/ksr/${meta.part}`} className="hover:text-white transition-colors no-underline text-white/60">{meta.partLabel}</Link>
+            <span>›</span>
+            <span style={{ color: COLOR }}>{meta.title}</span>
           </div>
-        </div>
 
-        {/* CONTENT */}
-        <div className="max-w-4xl mx-auto px-6 pb-20">
-          {scheme.description_ml && (
-            <p className="text-base text-white/70 leading-relaxed mb-10 pb-10 border-b border-white/[0.06]"
-              style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
-              {scheme.description_ml}
-            </p>
+          {/* Badge */}
+          <div className="flex items-center gap-3 mb-4 flex-wrap">
+            <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg"
+              style={{ background: `${COLOR}18`, color: COLOR }}>
+              {meta.icon} {meta.ruleRef}
+            </span>
+          </div>
+
+          {/* Title */}
+          <h1 className="text-[clamp(24px,4vw,40px)] font-[900] tracking-[-0.03em] leading-tight mb-2 text-white"
+            style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
+            {scheme.title_ml || meta.titleMl}
+          </h1>
+          {scheme.title_en && (
+            <div className="text-base text-white/70 mb-4">{scheme.title_en}</div>
           )}
 
+          {/* Tags */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {meta.tags.map(tag => (
+              <span key={tag}
+                className="text-xs font-semibold text-white/70 px-3 py-1.5 rounded-lg"
+                style={{ background: `${COLOR}10`, border: `1px solid ${COLOR}22` }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          {/* Description */}
+          {scheme.description_ml && (
+            <div className="glass-card rounded-2xl p-5 mb-6">
+              <p className="text-sm text-white/75 leading-relaxed"
+                style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>
+                {scheme.description_ml}
+              </p>
+            </div>
+          )}
+
+          {/* Main content */}
           {scheme.content_ml ? (
-            <KsrContent html={scheme.content_ml} accentColor={COLOR} />
+            <div className="glass-card rounded-2xl p-6 mb-6">
+              <div className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: COLOR }}>
+                📋 Rule Details
+              </div>
+              <KsrContent html={scheme.content_ml} accentColor={COLOR} />
+            </div>
           ) : (
-            <div className="text-center py-20 rounded-2xl" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="glass-card rounded-2xl p-10 mb-6 text-center">
               <div className="text-5xl mb-4">{meta.icon}</div>
               <p className="text-white/60 font-semibold mb-2">Content Coming Soon</p>
               <p className="text-sm text-white/35 max-w-sm mx-auto">
@@ -168,17 +187,21 @@ export default async function KsrRulePage({ params }) {
             </div>
           )}
 
+          {/* Disclaimer */}
+          <div className="rounded-2xl p-4 text-xs text-white/60 leading-relaxed mb-8"
+            style={{ background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.15)' }}>
+            ⚠️ ഈ ഉള്ളടക്കം വിവരണ ആവശ്യങ്ങൾക്കുള്ളതാണ്. നിയമ ആവശ്യങ്ങൾക്ക് ഔദ്യോഗിക KSR ഗ്രന്ഥം പരിശോധിക്കുക.
+          </div>
+
           {/* Back nav */}
-          <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-wrap gap-3">
-            <Link href="/ksr"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-              style={{ background: `${COLOR}10`, color: COLOR, border: `1px solid ${COLOR}25` }}>
-              ← Back to KSR
+          <div className="flex flex-wrap gap-3">
+            <Link href={`/ksr/${meta.part}`}
+              className="text-sm no-underline hover:underline" style={{ color: COLOR }}>
+              ← {meta.partLabel}
             </Link>
-            <Link href="/ksr/part-2"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-              style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.08)' }}>
-              KSR Part II — Leave Rules →
+            <span className="text-white/20">·</span>
+            <Link href="/ksr" className="text-sm text-white/50 no-underline hover:text-white hover:underline">
+              KSR Home
             </Link>
           </div>
         </div>
