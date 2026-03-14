@@ -24,13 +24,13 @@ const tools = [
   },
   {
     icon: '📊',
-    title: 'NPS കാൽക്കുലേറ്റർ',
-    subtitle: 'NPS Corpus Calculator',
-    desc: 'Basic Pay, DA, retirement age അനുസരിച്ച് NPS corpus, lump sum, monthly pension കണക്കാക്കൂ',
-    href: '/nps/calculator',
+    title: 'NPS — National Pension System',
+    subtitle: 'NPS Guide & Resources',
+    desc: 'NPS contribution rules, PRAN, withdrawal, GOs, circulars, calculator — 01.04.2013 മുതൽ നിയമിതർക്ക്',
+    href: '/nps',
     color: '#bf5af2',
     badge: null,
-    tags: ['Corpus', 'Pension', 'PRAN', 'Annuity'],
+    tags: ['NPS', 'PRAN', 'Corpus', 'APS'],
   },
   {
     icon: '📖',
