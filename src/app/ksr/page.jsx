@@ -188,20 +188,23 @@ export default async function KsrPage() {
               <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-3">Commonly Referenced Rules</p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
                 {[
-                  { icon: '🏖️', rule: 'Rule 14–22', label: 'Earned Leave' },
-                  { icon: '🔄', rule: 'Rule 61–67', label: 'Joining Time' },
-                  { icon: '👶', rule: 'Rule 101', label: 'Maternity Leave' },
-                  { icon: '📚', rule: 'Rule 107', label: 'Study Leave' },
-                  { icon: '🚌', rule: 'SR 46–60', label: 'Transfer TA' },
-                  { icon: '🎖️', rule: 'KSR III Rule 77', label: 'DCRG' },
-                  { icon: '👨‍👩‍👧', rule: 'KSR III Rule 83', label: 'Family Pension' },
-                  { icon: '⚖️', rule: 'KCS(CCA) Rules', label: 'Disciplinary' },
+                  { icon: '🏖️', rule: 'Rule 14–22',    label: 'Earned Leave',    slug: 'earned-leave' },
+                  { icon: '⏱️', rule: 'Rule 61–67',    label: 'Joining Time',    slug: 'joining-time' },
+                  { icon: '👶', rule: 'Rule 101',       label: 'Maternity Leave', slug: 'maternity-leave' },
+                  { icon: '📚', rule: 'Rule 107',       label: 'Study Leave',     slug: 'study-leave' },
+                  { icon: '🚌', rule: 'SR 46–60',       label: 'Transfer TA',     slug: 'transfer-ta' },
+                  { icon: '🎖️', rule: 'Rule 77',        label: 'DCRG',            slug: 'dcrg' },
+                  { icon: '👨‍👩‍👧', rule: 'Rule 83',        label: 'Family Pension',  slug: 'family-pension' },
+                  { icon: '⚖️', rule: 'KCS Rules',      label: 'Disciplinary',    slug: 'disciplinary' },
                 ].map(r => (
-                  <div key={r.label} className="p-3 rounded-xl" style={{ background: `${BLUE}06`, border: `1px solid ${BLUE}12` }}>
+                  <Link key={r.label} href={`/ksr/rules/${r.slug}`}
+                    className="group p-3 rounded-xl no-underline transition-all hover:-translate-y-0.5"
+                    style={{ background: `${BLUE}06`, border: `1px solid ${BLUE}12` }}>
                     <div className="text-xl mb-1">{r.icon}</div>
                     <div className="font-black text-white/80 text-[9px] mb-0.5">{r.label}</div>
                     <div className="text-white/35 text-[9px]">{r.rule}</div>
-                  </div>
+                    <div className="text-[8px] mt-1.5 font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: BLUE }}>View →</div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -218,6 +221,7 @@ export default async function KsrPage() {
               {[
                 {
                   part: 'Part I',
+                  href: '/ksr/part-1',
                   title: 'General Service Conditions',
                   color: BLUE,
                   icon: '🏛️',
@@ -225,6 +229,7 @@ export default async function KsrPage() {
                 },
                 {
                   part: 'Part II',
+                  href: '/ksr/part-2',
                   title: 'Leave Rules',
                   color: '#ff9f0a',
                   icon: '🏖️',
@@ -232,20 +237,25 @@ export default async function KsrPage() {
                 },
                 {
                   part: 'Part III',
+                  href: '/ksr/part-3',
                   title: 'Pension Rules',
                   color: '#bf5af2',
                   icon: '🏦',
                   items: ['Service Pension', 'Family Pension', 'Commutation', 'DCRG / Gratuity', 'Voluntary Retirement', 'Invalid Pension'],
                 },
               ].map(p => (
-                <div key={p.part} className="p-5 rounded-2xl flex flex-col gap-3"
+                <Link key={p.part} href={p.href}
+                  className="group p-5 rounded-2xl flex flex-col gap-3 no-underline transition-all hover:-translate-y-0.5"
                   style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${p.color}20` }}>
-                  <div className="flex items-center gap-3">
-                    <div className="text-2xl">{p.icon}</div>
-                    <div>
-                      <div className="text-[10px] font-black uppercase tracking-widest" style={{ color: p.color }}>{p.part}</div>
-                      <div className="text-sm font-black text-white leading-tight">{p.title}</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="text-2xl">{p.icon}</div>
+                      <div>
+                        <div className="text-[10px] font-black uppercase tracking-widest" style={{ color: p.color }}>{p.part}</div>
+                        <div className="text-sm font-black text-white leading-tight">{p.title}</div>
+                      </div>
                     </div>
+                    <span className="text-white/25 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all text-sm flex-shrink-0">→</span>
                   </div>
                   <ul className="flex flex-col gap-1.5">
                     {p.items.map(item => (
@@ -255,7 +265,10 @@ export default async function KsrPage() {
                       </li>
                     ))}
                   </ul>
-                </div>
+                  <div className="text-[10px] font-bold mt-1 opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: p.color }}>
+                    View full {p.part} rules →
+                  </div>
+                </Link>
               ))}
             </div>
 
