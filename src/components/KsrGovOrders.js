@@ -40,7 +40,7 @@ function OrderRow({ order }) {
         )}
         <div className="mt-2 flex items-center gap-3">
           {order.pdf_url ? (
-            <a href={`/api/pdf?url=${encodeURIComponent(order.pdf_url)}`}
+            <a href={order.pdf_url} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-[10px] font-bold no-underline px-2.5 py-1 rounded-lg"
               style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158' }}>
               ⬇ Download PDF
