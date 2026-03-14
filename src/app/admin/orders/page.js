@@ -15,6 +15,7 @@ const CATEGORIES = [
   { value: 'gpf', label: 'GPF' },
   { value: 'sli', label: 'SLI' },
   { value: 'gis', label: 'GIS' },
+  { value: 'ksr', label: 'KSR Amendment' },
   { value: 'general', label: 'പൊതുവായത്' },
 ];
 
