@@ -122,6 +122,31 @@ export default async function KsrPart3Page() {
             </Link>
           </div>
 
+          {/* Key Rules in Part III */}
+          <div className="mt-12 mb-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Key Rules in Part III</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: '🎖️', rule: 'Rule 77', label: 'DCRG — Death-cum-Retirement Gratuity', slug: 'dcrg',          desc: 'Gratuity on retirement or death, max ₹20 lakh' },
+                { icon: '👨‍👩‍👧', rule: 'Rule 83', label: 'Family Pension',                       slug: 'family-pension', desc: '30% of last pay, spouse & children eligibility' },
+              ].map(r => (
+                <Link key={r.slug} href={`/ksr/rules/${r.slug}`}
+                  className="group flex flex-col gap-2 p-4 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+                  style={{ background: `${COLOR}06`, border: `1px solid ${COLOR}18` }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{r.icon}</span>
+                    <div>
+                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: COLOR }}>{r.rule}</div>
+                      <div className="text-sm font-bold text-white leading-tight">{r.label}</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-white/50 leading-relaxed">{r.desc}</p>
+                  <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: COLOR }}>View details →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-12 pt-8 border-t border-white/[0.06]">
             <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Other KSR Parts</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">

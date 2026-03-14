@@ -98,6 +98,33 @@ export default async function KsrPart2Page() {
             <EmptyContent part="Part II" />
           )}
 
+          {/* Key Rules in Part II */}
+          <div className="mt-12 mb-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Key Rules in Part II</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: '🏖️', rule: 'Rule 14–22', label: 'Earned Leave (EL)',          slug: 'earned-leave',     desc: 'EL accumulation, encashment, max 360 days' },
+                { icon: '👶', rule: 'Rule 101',   label: 'Maternity & Paternity Leave', slug: 'maternity-leave',  desc: '180 days full pay, counts as duty' },
+                { icon: '📚', rule: 'Rule 107',   label: 'Study Leave',                 slug: 'study-leave',      desc: 'Max 24 months, 5 years service required' },
+                { icon: '📉', rule: 'Rule 86–100',label: 'Half Pay Leave (HPL)',         slug: 'earned-leave',     desc: '20 days per year, can be commuted' },
+              ].map(r => (
+                <Link key={r.label} href={`/ksr/rules/${r.slug}`}
+                  className="group flex flex-col gap-2 p-4 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+                  style={{ background: `${COLOR}06`, border: `1px solid ${COLOR}18` }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{r.icon}</span>
+                    <div>
+                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: COLOR }}>{r.rule}</div>
+                      <div className="text-sm font-bold text-white leading-tight">{r.label}</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-white/50 leading-relaxed">{r.desc}</p>
+                  <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: COLOR }}>View details →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-16 pt-8 border-t border-white/[0.06]">
             <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Other KSR Parts</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">

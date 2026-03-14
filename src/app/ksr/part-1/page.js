@@ -101,6 +101,32 @@ export default async function KsrPart1Page() {
             <EmptyContent part="Part I" />
           )}
 
+          {/* Key Rules in Part I */}
+          <div className="mt-12 mb-4">
+            <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Key Rules in Part I</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { icon: '⏱️', rule: 'Rule 61–67',  label: 'Joining Time on Transfer',  slug: 'joining-time',  desc: 'Joining time allowed on transfer between stations' },
+                { icon: '🚌', rule: 'SR 46–60',    label: 'Transfer TA Rules',          slug: 'transfer-ta',   desc: 'Travel allowance for transfer of station' },
+                { icon: '⚖️', rule: 'KCS Rules',   label: 'Disciplinary Proceedings',  slug: 'disciplinary',  desc: 'Minor & major penalties, charge memo, suspension' },
+              ].map(r => (
+                <Link key={r.slug} href={`/ksr/rules/${r.slug}`}
+                  className="group flex flex-col gap-2 p-4 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
+                  style={{ background: `${BLUE}06`, border: `1px solid ${BLUE}18` }}>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl">{r.icon}</span>
+                    <div>
+                      <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: BLUE }}>{r.rule}</div>
+                      <div className="text-sm font-bold text-white leading-tight">{r.label}</div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-white/50 leading-relaxed">{r.desc}</p>
+                  <span className="text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: BLUE }}>View details →</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           {/* Nav to other parts */}
           <div className="mt-16 pt-8 border-t border-white/[0.06]">
             <p className="text-[10px] font-black uppercase tracking-widest text-white/30 mb-4">Other KSR Parts</p>
