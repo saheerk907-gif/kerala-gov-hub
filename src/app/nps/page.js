@@ -3,6 +3,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NpsQueryForm from '@/components/NpsQueryForm';
 import NpsCorpusCalculator from '@/components/NpsCorpusCalculator';
+import NpsGovOrders from '@/components/NpsGovOrders';
 import Link from 'next/link';
 import { buildMetadata } from '@/lib/seo';
 
@@ -222,7 +223,18 @@ export default async function NpsPage() {
             )}
           </section>
 
-          {/* ── 5. NPS ARTICLES ─────────────────────────────────── */}
+          {/* ── 5. NPS GOVERNMENT ORDERS ────────────────────────── */}
+          <section>
+            <SectionLabel label="Government Orders" />
+            <h2 className="text-2xl font-black text-white mb-2">NPS ഉത്തരവുകളും സർക്കുലറുകളും</h2>
+            <p className="text-sm text-white/50 mb-8">
+              Official Government Orders, Circulars, and Notices related to NPS from Kerala Finance Department.
+              Search by order number or subject to find what you need.
+            </p>
+            <NpsGovOrders />
+          </section>
+
+          {/* ── 6. NPS ARTICLES ─────────────────────────────────── */}
           {articles.length > 0 && (
             <section>
               <SectionLabel label="Articles" />
@@ -256,7 +268,7 @@ export default async function NpsPage() {
             </section>
           )}
 
-          {/* ── 6. FAQ ──────────────────────────────────────────── */}
+          {/* ── 7. FAQ ──────────────────────────────────────────── */}
           <section>
             <SectionLabel label="FAQ" />
             <h2 className="text-2xl font-black text-white mb-2">NPS സംശയങ്ങൾ — FAQ</h2>
@@ -270,7 +282,7 @@ export default async function NpsPage() {
             </div>
           </section>
 
-          {/* ── 7. ASK A DOUBT ──────────────────────────────────── */}
+          {/* ── 8. ASK A DOUBT ──────────────────────────────────── */}
           <section>
             <SectionLabel label="Ask Us" />
             <h2 className="text-2xl font-black text-white mb-2">NPS സംശയം ചോദിക്കൂ</h2>
