@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import KsrContent from '@/components/KsrContent';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -92,7 +93,7 @@ export default async function KsrPart3Page() {
           )}
 
           {scheme.content_ml ? (
-            <div className="scheme-content" dangerouslySetInnerHTML={{ __html: scheme.content_ml }} />
+            <KsrContent html={scheme.content_ml} accentColor={COLOR} />
           ) : (
             <EmptyContent part="Part III" />
           )}
@@ -152,20 +153,6 @@ export default async function KsrPart3Page() {
         </div>
       </main>
       <Footer />
-      <style dangerouslySetInnerHTML={{ __html: `
-        .scheme-content { font-family: Georgia, serif; line-height: 1.85; color: #e5e5e7; }
-        .scheme-content h2 { font-size: 1.4rem; font-weight: 800; color: white; margin: 2.5rem 0 1rem; }
-        .scheme-content h3 { font-size: 1.05rem; font-weight: 700; color: ${COLOR}; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid ${COLOR}; }
-        .scheme-content p { margin-bottom: 1.25rem; color: #aeaeb2; font-size: 0.95rem; font-family: var(--font-noto-malayalam), Georgia, serif; }
-        .scheme-content b, .scheme-content strong { color: white; font-weight: 700; }
-        .scheme-content ul { list-style: none; padding: 0; margin: 1rem 0 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
-        .scheme-content ul li { padding: 0.85rem 1.1rem 0.85rem 2rem; background: rgba(191,90,242,0.04); border: 1px solid rgba(191,90,242,0.10); border-radius: 12px; font-size: 0.9rem; color: #aeaeb2; position: relative; font-family: var(--font-noto-malayalam), Georgia, serif; }
-        .scheme-content ul li::before { content: '✦'; color: ${COLOR}; font-size: 0.6rem; position: absolute; left: 0.85rem; top: 1rem; }
-        .scheme-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.875rem; }
-        .scheme-content th { background: rgba(191,90,242,0.10); color: white; font-weight: 700; padding: 0.75rem 1rem; text-align: left; border: 1px solid rgba(191,90,242,0.15); }
-        .scheme-content td { padding: 0.65rem 1rem; color: #aeaeb2; border: 1px solid rgba(255,255,255,0.06); }
-        .scheme-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-      ` }} />
     </>
   );
 }

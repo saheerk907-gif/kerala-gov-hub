@@ -1,5 +1,15 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
+
+const QuillEditor = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-64 bg-[#1c1c1e] border border-white/10 rounded-xl flex items-center justify-center text-[#6e6e73] text-sm">
+      Loading editor…
+    </div>
+  ),
+});
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -34,14 +44,26 @@ const KSR_PAGES = [
   { slug: 'ksr-rule-disciplinary',    icon: '⚖️', title_en: 'Disciplinary Proceedings',                   title_ml: 'അച്ചടക്ക നടപടികൾ',                        group: 'Rules' },
 ];
 
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [2, 3, false] }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['blockquote'],
+    ['clean'],
+  ],
+};
+
+const QUILL_FORMATS = ['header', 'bold', 'italic', 'underline', 'list', 'bullet', 'blockquote'];
+
 const inp = "w-full px-3 py-2.5 bg-[#1c1c1e] border border-white/10 rounded-xl text-sm text-white outline-none focus:border-[#2997ff] transition-colors";
 
 export default function AdminKsr() {
-  const [rows,    setRows]    = useState({});   // slug → db row
+  const [rows,    setRows]    = useState({});
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(null);
   const [saving,  setSaving]  = useState(false);
-  const [init,    setInit]    = useState(false); // initialising missing entries
+  const [init,    setInit]    = useState(false);
 
   async function load() {
     setLoading(true);
@@ -52,9 +74,7 @@ export default function AdminKsr() {
       const map = {};
       if (Array.isArray(data)) data.forEach(r => { map[r.slug] = r; });
       setRows(map);
-    } catch (e) {
-      console.error(e);
-    }
+    } catch (e) { console.error(e); }
     setLoading(false);
   }
 
@@ -93,10 +113,28 @@ export default function AdminKsr() {
     setSaving(false);
   }
 
-  const groups = ['Parts', 'Rules'];
-
   return (
-    <div>
+    <>
+      {/* Quill dark theme overrides */}
+      <style>{`
+        .ql-toolbar { background: #1c1c1e !important; border: 1px solid rgba(255,255,255,0.10) !important; border-bottom: none !important; border-radius: 12px 12px 0 0 !important; }
+        .ql-container { background: #1c1c1e !important; border: 1px solid rgba(255,255,255,0.10) !important; border-top: none !important; border-radius: 0 0 12px 12px !important; min-height: 380px; }
+        .ql-editor { color: #e5e5e7 !important; font-size: 14px; line-height: 1.8; font-family: var(--font-noto-malayalam), Georgia, serif; }
+        .ql-editor.ql-blank::before { color: #6e6e73 !important; font-style: normal; }
+        .ql-stroke { stroke: #86868b !important; }
+        .ql-fill { fill: #86868b !important; }
+        .ql-picker { color: #86868b !important; }
+        .ql-picker-options { background: #1c1c1e !important; border-color: rgba(255,255,255,0.1) !important; }
+        .ql-active .ql-stroke, button:hover .ql-stroke { stroke: #2997ff !important; }
+        .ql-active .ql-fill, button:hover .ql-fill { fill: #2997ff !important; }
+        .ql-active { color: #2997ff !important; }
+        .ql-editor h2 { font-size: 1.3rem; font-weight: 800; color: white; margin: 1.5rem 0 0.5rem; }
+        .ql-editor h3 { font-size: 1.05rem; font-weight: 700; color: #2997ff; margin: 1.2rem 0 0.4rem; }
+        .ql-editor p { margin-bottom: 0.75rem; }
+        .ql-editor ul, .ql-editor ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+        .ql-editor blockquote { border-left: 3px solid #2997ff; padding-left: 1rem; color: #aeaeb2; margin: 1rem 0; }
+      `}</style>
+
       <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">KSR Content</h1>
@@ -115,59 +153,53 @@ export default function AdminKsr() {
         <div className="text-center text-[#6e6e73] py-20">Loading...</div>
       ) : (
         <div className="flex flex-col gap-10">
-          {groups.map(group => {
-            const pages = KSR_PAGES.filter(p => p.group === group);
-            return (
-              <div key={group}>
-                <p className="text-[10px] font-black uppercase tracking-widest text-[#6e6e73] mb-3">
-                  KSR {group}
-                </p>
-                <div className="flex flex-col gap-2">
-                  {pages.map(p => {
-                    const row = rows[p.slug];
-                    const hasContent = !!row?.content_ml;
-                    return (
-                      <div key={p.slug}
-                        className="flex items-center justify-between gap-4 p-4 rounded-2xl border transition-all"
-                        style={{ background: '#111', borderColor: 'rgba(255,255,255,0.07)' }}>
-                        <div className="flex items-center gap-3">
-                          <div className="text-2xl w-10 text-center">{p.icon}</div>
-                          <div>
-                            <div className="font-semibold text-white text-sm">{p.title_en}</div>
-                            <div className="text-xs text-[#6e6e73] mt-0.5" style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}>{p.title_ml}</div>
-                            <div className="mt-1">
-                              {!row ? (
-                                <span className="text-[10px] text-[#ff453a]">● Not initialised — click "Initialise" above</span>
-                              ) : hasContent ? (
-                                <span className="text-[10px] text-[#30d158]">✓ Content uploaded</span>
-                              ) : (
-                                <span className="text-[10px] text-[#ff9f0a]">⚠ No content yet — click Edit to add</span>
-                              )}
-                            </div>
+          {['Parts', 'Rules'].map(group => (
+            <div key={group}>
+              <p className="text-[10px] font-black uppercase tracking-widest text-[#6e6e73] mb-3">KSR {group}</p>
+              <div className="flex flex-col gap-2">
+                {KSR_PAGES.filter(p => p.group === group).map(p => {
+                  const row = rows[p.slug];
+                  const hasContent = !!row?.content_ml;
+                  return (
+                    <div key={p.slug}
+                      className="flex items-center justify-between gap-4 p-4 rounded-2xl"
+                      style={{ background: '#111', border: '1px solid rgba(255,255,255,0.07)' }}>
+                      <div className="flex items-center gap-3">
+                        <div className="text-2xl w-10 text-center">{p.icon}</div>
+                        <div>
+                          <div className="font-semibold text-white text-sm">{p.title_en}</div>
+                          <div className="text-xs text-[#6e6e73] mt-0.5">{p.title_ml}</div>
+                          <div className="mt-1">
+                            {!row
+                              ? <span className="text-[10px] text-[#ff453a]">● Not initialised</span>
+                              : hasContent
+                                ? <span className="text-[10px] text-[#30d158]">✓ Content uploaded</span>
+                                : <span className="text-[10px] text-[#ff9f0a]">⚠ No content yet</span>
+                            }
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <a href={`/ksr${p.slug.replace('ksr', '').replace('-part-', '/part-').replace('-rule-', '/rules/')}`}
-                            target="_blank"
-                            className="px-3 py-1.5 rounded-lg text-xs font-bold no-underline transition-all"
-                            style={{ background: 'rgba(255,255,255,0.05)', color: '#86868b' }}>
-                            View ↗
-                          </a>
-                          <button
-                            onClick={() => row && setEditing({ ...row })}
-                            disabled={!row}
-                            className="px-4 py-1.5 rounded-lg text-xs font-bold border-none cursor-pointer transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                            style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}>
-                            Edit
-                          </button>
-                        </div>
                       </div>
-                    );
-                  })}
-                </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <a href={`/ksr${p.slug.replace('ksr','').replace(/-part-/,'/part-').replace(/-rule-/,'/rules/')}`}
+                          target="_blank"
+                          className="px-3 py-1.5 rounded-lg text-xs font-bold no-underline"
+                          style={{ background: 'rgba(255,255,255,0.05)', color: '#86868b' }}>
+                          View ↗
+                        </a>
+                        <button
+                          onClick={() => row && setEditing({ ...row })}
+                          disabled={!row}
+                          className="px-4 py-1.5 rounded-lg text-xs font-bold border-none cursor-pointer transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                          style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}>
+                          Edit
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       )}
 
@@ -203,26 +235,21 @@ export default function AdminKsr() {
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">Short Description</label>
                 <textarea value={editing.description_ml || ''} onChange={e => setEditing({ ...editing, description_ml: e.target.value })}
-                  rows={3} placeholder="Short description (optional)" className={inp + ' resize-y'} />
+                  rows={2} placeholder="Short description (optional)" className={inp + ' resize-none'} />
               </div>
 
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-widest text-[#6e6e73] mb-1.5">
                   Full Page Content
                 </label>
-                <textarea
+                <QuillEditor
                   value={editing.content_ml || ''}
-                  onChange={e => setEditing({ ...editing, content_ml: e.target.value })}
-                  rows={20}
-                  placeholder={`Paste content here.\n\nHTML supported:\n<h2>Main Heading</h2>\n<h3>Sub Heading</h3>\n<p>Paragraph text here...</p>\n<ul><li>Point 1</li><li>Point 2</li></ul>\n<b>Bold text</b>`}
-                  className={inp + ' resize-y font-mono text-xs leading-relaxed'}
+                  onChange={val => setEditing({ ...editing, content_ml: val })}
+                  modules={QUILL_MODULES}
+                  formats={QUILL_FORMATS}
+                  placeholder="Type or paste content here. Use the toolbar to format headings, bold, lists..."
+                  theme="snow"
                 />
-                <div className="text-[10px] text-[#6e6e73] mt-1.5 flex flex-wrap gap-x-3">
-                  <span>Supported tags:</span>
-                  {['h2', 'h3', 'p', 'b', 'ul', 'li', 'table', 'tr', 'th', 'td', 'br'].map(t => (
-                    <code key={t} className="bg-white/5 px-1 rounded">&lt;{t}&gt;</code>
-                  ))}
-                </div>
               </div>
 
               <div className="flex gap-3 pt-2">
@@ -240,6 +267,6 @@ export default function AdminKsr() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
