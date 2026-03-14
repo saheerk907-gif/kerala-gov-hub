@@ -49,7 +49,8 @@ export default function AdminSchemes() {
     setError('');
     try {
       const data = await api('schemes?select=*&order=slug');
-      setSchemes(Array.isArray(data) ? data : []);
+      const filtered = Array.isArray(data) ? data.filter(s => !s.slug.startsWith('ksr')) : [];
+      setSchemes(filtered);
       if (data?.message) setError(data.message);
     } catch (e) {
       setError(e.message);
