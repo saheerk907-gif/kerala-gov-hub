@@ -7,6 +7,21 @@ const nextConfig = {
     ],
   },
 
+  async redirects() {
+    return [
+      {
+        source: '/kerala-service-rules',
+        destination: '/ksr',
+        permanent: true,
+      },
+      {
+        source: '/ksr-part-i-%E2%80%94-general-service-conditions',
+        destination: '/ksr/part-1',
+        permanent: true,
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
