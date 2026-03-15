@@ -67,13 +67,13 @@ export default function Hero() {
 
         {/* Titles — tight single typographic block */}
         <div className="flex flex-col items-center gap-1.5 mb-4">
-          <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+          <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]" style={{ color: '#ff9f0a' }}>
             കേരള സർക്കാർ
           </h1>
           {/* Thin gold rule connecting both lines */}
-          <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#c8960c]/60 to-transparent rounded-full" />
+          <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#ff9f0a]/60 to-transparent rounded-full" />
           <h2 className="text-[clamp(22px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
-            <span className="bg-gradient-to-r from-white/80 via-white to-white/80 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer">
+            <span className="bg-gradient-to-r from-[#ff9f0a]/80 via-[#ff9f0a] to-[#ff9f0a]/80 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer">
               ജീവനക്കാരുടെ വിജ്ഞാനകോശം
             </span>
           </h2>
