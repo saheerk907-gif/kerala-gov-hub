@@ -41,11 +41,16 @@ export default function DepartmentalTestsSection() {
               <div key={d.id}>
                 <Link
                   href={`/departmental-tests?dept=${d.id}`}
-                  className="dept-card group flex items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3 md:py-2.5 rounded-lg md:rounded-xl no-underline transition-all duration-200 hover:bg-white/[0.05] h-full"
-                  style={{ border: '1px solid var(--surface-xs)' }}
+                  className="glass-card group relative flex items-center gap-2.5 px-3 py-2.5 rounded-[16px] no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden h-full"
                 >
+                  {/* Glow blob */}
                   <div
-                    className="flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-md md:rounded-lg flex items-center justify-center text-xs md:text-sm"
+                    className="absolute -top-4 -left-4 w-14 h-14 rounded-full blur-[28px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                    style={{ background: d.color + '30' }}
+                  />
+
+                  <div
+                    className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm transition-transform duration-200 group-hover:scale-105"
                     style={{ background: d.color + '20', border: `1px solid ${d.color}35` }}
                   >
                     {d.icon}
@@ -61,6 +66,12 @@ export default function DepartmentalTestsSection() {
                       {count} tests
                     </div>
                   </div>
+
+                  {/* Bottom accent */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    style={{ background: `linear-gradient(90deg, transparent, ${d.color}70, transparent)` }}
+                  />
                 </Link>
               </div>
             );

@@ -48,12 +48,17 @@ export default function SchemesSection({ schemes }) {
               <Link
                 key={scheme.id}
                 href={pageUrl}
-                className="group flex items-center gap-3 px-4 py-3 rounded-2xl no-underline transition-all duration-200 hover:bg-white/[0.05]"
-                style={{ border: '1px solid var(--surface-xs)' }}
+                className="glass-card group relative flex items-center gap-3 px-4 py-3 rounded-[16px] no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
               >
+                {/* Glow blob */}
+                <div
+                  className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                  style={{ background: c.text + '25' }}
+                />
+
                 {/* Icon */}
                 <div
-                  className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-base"
+                  className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-base transition-transform duration-200 group-hover:scale-105"
                   style={{ background: c.bg, border: `1px solid ${c.border}` }}
                 >
                   {scheme.icon}
@@ -79,6 +84,12 @@ export default function SchemesSection({ schemes }) {
                 >
                   <path d="M9 5l7 7-7 7" />
                 </svg>
+
+                {/* Bottom accent */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{ background: `linear-gradient(90deg, transparent, ${c.text}70, transparent)` }}
+                />
               </Link>
             );
           })}
