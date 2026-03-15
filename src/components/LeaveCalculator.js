@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
+import SectionHeader from '@/components/SectionHeader';
 
 /* ── KSR rounding: fraction ≥ 0.5 → ceil, else floor ── */
 function roundKSR(val) {
@@ -100,24 +101,14 @@ const CATEGORIES = [
   { id: 'limited',   label: 'Limited Period (Contract)', sub: 'Up to 5 years appointment' },
 ];
 
-const inputCls = 'w-full bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#64d2ff]/60 focus:ring-1 focus:ring-[#64d2ff]/30 transition-all';
-const labelCls = 'block text-xs font-semibold text-white/50 uppercase tracking-wider mb-1.5';
-
-function Field({ label, hint, children }) {
-  return (
-    <div>
-      <label className={labelCls}>{label}</label>
-      {children}
-      {hint && <p className="mt-1 text-[10px] text-white/45">{hint}</p>}
-    </div>
-  );
-}
+const inputCls = 'bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#ff9f0a]/50 focus:bg-white/[0.09] transition-all w-full';
+const labelCls = 'text-xs text-white/60 font-medium mb-2 block';
 
 function ResultRow({ label, value, accent, small }) {
   return (
     <div className={`flex justify-between items-center ${small ? 'py-1.5' : 'py-2.5'} border-b border-white/[0.06] last:border-0`}>
       <span className={small ? 'text-xs text-white/60' : 'text-sm text-white/65'}>{label}</span>
-      <span className={`font-bold tabular-nums ${small ? 'text-sm' : 'text-base'} ${accent ? 'text-[#64d2ff]' : 'text-white'}`}>{value}</span>
+      <span className={`font-bold tabular-nums ${small ? 'text-sm' : 'text-base'} ${accent ? 'text-[#ff9f0a]' : 'text-white'}`}>{value}</span>
     </div>
   );
 }
@@ -160,64 +151,69 @@ const FAQ_DATA = [
 export default function LeaveCalculator() {
   const today = todayStr();
 
-  const [category,       setCategory]    = useState('permanent');
-  const [joiningDate,    setJoiningDate] = useState('');
-  const [asOfDate,       setAsOfDate]    = useState(today);
-  const [fullVacation,   setFullVacation] = useState('');
-  const [vacationAvailed, setVacAvailed] = useState('');
-  const [appointmentType, setApptType]   = useState('upto1year');
-  const [existingBalance, setExisting]   = useState('');
-  const [isLPR,          setIsLPR]       = useState(false);
-  const [openFaq,        setOpenFaq]     = useState(null);
+  const [category,        setCategory]    = useState('permanent');
+  const [joiningDate,     setJoiningDate] = useState('');
+  const [asOfDate,        setAsOfDate]    = useState(today);
+  const [fullVacation,    setFullVacation] = useState('');
+  const [vacationAvailed, setVacAvailed]  = useState('');
+  const [appointmentType, setApptType]    = useState('upto1year');
+  const [existingBalance, setExisting]    = useState('');
+  const [isLPR,           setIsLPR]       = useState(false);
+  const [openFaq,         setOpenFaq]     = useState(null);
 
-  /* Derived values from dates */
-  const dutyDays      = useMemo(() => joiningDate && asOfDate ? daysBetween(joiningDate, asOfDate) : 0, [joiningDate, asOfDate]);
+  const dutyDays       = useMemo(() => joiningDate && asOfDate ? daysBetween(joiningDate, asOfDate) : 0, [joiningDate, asOfDate]);
   const yearsOfService = useMemo(() => joiningDate && asOfDate ? yearsBetween(joiningDate, asOfDate) : 0, [joiningDate, asOfDate]);
 
   const ready  = joiningDate && asOfDate && dutyDays > 0;
   const result = ready ? calculateEL({ category, dutyDays, yearsOfService, fullVacation, vacationAvailed, appointmentType, existingBalance, isLPR }) : null;
 
-  /* Display helpers */
   const yearsDisplay = yearsOfService > 0
     ? `${Math.floor(yearsOfService)} yr${Math.floor(yearsOfService) !== 1 ? 's' : ''} ${Math.round((yearsOfService % 1) * 12)} mo`
     : '—';
 
   return (
-    <div>
-      {/* ── Calculator Card ── */}
-      <div className="glass-card rounded-[20px] p-6 md:p-8 mb-10">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl" style={{ background: 'rgba(100,210,255,0.15)', border: '1px solid rgba(100,210,255,0.25)' }}>📅</div>
+    <div className="space-y-6">
+
+      {/* ── Header card ── */}
+      <div className="glass-card rounded-2xl p-6 border border-[#ff9f0a]/20">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-2xl"
+            style={{ background: 'rgba(255,159,10,0.15)', border: '1px solid rgba(255,159,10,0.25)' }}>📅</div>
           <div>
-            <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>Earned Leave Calculator</h1>
-            <p className="text-xs text-white/60">Kerala Service Rules (KSR) Part I</p>
+            <h1 className="text-lg font-[900] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>Leave Calculator</h1>
+            <p className="text-xs text-white/60">KSR Part I — Earned Leave</p>
           </div>
         </div>
+      </div>
 
-        {/* Category */}
-        <Field label="Employee Category">
-          <div className="grid grid-cols-2 gap-2">
-            {CATEGORIES.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setCategory(c.id)}
-                className={`text-left rounded-xl px-3 py-2.5 border transition-all duration-150 ${
-                  category === c.id
-                    ? 'border-[#64d2ff]/60 bg-[#64d2ff]/10 text-white'
-                    : 'border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20'
-                }`}
-              >
-                <div className="text-xs font-bold leading-tight">{c.label}</div>
-                <div className="text-[10px] text-white/55 mt-0.5">{c.sub}</div>
-              </button>
-            ))}
-          </div>
-        </Field>
+      {/* ── Service Type ── */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Service Type" />
+        <div className="grid grid-cols-2 gap-2">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setCategory(c.id)}
+              className={`text-left rounded-xl px-3 py-2.5 border transition-all duration-150 ${
+                category === c.id
+                  ? 'bg-[#ff9f0a]/15 border-[#ff9f0a]/50 text-white'
+                  : 'border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20'
+              }`}
+            >
+              <div className="text-xs font-bold leading-tight">{c.label}</div>
+              <div className="text-[10px] text-white/55 mt-0.5">{c.sub}</div>
+            </button>
+          ))}
+        </div>
+      </div>
 
-        <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* ── Leave Period ── */}
+      <div className="glass-card rounded-2xl p-6">
+        <SectionHeader title="Leave Period" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-          {/* Date of Joining */}
-          <Field label="Date of Joining / Service Start" hint="First day of duty in the current post">
+          <div>
+            <label className={labelCls}>Date of Joining / Service Start</label>
             <input
               type="date"
               max={asOfDate}
@@ -225,10 +221,11 @@ export default function LeaveCalculator() {
               onChange={e => setJoiningDate(e.target.value)}
               className={inputCls}
             />
-          </Field>
+            <p className="mt-1 text-[10px] text-white/45">First day of duty in the current post</p>
+          </div>
 
-          {/* Calculate As Of */}
-          <Field label="Calculate As Of" hint="Defaults to today; change for a past/future date">
+          <div>
+            <label className={labelCls}>Calculate As Of</label>
             <input
               type="date"
               min={joiningDate || undefined}
@@ -237,9 +234,9 @@ export default function LeaveCalculator() {
               onChange={e => setAsOfDate(e.target.value)}
               className={inputCls}
             />
-          </Field>
+            <p className="mt-1 text-[10px] text-white/45">Defaults to today; change for a past/future date</p>
+          </div>
 
-          {/* Auto-computed summary pill */}
           {joiningDate && asOfDate && dutyDays > 0 && (
             <div className="md:col-span-2 flex flex-wrap gap-3">
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.05] border border-white/10">
@@ -261,8 +258,8 @@ export default function LeaveCalculator() {
             </div>
           )}
 
-          {/* Existing EL balance */}
-          <Field label="Existing EL Balance (days)" hint="Leave already accumulated before this period">
+          <div>
+            <label className={labelCls}>Existing EL Balance (days)</label>
             <input
               type="number"
               min="0"
@@ -272,12 +269,13 @@ export default function LeaveCalculator() {
               onChange={e => setExisting(e.target.value)}
               className={inputCls}
             />
-          </Field>
+            <p className="mt-1 text-[10px] text-white/45">Leave already accumulated before this period</p>
+          </div>
 
-          {/* Vacation dept: full vacation & availed */}
           {category === 'vacation' && (
             <>
-              <Field label="Full Vacation Entitlement (days/year)">
+              <div>
+                <label className={labelCls}>Full Vacation Entitlement (days/year)</label>
                 <input
                   type="number"
                   min="0"
@@ -286,8 +284,9 @@ export default function LeaveCalculator() {
                   onChange={e => setFullVacation(e.target.value)}
                   className={inputCls}
                 />
-              </Field>
-              <Field label="Vacation Actually Availed (days)">
+              </div>
+              <div>
+                <label className={labelCls}>Vacation Actually Availed (days)</label>
                 <input
                   type="number"
                   min="0"
@@ -296,13 +295,13 @@ export default function LeaveCalculator() {
                   onChange={e => setVacAvailed(e.target.value)}
                   className={inputCls}
                 />
-              </Field>
+              </div>
             </>
           )}
 
-          {/* Limited: appointment type */}
           {category === 'limited' && (
-            <Field label="Appointment Duration">
+            <div>
+              <label className={labelCls}>Appointment Duration</label>
               <select
                 value={appointmentType}
                 onChange={e => setApptType(e.target.value)}
@@ -311,16 +310,15 @@ export default function LeaveCalculator() {
                 <option value="upto1year">Up to 1 Year</option>
                 <option value="1to5years">1 to 5 Years</option>
               </select>
-            </Field>
+            </div>
           )}
 
-          {/* LPR toggle */}
           {(category === 'permanent' || category === 'temporary') && (
             <div className="md:col-span-2">
               <label className="flex items-center gap-3 cursor-pointer select-none">
                 <div
                   onClick={() => setIsLPR(!isLPR)}
-                  className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${isLPR ? 'bg-[#64d2ff]' : 'bg-white/15'}`}
+                  className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${isLPR ? 'bg-[#ff9f0a]' : 'bg-white/15'}`}
                 >
                   <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all duration-200 ${isLPR ? 'left-5' : 'left-0.5'}`} />
                 </div>
@@ -330,49 +328,48 @@ export default function LeaveCalculator() {
               </label>
             </div>
           )}
+
+          {!joiningDate && (
+            <div className="md:col-span-2 text-center py-8 rounded-[16px] border border-dashed border-white/10">
+              <p className="text-sm text-white/50">Enter your Date of Joining above to calculate Earned Leave</p>
+            </div>
+          )}
         </div>
-
-        {/* Prompt if no date entered */}
-        {!joiningDate && (
-          <div className="mt-6 text-center py-8 rounded-[16px] border border-dashed border-white/10">
-            <p className="text-sm text-white/50">Enter your Date of Joining above to calculate Earned Leave</p>
-          </div>
-        )}
-
-        {/* ── Result ── */}
-        {result && (
-          <div className="mt-6 rounded-[16px] border border-[#64d2ff]/20 bg-[#64d2ff]/[0.05] p-5">
-            <div className="text-xs font-bold text-[#64d2ff] uppercase tracking-widest mb-1">Result</div>
-            <p className="text-[10px] text-white/45 mb-3">
-              {fmtDate(joiningDate)} → {fmtDate(asOfDate)} · {dutyDays.toLocaleString('en-IN')} days
-            </p>
-
-            <ResultRow label="EL Earned this period"   value={`${result.earned} days`} accent />
-            {result.cappedAt300 && (
-              <ResultRow label="EL Credited (300-day cap)" value={`${result.effectiveEarned} days`} small />
-            )}
-            <ResultRow label="Updated EL Balance"      value={`${result.newBalance} days`} />
-            <ResultRow label="Max Accumulation Limit"  value="300 days" small />
-            <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={`${result.maxGrant} days`} small />
-            <ResultRow label="Admissible Grant Now"    value={`${result.canGrant} days`} accent />
-
-            <p className="mt-3 text-[11px] text-white/50 leading-relaxed">{result.rateNote}</p>
-
-            {result.cappedAt300 && (
-              <p className="mt-2 text-[11px] text-amber-400/70 leading-relaxed">
-                ⚠ Accumulation limit of 300 days exceeded. Only {result.effectiveEarned} days credited; officer ceases to earn further leave until balance drops below 300.
-              </p>
-            )}
-          </div>
-        )}
-
-        <p className="mt-4 text-[11px] text-white/40 leading-relaxed">
-          Note: Calculation is based on total calendar days from joining date. Actual entitlement excludes periods spent on leave, EOL, and suspension, and is subject to audit and competent authority's sanction per KSR Part I.
-        </p>
       </div>
 
+      {/* ── Results ── */}
+      {result && (
+        <div className="glass-card rounded-2xl p-6 border border-[#ff9f0a]/20">
+          <SectionHeader title="Results" />
+          <p className="text-[10px] text-white/45 mb-3">
+            {fmtDate(joiningDate)} → {fmtDate(asOfDate)} · {dutyDays.toLocaleString('en-IN')} days
+          </p>
+
+          <ResultRow label="EL Earned this period"   value={`${result.earned} days`} accent />
+          {result.cappedAt300 && (
+            <ResultRow label="EL Credited (300-day cap)" value={`${result.effectiveEarned} days`} small />
+          )}
+          <ResultRow label="Updated EL Balance"      value={`${result.newBalance} days`} />
+          <ResultRow label="Max Accumulation Limit"  value="300 days" small />
+          <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={`${result.maxGrant} days`} small />
+          <ResultRow label="Admissible Grant Now"    value={`${result.canGrant} days`} accent />
+
+          <p className="mt-3 text-[11px] text-white/50 leading-relaxed">{result.rateNote}</p>
+
+          {result.cappedAt300 && (
+            <p className="mt-2 text-[11px] text-amber-400/70 leading-relaxed">
+              ⚠ Accumulation limit of 300 days exceeded. Only {result.effectiveEarned} days credited; officer ceases to earn further leave until balance drops below 300.
+            </p>
+          )}
+
+          <p className="mt-4 text-[11px] text-white/40 leading-relaxed">
+            Note: Calculation is based on total calendar days from joining date. Actual entitlement excludes periods spent on leave, EOL, and suspension, and is subject to audit and competent authority's sanction per KSR Part I.
+          </p>
+        </div>
+      )}
+
       {/* ── KSR Rules Reference Table ── */}
-      <div className="glass-card rounded-[20px] p-6 md:p-8 mb-10">
+      <div className="glass-card rounded-2xl p-6">
         <h2 className="text-base font-[900] text-white mb-4" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           KSR Earned Leave Rules — Quick Reference
         </h2>
@@ -399,7 +396,7 @@ export default function LeaveCalculator() {
               ].map(([cat, rate, accum, grant]) => (
                 <tr key={cat} className="border-b border-white/[0.05] last:border-0">
                   <td className="py-2.5 pr-4 text-white/70 text-xs">{cat}</td>
-                  <td className="py-2.5 pr-4 text-[#64d2ff] text-xs font-mono">{rate}</td>
+                  <td className="py-2.5 pr-4 text-[#ff9f0a] text-xs font-mono">{rate}</td>
                   <td className="py-2.5 pr-4 text-white/50 text-xs">{accum}</td>
                   <td className="py-2.5 text-white/50 text-xs">{grant}</td>
                 </tr>

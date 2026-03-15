@@ -135,7 +135,7 @@ export default function PayScalesPage() {
           <div className="flex items-center gap-2 text-xs text-white/60 mb-8">
             <a href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</a>
             <span>›</span>
-            <span className="text-[#2997ff]">Pay Scales</span>
+            <span className="text-[#ff9f0a]">Pay Revision Calculator</span>
           </div>
 
           {/* Header */}

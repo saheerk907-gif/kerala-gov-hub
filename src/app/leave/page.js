@@ -110,7 +110,7 @@ export default function LeavePage() {
             <span>›</span>
             <a href="/ksr" className="hover:text-white transition-colors no-underline text-white/60">Kerala Service Rules</a>
             <span>›</span>
-            <span className="text-[#64d2ff]">Earned Leave Calculator</span>
+            <span className="text-[#ff9f0a]">Leave Calculator</span>
           </div>
 
           <LeaveCalculator />
