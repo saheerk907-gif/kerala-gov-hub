@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function OrdersSection({ orders }) {
   const [query, setQuery] = useState('');
@@ -141,14 +142,14 @@ export default function OrdersSection({ orders }) {
 
       {/* CTA — pinned to bottom */}
       <div className="mt-2">
-        <a href="https://www.finance.kerala.gov.in" target="_blank" rel="noopener noreferrer"
+        <Link href="/orders"
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
           style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)' }}>
           എല്ലാ ഉത്തരവുകളും കാണുക
           <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
             <path d="M9 5l7 7-7 7" />
           </svg>
-        </a>
+        </Link>
       </div>
     </section>
   );
