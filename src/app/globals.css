@@ -335,7 +335,7 @@ img, video, svg { max-width: 100%; }
 [data-theme="light"] .border-white\/20         { border-color: rgba(26,26,46,0.20) !important; }
 [data-theme="light"] .border-white\/25         { border-color: rgba(26,26,46,0.25) !important; }
 
-/* ── Gradient from/via/to overrides (Hero vignettes, etc.) ── */
+/* ── Gradient from/via/to overrides (non-hero sections) ── */
 [data-theme="light"] .from-\[\#121416\]      { --tw-gradient-from: #f5f0e8 var(--tw-gradient-from-position) !important; }
 [data-theme="light"] .from-\[\#121416\]\/80  { --tw-gradient-from: rgba(245,240,232,0.80) var(--tw-gradient-from-position) !important; }
 [data-theme="light"] .from-\[\#121416\]\/70  { --tw-gradient-from: rgba(245,240,232,0.70) var(--tw-gradient-from-position) !important; }
@@ -343,6 +343,29 @@ img, video, svg { max-width: 100%; }
 [data-theme="light"] .to-\[\#121416\]\/80    { --tw-gradient-to: rgba(245,240,232,0.80) var(--tw-gradient-to-position) !important; }
 [data-theme="light"] .to-\[\#121416\]\/60    { --tw-gradient-to: rgba(245,240,232,0.60) var(--tw-gradient-to-position) !important; }
 [data-theme="light"] .via-\[\#121416\]\/60   { --tw-gradient-via: rgba(245,240,232,0.60) var(--tw-gradient-via-position) !important; }
+
+/* ── Hero section always stays dark (professional full-bleed hero) ── */
+[data-theme="light"] .hero-section .from-\[\#121416\]      { --tw-gradient-from: #121416 var(--tw-gradient-from-position) !important; }
+[data-theme="light"] .hero-section .from-\[\#121416\]\/80  { --tw-gradient-from: rgba(18,20,22,0.80) var(--tw-gradient-from-position) !important; }
+[data-theme="light"] .hero-section .from-\[\#121416\]\/70  { --tw-gradient-from: rgba(18,20,22,0.70) var(--tw-gradient-from-position) !important; }
+[data-theme="light"] .hero-section .via-\[\#121416\]\/60   { --tw-gradient-via: rgba(18,20,22,0.60) var(--tw-gradient-via-position) !important; }
+[data-theme="light"] .hero-section .to-\[\#121416\]        { --tw-gradient-to: #121416 var(--tw-gradient-to-position) !important; }
+[data-theme="light"] .hero-section .to-\[\#121416\]\/80    { --tw-gradient-to: rgba(18,20,22,0.80) var(--tw-gradient-to-position) !important; }
+[data-theme="light"] .hero-section .text-white             { color: rgba(255,255,255,0.92) !important; }
+[data-theme="light"] .hero-section .text-white\/95         { color: rgba(255,255,255,0.95) !important; }
+[data-theme="light"] .hero-section .text-white\/85         { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .hero-section .text-white\/60         { color: rgba(255,255,255,0.60) !important; }
+[data-theme="light"] .hero-section .text-white\/50         { color: rgba(255,255,255,0.50) !important; }
+[data-theme="light"] .hero-section .bg-black\/50           { background-color: rgba(0,0,0,0.50) !important; }
+[data-theme="light"] .hero-section .border-white\/20       { border-color: rgba(255,255,255,0.20) !important; }
+[data-theme="light"] .hero-section .hover\:bg-white\/10:hover { background-color: rgba(255,255,255,0.10) !important; }
+
+/* ── Section nav (sticky scroll nav) light mode ── */
+[data-theme="light"] .section-nav            { background: rgba(248,244,238,0.96) !important; border-color: rgba(0,0,0,0.09) !important; }
+[data-theme="light"] .section-nav-btn        { color: rgba(26,26,46,0.60) !important; }
+[data-theme="light"] .section-nav-btn:hover  { background: rgba(26,26,46,0.05) !important; color: rgba(26,26,46,0.90) !important; }
+[data-theme="light"] .section-nav-divider    { background: rgba(26,26,46,0.10) !important; }
+[data-theme="light"] .section-nav-quiz       { color: rgba(26,26,46,0.40) !important; }
 
 /* ── Ring / shadow utilities ── */
 [data-theme="light"] .ring-white\/\[0\.08\]  { --tw-ring-color: rgba(26,26,46,0.10) !important; }

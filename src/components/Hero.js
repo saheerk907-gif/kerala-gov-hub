@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-12 overflow-hidden">
+    <section className="hero-section relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-12 overflow-hidden">
 
       {/* ── Background: Secretariat building ─────────────── */}
       <div className="absolute inset-0 z-0">
@@ -99,7 +99,7 @@ export default function Hero() {
               key={label}
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.92)', border: '1px solid rgba(255,255,255,0.25)' }}
+              style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.92)', border: '1px solid rgba(255,255,255,0.28)' }}
             >
               {label}
             </a>

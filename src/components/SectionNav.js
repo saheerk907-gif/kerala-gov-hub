@@ -42,7 +42,7 @@ export default function SectionNav() {
 
   return (
     <div
-      className="fixed top-[56px] lg:top-[88px] left-0 right-0 z-[900] transition-all duration-300"
+      className="section-nav fixed top-[56px] lg:top-[88px] left-0 right-0 z-[900] transition-all duration-300"
       style={{
         background: 'rgba(18,20,22,0.92)',
         backdropFilter: 'blur(20px)',
@@ -55,7 +55,7 @@ export default function SectionNav() {
             <button
               key={s.id}
               onClick={() => scrollTo(s.id)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-bold whitespace-nowrap border-none cursor-pointer transition-all flex-shrink-0"
+              className={`section-nav-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-bold whitespace-nowrap border-none cursor-pointer transition-all flex-shrink-0`}
               style={{
                 background: active === s.id ? 'rgba(41,151,255,0.15)' : 'transparent',
                 color: active === s.id ? '#2997ff' : 'rgba(255,255,255,0.65)',
@@ -68,13 +68,13 @@ export default function SectionNav() {
           ))}
 
           {/* Divider */}
-          <div className="w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
+          <div className="section-nav-divider w-px h-4 bg-white/10 mx-1 flex-shrink-0" />
 
           {/* Quick links to dedicated pages */}
           <Link href="/departmental-tests"
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap no-underline flex-shrink-0 transition-all"
+            className="section-nav-quiz flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap no-underline flex-shrink-0 transition-all"
             style={{ color: 'rgba(255,255,255,0.3)', background: 'transparent' }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#2997ff'; e.currentTarget.style.background = 'rgba(41,151,255,0.10)'; }}
             onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.3)'; e.currentTarget.style.background = 'transparent'; }}>
             Quiz →
           </Link>
