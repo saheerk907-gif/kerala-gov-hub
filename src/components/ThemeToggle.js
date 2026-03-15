@@ -25,7 +25,11 @@ export default function ThemeToggle() {
       aria-label="Toggle light/dark mode"
       title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
       className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-md md:rounded-lg transition-all duration-200 cursor-pointer flex-shrink-0"
-      style={{
+      style={isLight ? {
+        background: 'rgba(0,0,0,0.07)',
+        color: '#374151',
+        border: '1px solid rgba(0,0,0,0.15)',
+      } : {
         background: 'rgba(255,255,255,0.10)',
         color: 'rgba(245,208,96,0.88)',
         border: '1px solid rgba(255,255,255,0.28)',

@@ -115,7 +115,16 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown]   = useState(null);
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const [searchOpen, setSearchOpen]       = useState(false);
+  const [isLight, setIsLight]             = useState(false);
   const navRef = useRef(null);
+
+  useEffect(() => {
+    const check = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -276,21 +285,26 @@ export default function Navbar() {
             aria-label="Search"
             title="Search (Ctrl+K)"
             className="flex items-center gap-2 rounded-lg px-2.5 h-12 min-w-[48px] transition-all duration-200 border-none cursor-pointer flex-shrink-0 hidden sm:flex"
-            style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
+            style={isLight
+              ? { background: 'rgba(0,0,0,0.06)', color: '#374151', border: '1px solid rgba(0,0,0,0.14)' }
+              : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
           >
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
             <span className="text-[11px] font-medium hidden md:block">Search</span>
-            <kbd className="hidden lg:flex items-center text-[10px] border rounded px-1 py-0.5 font-mono leading-none" style={{ color: 'rgba(245,208,96,0.50)', borderColor: 'rgba(255,255,255,0.20)' }}>⌘K</kbd>
+            <kbd className="hidden lg:flex items-center text-[10px] border rounded px-1 py-0.5 font-mono leading-none"
+              style={isLight ? { color: 'rgba(55,65,81,0.50)', borderColor: 'rgba(0,0,0,0.18)' } : { color: 'rgba(245,208,96,0.50)', borderColor: 'rgba(255,255,255,0.20)' }}>⌘K</kbd>
           </button>
           {/* Mobile search icon only */}
           <button
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
             className="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
-            style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
+            style={isLight
+              ? { background: 'rgba(0,0,0,0.06)', color: '#374151', border: '1px solid rgba(0,0,0,0.14)' }
+              : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
           >
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
