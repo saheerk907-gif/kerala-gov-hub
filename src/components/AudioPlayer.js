@@ -97,12 +97,12 @@ export default function AudioPlayer({ limit }) {
                 <button
                   key={ep.id}
                   onClick={() => playEpisode(ep)}
-                  className={`glass-card glow-top w-full text-left flex items-center gap-4 p-4 rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group ${isActive ? 'audio-ep-active' : ''}`}
+                  className={`glass-card glow-top w-full text-left flex items-center gap-3 p-3 md:p-4 rounded-[16px] md:rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group ${isActive ? 'audio-ep-active' : ''}`}
                   style={isActive ? { borderColor: 'var(--text-ghost)' } : {}}
                 >
                   {/* Play/pause icon */}
                   <div
-                    className="audio-icon-box flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    className="audio-icon-box flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all"
                     style={isActive
                       ? { background: 'var(--surface-md)', color: 'var(--text-primary)' }
                       : { background: 'var(--surface-xs)', color: 'var(--text-dim)' }}
@@ -125,7 +125,7 @@ export default function AudioPlayer({ limit }) {
                       )}
                     </div>
                     <h3
-                      className="text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate"
+                      className="text-[12px] md:text-[14px] font-bold text-white/90 group-hover:text-white transition-colors leading-snug truncate"
                       style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                     >
                       {ep.title_ml}

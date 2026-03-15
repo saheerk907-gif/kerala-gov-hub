@@ -4,11 +4,11 @@ import Link from 'next/link';
 
 const NewsRow = ({ date, title, category, link = '/news', isFirst }) => (
   <Link href={link} className="block no-underline group">
-    <div className={`glass-card glow-top relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-3 ${
+    <div className={`glass-card glow-top relative flex items-center gap-3 p-3 md:p-5 rounded-[16px] md:rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-2 md:mb-3 ${
       isFirst ? 'border-[#2997ff]/30 bg-[#2997ff]/[0.08]' : ''
     }`}>
       {/* Icon */}
-      <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={isFirst ? { background: 'rgba(41,151,255,0.20)', border: '1px solid rgba(41,151,255,0.35)' } : { background: 'var(--surface-sm)', border: '1px solid var(--surface-sm)' }}>
+      <div className="flex-shrink-0 w-8 h-8 md:w-11 md:h-11 rounded-lg md:rounded-xl flex items-center justify-center" style={isFirst ? { background: 'rgba(41,151,255,0.20)', border: '1px solid rgba(41,151,255,0.35)' } : { background: 'var(--surface-sm)', border: '1px solid var(--surface-sm)' }}>
         {isFirst ? (
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2997ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -31,7 +31,7 @@ const NewsRow = ({ date, title, category, link = '/news', isFirst }) => (
           </span>
           <span className="text-[10px] text-white/70">{date}</span>
         </div>
-        <h3 className="text-[15px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+        <h3 className="text-[12px] md:text-base font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           {title}
         </h3>
       </div>

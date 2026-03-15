@@ -23,47 +23,41 @@ export default function TrendingArticle() {
   const summary = article.summary_ml ? article.summary_ml.replace(/<[^>]+>/g, '').slice(0, 80) : null;
 
   return (
-    <div className="px-4 md:px-6 max-w-[1200px] mx-auto mt-4 mb-6">
+    <div className="px-4 md:px-6 max-w-[1200px] mx-auto mt-2 mb-3 md:mt-4 md:mb-6">
       <Link href={`/articles/${article.id}`} className="no-underline group block">
-        <div className="relative rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
+        <div className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
           style={{ background: 'linear-gradient(135deg, rgba(255,159,10,0.1) 0%, rgba(255,69,58,0.06) 100%)', border: '1px solid rgba(255,159,10,0.25)' }}>
 
-          {/* Mobile layout */}
-          <div className="flex md:hidden items-start gap-3 px-4 py-4">
+          {/* Mobile layout — compact single line */}
+          <div className="flex md:hidden items-center gap-2.5 px-3 py-2.5">
             {/* Left: image */}
             {article.image_url ? (
               <img src={article.image_url} alt={article.title_ml}
-                className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+                className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
             ) : (
-              <div className="w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center"
+              <div className="w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center"
                 style={{ background: 'rgba(255,159,10,0.15)' }}>
-                <span className="text-2xl">📰</span>
+                <span className="text-base">📰</span>
               </div>
             )}
 
-            {/* Right: content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a] animate-pulse flex-shrink-0" />
-                <span className="text-[9px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
-              </div>
-              <p className="text-[14px] font-bold text-white/90 leading-snug line-clamp-2 mb-2"
-                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                {article.title_ml}
-              </p>
-              {summary && (
-                <p className="text-[11px] text-white/60 line-clamp-2 leading-relaxed mb-2"
-                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                  {summary}
-                </p>
-              )}
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff9f0a]">
-                വായിക്കുക
-                <svg width="10" height="10" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
+            {/* Label */}
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a] animate-pulse" />
+              <span className="text-[8px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
             </div>
+
+            <div className="w-px h-4 bg-white/15 flex-shrink-0" />
+
+            {/* Title — truncated to 1 line */}
+            <p className="text-[12px] font-bold text-white/85 leading-tight truncate flex-1"
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              {article.title_ml}
+            </p>
+
+            <svg width="10" height="10" fill="none" stroke="#ff9f0a" strokeWidth="2.5" viewBox="0 0 24 24" className="flex-shrink-0">
+              <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
 
           {/* Desktop layout */}

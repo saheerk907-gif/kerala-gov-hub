@@ -1,8 +1,12 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { DEPTS, TESTS } from '@/lib/testsData';
 
+const MOBILE_DEPT_VISIBLE = 6;
+
 export default function DepartmentalTestsSection() {
+  const [expanded, setExpanded] = useState(false);
   const countByDept = {};
   TESTS.forEach(t => { countByDept[t.dept] = (countByDept[t.dept] || 0) + 1; });
 
@@ -35,36 +39,50 @@ export default function DepartmentalTestsSection() {
 
         {/* Compact department grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          {DEPTS.map(d => {
+          {DEPTS.map((d, idx) => {
             const count = countByDept[d.id] || 0;
             return (
-              <Link
-                key={d.id}
-                href={`/departmental-tests?dept=${d.id}`}
-                className="dept-card group flex items-center gap-2.5 px-3 py-2.5 rounded-xl no-underline transition-all duration-200 hover:bg-white/[0.05]"
-                style={{ border: '1px solid var(--surface-xs)' }}
-              >
-                <div
-                  className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm"
-                  style={{ background: d.color + '20', border: `1px solid ${d.color}35` }}
+              <div key={d.id} className={idx >= MOBILE_DEPT_VISIBLE && !expanded ? 'sm:block hidden' : 'block'}>
+                <Link
+                  href={`/departmental-tests?dept=${d.id}`}
+                  className="dept-card group flex items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3 md:py-2.5 rounded-lg md:rounded-xl no-underline transition-all duration-200 hover:bg-white/[0.05] h-full"
+                  style={{ border: '1px solid var(--surface-xs)' }}
                 >
-                  {d.icon}
-                </div>
-                <div className="min-w-0">
                   <div
-                    className="text-[12px] font-bold text-white/85 group-hover:text-white transition-colors leading-tight truncate"
-                    style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                    className="flex-shrink-0 w-6 h-6 md:w-7 md:h-7 rounded-md md:rounded-lg flex items-center justify-center text-xs md:text-sm"
+                    style={{ background: d.color + '20', border: `1px solid ${d.color}35` }}
                   >
-                    {d.label}
+                    {d.icon}
                   </div>
-                  <div className="text-[9px] text-white/55 font-medium mt-0.5">
-                    {count} tests
+                  <div className="min-w-0">
+                    <div
+                      className="text-[11px] md:text-[12px] font-bold text-white/85 group-hover:text-white transition-colors leading-tight truncate"
+                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                    >
+                      {d.label}
+                    </div>
+                    <div className="text-[8px] md:text-[9px] text-white/55 font-medium mt-0.5">
+                      {count} tests
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>
+
+        {/* Show more — mobile only */}
+        {DEPTS.length > MOBILE_DEPT_VISIBLE && (
+          <div className="sm:hidden mt-3 flex justify-center">
+            <button
+              onClick={() => setExpanded(v => !v)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+              style={{ background: 'rgba(48,209,88,0.08)', color: '#30d158', border: '1px solid rgba(48,209,88,0.20)' }}
+            >
+              {expanded ? 'Show less ↑' : `Show all ${DEPTS.length} departments ↓`}
+            </button>
+          </div>
+        )}
 
       </div>
     </section>

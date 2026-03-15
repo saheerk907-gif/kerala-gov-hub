@@ -27,7 +27,7 @@ export default function AudioClassesSection() {
           </Link>
         </div>
 
-        <AudioPlayer limit={4} />
+        <AudioPlayer limit={2} />
 
       </div>
     </section>
