@@ -1,12 +1,8 @@
 'use client';
-import { useState } from 'react';
 import Link from 'next/link';
 import { DEPTS, TESTS } from '@/lib/testsData';
 
-const MOBILE_DEPT_VISIBLE = 6;
-
 export default function DepartmentalTestsSection() {
-  const [expanded, setExpanded] = useState(false);
   const countByDept = {};
   TESTS.forEach(t => { countByDept[t.dept] = (countByDept[t.dept] || 0) + 1; });
 
@@ -39,10 +35,10 @@ export default function DepartmentalTestsSection() {
 
         {/* Compact department grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          {DEPTS.map((d, idx) => {
+          {DEPTS.map((d) => {
             const count = countByDept[d.id] || 0;
             return (
-              <div key={d.id} className={idx >= MOBILE_DEPT_VISIBLE && !expanded ? 'sm:block hidden' : 'block'}>
+              <div key={d.id}>
                 <Link
                   href={`/departmental-tests?dept=${d.id}`}
                   className="dept-card group flex items-center gap-2 px-2.5 py-2 md:gap-2.5 md:px-3 md:py-2.5 rounded-lg md:rounded-xl no-underline transition-all duration-200 hover:bg-white/[0.05] h-full"
@@ -70,19 +66,6 @@ export default function DepartmentalTestsSection() {
             );
           })}
         </div>
-
-        {/* Show more — mobile only */}
-        {DEPTS.length > MOBILE_DEPT_VISIBLE && (
-          <div className="sm:hidden mt-3 flex justify-center">
-            <button
-              onClick={() => setExpanded(v => !v)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-              style={{ background: 'rgba(48,209,88,0.08)', color: '#30d158', border: '1px solid rgba(48,209,88,0.20)' }}
-            >
-              {expanded ? 'Show less ↑' : `Show all ${DEPTS.length} departments ↓`}
-            </button>
-          </div>
-        )}
 
       </div>
     </section>

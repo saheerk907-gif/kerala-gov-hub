@@ -106,7 +106,6 @@ function SmallCard({ article }) {
 export default function ArticlesSection() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchArticles() {
@@ -131,23 +130,13 @@ export default function ArticlesSection() {
   return (
     <section className="py-6 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
       {/* Header */}
-      <div className="flex items-end justify-between mb-8">
-        <div>
-          <div className="section-label mb-2">Articles</div>
-          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
-            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-            ലേഖനങ്ങൾ
-          </h2>
-          <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
-        </div>
-        <Link href="/articles"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[12px] font-bold no-underline transition-all hover:bg-[#2997ff]/10"
-          style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.2)' }}>
-          കൂടുതൽ ലേഖനങ്ങൾ
-          <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </Link>
+      <div className="mb-6">
+        <div className="section-label mb-2">Articles</div>
+        <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
+          style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+          ലേഖനങ്ങൾ
+        </h2>
+        <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
       </div>
 
       {/* Grid */}
@@ -158,25 +147,11 @@ export default function ArticlesSection() {
           <div className="hidden md:block h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
         </div>
       ) : (
-        <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {articles[0] && <FeaturedCard article={articles[0]} />}
-            {articles[1] && <div className={expanded ? 'block' : 'hidden md:block'}><SmallCard article={articles[1]} /></div>}
-            {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
-          </div>
-          {/* Expand button — mobile only */}
-          {articles.length > 1 && (
-            <div className="md:hidden mt-3 flex justify-center">
-              <button
-                onClick={() => setExpanded(v => !v)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-                style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
-              >
-                {expanded ? 'Show less ↑' : 'Show more articles ↓'}
-              </button>
-            </div>
-          )}
-        </>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {articles[0] && <FeaturedCard article={articles[0]} />}
+          {articles[1] && <div className="hidden md:block"><SmallCard article={articles[1]} /></div>}
+          {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
+        </div>
       )}
 
       {/* Bottom CTA */}
