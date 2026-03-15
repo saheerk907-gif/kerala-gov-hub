@@ -160,7 +160,7 @@ export default function Navbar() {
           background: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
           backdropFilter: 'saturate(180%) blur(24px)',
           WebkitBackdropFilter: 'saturate(180%) blur(24px)',
-          borderBottom: '1px solid var(--nav-border)',
+          borderBottom: scrolled ? '1px solid rgba(200,150,12,0.18)' : '1px solid var(--nav-border)',
         }}
       >
         <div className="flex items-center justify-between px-4 md:px-6 h-14">
@@ -173,7 +173,7 @@ export default function Navbar() {
                 className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             </picture>
             <div className="flex flex-col leading-tight min-w-0">
-              <span className="text-[12px] sm:text-[14px] font-bold transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: 'var(--nav-text-active)' }}>
+              <span className="text-[12px] sm:text-[14px] font-bold transition-colors truncate bg-clip-text text-transparent" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", backgroundImage: 'linear-gradient(135deg, #c8960c, #f5d060, #c8960c)' }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
               <span className="text-[9px] font-semibold uppercase tracking-widest font-sans hidden sm:block" style={{ color: 'var(--nav-text)' }}>
@@ -194,7 +194,7 @@ export default function Navbar() {
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-all border-none bg-transparent cursor-pointer"
                     style={{
                       fontFamily: "var(--font-noto-malayalam), sans-serif",
-                      color: isOpen ? 'var(--nav-text-active)' : 'var(--nav-text)',
+                      color: isOpen ? '#f5d060' : 'var(--nav-text)',
                       background: isOpen ? 'var(--nav-item-active-bg)' : 'transparent',
                     }}
                   >
@@ -220,7 +220,7 @@ export default function Navbar() {
                     >
                       {/* Header */}
                       <div className="px-4 py-2.5 border-b" style={{ borderColor: 'var(--nav-border)' }}>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--text-secondary)' }}>{item.en}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'rgba(200,150,12,0.70)' }}>{item.en}</span>
                       </div>
 
                       {/* Items */}
@@ -243,8 +243,8 @@ export default function Navbar() {
                                 {d.badge && (
                                   <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide flex-shrink-0"
                                     style={{
-                                      background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'var(--surface-xs)',
-                                      color: d.badge === 'NEW' ? '#2997ff' : 'var(--text-dim)',
+                                      background: d.badge === 'NEW' ? 'rgba(200,150,12,0.15)' : 'var(--surface-xs)',
+                                      color: d.badge === 'NEW' ? '#f5d060' : 'var(--text-dim)',
                                     }}>
                                     {d.badge}
                                   </span>
