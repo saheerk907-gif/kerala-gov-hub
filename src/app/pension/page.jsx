@@ -109,8 +109,8 @@ function calculate({ avgEmoluments, lastEmoluments, qualifyingService, commutePc
 
 // ─── UI atoms ─────────────────────────────────────────────────────────────────
 const GLASS = {
-  input:    { background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: '#fff' },
-  output:   { background: 'rgba(41,151,255,0.07)',  border: '1px solid rgba(41,151,255,0.18)',  color: '#fff' },
+  input:    { background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: 'var(--text-primary)' },
+  output:   { background: 'rgba(41,151,255,0.07)',  border: '1px solid rgba(41,151,255,0.18)',  color: 'var(--text-primary)' },
   disabled: { background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)', color: 'var(--text-dim)' },
 };
 
@@ -333,7 +333,7 @@ export default function PensionPage() {
           </Link>
         </div>
 
-        <FAQSection faqs={PENSION_FAQS} accentColor="#2997ff" />
+        <FAQSection faqs={PENSION_FAQS} accentColor="#ff9f0a" />
 
       </div>
     </div>
