@@ -135,6 +135,30 @@ export default function AdminOrders() {
         <p className="text-xs text-[#6e6e73]">{orders.length} records total</p>
       </div>
 
+      {/* Refresh Homepage Button */}
+      <div className="mb-4">
+        <button
+          onClick={async () => {
+            try {
+              const res = await fetch('/api/revalidate', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '',
+                },
+                body: JSON.stringify({}),
+              });
+              if (res.ok) alert('✅ Homepage refreshed! New content is now live.');
+              else alert('❌ Refresh failed. Try again.');
+            } catch {
+              alert('❌ Refresh failed. Try again.');
+            }
+          }}
+          className="px-4 py-2 bg-[#30d158]/10 text-[#30d158] rounded-xl text-xs font-bold hover:bg-[#30d158]/20 transition-all border-none cursor-pointer">
+          🔄 Refresh Homepage
+        </button>
+      </div>
+
 
       {/* Search */}
       <input value={search} onChange={e => setSearch(e.target.value)}
