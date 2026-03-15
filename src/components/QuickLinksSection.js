@@ -1,4 +1,7 @@
 'use client';
+import { useState } from 'react';
+
+const MOBILE_VISIBLE = 5;
 
 const COLOR_MAP = {
   blue:   { text: '#2997ff', bg: 'rgba(41,151,255,0.12)',  border: 'rgba(41,151,255,0.22)' },
@@ -11,6 +14,7 @@ const COLOR_MAP = {
 };
 
 export default function QuickLinksSection({ links }) {
+  const [expanded, setExpanded] = useState(false);
   if (!links?.length) return null;
 
   return (
@@ -29,11 +33,12 @@ export default function QuickLinksSection({ links }) {
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#64d2ff] to-transparent mt-2 rounded-full" />
         </div>
 
-        {/* Compact 2-col grid of rows */}
+        {/* Compact grid — mobile shows MOBILE_VISIBLE items by default */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-          {links.map(l => {
+          {links.map((l, idx) => {
             const c = COLOR_MAP[l.color] || COLOR_MAP.blue;
             return (
+              <div key={l.id} className={idx >= MOBILE_VISIBLE && !expanded ? 'sm:block hidden' : 'block'}>
               <a
                 key={l.id}
                 href={l.url}
@@ -75,9 +80,23 @@ export default function QuickLinksSection({ links }) {
                   <line x1="10" y1="14" x2="21" y2="3" />
                 </svg>
               </a>
+              </div>
             );
           })}
         </div>
+
+        {/* Expand / collapse — mobile only */}
+        {links.length > MOBILE_VISIBLE && (
+          <div className="sm:hidden mt-3 flex justify-center">
+            <button
+              onClick={() => setExpanded(v => !v)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+              style={{ background: 'rgba(100,210,255,0.08)', color: '#64d2ff', border: '1px solid rgba(100,210,255,0.22)' }}
+            >
+              {expanded ? 'Show less ↑' : `Show all ${links.length} portals ↓`}
+            </button>
+          </div>
+        )}
 
       </div>
     </section>
