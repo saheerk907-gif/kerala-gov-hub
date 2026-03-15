@@ -158,23 +158,25 @@ export default function ArticlesSection() {
           <div className="hidden md:block h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {articles[0] && <FeaturedCard article={articles[0]} />}
-          {articles[1] && <div className={expanded ? 'block' : 'hidden md:block'}><SmallCard article={articles[1]} /></div>}
-          {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
-        </div>
-        {/* Expand button — mobile only */}
-        {!loading && articles.length > 1 && (
-          <div className="md:hidden mt-3 flex justify-center">
-            <button
-              onClick={() => setExpanded(v => !v)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-              style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
-            >
-              {expanded ? 'Show less ↑' : 'Show more articles ↓'}
-            </button>
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {articles[0] && <FeaturedCard article={articles[0]} />}
+            {articles[1] && <div className={expanded ? 'block' : 'hidden md:block'}><SmallCard article={articles[1]} /></div>}
+            {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
           </div>
-        )}
+          {/* Expand button — mobile only */}
+          {articles.length > 1 && (
+            <div className="md:hidden mt-3 flex justify-center">
+              <button
+                onClick={() => setExpanded(v => !v)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+                style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
+              >
+                {expanded ? 'Show less ↑' : 'Show more articles ↓'}
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Bottom CTA */}
