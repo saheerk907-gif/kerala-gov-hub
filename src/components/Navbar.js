@@ -164,12 +164,12 @@ export default function Navbar() {
     <>
       <header
         ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : ''}`}
+        className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_40px_rgba(0,0,0,0.4)]' : ''}`}
         style={{
           background: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
-          backdropFilter: 'saturate(180%) blur(24px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(24px)',
-          borderBottom: scrolled ? '1px solid rgba(200,150,12,0.18)' : '1px solid var(--nav-border)',
+          backdropFilter: 'saturate(200%) blur(32px)',
+          WebkitBackdropFilter: 'saturate(200%) blur(32px)',
+          borderBottom: '1px solid var(--nav-border)',
         }}
       >
         <div className="flex items-center justify-between px-3 md:px-6 h-12 md:h-14">
@@ -200,11 +200,12 @@ export default function Navbar() {
                 <div key={item.en} className="relative">
                   <button
                     onClick={() => setOpenDropdown(isOpen ? null : item.en)}
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-all border-none bg-transparent cursor-pointer"
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13px] font-semibold transition-all border cursor-pointer"
                     style={{
                       fontFamily: "var(--font-noto-malayalam), sans-serif",
                       color: isOpen ? '#f5d060' : 'var(--nav-text)',
-                      background: isOpen ? 'var(--nav-item-active-bg)' : 'transparent',
+                      background: isOpen ? 'var(--glass-bg-hover)' : 'transparent',
+                      borderColor: isOpen ? 'var(--glass-border-hover)' : 'transparent',
                     }}
                   >
                     {item.label}
@@ -217,14 +218,15 @@ export default function Navbar() {
 
                   {isOpen && (
                     <div
-                      className="absolute top-full mt-2 rounded-xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.55)] z-50"
+                      className="absolute top-full mt-2 rounded-2xl overflow-hidden shadow-[0_16px_48px_rgba(0,0,0,0.55)] z-50"
                       style={{
                         left: '50%',
                         transform: 'translateX(-50%)',
                         minWidth: cols === 2 ? '460px' : '240px',
                         background: 'var(--nav-dropdown-bg)',
-                        border: '1px solid var(--nav-dropdown-border)',
-                        backdropFilter: 'blur(32px)',
+                        border: '1px solid var(--glass-border)',
+                        backdropFilter: 'saturate(200%) blur(40px)',
+                        WebkitBackdropFilter: 'saturate(200%) blur(40px)',
                       }}
                     >
                       {/* Header */}

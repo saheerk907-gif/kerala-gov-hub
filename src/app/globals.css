@@ -31,18 +31,18 @@
   --border: rgba(255, 255, 255, 0.09);
 
   /* Navigation */
-  --nav-bg: rgba(18, 20, 22, 0.85);
-  --nav-bg-scrolled: rgba(18, 20, 22, 0.97);
-  --nav-border: rgba(255, 255, 255, 0.07);
+  --nav-bg: rgba(18, 20, 22, 0.60);
+  --nav-bg-scrolled: rgba(18, 20, 22, 0.80);
+  --nav-border: rgba(255, 255, 255, 0.09);
   --nav-text: rgba(255, 255, 255, 0.55);
   --nav-text-active: #ffffff;
-  --nav-dropdown-bg: rgba(20, 22, 26, 0.99);
+  --nav-dropdown-bg: rgba(20, 22, 26, 0.92);
   --nav-dropdown-border: rgba(255, 255, 255, 0.09);
-  --nav-item-hover: rgba(255, 255, 255, 0.06);
-  --nav-mobile-bg: rgba(14, 16, 18, 0.99);
+  --nav-item-hover: rgba(255, 255, 255, 0.07);
+  --nav-mobile-bg: rgba(14, 16, 18, 0.97);
   --nav-icon-bg: rgba(255, 255, 255, 0.07);
   --nav-icon-color: rgba(255, 255, 255, 0.5);
-  --nav-item-active-bg: rgba(255, 255, 255, 0.07);
+  --nav-item-active-bg: rgba(255, 255, 255, 0.09);
 
   /* Hero vignette */
   --hero-vignette: 18, 20, 22;

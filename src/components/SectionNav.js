@@ -45,8 +45,9 @@ export default function SectionNav() {
       className="section-nav fixed top-[56px] lg:top-[88px] left-0 right-0 z-[900] transition-all duration-300"
       style={{
         background: 'var(--nav-bg-scrolled)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--nav-border)',
+        backdropFilter: 'saturate(200%) blur(32px)',
+        WebkitBackdropFilter: 'saturate(200%) blur(32px)',
+        borderBottom: '1px solid var(--glass-border)',
       }}
     >
       <div className="max-w-[1200px] mx-auto px-4 md:px-6">
@@ -55,10 +56,11 @@ export default function SectionNav() {
             <button
               key={s.id}
               onClick={() => scrollTo(s.id)}
-              className={`section-nav-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[12px] font-bold whitespace-nowrap border-none cursor-pointer transition-all flex-shrink-0`}
+              className={`section-nav-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-[12px] font-bold whitespace-nowrap cursor-pointer transition-all flex-shrink-0 border`}
               style={{
-                background: active === s.id ? 'rgba(41,151,255,0.15)' : 'transparent',
+                background: active === s.id ? 'rgba(41,151,255,0.12)' : 'transparent',
                 color: active === s.id ? '#2997ff' : 'var(--text-dim)',
+                borderColor: active === s.id ? 'rgba(41,151,255,0.22)' : 'transparent',
               }}
             >
               <span className="text-sm">{s.icon}</span>
