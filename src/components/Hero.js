@@ -1,31 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function Hero() {
-  return (
-    <section className="hero-section relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-12 overflow-hidden">
+  const [isLight, setIsLight] = useState(false);
 
-      {/* ── Background: Secretariat building ─────────────── */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/kerala-secretariat.jpg"
-          alt=""
-          fill
-          priority
-          fetchPriority="high"
-          className="object-cover object-[center_65%] opacity-[0.32]"
-          style={{ filter: 'grayscale(25%) brightness(0.8) contrast(1.1)' }}
-          sizes="100vw"
-        />
-        {/* Side vignettes — softer so building feels present */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#121416]/80 via-transparent to-[#121416]/80" />
-        {/* Top fade — clean entry */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#121416]/70 via-transparent to-transparent" />
-        {/* Bottom — building roofline visible, fades into page */}
-        <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-t from-[#121416] via-[#121416]/60 to-transparent" />
-      </div>
+  useEffect(() => {
+    const check = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section
+      className="hero-section relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-12 overflow-hidden"
+      style={isLight ? {
+        background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(200,150,12,0.13) 0%, transparent 65%), radial-gradient(ellipse 60% 40% at 15% 100%, rgba(200,150,12,0.07) 0%, transparent 55%), #f5f0e8',
+      } : undefined}
+    >
+
+      {/* ── Background: Secretariat building (dark mode only) ── */}
+      {!isLight && (
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/kerala-secretariat.jpg"
+            alt=""
+            fill
+            priority
+            fetchPriority="high"
+            className="object-cover object-[center_65%] opacity-[0.32]"
+            style={{ filter: 'grayscale(25%) brightness(0.8) contrast(1.1)' }}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#121416]/80 via-transparent to-[#121416]/80" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#121416]/70 via-transparent to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-t from-[#121416] via-[#121416]/60 to-transparent" />
+        </div>
+      )}
+
+      {/* ── Light mode: subtle Kerala emblem watermark ──────── */}
+      {isLight && (
+        <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+          <div className="w-[420px] h-[420px] rounded-full opacity-[0.06]"
+            style={{ background: 'radial-gradient(circle, rgba(200,150,12,1) 0%, transparent 70%)' }} />
+        </div>
+      )}
 
       {/* ── Gold ambient glow centered behind logo ────────── */}
       <div
@@ -107,7 +129,9 @@ export default function Hero() {
               key={label}
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
+              style={isLight
+                ? { background: 'rgba(200,150,12,0.08)', color: '#b8860b', border: '1px solid rgba(200,150,12,0.30)' }
+                : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
             >
               {label}
             </a>
@@ -123,7 +147,7 @@ export default function Hero() {
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: 'rgba(245,208,96,0.55)' }}>
             Explore
           </span>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: '1px solid rgba(200,150,12,0.30)' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: `1px solid ${isLight ? 'rgba(184,134,11,0.35)' : 'rgba(200,150,12,0.30)'}` }}>
             <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: 'rgba(245,208,96,0.55)' }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
