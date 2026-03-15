@@ -1,10 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-const VISIBLE = 5;
-
 export default function OrdersSection({ orders }) {
-  const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState('');
 
   if (!orders?.length) return null;
@@ -19,11 +16,10 @@ export default function OrdersSection({ orders }) {
       )
     : orders;
 
-  const currentOrders = expanded ? filtered : filtered.slice(0, VISIBLE);
+  const currentOrders = filtered;
 
   const handleSearch = (val) => {
     setQuery(val);
-    setExpanded(false);
   };
 
   return (
@@ -128,18 +124,6 @@ export default function OrdersSection({ orders }) {
         })}
       </div>
 
-      {/* Read More / Show Less */}
-      {filtered.length > VISIBLE && (
-        <div className="mt-3 flex justify-center">
-          <button
-            onClick={() => setExpanded(v => !v)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-            style={{ background: 'rgba(255,159,10,0.08)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.22)' }}
-          >
-            {expanded ? 'Show less ↑' : `Read more (${filtered.length - VISIBLE} more) ↓`}
-          </button>
-        </div>
-      )}
 
       {/* CTA — pinned to bottom */}
       <div className="mt-4">
