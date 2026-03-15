@@ -163,14 +163,14 @@ export default function Navbar() {
           borderBottom: scrolled ? '1px solid rgba(200,150,12,0.18)' : '1px solid var(--nav-border)',
         }}
       >
-        <div className="flex items-center justify-between px-4 md:px-6 h-14">
+        <div className="flex items-center justify-between px-3 md:px-6 h-12 md:h-14">
 
           {/* Brand */}
           <a href="/" className="flex items-center gap-2 no-underline group min-w-0 shrink">
             <picture className="flex-shrink-0">
               <source srcSet="/logo.webp" type="image/webp" />
               <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
-                className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
+                className="w-7 h-7 md:w-9 md:h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             </picture>
             <div className="flex flex-col leading-tight min-w-0">
               <span className="text-[12px] sm:text-[14px] font-bold transition-colors truncate bg-clip-text text-transparent" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", backgroundImage: 'linear-gradient(135deg, #c8960c, #f5d060, #c8960c)' }}>
@@ -289,17 +289,17 @@ export default function Navbar() {
           <button
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="flex sm:hidden items-center justify-center w-12 h-12 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
+            className="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
             style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
           >
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
               <path d="M21 21l-4.35-4.35" />
             </svg>
           </button>
           <ThemeToggle />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
-            className="lg:hidden flex flex-col gap-[5px] p-3 min-w-[48px] min-h-[48px] items-center justify-center bg-transparent border-none cursor-pointer">
+            className="lg:hidden flex flex-col gap-[5px] p-2 min-w-[36px] min-h-[36px] items-center justify-center bg-transparent border-none cursor-pointer">
             <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
             <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />

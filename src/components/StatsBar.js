@@ -110,7 +110,7 @@ export default function StatsBar() {
   }, []);
 
   return (
-    <section className="relative pt-6 pb-10 md:pt-10 md:pb-20 px-4 md:px-6">
+    <section className="relative pt-4 pb-6 md:pt-10 md:pb-20 px-4 md:px-6">
       <div className="max-w-[1100px] mx-auto">
         {/* Section header — hidden on mobile to save space */}
         <div className="hidden md:flex flex-col items-center text-center mb-14">

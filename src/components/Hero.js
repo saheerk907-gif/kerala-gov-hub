@@ -16,7 +16,7 @@ export default function Hero() {
 
   return (
     <section
-      className="hero-section relative min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[56px] lg:pt-[88px] pb-12 overflow-hidden"
+      className="hero-section relative min-h-[42vh] md:min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[48px] md:pt-[56px] lg:pt-[88px] pb-6 md:pb-12 overflow-hidden"
       style={isLight ? {
         background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(200,150,12,0.13) 0%, transparent 65%), radial-gradient(ellipse 60% 40% at 15% 100%, rgba(200,150,12,0.07) 0%, transparent 55%), #f5f0e8',
       } : undefined}
@@ -59,7 +59,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-0">
 
         {/* Logo with badge overlaid */}
-        <div className="relative mb-5 group cursor-pointer">
+        <div className="relative mb-3 md:mb-5 group cursor-pointer">
           {/* Drop shadow */}
           <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />
 
@@ -70,7 +70,7 @@ export default function Hero() {
             height={120}
             priority
             fetchPriority="high"
-            className="relative z-10 w-[96px] h-[96px] md:w-[112px] md:h-[112px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
+            className="relative z-10 w-[68px] h-[68px] md:w-[96px] md:h-[96px] lg:w-[112px] lg:h-[112px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
             style={{
               boxShadow:
                 '0 0 0 2px rgba(200,150,12,0.55), ' +
@@ -83,14 +83,14 @@ export default function Hero() {
         </div>
 
         {/* Kicker — SEO label above the main title */}
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] mb-3"
+        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.28em] mb-1.5 md:mb-3"
           style={{ color: isLight ? 'rgba(30,58,95,0.60)' : 'rgba(245,208,96,0.70)' }}>
           Kerala Government Employees Portal
         </p>
 
         {/* Titles — tight single typographic block */}
-        <div className="flex flex-col items-center gap-1.5 mb-4">
-          <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight">
+        <div className="flex flex-col items-center gap-1 md:gap-1.5 mb-2 md:mb-4">
+          <h1 className="text-[clamp(28px,7vw,80px)] font-bold leading-[1] tracking-tight">
             <span className="bg-clip-text text-transparent" style={isLight ? {
               backgroundImage: 'linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 45%, #1e3a5f 100%)',
               filter: 'none',
@@ -107,7 +107,7 @@ export default function Hero() {
               ? 'linear-gradient(90deg, transparent, rgba(29,78,216,0.50), transparent)'
               : 'linear-gradient(90deg, transparent, rgba(200,150,12,0.8), transparent)',
           }} />
-          <h2 className="text-[clamp(22px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
+          <h2 className="text-[clamp(16px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
             <span className={`bg-clip-text text-transparent bg-[length:200%_auto] ${isLight ? '' : 'animate-shimmer'}`} style={isLight ? {
               backgroundImage: 'linear-gradient(135deg, #1e40af, #3b82f6, #1e40af)',
               filter: 'none',
@@ -121,14 +121,14 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-[clamp(12px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-5"
+        <p className="text-[clamp(11px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-3 md:mb-5 line-clamp-2 md:line-clamp-none"
           style={{ color: isLight ? 'rgba(30,58,95,0.70)' : 'rgba(252,227,138,0.80)' }}>
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
 
         {/* Feature pills */}
-        <div className="flex flex-wrap justify-center gap-2 mb-6">
+        <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-3 md:mb-6">
           {[
             { label: 'MEDISEP', href: '/medisep' },
             { label: 'Pension', href: '/pension' },
@@ -140,7 +140,7 @@ export default function Hero() {
             <a
               key={label}
               href={href}
-              className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
+              className="px-3 py-1 md:px-4 md:py-2 inline-flex items-center rounded-full text-[10px] md:text-[11px] font-bold no-underline transition-all hover:bg-white/10"
               style={isLight
                 ? { background: 'rgba(29,78,216,0.07)', color: '#1d4ed8', border: '1px solid rgba(29,78,216,0.22)' }
                 : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
@@ -150,10 +150,10 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Scroll down button */}
+        {/* Scroll down button — desktop only */}
         <button
           onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-          className="group flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
+          className="hidden md:flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
           aria-label="Scroll to explore"
         >
           <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
