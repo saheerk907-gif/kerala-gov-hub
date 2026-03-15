@@ -142,7 +142,7 @@ export default function Hero() {
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
               style={isLight
-                ? { background: 'rgba(200,150,12,0.08)', color: '#b8860b', border: '1px solid rgba(200,150,12,0.30)' }
+                ? { background: 'rgba(29,78,216,0.07)', color: '#1d4ed8', border: '1px solid rgba(29,78,216,0.22)' }
                 : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
             >
               {label}
@@ -156,11 +156,11 @@ export default function Hero() {
           className="group flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
           aria-label="Scroll to explore"
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: 'rgba(245,208,96,0.55)' }}>
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
             Explore
           </span>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: `1px solid ${isLight ? 'rgba(184,134,11,0.35)' : 'rgba(200,150,12,0.30)'}` }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: 'rgba(245,208,96,0.55)' }}>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: `1px solid ${isLight ? 'rgba(29,78,216,0.25)' : 'rgba(200,150,12,0.30)'}` }}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </div>
