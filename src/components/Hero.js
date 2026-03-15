@@ -70,7 +70,7 @@ export default function Hero() {
           <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight">
             <span className="bg-clip-text text-transparent" style={{
               backgroundImage: 'linear-gradient(135deg, #c8960c 0%, #f5d060 35%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
-              filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.95)) drop-shadow(0 0 32px rgba(200,150,12,0.55))',
+              filter: 'drop-shadow(0 0 8px rgba(200,150,12,0.50))',
             }}>
               കേരള സർക്കാർ
             </span>
@@ -80,7 +80,7 @@ export default function Hero() {
           <h2 className="text-[clamp(22px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
             <span className="bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]" style={{
               backgroundImage: 'linear-gradient(135deg, #b8860b, #f5d060, #fce38a, #f5d060, #b8860b)',
-              filter: 'drop-shadow(0 0 10px rgba(200,150,12,0.85)) drop-shadow(0 0 24px rgba(200,150,12,0.45))',
+              filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.40))',
             }}>
               ജീവനക്കാരുടെ വിജ്ഞാനകോശം
             </span>
