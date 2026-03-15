@@ -49,19 +49,21 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── Gold ambient glow centered behind logo ────────── */}
-      <div
-        className="absolute top-[25%] left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(200,150,12,0.10) 0%, transparent 70%)' }}
-      />
+      {/* ── Gold ambient glow centered behind logo (dark only) ── */}
+      {!isLight && (
+        <div
+          className="absolute top-[25%] left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(200,150,12,0.10) 0%, transparent 70%)' }}
+        />
+      )}
 
       {/* ── Content ──────────────────────────────────────── */}
       <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-0">
 
         {/* Logo with badge overlaid */}
         <div className="relative mb-4 md:mb-5 group cursor-pointer">
-          {/* Drop shadow */}
-          <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />
+          {/* Drop shadow (dark only) */}
+          {!isLight && <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />}
 
           <Image
             src="/logo.webp"
@@ -71,7 +73,9 @@ export default function Hero() {
             priority
             fetchPriority="high"
             className="relative z-10 w-[80px] h-[80px] md:w-[96px] md:h-[96px] lg:w-[112px] lg:h-[112px] rounded-full object-cover transition-transform duration-700 group-hover:scale-105"
-            style={{
+            style={isLight ? {
+              boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+            } : {
               boxShadow:
                 '0 0 0 2px rgba(200,150,12,0.55), ' +
                 '0 0 18px 4px rgba(200,150,12,0.22), ' +
