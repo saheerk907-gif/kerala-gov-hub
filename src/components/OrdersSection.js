@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 export default function OrdersSection({ orders }) {
   const [query, setQuery] = useState('');
+  const [expanded, setExpanded] = useState(false);
 
   if (!orders?.length) return null;
 
@@ -16,7 +17,7 @@ export default function OrdersSection({ orders }) {
       )
     : orders;
 
-  const currentOrders = filtered.slice(0, 5);
+  const currentOrders = expanded ? filtered : filtered.slice(0, 5);
 
   const handleSearch = (val) => {
     setQuery(val);
@@ -125,8 +126,21 @@ export default function OrdersSection({ orders }) {
       </div>
 
 
+      {/* Read More */}
+      {filtered.length > 5 && (
+        <div className="mt-3">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
+            style={{ background: 'rgba(255,159,10,0.08)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.22)' }}
+          >
+            {expanded ? 'Show Less ↑' : 'Read More ↓'}
+          </button>
+        </div>
+      )}
+
       {/* CTA — pinned to bottom */}
-      <div className="mt-4">
+      <div className="mt-2">
         <a href="https://www.finance.kerala.gov.in" target="_blank" rel="noopener noreferrer"
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
           style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)' }}>

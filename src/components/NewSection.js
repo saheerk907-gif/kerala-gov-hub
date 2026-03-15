@@ -47,6 +47,7 @@ const NewsRow = ({ date, title, category, link = '/news', isFirst }) => (
 export default function NewsSection() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchNews() {
@@ -93,7 +94,7 @@ export default function NewsSection() {
           </div>
         ) : news.length > 0 ? (
           <div>
-            {news.slice(0, 5).map((item, index) => (
+            {(expanded ? news : news.slice(0, 5)).map((item, index) => (
               <NewsRow
                 key={item.id}
                 isFirst={index === 0}
@@ -110,6 +111,19 @@ export default function NewsSection() {
           </div>
         )}
       </div>
+
+      {/* Read More */}
+      {!loading && news.length > 5 && (
+        <div className="mt-3">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
+          >
+            {expanded ? 'Show Less ↑' : 'Read More ↓'}
+          </button>
+        </div>
+      )}
 
 {/* CTA — pinned to bottom, matches OrdersSection */}
       {!loading && news.length > 0 && (
