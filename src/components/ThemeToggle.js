@@ -24,10 +24,11 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label="Toggle light/dark mode"
       title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-      className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
+      className="flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 cursor-pointer flex-shrink-0"
       style={{
-        background: 'var(--nav-icon-bg)',
-        color: 'var(--nav-icon-color)',
+        background: 'rgba(200,150,12,0.10)',
+        color: '#f5d060',
+        border: '1px solid rgba(200,150,12,0.22)',
       }}
     >
       {isLight ? (
