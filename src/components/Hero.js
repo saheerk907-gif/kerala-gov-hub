@@ -67,13 +67,21 @@ export default function Hero() {
 
         {/* Titles — tight single typographic block */}
         <div className="flex flex-col items-center gap-1.5 mb-4">
-          <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)]" style={{ color: '#ff9f0a' }}>
-            കേരള സർക്കാർ
+          <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight">
+            <span className="bg-clip-text text-transparent" style={{
+              backgroundImage: 'linear-gradient(135deg, #c8960c 0%, #f5d060 35%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
+              filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.95)) drop-shadow(0 0 32px rgba(200,150,12,0.55))',
+            }}>
+              കേരള സർക്കാർ
+            </span>
           </h1>
           {/* Thin gold rule connecting both lines */}
-          <div className="w-12 h-[1.5px] bg-gradient-to-r from-transparent via-[#ff9f0a]/60 to-transparent rounded-full" />
+          <div className="w-12 h-[1.5px] rounded-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(200,150,12,0.8), transparent)' }} />
           <h2 className="text-[clamp(22px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
-            <span className="bg-gradient-to-r from-[#ff9f0a]/80 via-[#ff9f0a] to-[#ff9f0a]/80 bg-[length:200%_auto] bg-clip-text text-transparent animate-shimmer">
+            <span className="bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]" style={{
+              backgroundImage: 'linear-gradient(135deg, #b8860b, #f5d060, #fce38a, #f5d060, #b8860b)',
+              filter: 'drop-shadow(0 0 10px rgba(200,150,12,0.85)) drop-shadow(0 0 24px rgba(200,150,12,0.45))',
+            }}>
               ജീവനക്കാരുടെ വിജ്ഞാനകോശം
             </span>
           </h2>
