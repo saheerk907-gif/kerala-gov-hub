@@ -213,10 +213,13 @@ export default function AdminAudioPage() {
                   <p className="font-bold text-[15px] truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{ep.title_ml}</p>
                   {ep.title_en && <p className="text-xs text-gray-400 truncate">{ep.title_en}</p>}
                   {ep.duration_label && <p className="text-xs text-gray-400">{ep.duration_label}</p>}
+                  {ep.audio_url && (
+                    <audio controls className="w-full mt-2" style={{ height: '32px' }}>
+                      <source src={ep.audio_url} type="audio/mp4" />
+                      <source src={ep.audio_url} type="audio/mpeg" />
+                    </audio>
+                  )}
                 </div>
-                <a href={ep.audio_url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-blue-600 hover:underline flex-shrink-0">
-                  Play
-                </a>
                 <button
                   onClick={() => handleDelete(ep)}
                   className="w-8 h-8 rounded-xl bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center flex-shrink-0 transition-colors"
