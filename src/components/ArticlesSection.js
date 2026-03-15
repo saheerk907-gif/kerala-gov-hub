@@ -19,14 +19,14 @@ function FeaturedCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block col-span-2">
-      <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
         style={{ minHeight: '320px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               style={{ opacity: 0.35 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
+            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
@@ -66,14 +66,14 @@ function SmallCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block">
-      <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
+      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
         style={{ minHeight: '240px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               style={{ opacity: 0.35 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
+            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />

@@ -72,7 +72,7 @@ export default function TopBar() {
 
   return (
     <div
-      className="relative z-[1001] hidden md:flex items-center justify-between px-6 md:px-10 h-9 border-b"
+      className="topbar relative z-[1001] hidden md:flex items-center justify-between px-6 md:px-10 h-9 border-b"
       style={{
         background: 'rgba(255,255,255,0.03)',
         backdropFilter: 'blur(12px)',
@@ -90,7 +90,7 @@ export default function TopBar() {
             target="_blank"
             rel="noopener noreferrer"
             title={s.label}
-            className="flex items-center justify-center w-6 h-6 rounded-md transition-all duration-200 hover:scale-110"
+            className="topbar-icon flex items-center justify-center w-6 h-6 rounded-md transition-all duration-200 hover:scale-110"
             style={{ color: 'rgba(255,255,255,0.60)' }}
             onMouseEnter={e => { e.currentTarget.style.color = s.color; e.currentTarget.style.background = `${s.color}18`; }}
             onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.60)'; e.currentTarget.style.background = 'transparent'; }}
@@ -100,7 +100,7 @@ export default function TopBar() {
         ))}
 
         {/* Divider */}
-        <div className="w-px h-4 bg-white/10 mx-2" />
+        <div className="topbar-divider w-px h-4 bg-white/10 mx-2" />
 
         {/* News ticker */}
         <div className="flex items-center gap-2 overflow-hidden max-w-[340px]">
@@ -135,7 +135,7 @@ export default function TopBar() {
           </span>
         ))}
 
-        <div className="w-px h-4 bg-white/10 mx-2" />
+        <div className="topbar-divider w-px h-4 bg-white/10 mx-2" />
 
         {/* Date */}
         <span className="text-[10px] font-semibold text-white/50 whitespace-nowrap">

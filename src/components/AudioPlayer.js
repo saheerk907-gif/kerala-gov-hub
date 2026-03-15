@@ -97,12 +97,12 @@ export default function AudioPlayer({ limit }) {
                 <button
                   key={ep.id}
                   onClick={() => playEpisode(ep)}
-                  className="glass-card glow-top w-full text-left flex items-center gap-4 p-4 rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group"
+                  className={`glass-card glow-top w-full text-left flex items-center gap-4 p-4 rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group ${isActive ? 'audio-ep-active' : ''}`}
                   style={isActive ? { borderColor: 'rgba(255,255,255,0.22)' } : {}}
                 >
                   {/* Play/pause icon */}
                   <div
-                    className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    className="audio-icon-box flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all"
                     style={isActive
                       ? { background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.95)' }
                       : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}
@@ -115,7 +115,7 @@ export default function AudioPlayer({ limit }) {
                   <div className="flex-grow min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span
-                        className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                        className="audio-ep-label text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
                         style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.65)' }}
                       >
                         EP {ep.episode_number}
@@ -146,7 +146,7 @@ export default function AudioPlayer({ limit }) {
         {hasMore && (
           <Link
             href="/audio-classes"
-            className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08] mt-1"
+            className="audio-more-btn w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08] mt-1"
             style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.09)' }}
           >
             എല്ലാ ക്ലാസ്സുകളും കാണുക ({episodes.length} Episodes)
@@ -162,7 +162,7 @@ export default function AudioPlayer({ limit }) {
         {current ? (
           <div className="glass-card rounded-[24px] p-5">
             <div
-              className="text-[9px] font-black uppercase tracking-[0.2em] text-white/65 mb-4"
+              className="audio-now-text text-[9px] font-black uppercase tracking-[0.2em] text-white/65 mb-4"
             >
               Now Playing
             </div>
@@ -170,10 +170,10 @@ export default function AudioPlayer({ limit }) {
             {/* Track info */}
             <div className="flex items-center gap-3 mb-4">
               <div
-                className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                className="audio-icon-box w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(255,255,255,0.08)' }}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
                   <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
                   <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                   <line x1="12" y1="19" x2="12" y2="23"/>
@@ -196,12 +196,12 @@ export default function AudioPlayer({ limit }) {
             {/* Progress bar */}
             <div className="mb-4">
               <div
-                className="h-1.5 rounded-full cursor-pointer overflow-hidden"
+                className="audio-progress-track h-1.5 rounded-full cursor-pointer overflow-hidden"
                 style={{ background: 'rgba(255,255,255,0.10)' }}
                 onClick={seekTo}
               >
                 <div
-                  className="h-full rounded-full transition-all"
+                  className="audio-progress-fill h-full rounded-full transition-all"
                   style={{ width: `${progress}%`, background: 'rgba(255,255,255,0.75)' }}
                 />
               </div>
@@ -215,14 +215,14 @@ export default function AudioPlayer({ limit }) {
             <div className="flex items-center justify-center gap-2.5">
               <button
                 onClick={() => skip(-10)}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
+                className="audio-skip-btn w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
                 style={{ background: 'rgba(255,255,255,0.07)' }}
               >
                 -10
               </button>
               <button
                 onClick={() => playEpisode(current)}
-                className="w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+                className="audio-main-btn w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
                 style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.18)' }}
               >
                 {playing
@@ -231,14 +231,14 @@ export default function AudioPlayer({ limit }) {
               </button>
               <button
                 onClick={() => skip(10)}
-                className="w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
+                className="audio-skip-btn w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
                 style={{ background: 'rgba(255,255,255,0.07)' }}
               >
                 +10
               </button>
               <button
                 onClick={cycleSpeed}
-                className="h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:bg-white/10"
+                className="audio-speed-btn h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:bg-white/10"
                 style={{
                   background: speed !== 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
                   color: speed !== 1 ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)',
@@ -253,8 +253,8 @@ export default function AudioPlayer({ limit }) {
           </div>
         ) : (
           <div className="glass-card rounded-[24px] p-8 text-center">
-            <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'rgba(255,255,255,0.07)' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <div className="audio-icon-box w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'rgba(255,255,255,0.07)' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                 <line x1="12" y1="19" x2="12" y2="23"/>

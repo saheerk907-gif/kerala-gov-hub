@@ -309,7 +309,7 @@ export default function NPSvsAPSPage() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden" style={{ background: '#0a0c0e' }}>
+    <div className="page-bg-dark relative min-h-screen overflow-x-hidden" style={{ background: '#0a0c0e' }}>
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-[0.06]" style={{ background: '#30d158' }} />

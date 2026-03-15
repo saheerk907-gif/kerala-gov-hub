@@ -41,14 +41,14 @@ function FeaturedCard({ article }) {
   const cat = CATEGORIES.find(c => c.value === article.category);
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block" style={{ gridColumn: '1 / -1' }}>
-      <div className="relative rounded-3xl overflow-hidden"
+      <div className="article-card relative rounded-3xl overflow-hidden"
         style={{ minHeight: '380px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               style={{ opacity: 0.35 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #000 40%, transparent 100%)' }} />
+            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 40%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}12, transparent)` }} />
@@ -95,7 +95,7 @@ function ArticleCard({ article }) {
   const cat = CATEGORIES.find(c => c.value === article.category);
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block">
-      <div className="relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
+      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4)]"
         style={{ minHeight: '280px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
 
         {article.image_url ? (
@@ -103,7 +103,7 @@ function ArticleCard({ article }) {
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               style={{ opacity: 0.35 }} />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, #000 45%, transparent 100%)' }} />
+            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 45%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}12, transparent)` }} />
@@ -178,7 +178,7 @@ export default function ArticlesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-black text-white pt-24 pb-20 px-4 md:px-6">
+      <main className="min-h-screen page-bg-dark pt-24 pb-20 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
 
           {/* Header */}
@@ -197,7 +197,7 @@ export default function ArticlesPage() {
           <div className="flex gap-2 flex-wrap mb-10">
             {CATEGORIES.map(cat => (
               <button key={cat.value} onClick={() => setActiveCat(cat.value)}
-                className="px-4 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
+                className={`px-4 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all ${activeCat !== cat.value ? 'cat-tab-inactive' : ''}`}
                 style={activeCat === cat.value
                   ? { background: '#2997ff', color: 'white' }
                   : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.08)' }
@@ -237,7 +237,7 @@ export default function ArticlesPage() {
               {hasMore && (
                 <div className="mt-10 text-center">
                   <button onClick={loadMore} disabled={loadingMore}
-                    className="px-8 py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50 hover:bg-white/10"
+                    className="cat-tab-more px-8 py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50 hover:bg-white/10"
                     style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}>
                     {loadingMore ? 'Loading...' : 'കൂടുതൽ ലേഖനങ്ങൾ'}
                   </button>
