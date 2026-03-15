@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { r2upload } from '@/lib/r2upload';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -93,21 +94,20 @@ export default function AdminOrders() {
   async function handleUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.type !== 'application/pdf') {
+      alert('PDF ഫയൽ മാത്രം അനുവദനീയം');
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      alert('ഫയൽ വലിപ്പം 50MB-ൽ കൂടരുത്');
+      return;
+    }
     setUploading(true);
-    const token = sessionStorage.getItem('admin_token');
-    const fileName = `${Date.now()}_${file.name}`;
-    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/documents/${fileName}`, {
-      method: 'POST',
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${token || SUPABASE_KEY}`,
-        'Content-Type': file.type,
-      },
-      body: file,
-    });
-    if (res.ok) {
-      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/documents/${fileName}`;
+    try {
+      const { publicUrl } = await r2upload(file, 'documents');
       setForm(f => ({ ...f, pdf_url: publicUrl }));
+    } catch (err) {
+      alert('Upload Error: ' + err.message);
     }
     setUploading(false);
   }

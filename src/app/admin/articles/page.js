@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import RichTextEditor from '@/components/RichTextEditor';
+import { r2upload } from '@/lib/r2upload';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -99,33 +100,16 @@ export default function AdminArticles() {
 
   async function handleImageUpload(file) {
     if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image 10MB-ൽ കൂടരുത്');
+      return;
+    }
     setUploading(true);
     try {
-      const token = sessionStorage.getItem('admin_token');
-      const ext = file.name.split('.').pop();
-      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const res = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/article-images/${filename}`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token || SUPABASE_KEY}`,
-            'apikey': SUPABASE_KEY,
-            'Content-Type': file.type,
-            'x-upsert': 'true',
-          },
-          body: file,
-        }
-      );
-      if (res.ok) {
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/article-images/${filename}`;
-        setForm(f => ({ ...f, image_url: publicUrl }));
-      } else {
-        const err = await res.text();
-        alert('Upload failed: ' + err + '\n\nMake sure the "article-images" bucket exists in Supabase Storage with public access.');
-      }
-    } catch (e) {
-      alert('Upload error: ' + e.message);
+      const { publicUrl } = await r2upload(file, 'articles');
+      setForm(f => ({ ...f, image_url: publicUrl }));
+    } catch (err) {
+      alert('Upload Error: ' + err.message);
     } finally {
       setUploading(false);
     }

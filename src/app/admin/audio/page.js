@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { r2upload } from '@/lib/r2upload';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -36,28 +37,13 @@ export default function AdminAudioPage() {
     setUploading(true);
 
     try {
-      // 1. Upload file to Supabase Storage
-      const fileName = `ep${form.episode_number}-${Date.now()}.${file.name.split('.').pop()}`;
-      const uploadRes = await fetch(
-        `${SUPABASE_URL}/storage/v1/object/audio/${fileName}`,
-        {
-          method: 'POST',
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            'Content-Type': file.type,
-            'x-upsert': 'true',
-          },
-          body: file,
-        }
-      );
-
-      if (!uploadRes.ok) {
-        const err = await uploadRes.json();
-        throw new Error(err.message || 'Upload failed');
+      // Validate file size
+      if (file.size > 200 * 1024 * 1024) {
+        throw new Error('ഫയൽ വലിപ്പം 200MB-ൽ കൂടരുത്');
       }
 
-      const audio_url = `${SUPABASE_URL}/storage/v1/object/public/audio/${fileName}`;
+      // 1. Upload file to Cloudflare R2
+      const { publicUrl: audio_url } = await r2upload(file, 'audio');
 
       // 2. Insert metadata
       const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/audio_classes`, {
