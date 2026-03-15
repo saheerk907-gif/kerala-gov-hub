@@ -13,6 +13,15 @@ const COLORS = {
 export default function SchemesSection({ schemes }) {
   if (!schemes?.length) return null;
 
+  // KSR sub-rules belong inside /ksr — exclude from homepage Resources
+  const filtered = schemes.filter(s => {
+    const sub = (s.subtitle_en || '').toLowerCase();
+    const title = (s.title_en || '').toLowerCase();
+    return !sub.includes('ksr') && !sub.includes('rule') && !sub.includes(' sr ') && !title.includes('ksr');
+  });
+
+  if (!filtered.length) return null;
+
   return (
     <section id="services" className="relative py-6 md:py-10 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
@@ -31,7 +40,7 @@ export default function SchemesSection({ schemes }) {
 
         {/* Compact 2-col grid of rows */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {schemes.map(scheme => {
+          {filtered.map(scheme => {
             const c = COLORS[scheme.color] || COLORS.blue;
             const pageUrl = `/${scheme.title_en ? scheme.title_en.toLowerCase().replace(/\s+/g, '-') : 'details'}`;
 
