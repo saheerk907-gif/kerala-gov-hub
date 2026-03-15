@@ -56,8 +56,8 @@ export default function ActsClient({ acts }) {
               <button key={cat.id} onClick={() => setActiveCat(cat.id)}
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
                 style={{
-                  background: active ? cat.color + '20' : 'rgba(255,255,255,0.04)',
-                  color: active ? cat.color : 'rgba(255,255,255,0.4)',
+                  background: active ? cat.color + '20' : 'var(--surface-xs)',
+                  color: active ? cat.color : 'var(--text-faint)',
                   outline: active ? `1px solid ${cat.color}40` : 'none',
                 }}>
                 {cat.icon} <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{cat.label}</span>

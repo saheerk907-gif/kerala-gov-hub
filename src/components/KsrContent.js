@@ -18,7 +18,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
           color: white;
           margin: 2.5rem 0 1rem;
           padding-bottom: 0.5rem;
-          border-bottom: 1px solid rgba(255,255,255,0.07);
+          border-bottom: 1px solid var(--surface-xs);
           font-family: var(--font-noto-malayalam), sans-serif;
         }
         .ksr-content h2:first-child { margin-top: 0; }
@@ -44,7 +44,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
         /* Bold */
         .ksr-content strong,
         .ksr-content b {
-          color: rgba(255,255,255,0.9);
+          color: var(--text-primary);
           font-weight: 700;
         }
 
@@ -92,8 +92,8 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
         .ksr-content ol li {
           position: relative;
           padding: 0.8rem 1rem 0.8rem 2.75rem;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.07);
+          background: var(--surface-xs);
+          border: 1px solid var(--surface-xs);
           border-radius: 12px;
           font-size: 0.9rem;
           color: #aeaeb2;
@@ -142,7 +142,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
         }
         .ksr-content th {
           background: ${accentColor}14;
-          color: white;
+          color: var(--text-primary);
           font-weight: 700;
           padding: 0.75rem 1rem;
           text-align: left;
@@ -150,11 +150,11 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
         }
         .ksr-content td {
           padding: 0.65rem 1rem;
-          color: #aeaeb2;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          color: var(--text-secondary);
+          border-bottom: 1px solid var(--surface-xs);
         }
         .ksr-content tr:last-child td { border-bottom: none; }
-        .ksr-content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+        .ksr-content tr:nth-child(even) td { background: var(--surface-xs); }
         .ksr-content tr:hover td { background: ${accentColor}05; }
       `}</style>
     </>

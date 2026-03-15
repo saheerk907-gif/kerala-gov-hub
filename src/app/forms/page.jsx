@@ -459,7 +459,7 @@ function FormsContent() {
           onChange={e => setSearch(e.target.value)}
           placeholder="Search by form name, number or category..."
           className="w-full rounded-xl px-4 py-3 text-[14px] text-white outline-none focus:ring-1 focus:ring-white/20 mb-4"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}
         />
 
         {/* Category tabs */}
@@ -471,9 +471,9 @@ function FormsContent() {
               <button key={cat} onClick={() => setCategory(cat)}
                 className="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all"
                 style={{
-                  background: active ? `${color}22` : 'rgba(255,255,255,0.04)',
-                  color: active ? color : 'rgba(255,255,255,0.65)',
-                  border: `1px solid ${active ? color : 'rgba(255,255,255,0.07)'}`,
+                  background: active ? `${color}22` : 'var(--surface-xs)',
+                  color: active ? color : 'var(--text-dim)',
+                  border: `1px solid ${active ? color : 'var(--surface-xs)'}`,
                 }}>
                 {cat}
                 <span className="ml-1.5 text-[9px] opacity-60">
@@ -488,11 +488,11 @@ function FormsContent() {
 
         {/* Forms list */}
         <div className="rounded-2xl overflow-hidden"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+          style={{ border: '1px solid var(--surface-sm)' }}>
 
           {/* Table header */}
           <div className="hidden md:grid grid-cols-[120px_1fr_130px_100px] gap-0 px-5 py-3"
-            style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            style={{ background: 'var(--surface-xs)', borderBottom: '1px solid var(--surface-xs)' }}>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Form No.</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Title</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Category</div>
@@ -508,7 +508,7 @@ function FormsContent() {
               return (
                 <div key={form.id}
                   className="grid grid-cols-1 md:grid-cols-[120px_1fr_130px_100px] gap-3 md:gap-0 px-5 py-4 items-center transition-colors hover:bg-white/[0.02]"
-                  style={{ borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                  style={{ borderTop: i > 0 ? '1px solid var(--surface-xs)' : 'none' }}>
 
                   {/* Form number */}
                   <div>

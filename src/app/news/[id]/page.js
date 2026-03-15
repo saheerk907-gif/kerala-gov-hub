@@ -250,7 +250,7 @@ export default async function NewsDetailPage({ params }) {
                 /* Fallback if scraping failed */
                 item.source_url && (
                   <div className="rounded-2xl p-6"
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
                     <p className="text-sm text-white/70 mb-4">
                       ഈ വാർത്ത ഒറിജിനൽ വെബ്‌സൈറ്റിൽ നിന്ന് ഓട്ടോമാറ്റിക്കായി ശേഖരിച്ചതാണ്.
                     </p>
@@ -338,7 +338,7 @@ export default async function NewsDetailPage({ params }) {
           .article-content ol li { padding: 0.3rem 0; }
           .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
           .article-content th { background: rgba(41,151,255,0.1); color: white; padding: 10px 14px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
-          .article-content td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+          .article-content td { padding: 10px 14px; border-bottom: 1px solid var(--surface-xs); font-size: 0.9rem; }
           .article-content .ql-align-justify { text-align: justify; }
           .article-content .ql-align-center  { text-align: center; }
           .article-content .ql-align-right   { text-align: right; }

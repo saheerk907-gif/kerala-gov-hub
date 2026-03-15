@@ -210,7 +210,7 @@ function QuizInner() {
             {/* Stats grid */}
             <div className="grid grid-cols-3 gap-3 mb-8">
               {[
-                { label: 'Attempted',  value: totalAnswered,                     col: 'rgba(255,255,255,0.7)' },
+                { label: 'Attempted',  value: totalAnswered,                     col: 'var(--text-dim)' },
                 { label: '✓ Correct',  value: totalCorrect,                      col: '#30d158' },
                 { label: '✗ Wrong',    value: totalWrong,                        col: '#ff453a' },
               ].map(s => (
@@ -403,7 +403,7 @@ function QuizInner() {
           <div className="flex items-center gap-1.5">
             <span className="text-white/50">Score</span>
             <span className="font-black text-[15px]"
-              style={{ color: score < 0 ? '#ff453a' : score > 0 ? '#30d158' : 'rgba(255,255,255,0.5)' }}>
+              style={{ color: score < 0 ? '#ff453a' : score > 0 ? '#30d158' : 'var(--text-faint)' }}>
               {score < 0 ? score.toFixed(2) : score % 1 === 0 ? score : score.toFixed(2)}
             </span>
           </div>

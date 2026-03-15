@@ -193,11 +193,11 @@ export default function PayScalesPage() {
           </div>
 
           {/* Table */}
-          <div className="rounded-2xl overflow-hidden border border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <div className="rounded-2xl overflow-hidden border border-white/[0.08]" style={{ background: 'var(--surface-xs)' }}>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[600px]">
                 <thead>
-                  <tr className="border-b border-white/[0.08]" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                  <tr className="border-b border-white/[0.08]" style={{ background: 'var(--surface-xs)' }}>
                     <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60 w-20">Scale</th>
                     <th className="text-left px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60">Scale of Pay</th>
                     <th className="text-right px-4 py-3 text-[11px] font-bold uppercase tracking-widest text-white/60 w-32">Minimum</th>

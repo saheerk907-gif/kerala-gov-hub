@@ -191,7 +191,7 @@ function DOBSelector({ value, onChange, label }) {
 
   const daysInMonth = new Date(Number(yr), Number(mo), 0).getDate();
   const inp = 'w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none';
-  const bg = { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' };
+  const bg = { background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' };
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -229,7 +229,7 @@ function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }
           min={min} max={max} step={step}
           onChange={e => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
           className="w-full rounded-xl px-3 py-2.5 text-white text-sm font-semibold outline-none"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
+          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
         />
         {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-[11px] font-bold">{suffix}</span>}
       </div>
@@ -245,7 +245,7 @@ function JoinYearSelector({ value, onChange, label }) {
       <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <select value={value} onChange={e => onChange(Number(e.target.value))}
         className="w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none"
-        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}>
+        style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
         {Array.from({ length: 42 }, (_, i) => 2004 + i).map(y => (
           <option key={y} value={y}>{y}</option>
         ))}
@@ -255,8 +255,8 @@ function JoinYearSelector({ value, onChange, label }) {
   );
 }
 
-const CARD = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' };
-const TT_STYLE = { background: 'rgba(12,14,16,0.97)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, color: '#fff', fontSize: 12 };
+const CARD = { background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' };
+const TT_STYLE = { background: 'var(--nav-dropdown-bg)', border: '1px solid var(--nav-dropdown-border)', borderRadius: 12, color: 'var(--text-primary)', fontSize: 12 };
 
 const WaIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="#25d366">
@@ -309,7 +309,7 @@ export default function NPSvsAPSPage() {
   ];
 
   return (
-    <div className="page-bg-dark relative min-h-screen overflow-x-hidden" style={{ background: '#0a0c0e' }}>
+    <div className="page-bg-dark relative min-h-screen overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>
       {/* Background blobs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-[0.06]" style={{ background: '#30d158' }} />
@@ -335,7 +335,7 @@ export default function NPSvsAPSPage() {
           <div className="flex gap-2 flex-wrap">
             <button onClick={() => setLang(ml ? 'en' : 'ml')}
               className="px-4 py-2 rounded-full text-[12px] font-bold transition-all"
-              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.6)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: 'var(--text-dim)' }}>
               {ml ? 'English' : 'മലയാളം'}
             </button>
             {R && (
@@ -459,11 +459,11 @@ export default function NPSvsAPSPage() {
             {/* PV toggle */}
             <button onClick={() => setPvOn(v => !v)}
               className="flex items-center gap-2 text-[12px] font-semibold transition-colors mx-auto"
-              style={{ color: pvOn ? '#30d158' : 'rgba(255,255,255,0.3)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              style={{ color: pvOn ? '#30d158' : 'var(--text-ghost)', background: 'none', border: 'none', cursor: 'pointer' }}>
               <span className="w-8 h-4 rounded-full flex items-center"
-                style={{ background: pvOn ? 'rgba(48,209,88,0.3)' : 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                style={{ background: pvOn ? 'rgba(48,209,88,0.3)' : 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
                 <span className="w-3 h-3 rounded-full ml-[2px] transition-transform"
-                  style={{ background: pvOn ? '#30d158' : 'rgba(255,255,255,0.3)', transform: pvOn ? 'translateX(16px)' : 'none' }} />
+                  style={{ background: pvOn ? '#30d158' : 'var(--text-ghost)', transform: pvOn ? 'translateX(16px)' : 'none' }} />
               </span>
               {pvOn
                 ? `📉 ${ml ? 'ഇന്നത്തെ മൂല്യം' : "Today's Value"} (${inf}% {ml ? 'inflation' : 'inflation'}) — ON`
@@ -505,9 +505,9 @@ export default function NPSvsAPSPage() {
               <button key={t.id} onClick={() => setTab(t.id)}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold whitespace-nowrap transition-all"
                 style={{
-                  background: tab === t.id ? '#2997ff' : 'rgba(255,255,255,0.05)',
-                  border: tab === t.id ? '1px solid #2997ff' : '1px solid rgba(255,255,255,0.08)',
-                  color: tab === t.id ? '#fff' : 'rgba(255,255,255,0.4)',
+                  background: tab === t.id ? '#2997ff' : 'var(--surface-xs)',
+                  border: tab === t.id ? '1px solid #2997ff' : '1px solid var(--surface-sm)',
+                  color: tab === t.id ? '#fff' : 'var(--text-faint)',
                   cursor: 'pointer',
                 }}>
                 {t.icon} {t.label}
@@ -532,7 +532,7 @@ export default function NPSvsAPSPage() {
                         {['#2997ff','#30d158','#ff9f0a'].map((c, i) => <Cell key={i} fill={c} />)}
                       </Pie>
                       <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
-                      <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                      <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -549,7 +549,7 @@ export default function NPSvsAPSPage() {
                         {['#ff9f0a','#2997ff'].map((c, i) => <Cell key={i} fill={c} />)}
                       </Pie>
                       <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
-                      <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                      <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -561,7 +561,7 @@ export default function NPSvsAPSPage() {
                 <div className="flex gap-3 overflow-x-auto pb-2">
                   {R.data.filter(d => d.isRev).map(d => (
                     <div key={d.year} className="rounded-xl p-3 flex-shrink-0 min-w-[150px]"
-                      style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(41,151,255,0.2)' }}>
+                      style={{ background: 'var(--surface-xs)', border: '1px solid rgba(41,151,255,0.2)' }}>
                       <div className="text-[10px] font-black text-[#2997ff] mb-1">{d.revLabel}</div>
                       <div className="text-[11px] text-white/50">Basic: {fmtF(d.basic)}</div>
                       <div className="text-[11px] text-white/55">DA: {d.daPct}%</div>
@@ -603,14 +603,14 @@ export default function NPSvsAPSPage() {
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
                   <ComposedChart data={R.data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="year" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
+                    <XAxis dataKey="year" tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                     <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     <Area type="monotone" dataKey={pvOn ? 'annSalPV' : 'annSal'} name={ml ? 'വാർഷിക ശമ്പളം' : 'Annual Salary'} fill="rgba(41,151,255,0.08)" stroke="#2997ff" strokeWidth={2} />
                     <Line type="monotone" dataKey="basic" name={ml ? 'Basic Pay' : 'Basic Pay'} stroke="#30d158" strokeWidth={1.5} dot={false} />
-                    {R.data.filter(d => d.isRev).map(d => <ReferenceLine key={d.year} x={d.year} stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />)}
+                    {R.data.filter(d => d.isRev).map(d => <ReferenceLine key={d.year} x={d.year} stroke="var(--surface-sm)" strokeDasharray="3 3" />)}
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -627,11 +627,11 @@ export default function NPSvsAPSPage() {
                         <stop offset="95%" stopColor="#2997ff" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="year" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
+                    <XAxis dataKey="year" tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                     <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     <Area type="monotone" dataKey={pvOn ? 'corpusPV' : 'corpus'} name="NPS Corpus" fill="url(#corpG)" stroke="#2997ff" strokeWidth={2} />
                     <Area type="monotone" dataKey="totC" name={ml ? 'സംഭാവനകൾ' : 'Contributions'} fill="rgba(48,209,88,0.06)" stroke="#30d158" strokeWidth={1.5} />
                   </AreaChart>
@@ -649,11 +649,11 @@ export default function NPSvsAPSPage() {
                 </div>
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={R.post}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                    <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
+                    <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
+                    <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                     <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke="#30d158" strokeWidth={2.5} dot={false} />
                     <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke="#2997ff" strokeWidth={2.5} dot={false} strokeDasharray="6 3" />
                   </LineChart>
@@ -676,11 +676,11 @@ export default function NPSvsAPSPage() {
                         <stop offset="95%" stopColor="#2997ff" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                    <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
+                    <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
+                    <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                     <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'rgba(255,255,255,0.4)' }} />
+                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                     <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG)" stroke="#30d158" strokeWidth={2} />
                     <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke="#2997ff" strokeWidth={2} />
                   </AreaChart>
@@ -693,9 +693,9 @@ export default function NPSvsAPSPage() {
                 </div>
                 <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={R.post}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                    <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.3)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
+                    <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
+                    <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                     <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
                     <Bar dataKey={pvOn ? 'advPV' : 'adv'} name="APS Advantage" radius={[4,4,0,0]}>
                       {R.post.map((e, i) => <Cell key={i} fill={(pvOn ? e.advPV : e.adv) >= 0 ? '#30d158' : '#ff453a'} fillOpacity={0.6} />)}
@@ -717,7 +717,7 @@ export default function NPSvsAPSPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-[11px]" style={{ minWidth: 640 }}>
                   <thead>
-                    <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+                    <tr style={{ background: 'var(--surface-xs)', borderBottom: '1px solid var(--surface-xs)' }}>
                       {['Year','Basic','DA%','Gross','Emp','Govt','Monthly','Corpus',...(pvOn?['PV Corpus']:[])].map(h => (
                         <th key={h} className="px-4 py-3 text-left font-black uppercase tracking-widest text-white/45 whitespace-nowrap text-[9px]">{h}</th>
                       ))}
@@ -726,7 +726,7 @@ export default function NPSvsAPSPage() {
                   <tbody>
                     {R.data.map((r, i) => (
                       <tr key={i} className="border-b transition-colors hover:bg-white/[0.02]"
-                        style={{ borderColor: 'rgba(255,255,255,0.04)', background: r.isRev ? 'rgba(41,151,255,0.05)' : 'transparent' }}>
+                        style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(41,151,255,0.05)' : 'transparent' }}>
                         <td className="px-4 py-2.5 font-bold text-white/70">
                           {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-[#2997ff] font-black">REV</span>}
                         </td>
@@ -742,7 +742,7 @@ export default function NPSvsAPSPage() {
                     ))}
                   </tbody>
                   <tfoot>
-                    <tr style={{ borderTop: '2px solid rgba(255,255,255,0.08)' }}>
+                    <tr style={{ borderTop: '2px solid var(--surface-sm)' }}>
                       <td colSpan={4} className="px-4 py-3 font-bold text-white/60 text-[10px]">TOTALS →</td>
                       <td className="px-4 py-3 font-bold text-[#ff453a]">{fmt(R.empC)}</td>
                       <td className="px-4 py-3 font-bold text-[#ff9f0a]">{fmt(R.govC)}</td>

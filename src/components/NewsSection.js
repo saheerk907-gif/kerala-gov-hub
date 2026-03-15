@@ -85,8 +85,8 @@ function NewsCard({ news, index, featured }) {
     <Link href={`/news/${news.id}`} ref={ref}
       className="no-underline block group relative rounded-2xl overflow-hidden transition-all duration-700"
       style={{
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.07)',
+        background: 'var(--surface-xs)',
+        border: '1px solid var(--surface-xs)',
         opacity: visible ? 1 : 0,
         transform: visible ? 'translateY(0)' : 'translateY(32px)',
         filter: visible ? 'blur(0)' : 'blur(6px)',
@@ -94,13 +94,13 @@ function NewsCard({ news, index, featured }) {
         transitionDelay: `${index * 100}ms`,
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+        e.currentTarget.style.background = 'var(--surface-xs)';
         e.currentTarget.style.borderColor = `${cat.color}30`;
         e.currentTarget.style.transform = 'translateY(-3px)';
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)';
+        e.currentTarget.style.background = 'var(--surface-xs)';
+        e.currentTarget.style.borderColor = 'var(--surface-xs)';
         e.currentTarget.style.transform = 'translateY(0)';
       }}>
       {/* Color accent bar */}
@@ -156,7 +156,7 @@ export default function NewsSection({ news = [] }) {
           </div>
           <Link href="/news"
             className="no-underline px-5 py-2.5 rounded-xl text-xs font-bold text-[#86868b] hover:text-white transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
             എല്ലാം കാണുക →
           </Link>
         </div>

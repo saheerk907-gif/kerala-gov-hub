@@ -74,10 +74,10 @@ export default function TopBar() {
     <div
       className="topbar relative z-[1001] hidden md:flex items-center justify-between px-6 md:px-10 h-9 border-b"
       style={{
-        background: 'rgba(255,255,255,0.03)',
+        background: 'var(--surface-xs)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderColor: 'rgba(255,255,255,0.07)',
+        borderColor: 'var(--surface-xs)',
       }}
     >
       {/* Left — Social icons */}
@@ -91,9 +91,9 @@ export default function TopBar() {
             rel="noopener noreferrer"
             title={s.label}
             className="topbar-icon flex items-center justify-center w-6 h-6 rounded-md transition-all duration-200 hover:scale-110"
-            style={{ color: 'rgba(255,255,255,0.60)' }}
+            style={{ color: 'var(--text-dim)' }}
             onMouseEnter={e => { e.currentTarget.style.color = s.color; e.currentTarget.style.background = `${s.color}18`; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.60)'; e.currentTarget.style.background = 'transparent'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-dim)'; e.currentTarget.style.background = 'transparent'; }}
           >
             {s.icon}
           </a>

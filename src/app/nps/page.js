@@ -146,7 +146,7 @@ export default async function NpsPage() {
             ].map(fact => (
               <span key={fact}
                 className="text-xs font-semibold text-white/65 px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
                 {fact}
               </span>
             ))}
@@ -191,7 +191,7 @@ export default async function NpsPage() {
             </div>
 
             {/* Old vs New pension comparison strip */}
-            <div className="p-5 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="p-5 rounded-2xl" style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-3">Quick Comparison</p>
               <div className="grid grid-cols-3 gap-4 text-center text-xs">
                 <div>
@@ -272,7 +272,7 @@ export default async function NpsPage() {
                 {documents.map(doc => (
                   <div key={doc.id}
                     className="flex items-start gap-4 p-5 rounded-2xl"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
                       style={{ background: `${PURPLE}15` }}>
                       📄

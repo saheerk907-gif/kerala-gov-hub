@@ -134,7 +134,7 @@ function GlassInput({ label, value, onChange, type = 'number', min, max, step = 
           onChange={e => onChange(type === 'number' ? Number(e.target.value) : e.target.value)}
           min={min} max={max} step={step}
           className="w-full rounded-xl px-3 py-2.5 text-white text-sm font-semibold outline-none focus:ring-1 focus:ring-white/20"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}
         />
       )}
     </div>
@@ -204,7 +204,7 @@ export default function DCRGPage() {
 
             {/* Type toggle */}
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">Gratuity Type</div>
               <div className="grid grid-cols-2 gap-2">
                 {[
@@ -214,9 +214,9 @@ export default function DCRGPage() {
                   <button key={t.id} onClick={() => setRetireType(t.id)}
                     className="flex flex-col items-center gap-1.5 p-3.5 rounded-xl text-[12px] font-bold transition-all"
                     style={{
-                      background: retireType === t.id ? 'rgba(200,150,12,0.15)' : 'rgba(255,255,255,0.04)',
-                      border: `1px solid ${retireType === t.id ? 'rgba(200,150,12,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                      color: retireType === t.id ? '#c8960c' : 'rgba(255,255,255,0.4)',
+                      background: retireType === t.id ? 'rgba(200,150,12,0.15)' : 'var(--surface-xs)',
+                      border: `1px solid ${retireType === t.id ? 'rgba(200,150,12,0.4)' : 'var(--surface-sm)'}`,
+                      color: retireType === t.id ? '#c8960c' : 'var(--text-faint)',
                     }}>
                     <span className="text-xl">{t.icon}</span>
                     {t.label}
@@ -227,7 +227,7 @@ export default function DCRGPage() {
 
             {/* Pay details */}
             <div className="rounded-2xl p-5 flex flex-col gap-4"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/50">Pay Details</div>
 
               <GlassInput label="Last Basic Pay (₹)" value={basic} onChange={setBasic} min={10000} max={300000} step={500} />
@@ -239,9 +239,9 @@ export default function DCRGPage() {
                     <button key={p} onClick={() => setPrc(p)}
                       className="py-2.5 rounded-xl text-[12px] font-bold transition-all"
                       style={{
-                        background: prc === p ? 'rgba(41,151,255,0.15)' : 'rgba(255,255,255,0.04)',
-                        border: `1px solid ${prc === p ? 'rgba(41,151,255,0.35)' : 'rgba(255,255,255,0.08)'}`,
-                        color: prc === p ? '#2997ff' : 'rgba(255,255,255,0.4)',
+                        background: prc === p ? 'rgba(41,151,255,0.15)' : 'var(--surface-xs)',
+                        border: `1px solid ${prc === p ? 'rgba(41,151,255,0.35)' : 'var(--surface-sm)'}`,
+                        color: prc === p ? '#2997ff' : 'var(--text-faint)',
                       }}>
                       {p} PRC
                     </button>
@@ -256,7 +256,7 @@ export default function DCRGPage() {
                   value={retireDate}
                   onChange={e => setRetireDate(e.target.value)}
                   className="w-full rounded-xl px-3 py-2.5 text-white text-sm font-semibold outline-none focus:ring-1 focus:ring-white/20"
-                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', colorScheme: 'dark' }}
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)', colorScheme: 'dark' }}
                 />
               </GlassInput>
 
@@ -267,7 +267,7 @@ export default function DCRGPage() {
                   <button
                     onClick={() => setManualDA(v => !v)}
                     className="text-[10px] font-bold transition-colors"
-                    style={{ color: manualDA ? '#ff9f0a' : 'rgba(255,255,255,0.3)' }}>
+                    style={{ color: manualDA ? '#ff9f0a' : 'var(--text-ghost)' }}>
                     {manualDA ? 'Manual ✓' : 'Auto (edit?)'}
                   </button>
                 </div>
@@ -290,7 +290,7 @@ export default function DCRGPage() {
 
             {/* Service details */}
             <div className="rounded-2xl p-5 flex flex-col gap-4"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/50">Qualifying Service</div>
               <div className="grid grid-cols-2 gap-3">
                 <GlassInput label="Years" value={serviceYears} onChange={setServiceYears} min={0} max={40} />
@@ -345,7 +345,7 @@ export default function DCRGPage() {
 
             {/* Breakdown */}
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">Calculation Breakdown</div>
 
               <ResultRow label="Last Basic Pay"  value={fmt(basic)} />
@@ -364,7 +364,7 @@ export default function DCRGPage() {
 
             {/* KSR Note */}
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/45 mb-3">KSR Rule 77 — DCRG Rules</div>
               <div className="flex flex-col gap-2 mb-4">
                 <div className="text-[11px] font-bold text-white/60 mb-1">Death Gratuity (no min service required)</div>
@@ -399,14 +399,14 @@ export default function DCRGPage() {
 
             {/* DA reference table */}
             <div className="rounded-2xl p-5"
-              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
               <div className="text-[11px] font-black uppercase tracking-widest text-white/45 mb-3">
                 {prc} PRC — DA Rate Reference
               </div>
               <div className="flex flex-col gap-1 max-h-48 overflow-y-auto pr-1">
                 {(prc === '11th' ? DA_TABLE_11TH : DA_TABLE_10TH).map(row => (
                   <div key={row.from} className="flex justify-between text-[11px] py-0.5"
-                    style={{ color: row.rate === effectiveDA ? '#c8960c' : 'rgba(255,255,255,0.3)' }}>
+                    style={{ color: row.rate === effectiveDA ? '#c8960c' : 'var(--text-ghost)' }}>
                     <span>From {row.from}</span>
                     <span className="font-bold">{row.rate}%</span>
                   </div>

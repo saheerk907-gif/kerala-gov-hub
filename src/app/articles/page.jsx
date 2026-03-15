@@ -61,7 +61,7 @@ function FeaturedCard({ article }) {
             </span>
             <span className="text-[11px] text-white/55">{formatDate(article.created_at)}</span>
             <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
-              style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.5)' }}>
+              style={{ background: 'var(--surface-sm)', color: 'var(--text-faint)' }}>
               Featured
             </span>
           </div>
@@ -200,7 +200,7 @@ export default function ArticlesPage() {
                 className={`px-4 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all ${activeCat !== cat.value ? 'cat-tab-inactive' : ''}`}
                 style={activeCat === cat.value
                   ? { background: '#2997ff', color: 'white' }
-                  : { background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.08)' }
+                  : { background: 'var(--surface-xs)', color: 'var(--text-dim)', border: '1px solid var(--surface-sm)' }
                 }>
                 {cat.label}
               </button>
@@ -238,7 +238,7 @@ export default function ArticlesPage() {
                 <div className="mt-10 text-center">
                   <button onClick={loadMore} disabled={loadingMore}
                     className="cat-tab-more px-8 py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50 hover:bg-white/10"
-                    style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}>
+                    style={{ background: 'var(--surface-xs)', color: 'var(--text-dim)' }}>
                     {loadingMore ? 'Loading...' : 'കൂടുതൽ ലേഖനങ്ങൾ'}
                   </button>
                 </div>

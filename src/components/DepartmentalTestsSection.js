@@ -42,7 +42,7 @@ export default function DepartmentalTestsSection() {
                 key={d.id}
                 href={`/departmental-tests?dept=${d.id}`}
                 className="dept-card group flex items-center gap-2.5 px-3 py-2.5 rounded-xl no-underline transition-all duration-200 hover:bg-white/[0.05]"
-                style={{ border: '1px solid rgba(255,255,255,0.06)' }}
+                style={{ border: '1px solid var(--surface-xs)' }}
               >
                 <div
                   className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center text-sm"

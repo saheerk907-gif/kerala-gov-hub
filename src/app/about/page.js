@@ -102,7 +102,7 @@ export default function AboutPage() {
             <h2 className="text-[11px] font-black uppercase tracking-[0.25em] text-white/65 mb-6">What We Offer</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {FEATURES.map((f) => (
-                <div key={f.title} className="flex gap-4 p-4 rounded-xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div key={f.title} className="flex gap-4 p-4 rounded-xl" style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
                   <div className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: 'rgba(200,150,12,0.12)', color: '#c8960c' }}>
                     {f.icon}
                   </div>

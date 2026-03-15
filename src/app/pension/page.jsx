@@ -109,9 +109,9 @@ function calculate({ avgEmoluments, lastEmoluments, qualifyingService, commutePc
 
 // ─── UI atoms ─────────────────────────────────────────────────────────────────
 const GLASS = {
-  input:    { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', color: '#fff' },
+  input:    { background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: '#fff' },
   output:   { background: 'rgba(41,151,255,0.07)',  border: '1px solid rgba(41,151,255,0.18)',  color: '#fff' },
-  disabled: { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.55)' },
+  disabled: { background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)', color: 'var(--text-dim)' },
 };
 
 const inputClass = 'w-full rounded-xl px-4 py-2.5 text-[14px] font-semibold outline-none focus:ring-1 focus:ring-white/20 transition-all';
@@ -210,7 +210,7 @@ export default function PensionPage() {
 
         {/* Card */}
         <div className="rounded-3xl p-6 md:p-8"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
 

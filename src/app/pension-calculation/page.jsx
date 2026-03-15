@@ -238,7 +238,7 @@ export default function PensionCalculationPage() {
             </Body>
 
             {/* Table */}
-            <div className="overflow-x-auto rounded-2xl" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="overflow-x-auto rounded-2xl" style={{ border: '1px solid var(--surface-sm)' }}>
               <table className="w-full text-[13px]">
                 <thead>
                   <tr style={{ background: 'rgba(41,151,255,0.08)' }}>
@@ -252,7 +252,7 @@ export default function PensionCalculationPage() {
                 </thead>
                 <tbody>
                   {AVERAGE_EMOLUMENTS_TABLE.map((row, i) => (
-                    <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <tr key={i} style={{ borderTop: '1px solid var(--surface-xs)' }}>
                       <td className="px-5 py-3.5 font-bold text-white/80 align-top" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                         {row.scenario}
                       </td>
@@ -333,7 +333,7 @@ export default function PensionCalculationPage() {
                   </thead>
                   <tbody>
                     {ROUNDING_RULES.map((r, i) => (
-                      <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                      <tr key={i} style={{ borderTop: '1px solid var(--surface-xs)' }}>
                         <td className="py-2.5 px-3 font-bold text-white/70" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{r.months}</td>
                         <td className="py-2.5 px-3 font-black" style={{ color: '#ff9f0a' }}>{r.units}</td>
                         <td className="py-2.5 px-3 text-[#86868b]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.note}</td>
@@ -524,7 +524,7 @@ export default function PensionCalculationPage() {
                 <details
                   key={i}
                   className="rounded-2xl overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}
                 >
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
                     <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>

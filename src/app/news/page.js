@@ -114,7 +114,7 @@ export default function AllNewsPage() {
           {hasMore && !loading && (
             <button onClick={loadMore} disabled={loadingMore}
               className="w-full mt-6 py-4 rounded-2xl text-sm font-bold border-none cursor-pointer transition-all disabled:opacity-50"
-              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)' }}>
+              style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)' }}>
               {loadingMore ? 'Loading...' : 'കൂടുതൽ വാർത്തകൾ കാണുക'}
             </button>
           )}

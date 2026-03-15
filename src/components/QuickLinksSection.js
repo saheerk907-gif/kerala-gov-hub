@@ -40,7 +40,7 @@ export default function QuickLinksSection({ links }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-3 px-4 py-3 rounded-2xl no-underline transition-all duration-200 hover:bg-white/[0.05]"
-                style={{ border: '1px solid rgba(255,255,255,0.06)' }}
+                style={{ border: '1px solid var(--surface-xs)' }}
               >
                 {/* Icon */}
                 <div

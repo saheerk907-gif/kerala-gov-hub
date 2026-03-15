@@ -17,7 +17,7 @@ function OrderRow({ order }) {
 
   return (
     <div className="flex items-start gap-4 p-4 rounded-xl transition-all"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+      style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
       <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-base mt-0.5"
         style={{ background: typeStyle.bg }}>
         📄

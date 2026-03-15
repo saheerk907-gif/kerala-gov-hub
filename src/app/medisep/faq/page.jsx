@@ -205,7 +205,7 @@ export default function MedisepFaqPage() {
               <div className="space-y-3">
                 {section.faqs.map((faq, i) => (
                   <details key={i} className="group rounded-2xl overflow-hidden"
-                    style={{ border: `1px solid rgba(255,255,255,0.07)`, background: 'rgba(255,255,255,0.025)' }}>
+                    style={{ border: `1px solid var(--surface-xs)`, background: 'var(--surface-xs)' }}>
                     <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none select-none"
                       style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                       <span className="text-[15px] font-bold text-white/90 leading-snug">{faq.q}</span>
@@ -276,7 +276,7 @@ export default function MedisepFaqPage() {
             </a>
             <a href="/"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ background: 'var(--surface-xs)', color: 'var(--text-faint)', border: '1px solid var(--surface-sm)' }}>
               Home
             </a>
           </div>

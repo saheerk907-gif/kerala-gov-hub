@@ -243,8 +243,8 @@ export default function Navbar() {
                                 {d.badge && (
                                   <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide flex-shrink-0"
                                     style={{
-                                      background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)',
-                                      color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.60)',
+                                      background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'var(--surface-xs)',
+                                      color: d.badge === 'NEW' ? '#2997ff' : 'var(--text-dim)',
                                     }}>
                                     {d.badge}
                                   </span>
@@ -349,7 +349,7 @@ export default function Navbar() {
                               <span className="text-[13px] font-medium" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: 'var(--nav-text)' }}>{d.label}</span>
                               {d.badge && (
                                 <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide"
-                                  style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)', color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.60)' }}>
+                                  style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'var(--surface-xs)', color: d.badge === 'NEW' ? '#2997ff' : 'var(--text-dim)' }}>
                                   {d.badge}
                                 </span>
                               )}

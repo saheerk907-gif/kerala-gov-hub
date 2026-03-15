@@ -163,7 +163,7 @@ export default async function ArticleDetailPage({ params }) {
               ← ലേഖനങ്ങൾ
             </a>
             <a href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"
-              style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }}>
+              style={{ background: 'var(--surface-xs)', color: 'var(--text-faint)' }}>
               Home
             </a>
           </div>
@@ -183,7 +183,7 @@ export default async function ArticleDetailPage({ params }) {
           .article-content ol li { padding: 0.3rem 0; }
           .article-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
           .article-content th { background: rgba(41,151,255,0.1); color: white; padding: 10px 14px; text-align: left; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
-          .article-content td { padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+          .article-content td { padding: 10px 14px; border-bottom: 1px solid var(--surface-xs); font-size: 0.9rem; }
           .article-content .ql-align-justify { text-align: justify; }
           .article-content .ql-align-center  { text-align: center; }
           .article-content .ql-align-right   { text-align: right; }

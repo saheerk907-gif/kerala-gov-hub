@@ -107,7 +107,7 @@ export default function PensionFormsPage() {
             onChange={e => setSearch(e.target.value)}
             placeholder="Search forms by name or number..."
             className="flex-1 rounded-xl px-4 py-2.5 text-[14px] text-white outline-none focus:ring-1 focus:ring-white/20"
-            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
+            style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}
           />
         </div>
 
@@ -119,11 +119,11 @@ export default function PensionFormsPage() {
               style={{
                 background: category === cat
                   ? (cat === 'All' ? '#2997ff' : CATEGORY_COLORS[cat] || '#2997ff')
-                  : 'rgba(255,255,255,0.05)',
-                color: category === cat ? '#fff' : 'rgba(255,255,255,0.65)',
+                  : 'var(--surface-xs)',
+                color: category === cat ? '#fff' : 'var(--text-dim)',
                 border: `1px solid ${category === cat
                   ? (cat === 'All' ? '#2997ff' : CATEGORY_COLORS[cat] || '#2997ff')
-                  : 'rgba(255,255,255,0.08)'}`,
+                  : 'var(--surface-sm)'}`,
               }}>
               {cat}
             </button>
@@ -137,11 +137,11 @@ export default function PensionFormsPage() {
 
         {/* Forms table */}
         <div className="rounded-2xl overflow-hidden"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+          style={{ border: '1px solid var(--surface-sm)' }}>
 
           {/* Table header — desktop only */}
           <div className="hidden md:grid grid-cols-[90px_1fr_130px_110px] gap-0 px-5 py-3"
-            style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+            style={{ background: 'var(--surface-xs)', borderBottom: '1px solid var(--surface-xs)' }}>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Form No.</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Title</div>
             <div className="text-[10px] font-black uppercase tracking-widest text-white/50">Category</div>
@@ -159,7 +159,7 @@ export default function PensionFormsPage() {
               return (
                 <div key={form.id}
                   className="px-4 py-4 transition-colors hover:bg-white/[0.02] md:grid md:grid-cols-[90px_1fr_130px_110px] md:items-center md:gap-0"
-                  style={{ borderTop: i > 0 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                  style={{ borderTop: i > 0 ? '1px solid var(--surface-xs)' : 'none' }}>
 
                   {/* Mobile: card layout — Desktop: row layout */}
                   <div className="flex items-start justify-between md:contents">

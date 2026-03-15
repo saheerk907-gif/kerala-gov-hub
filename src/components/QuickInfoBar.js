@@ -107,7 +107,7 @@ function DACard() {
                   stroke={i === points.length - 1 ? 'rgba(41,151,255,0.3)' : 'none'}
                   strokeWidth="4" />
                 <text x={p[0]} y={p[1] - 8} textAnchor="middle"
-                  fontSize="8" fill="rgba(255,255,255,0.4)" fontWeight="700">
+                  fontSize="8" fill="var(--text-faint)" fontWeight="700">
                   {DA_HISTORY[i].value}%
                 </text>
               </g>
@@ -143,7 +143,7 @@ function StatPill({ stat, index }) {
     <div
       ref={ref}
       className={`group relative flex items-center gap-3 rounded-xl px-4 py-3 transition-all duration-500 hover:-translate-y-0.5 cursor-default ${visible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'}`}
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', transitionDelay: `${index * 60}ms` }}
+      style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)', transitionDelay: `${index * 60}ms` }}
     >
       <div className="w-1 h-8 rounded-full flex-shrink-0" style={{ background: stat.color }} />
       <div className="flex-1 min-w-0">
@@ -161,7 +161,7 @@ export default function QuickInfoBar() {
   return (
     <section className="relative py-12 px-4 md:px-6">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)' }} />
+        style={{ background: 'linear-gradient(90deg, transparent, var(--surface-xs), transparent)' }} />
 
       <div className="max-w-[1300px] mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">

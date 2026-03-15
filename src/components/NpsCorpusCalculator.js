@@ -121,7 +121,7 @@ function DobPicker({ value, onChange }) {
   const selectStyle = {
     background: 'rgba(191,90,242,0.06)',
     border: '1px solid rgba(191,90,242,0.25)',
-    color: 'rgba(255,255,255,0.9)',
+    color: 'var(--text-primary)',
     colorScheme: 'dark',
   };
 
@@ -331,7 +331,7 @@ export default function NpsCorpusCalculator() {
 
       {/* ── Disclaimer ── */}
       <div className="p-5 rounded-2xl text-xs text-white/45 leading-relaxed"
-        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+        style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
         <p className="font-bold text-white/60 mb-1.5">⚠ Disclaimer</p>
         <p>
           This calculator is meant for <strong className="text-white/60">information and illustration purposes only</strong> and
@@ -357,13 +357,13 @@ function ResultCard({ icon, label, sublabel, value, highlight }) {
   return (
     <div className="p-5 rounded-2xl"
       style={{
-        background: highlight ? 'rgba(191,90,242,0.08)' : 'rgba(255,255,255,0.04)',
-        border: highlight ? '1px solid rgba(191,90,242,0.25)' : '1px solid rgba(255,255,255,0.08)',
+        background: highlight ? 'rgba(191,90,242,0.08)' : 'var(--surface-xs)',
+        border: highlight ? '1px solid rgba(191,90,242,0.25)' : '1px solid var(--surface-sm)',
       }}>
       <div className="text-2xl mb-2">{icon}</div>
       <div className="text-xs text-white/50 mb-0.5">{label}</div>
       <div className="text-xs text-white/35 mb-2">{sublabel}</div>
-      <div className="text-xl font-black" style={{ color: highlight ? PURPLE : 'rgba(255,255,255,0.9)' }}>
+      <div className="text-xl font-black" style={{ color: highlight ? PURPLE : 'var(--text-primary)' }}>
         {value}
       </div>
     </div>

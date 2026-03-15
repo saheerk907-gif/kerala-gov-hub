@@ -139,7 +139,7 @@ export default async function KsrPage() {
             ].map(fact => (
               <span key={fact}
                 className="text-xs font-semibold text-white/65 px-3 py-1.5 rounded-full"
-                style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
                 {fact}
               </span>
             ))}
@@ -184,7 +184,7 @@ export default async function KsrPage() {
             </div>
 
             {/* Quick reference strip */}
-            <div className="p-5 rounded-2xl" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="p-5 rounded-2xl" style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
               <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mb-3">Commonly Referenced Rules</p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
                 {[
@@ -246,7 +246,7 @@ export default async function KsrPage() {
               ].map(p => (
                 <Link key={p.part} href={p.href}
                   className="group p-5 rounded-2xl flex flex-col gap-3 no-underline transition-all hover:-translate-y-0.5"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${p.color}20` }}>
+                  style={{ background: 'var(--surface-xs)', border: `1px solid ${p.color}20` }}>
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <div className="text-2xl">{p.icon}</div>

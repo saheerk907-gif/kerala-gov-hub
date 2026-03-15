@@ -106,7 +106,7 @@ export default function MedisepComplaintPage() {
               </a>
               <a href="https://medisep.kerala.gov.in" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold no-underline"
-                style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                style={{ background: 'var(--surface-xs)', color: 'var(--text-dim)', border: '1px solid var(--surface-sm)' }}>
                 MEDISEP Portal ↗
               </a>
             </div>
@@ -207,7 +207,7 @@ export default function MedisepComplaintPage() {
             <div className="space-y-3">
               {ESCALATION.map((e, i) => (
                 <div key={i} className="flex gap-4 p-5 rounded-2xl items-start"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: `1px solid ${e.color}25` }}>
+                  style={{ background: 'var(--surface-xs)', border: `1px solid ${e.color}25` }}>
                   <div className="flex-shrink-0 px-2 py-1 rounded-lg text-[10px] font-black uppercase tracking-wider"
                     style={{ background: `${e.color}15`, color: e.color }}>
                     {e.level}
@@ -238,7 +238,7 @@ export default function MedisepComplaintPage() {
                 'Insurance Ombudsman-ൽ complain ചെയ്യുന്നത് free of cost ആണ്.',
               ].map((tip, i) => (
                 <div key={i} className="flex gap-3 p-4 rounded-xl"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
                   <span className="text-[#2997ff] font-black text-xs mt-0.5 flex-shrink-0">{i + 1}.</span>
                   <p className="text-[13px] text-[#c7c7cc] leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{tip}</p>
                 </div>
@@ -252,7 +252,7 @@ export default function MedisepComplaintPage() {
             <div className="space-y-3">
               {faqJsonLd.mainEntity.map((faq, i) => (
                 <details key={i} className="rounded-2xl overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
                     <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{faq.name}</span>
                     <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"

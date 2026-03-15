@@ -412,7 +412,7 @@ export default function DaArrearPage() {
               <div className="overflow-x-auto">
                 <table className="w-full text-[12px] min-w-[640px]">
                   <thead>
-                    <tr style={{ background: 'rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    <tr style={{ background: 'var(--surface-xs)', borderBottom: '1px solid var(--surface-sm)' }}>
                       {['Month','Basic Pay','DA Due %','DA Due (₹)','DA Paid %','DA Paid (₹)','Arrear (₹)'].map(h => (
                         <th key={h} className={`py-3 px-4 text-[9px] font-black uppercase tracking-widest text-white/55 ${h === 'Month' ? 'text-left' : 'text-right'}`}>{h}</th>
                       ))}

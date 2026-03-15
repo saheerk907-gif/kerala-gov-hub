@@ -186,7 +186,7 @@ export default function MedisepClaimProcessPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {DOCS.map((d, i) => (
                 <div key={i} className="flex items-start gap-3 p-4 rounded-xl"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
                   <span className="text-[#30d158] mt-0.5 flex-shrink-0 text-xs">✓</span>
                   <span className="text-[13px] text-[#c7c7cc]" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{d}</span>
                 </div>
@@ -239,7 +239,7 @@ export default function MedisepClaimProcessPage() {
             <div className="space-y-3">
               {faqJsonLd.mainEntity.map((faq, i) => (
                 <details key={i} className="rounded-2xl overflow-hidden group"
-                  style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                  style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-xs)' }}>
                   <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none select-none">
                     <span className="text-[14px] font-bold text-white/90" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{faq.name}</span>
                     <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"

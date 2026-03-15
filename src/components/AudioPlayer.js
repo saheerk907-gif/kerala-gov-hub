@@ -98,14 +98,14 @@ export default function AudioPlayer({ limit }) {
                   key={ep.id}
                   onClick={() => playEpisode(ep)}
                   className={`glass-card glow-top w-full text-left flex items-center gap-4 p-4 rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group ${isActive ? 'audio-ep-active' : ''}`}
-                  style={isActive ? { borderColor: 'rgba(255,255,255,0.22)' } : {}}
+                  style={isActive ? { borderColor: 'var(--text-ghost)' } : {}}
                 >
                   {/* Play/pause icon */}
                   <div
                     className="audio-icon-box flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all"
                     style={isActive
-                      ? { background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.95)' }
-                      : { background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.55)' }}
+                      ? { background: 'var(--surface-md)', color: 'var(--text-primary)' }
+                      : { background: 'var(--surface-xs)', color: 'var(--text-dim)' }}
                   >
                     {isActive && playing
                       ? <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
@@ -116,7 +116,7 @@ export default function AudioPlayer({ limit }) {
                     <div className="flex items-center gap-2 mb-0.5">
                       <span
                         className="audio-ep-label text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
-                        style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.65)' }}
+                        style={{ background: 'var(--surface-sm)', color: 'var(--text-dim)' }}
                       >
                         EP {ep.episode_number}
                       </span>
@@ -147,7 +147,7 @@ export default function AudioPlayer({ limit }) {
           <Link
             href="/audio-classes"
             className="audio-more-btn w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08] mt-1"
-            style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.09)' }}
+            style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)', border: '1px solid var(--surface-sm)' }}
           >
             എല്ലാ ക്ലാസ്സുകളും കാണുക ({episodes.length} Episodes)
             <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
@@ -171,9 +171,9 @@ export default function AudioPlayer({ limit }) {
             <div className="flex items-center gap-3 mb-4">
               <div
                 className="audio-icon-box w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                style={{ background: 'rgba(255,255,255,0.08)' }}
+                style={{ background: 'var(--surface-sm)' }}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
                   <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
                   <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                   <line x1="12" y1="19" x2="12" y2="23"/>
@@ -197,12 +197,12 @@ export default function AudioPlayer({ limit }) {
             <div className="mb-4">
               <div
                 className="audio-progress-track h-1.5 rounded-full cursor-pointer overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.10)' }}
+                style={{ background: 'var(--surface-sm)' }}
                 onClick={seekTo}
               >
                 <div
                   className="audio-progress-fill h-full rounded-full transition-all"
-                  style={{ width: `${progress}%`, background: 'rgba(255,255,255,0.75)' }}
+                  style={{ width: `${progress}%`, background: 'var(--text-primary)' }}
                 />
               </div>
               <div className="flex justify-between mt-1.5">
@@ -216,14 +216,14 @@ export default function AudioPlayer({ limit }) {
               <button
                 onClick={() => skip(-10)}
                 className="audio-skip-btn w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
-                style={{ background: 'rgba(255,255,255,0.07)' }}
+                style={{ background: 'var(--surface-xs)' }}
               >
                 -10
               </button>
               <button
                 onClick={() => playEpisode(current)}
                 className="audio-main-btn w-12 h-12 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-                style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.18)' }}
+                style={{ background: 'var(--surface-md)', border: '1px solid var(--surface-lg)' }}
               >
                 {playing
                   ? <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
@@ -232,7 +232,7 @@ export default function AudioPlayer({ limit }) {
               <button
                 onClick={() => skip(10)}
                 className="audio-skip-btn w-9 h-9 rounded-full flex items-center justify-center text-white/70 hover:text-white transition-colors text-[11px] font-bold"
-                style={{ background: 'rgba(255,255,255,0.07)' }}
+                style={{ background: 'var(--surface-xs)' }}
               >
                 +10
               </button>
@@ -240,9 +240,9 @@ export default function AudioPlayer({ limit }) {
                 onClick={cycleSpeed}
                 className="audio-speed-btn h-9 px-3 rounded-full flex items-center justify-center font-black text-[11px] transition-all hover:bg-white/10"
                 style={{
-                  background: speed !== 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.06)',
-                  color: speed !== 1 ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.55)',
-                  border: '1px solid rgba(255,255,255,0.10)',
+                  background: speed !== 1 ? 'var(--surface-md)' : 'var(--surface-xs)',
+                  color: speed !== 1 ? 'var(--text-primary)' : 'var(--text-dim)',
+                  border: '1px solid var(--surface-sm)',
                 }}
                 title="Change playback speed"
               >
@@ -253,8 +253,8 @@ export default function AudioPlayer({ limit }) {
           </div>
         ) : (
           <div className="glass-card rounded-[24px] p-8 text-center">
-            <div className="audio-icon-box w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'rgba(255,255,255,0.07)' }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
+            <div className="audio-icon-box w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3" style={{ background: 'var(--surface-xs)' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="audio-mic-icon">
                 <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                 <line x1="12" y1="19" x2="12" y2="23"/>

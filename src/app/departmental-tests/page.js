@@ -99,7 +99,7 @@ function TestsPageInner() {
             <button
               onClick={() => { setActiveDept('all'); setExpanded(null); }}
               className="px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
-              style={{ background: activeDept === 'all' ? '#ffffff20' : 'rgba(255,255,255,0.04)', color: activeDept === 'all' ? '#fff' : 'rgba(255,255,255,0.65)', outline: activeDept === 'all' ? '1px solid #ffffff30' : 'none' }}>
+              style={{ background: activeDept === 'all' ? 'var(--surface-md)' : 'var(--surface-xs)', color: activeDept === 'all' ? 'var(--text-primary)' : 'var(--text-dim)', outline: activeDept === 'all' ? '1px solid var(--border-sm)' : 'none' }}>
               🗂️ <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>എല്ലാം</span> ({TESTS.length})
             </button>
             {DEPTS.map(d => {
@@ -109,7 +109,7 @@ function TestsPageInner() {
                 <button key={d.id}
                   onClick={() => { setActiveDept(d.id); setExpanded(null); }}
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[12px] font-bold border-none cursor-pointer transition-all"
-                  style={{ background: active ? d.color + '20' : 'rgba(255,255,255,0.04)', color: active ? d.color : 'rgba(255,255,255,0.65)', outline: active ? `1px solid ${d.color}40` : 'none' }}>
+                  style={{ background: active ? d.color + '20' : 'var(--surface-xs)', color: active ? d.color : 'var(--text-dim)', outline: active ? `1px solid ${d.color}40` : 'none' }}>
                   {d.icon} <span style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span> <span className="opacity-50">({count})</span>
                 </button>
               );
@@ -196,7 +196,7 @@ function TestsPageInner() {
                               className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[12px] font-bold no-underline transition-all"
                               style={hasQ
                                 ? { background: color + '22', color, border: `1px solid ${color}33` }
-                                : { background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.2)', cursor: 'not-allowed' }
+                                : { background: 'var(--surface-xs)', color: 'var(--text-ghost)', cursor: 'not-allowed' }
                               }
                               title={hasQ ? `Paper ${p} Quiz` : 'Questions not added yet'}>
                               {hasQ ? '▶' : '🔒'} Paper {p} {hasQ ? 'Quiz' : '(Coming Soon)'}

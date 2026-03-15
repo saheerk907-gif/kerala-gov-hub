@@ -16,8 +16,8 @@ export default function FAQSection({ faqs, accentColor = '#2997ff' }) {
           <div key={i}
             className="rounded-2xl overflow-hidden transition-all duration-200"
             style={{
-              border: `1px solid ${open === i ? accentColor + '35' : 'rgba(255,255,255,0.07)'}`,
-              background: open === i ? accentColor + '07' : 'rgba(255,255,255,0.02)',
+              border: `1px solid ${open === i ? accentColor + '35' : 'var(--surface-xs)'}`,
+              background: open === i ? accentColor + '07' : 'var(--surface-xs)',
             }}>
             <button
               onClick={() => setOpen(open === i ? null : i)}
@@ -29,7 +29,7 @@ export default function FAQSection({ faqs, accentColor = '#2997ff' }) {
               </span>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor"
                 strokeWidth="2" strokeLinecap="round" className="flex-shrink-0 transition-transform duration-200"
-                style={{ transform: open === i ? 'rotate(180deg)' : 'none', color: open === i ? accentColor : 'rgba(255,255,255,0.3)' }}>
+                style={{ transform: open === i ? 'rotate(180deg)' : 'none', color: open === i ? accentColor : 'var(--text-ghost)' }}>
                 <path d="M2 5l5 5 5-5"/>
               </svg>
             </button>

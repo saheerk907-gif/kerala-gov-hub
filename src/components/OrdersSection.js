@@ -56,9 +56,9 @@ export default function OrdersSection({ orders }) {
           onChange={e => handleSearch(e.target.value)}
           placeholder="ഉത്തരവ് തിരയുക..."
           className="w-full pl-10 pr-4 py-2.5 rounded-xl text-[13px] text-white placeholder-white/30 outline-none transition-all"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}
           onFocus={e => e.target.style.borderColor = 'rgba(255,159,10,0.4)'}
-          onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+          onBlur={e => e.target.style.borderColor = 'var(--surface-sm)'}
         />
         {query && (
           <button onClick={() => handleSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/70 transition-colors bg-transparent border-0 cursor-pointer text-lg leading-none">
@@ -79,13 +79,13 @@ export default function OrdersSection({ orders }) {
           return isDirectPdf ? (
           <a key={o.id} href={o.pdf_url} target="_blank" rel="noopener noreferrer" download className="block no-underline group">
             <div className={`glass-card glow-top relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] mb-3 ${o.is_pinned ? 'border-[#ff9f0a]/30 bg-[#ff9f0a]/[0.06]' : ''}`}>
-              <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={o.is_pinned ? { background: 'rgba(255,159,10,0.20)', border: '1px solid rgba(255,159,10,0.35)' } : { background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.10)' }}>
+              <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={o.is_pinned ? { background: 'rgba(255,159,10,0.20)', border: '1px solid rgba(255,159,10,0.35)' } : { background: 'var(--surface-sm)', border: '1px solid var(--surface-sm)' }}>
                 {o.is_pinned ? (
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 2L8 8H3l4 4-1.5 7L12 16l6.5 3L17 12l4-4h-5L12 2z"/>
                   </svg>
                 ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                     <polyline points="14 2 14 8 20 8"/>
                     <line x1="16" y1="13" x2="8" y2="13"/>
@@ -111,8 +111,8 @@ export default function OrdersSection({ orders }) {
           </a>
         ) : (
           <div key={o.id} className="glass-card relative flex items-center gap-4 p-4 md:p-5 rounded-[20px] mb-3 opacity-50 cursor-not-allowed">
-            <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.12)' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: 'var(--surface-sm)', border: '1px solid var(--surface-md)' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <polyline points="14 2 14 8 20 8"/>
                 <line x1="16" y1="13" x2="8" y2="13"/>
@@ -152,7 +152,7 @@ export default function OrdersSection({ orders }) {
             return (
               <button key={page} onClick={() => goToPage(page)}
                 className="w-12 h-12 rounded-lg text-[12px] font-bold transition-all border-0 cursor-pointer"
-                style={currentPage === page ? { background: '#ff9f0a', color: 'white' } : { background: 'transparent', color: 'rgba(255,255,255,0.55)' }}>
+                style={currentPage === page ? { background: '#ff9f0a', color: 'white' } : { background: 'transparent', color: 'var(--text-dim)' }}>
                 {page}
               </button>
             );
@@ -168,7 +168,7 @@ export default function OrdersSection({ orders }) {
       <div className="mt-4">
         <a href="https://www.finance.kerala.gov.in" target="_blank" rel="noopener noreferrer"
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
-          style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.75)' }}>
+          style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)' }}>
           എല്ലാ ഉത്തരവുകളും കാണുക
           <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" viewBox="0 0 24 24">
             <path d="M9 5l7 7-7 7" />

@@ -51,6 +51,18 @@
   --quiz-opt-bg: rgba(255,255,255,0.04);
   --quiz-opt-color: rgba(255,255,255,0.70);
   --quiz-opt-border: rgba(255,255,255,0.08);
+
+  /* Generic surface / text tokens for inline styles across pages */
+  --surface-xs:   rgba(255,255,255,0.04);
+  --surface-sm:   rgba(255,255,255,0.08);
+  --surface-md:   rgba(255,255,255,0.12);
+  --surface-lg:   rgba(255,255,255,0.18);
+  --text-dim:     rgba(255,255,255,0.65);
+  --text-faint:   rgba(255,255,255,0.40);
+  --text-ghost:   rgba(255,255,255,0.20);
+  --border-xs:    rgba(255,255,255,0.06);
+  --border-sm:    rgba(255,255,255,0.10);
+  --border-md:    rgba(255,255,255,0.20);
 }
 
 /* ── Light Mode Variable Overrides ──────────────────────── */
@@ -94,6 +106,18 @@
   --quiz-opt-bg: rgba(26,26,46,0.05);
   --quiz-opt-color: rgba(26,26,46,0.80);
   --quiz-opt-border: rgba(26,26,46,0.12);
+
+  /* Generic surface / text tokens for inline styles across pages */
+  --surface-xs:   rgba(26,26,46,0.05);
+  --surface-sm:   rgba(26,26,46,0.08);
+  --surface-md:   rgba(26,26,46,0.12);
+  --surface-lg:   rgba(26,26,46,0.16);
+  --text-dim:     rgba(26,26,46,0.65);
+  --text-faint:   rgba(26,26,46,0.40);
+  --text-ghost:   rgba(26,26,46,0.22);
+  --border-xs:    rgba(26,26,46,0.08);
+  --border-sm:    rgba(26,26,46,0.12);
+  --border-md:    rgba(26,26,46,0.20);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -366,6 +390,11 @@ img, video, svg { max-width: 100%; }
 [data-theme="light"] .section-nav-btn:hover  { background: rgba(26,26,46,0.05) !important; color: rgba(26,26,46,0.90) !important; }
 [data-theme="light"] .section-nav-divider    { background: rgba(26,26,46,0.10) !important; }
 [data-theme="light"] .section-nav-quiz       { color: rgba(26,26,46,0.40) !important; }
+
+/* ── Placeholder colors (form inputs) ── */
+[data-theme="light"] .placeholder-white\/25::placeholder { color: rgba(26,26,46,0.35) !important; }
+[data-theme="light"] .placeholder-white\/30::placeholder { color: rgba(26,26,46,0.40) !important; }
+[data-theme="light"] .placeholder-white\/40::placeholder { color: rgba(26,26,46,0.45) !important; }
 
 /* ── Ring / shadow utilities ── */
 [data-theme="light"] .ring-white\/\[0\.08\]  { --tw-ring-color: rgba(26,26,46,0.10) !important; }

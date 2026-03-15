@@ -38,9 +38,9 @@ export default function ContactPage() {
   }
 
   const inputStyle = {
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid rgba(255,255,255,0.09)',
-    color: 'rgba(255,255,255,0.8)',
+    background: 'var(--surface-xs)',
+    border: '1px solid var(--surface-sm)',
+    color: 'var(--text-primary)',
     borderRadius: '10px',
     padding: '10px 14px',
     fontSize: '13px',
@@ -126,7 +126,7 @@ export default function ContactPage() {
                       <input name="name" value={form.name} onChange={handleChange} required placeholder="Your name"
                         style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
-                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--surface-sm)'}
                       />
                     </div>
                     <div>
@@ -134,7 +134,7 @@ export default function ContactPage() {
                       <input name="email" type="email" value={form.email} onChange={handleChange} required placeholder="your@email.com"
                         style={inputStyle}
                         onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
-                        onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--surface-sm)'}
                       />
                     </div>
                   </div>
@@ -143,7 +143,7 @@ export default function ContactPage() {
                     <select name="subject" value={form.subject} onChange={handleChange} required
                       style={{ ...inputStyle, cursor: 'pointer' }}
                       onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+                      onBlur={e => e.target.style.borderColor = 'var(--surface-sm)'}
                     >
                       <option value="" disabled>Select a subject</option>
                       {SUBJECTS.map(s => <option key={s} value={s} style={{ background: '#1a1c1e' }}>{s}</option>)}
@@ -155,7 +155,7 @@ export default function ContactPage() {
                       placeholder="Write your message here…"
                       style={{ ...inputStyle, resize: 'vertical', minHeight: '110px' }}
                       onFocus={e => e.target.style.borderColor = 'rgba(200,150,12,0.4)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.09)'}
+                      onBlur={e => e.target.style.borderColor = 'var(--surface-sm)'}
                     />
                   </div>
                   {status === 'error' && (
@@ -167,7 +167,7 @@ export default function ContactPage() {
                     className="w-full py-3 rounded-xl text-[13px] font-bold transition-all duration-200 border-none cursor-pointer"
                     style={{
                       background: status === 'sending' ? 'rgba(200,150,12,0.3)' : 'rgba(200,150,12,0.85)',
-                      color: status === 'sending' ? 'rgba(255,255,255,0.5)' : '#000',
+                      color: status === 'sending' ? 'var(--text-faint)' : '#000',
                     }}>
                     {status === 'sending' ? 'Sending…' : 'Send Message'}
                   </button>

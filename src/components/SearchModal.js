@@ -211,7 +211,7 @@ export default function SearchModal({ open, onClose }) {
     >
       <div
         className="w-full max-w-[580px] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.8)]"
-        style={{ background: 'rgba(20,22,26,0.99)', border: '1px solid rgba(255,255,255,0.1)' }}
+        style={{ background: 'var(--nav-dropdown-bg)', border: '1px solid var(--nav-dropdown-border)' }}
       >
         {/* Input */}
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-white/[0.07]">
@@ -277,7 +277,7 @@ export default function SearchModal({ open, onClose }) {
                         onMouseEnter={() => setActiveIdx(item._idx)}
                         onClick={() => navigate(item)}
                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left cursor-pointer border-none transition-all duration-100"
-                        style={{ background: isActive ? 'rgba(255,255,255,0.07)' : 'transparent' }}
+                        style={{ background: isActive ? 'var(--surface-xs)' : 'transparent' }}
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">

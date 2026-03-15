@@ -46,14 +46,14 @@ export default function AnnouncementBanner() {
   return (
     <div
       className="relative overflow-hidden border-b"
-      style={{ background: 'rgba(18,20,22,0.95)', borderColor: 'rgba(255,255,255,0.07)' }}
+      style={{ background: 'var(--nav-bg-scrolled)', borderColor: 'var(--nav-border)' }}
     >
       <div className="flex items-center h-10">
 
         {/* BREAKING label */}
         <div
           className="flex items-center gap-2 px-4 h-full flex-shrink-0 border-r"
-          style={{ background: 'rgba(41,151,255,0.85)', borderColor: 'rgba(255,255,255,0.1)' }}
+          style={{ background: 'rgba(41,151,255,0.85)', borderColor: 'var(--surface-sm)' }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white whitespace-nowrap">
@@ -65,9 +65,9 @@ export default function AnnouncementBanner() {
         <div className="flex-1 overflow-hidden relative">
           {/* Fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, rgba(18,20,22,0.95), transparent)' }} />
+            style={{ background: 'linear-gradient(to right, var(--bg-primary), transparent)' }} />
           <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, rgba(18,20,22,0.95), transparent)' }} />
+            style={{ background: 'linear-gradient(to left, var(--bg-primary), transparent)' }} />
 
           <div className="flex items-center gap-0 ticker-track whitespace-nowrap">
             {repeated.map((item, i) => (
@@ -94,7 +94,7 @@ export default function AnnouncementBanner() {
         {/* Dismiss */}
         <button onClick={() => setDismissed(true)}
           className="flex-shrink-0 px-3 h-full text-white/40 hover:text-white/60 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
-          style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+          style={{ borderColor: 'var(--surface-xs)' }}>
           ×
         </button>
       </div>
