@@ -37,31 +37,31 @@ function StatCard({ stat, index }) {
   return (
     <div
       ref={ref}
-      className={`glass-card glow-top relative rounded-[28px] p-8 flex flex-col items-center text-center overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] ${
+      className={`glass-card glow-top relative rounded-[18px] md:rounded-[28px] p-4 md:p-8 flex flex-col items-center text-center overflow-hidden transition-all duration-700 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
       }`}
       style={{ transitionDelay: `${index * 120}ms` }}
     >
       {/* Icon */}
       <div
-        className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-5"
+        className="w-8 h-8 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center text-lg md:text-2xl mb-2 md:mb-5"
         style={{ background: `${color}18`, border: `1px solid ${color}30` }}
       >
         {icons[index % icons.length]}
       </div>
 
       {/* Label */}
-      <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/60 mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+      <p className="text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-white/60 mb-1 md:mb-3" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
         {stat.label_ml}
       </p>
 
       {/* Number */}
-      <div className="text-5xl font-[900] tracking-[-0.04em] leading-none text-white mb-3">
+      <div className="text-2xl md:text-5xl font-[900] tracking-[-0.04em] leading-none text-white mb-1 md:mb-3">
         {val.toLocaleString('en-IN')}
-        <span style={{ color }} className="ml-1 text-3xl">+</span>
+        <span style={{ color }} className="ml-0.5 md:ml-1 text-xl md:text-3xl">+</span>
       </div>
 
-      <div className="flex items-center gap-2 justify-center">
+      <div className="hidden md:flex items-center gap-2 justify-center">
         <div className="w-5 h-[1px]" style={{ background: `${color}50` }} />
         <p className="text-[12px] font-semibold text-white/50" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
           {stat.sub_text || 'ഔദ്യോഗിക കണക്കുകൾ'}
@@ -110,10 +110,10 @@ export default function StatsBar() {
   }, []);
 
   return (
-    <section className="relative pt-10 pb-20 px-4 md:px-6">
+    <section className="relative pt-6 pb-10 md:pt-10 md:pb-20 px-4 md:px-6">
       <div className="max-w-[1100px] mx-auto">
-        {/* Section header */}
-        <div className="flex flex-col items-center text-center mb-14">
+        {/* Section header — hidden on mobile to save space */}
+        <div className="hidden md:flex flex-col items-center text-center mb-14">
           <div className="section-label mb-3">Dashboard</div>
           <h2 className="text-[clamp(28px,4vw,44px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             കേരള സർക്കാർ ജീവനക്കാർ{' '}
@@ -121,15 +121,15 @@ export default function StatsBar() {
           </h2>
         </div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Cards — 3-col horizontal on mobile, same on desktop */}
+        <div className="grid grid-cols-3 gap-3 md:gap-6">
           {counts.map((s, i) => (
             <StatCard key={s.id} stat={s} index={i} />
           ))}
         </div>
 
         {/* Live indicator */}
-        <div className="mt-12 flex items-center justify-center gap-2.5 opacity-40">
+        <div className="mt-6 md:mt-12 flex items-center justify-center gap-2.5 opacity-40">
           <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse" />
           <p className="text-[11px] font-bold text-white uppercase tracking-widest">
             Live data · {new Date().getFullYear()} Edition

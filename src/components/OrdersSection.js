@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 4;
 
 export default function OrdersSection({ orders }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +34,7 @@ export default function OrdersSection({ orders }) {
   };
 
   return (
-    <section id="orders" className="relative py-8 flex flex-col h-full">
+    <section id="orders" className="relative py-4 md:py-8 flex flex-col h-full">
 
       {/* Header */}
       <div className="mb-5">

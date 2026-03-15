@@ -14,7 +14,7 @@ export default function SchemesSection({ schemes }) {
   if (!schemes?.length) return null;
 
   return (
-    <section id="services" className="relative py-10 px-4 md:px-6">
+    <section id="services" className="relative py-6 md:py-10 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}

@@ -19,8 +19,8 @@ function FeaturedCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block col-span-2">
-      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
-        style={{ minHeight: '320px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
+      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 min-h-[200px] md:min-h-[320px]"
+        style={{ background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
@@ -31,7 +31,7 @@ function FeaturedCard({ article }) {
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
         )}
-        <div className="relative z-10 flex flex-col justify-end h-full p-7" style={{ minHeight: '320px' }}>
+        <div className="relative z-10 flex flex-col justify-end h-full p-5 md:p-7 min-h-[200px] md:min-h-[320px]">
           <div className="flex items-center gap-2 mb-3">
             <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
@@ -66,8 +66,8 @@ function SmallCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block">
-      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)]"
-        style={{ minHeight: '240px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
+      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[160px] md:min-h-[240px]"
+        style={{ background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
@@ -78,7 +78,7 @@ function SmallCard({ article }) {
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
         )}
-        <div className="relative z-10 flex flex-col justify-end h-full p-5" style={{ minHeight: '240px' }}>
+        <div className="relative z-10 flex flex-col justify-end h-full p-4 md:p-5 min-h-[160px] md:min-h-[240px]">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
@@ -128,7 +128,7 @@ export default function ArticlesSection() {
   if (!loading && articles.length === 0) return null;
 
   return (
-    <section className="py-10 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
+    <section className="py-6 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
       {/* Header */}
       <div className="flex items-end justify-between mb-8">
         <div>
@@ -152,13 +152,15 @@ export default function ArticlesSection() {
       {/* Grid */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="col-span-2 h-[320px] rounded-2xl animate-pulse bg-white/[0.04]" />
-          {[1, 2].map(i => <div key={i} className="h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />)}
+          <div className="col-span-2 h-[200px] md:h-[320px] rounded-2xl animate-pulse bg-white/[0.04]" />
+          <div className="h-[160px] md:h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
+          <div className="hidden md:block h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {articles[0] && <FeaturedCard article={articles[0]} />}
-          {articles.slice(1, 3).map(a => <SmallCard key={a.id} article={a} />)}
+          {articles[1] && <SmallCard article={articles[1]} />}
+          {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
         </div>
       )}
 

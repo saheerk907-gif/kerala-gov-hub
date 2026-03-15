@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 
 const tools = [
@@ -114,9 +115,13 @@ const tools = [
   },
 ];
 
+const MOBILE_VISIBLE = 6;
+
 export default function ToolsSection() {
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <section id="tools" className="relative py-8 px-4 md:px-6">
+    <section id="tools" className="relative py-6 md:py-8 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}
@@ -128,9 +133,10 @@ export default function ToolsSection() {
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
         </div>
 
-        {/* 2-col on mobile, 4-col on desktop — 8 items = 4+4 clean */}
+        {/* 2-col on mobile, 4-col on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {tools.map((t) => (
+          {tools.map((t, idx) => (
+            <div key={t.title} className={idx >= MOBILE_VISIBLE && !expanded ? 'md:block hidden' : 'block'}>
             <Link
               key={t.title}
               href={t.href}
@@ -179,8 +185,21 @@ export default function ToolsSection() {
                 style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
               />
             </Link>
+            </div>
           ))}
         </div>
+
+        {/* Show more / less — mobile only */}
+        <div className="md:hidden mt-4 flex justify-center">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
+          >
+            {expanded ? 'Show less ↑' : `Show all ${tools.length} tools ↓`}
+          </button>
+        </div>
+
       </div>
     </section>
   );

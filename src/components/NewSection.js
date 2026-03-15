@@ -72,7 +72,7 @@ export default function NewsSection() {
   }, []);
 
   return (
-    <div className="py-8 flex flex-col h-full">
+    <div className="py-4 md:py-8 flex flex-col h-full">
 
       {/* Header — matches OrdersSection exactly */}
       <div className="mb-5">
