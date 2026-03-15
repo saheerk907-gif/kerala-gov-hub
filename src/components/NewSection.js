@@ -44,12 +44,9 @@ const NewsRow = ({ date, title, category, link = '/news', isFirst }) => (
   </Link>
 );
 
-const VISIBLE = 5;
-
 export default function NewsSection() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchNews() {
@@ -96,7 +93,7 @@ export default function NewsSection() {
           </div>
         ) : news.length > 0 ? (
           <div>
-            {(expanded ? news : news.slice(0, VISIBLE)).map((item, index) => (
+            {news.slice(0, 5).map((item, index) => (
               <NewsRow
                 key={item.id}
                 isFirst={index === 0}
@@ -114,20 +111,7 @@ export default function NewsSection() {
         )}
       </div>
 
-      {/* Read More / Show Less */}
-      {!loading && news.length > VISIBLE && (
-        <div className="mt-3 flex justify-center">
-          <button
-            onClick={() => setExpanded(v => !v)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
-          >
-            {expanded ? 'Show less ↑' : `Read more (${news.length - VISIBLE} more) ↓`}
-          </button>
-        </div>
-      )}
-
-      {/* CTA — pinned to bottom, matches OrdersSection */}
+{/* CTA — pinned to bottom, matches OrdersSection */}
       {!loading && news.length > 0 && (
         <div className="mt-4">
           <Link href="/news"

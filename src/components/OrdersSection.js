@@ -16,7 +16,7 @@ export default function OrdersSection({ orders }) {
       )
     : orders;
 
-  const currentOrders = filtered;
+  const currentOrders = filtered.slice(0, 5);
 
   const handleSearch = (val) => {
     setQuery(val);
