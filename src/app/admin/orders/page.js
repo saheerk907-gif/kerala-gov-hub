@@ -264,30 +264,34 @@ export default function AdminOrders() {
       ) : (
         <div className="space-y-2">
           {filtered.map(o => (
-            <div key={o.id} className="flex items-center gap-4 px-5 py-3.5 bg-[#111] border border-white/[0.08] rounded-xl hover:bg-[#1a1a1a] transition-all">
-              <div className="text-lg">{o.is_pinned ? '📌' : '📄'}</div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  {!o.is_published && <span className="text-[9px] text-[#ff453a] bg-[#ff453a]/10 px-1.5 py-0.5 rounded">Draft</span>}
-                  <span className="text-sm font-semibold truncate">{o.title_ml}</span>
-                </div>
-                <div className="text-[11px] text-[#6e6e73] mt-0.5">
-                  {o.go_number} • {o.go_date} • {CATEGORIES.find(c => c.value === o.category)?.label}
+            <div key={o.id} className="flex flex-col gap-2 px-4 py-3.5 bg-[#111] border border-white/[0.08] rounded-xl hover:bg-[#1a1a1a] transition-all">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="text-lg flex-shrink-0">{o.is_pinned ? '📌' : '📄'}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    {!o.is_published && <span className="text-[9px] text-[#ff453a] bg-[#ff453a]/10 px-1.5 py-0.5 rounded flex-shrink-0">Draft</span>}
+                    <span className="text-sm font-semibold truncate">{o.title_ml}</span>
+                  </div>
+                  <div className="text-[11px] text-[#6e6e73] mt-0.5 truncate">
+                    {o.go_number} • {o.go_date} • {CATEGORIES.find(c => c.value === o.category)?.label}
+                  </div>
                 </div>
               </div>
-              {o.pdf_url
-                ? <a href={o.pdf_url} target="_blank" rel="noopener noreferrer"
-                    className="text-[10px] text-[#30d158] font-bold no-underline hover:underline whitespace-nowrap">✓ PDF</a>
-                : <span className="text-[10px] text-[#ff453a] font-bold whitespace-nowrap">No PDF</span>
-              }
-              <button onClick={() => { setForm({ title_ml: o.title_ml||'', title_en: o.title_en||'', go_number: o.go_number||'', go_date: o.go_date||'', category: o.category||'general', description_ml: o.description_ml||'', pdf_url: o.pdf_url||'', is_published: o.is_published, is_pinned: o.is_pinned }); setEditId(o.id); setShowForm(true); }}
-                className="px-3 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer transition-all">
-                Edit
-              </button>
-              <button onClick={() => handleDelete(o.id)}
-                className="px-3 py-1.5 bg-[#ff453a]/10 rounded-lg text-xs text-[#ff453a] hover:bg-[#ff453a]/20 border-none cursor-pointer transition-all">
-                Delete
-              </button>
+              <div className="flex items-center gap-2 flex-wrap pl-8">
+                {o.pdf_url
+                  ? <a href={o.pdf_url} target="_blank" rel="noopener noreferrer"
+                      className="text-[10px] text-[#30d158] font-bold no-underline hover:underline whitespace-nowrap">✓ PDF</a>
+                  : <span className="text-[10px] text-[#ff453a] font-bold whitespace-nowrap">No PDF</span>
+                }
+                <button onClick={() => { setForm({ title_ml: o.title_ml||'', title_en: o.title_en||'', go_number: o.go_number||'', go_date: o.go_date||'', category: o.category||'general', description_ml: o.description_ml||'', pdf_url: o.pdf_url||'', is_published: o.is_published, is_pinned: o.is_pinned }); setEditId(o.id); setShowForm(true); }}
+                  className="px-3 py-1.5 bg-white/5 rounded-lg text-xs text-[#86868b] hover:text-white border-none cursor-pointer transition-all">
+                  Edit
+                </button>
+                <button onClick={() => handleDelete(o.id)}
+                  className="px-3 py-1.5 bg-[#ff453a]/10 rounded-lg text-xs text-[#ff453a] hover:bg-[#ff453a]/20 border-none cursor-pointer transition-all">
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
