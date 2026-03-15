@@ -157,10 +157,10 @@ export default function Navbar() {
         ref={navRef}
         className={`fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'shadow-[0_4px_30px_rgba(0,0,0,0.5)]' : ''}`}
         style={{
-          background: scrolled ? 'rgba(18,20,22,0.97)' : 'rgba(18,20,22,0.85)',
+          background: scrolled ? 'var(--nav-bg-scrolled)' : 'var(--nav-bg)',
           backdropFilter: 'saturate(180%) blur(24px)',
           WebkitBackdropFilter: 'saturate(180%) blur(24px)',
-          borderBottom: '1px solid rgba(255,255,255,0.07)',
+          borderBottom: '1px solid var(--nav-border)',
         }}
       >
         <div className="flex items-center justify-between px-4 md:px-6 h-14">
@@ -173,10 +173,10 @@ export default function Navbar() {
                 className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
             </picture>
             <div className="flex flex-col leading-tight min-w-0">
-              <span className="text-[12px] sm:text-[14px] font-bold text-white/90 group-hover:text-white transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              <span className="text-[12px] sm:text-[14px] font-bold transition-colors truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: 'var(--nav-text-active)' }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
               </span>
-              <span className="text-[9px] font-semibold text-white/65 uppercase tracking-widest font-sans hidden sm:block">
+              <span className="text-[9px] font-semibold uppercase tracking-widest font-sans hidden sm:block" style={{ color: 'var(--nav-text)' }}>
                 Kerala Gov Employee Hub
               </span>
             </div>
@@ -194,8 +194,8 @@ export default function Navbar() {
                     className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-semibold transition-all border-none bg-transparent cursor-pointer"
                     style={{
                       fontFamily: "var(--font-noto-malayalam), sans-serif",
-                      color: isOpen ? '#ffffff' : 'rgba(255,255,255,0.55)',
-                      background: isOpen ? 'rgba(255,255,255,0.07)' : 'transparent',
+                      color: isOpen ? 'var(--nav-text-active)' : 'var(--nav-text)',
+                      background: isOpen ? 'var(--nav-item-active-bg)' : 'transparent',
                     }}
                   >
                     {item.label}
@@ -213,14 +213,14 @@ export default function Navbar() {
                         left: '50%',
                         transform: 'translateX(-50%)',
                         minWidth: cols === 2 ? '460px' : '240px',
-                        background: 'rgba(20,22,26,0.99)',
-                        border: '1px solid rgba(255,255,255,0.09)',
+                        background: 'var(--nav-dropdown-bg)',
+                        border: '1px solid var(--nav-dropdown-border)',
                         backdropFilter: 'blur(32px)',
                       }}
                     >
                       {/* Header */}
-                      <div className="px-4 py-2.5 border-b border-white/[0.06]">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white/65">{item.en}</span>
+                      <div className="px-4 py-2.5 border-b" style={{ borderColor: 'var(--nav-border)' }}>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.18em]" style={{ color: 'var(--text-secondary)' }}>{item.en}</span>
                       </div>
 
                       {/* Items */}
@@ -236,8 +236,8 @@ export default function Navbar() {
                           >
                             <div className="min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="text-[12.5px] font-semibold text-white/70 group-hover/item:text-white transition-colors leading-snug"
-                                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                                <span className="text-[12.5px] font-semibold transition-colors leading-snug"
+                                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: 'var(--nav-text)' }}>
                                   {d.label}
                                 </span>
                                 {d.badge && (
@@ -250,7 +250,7 @@ export default function Navbar() {
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[10.5px] text-white/70 mt-0.5 leading-none">{d.sub}</div>
+                              <div className="text-[10.5px] mt-0.5 leading-none" style={{ color: 'var(--text-muted)' }}>{d.sub}</div>
                             </div>
                             {d.external && (
                               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
@@ -276,7 +276,7 @@ export default function Navbar() {
             aria-label="Search"
             title="Search (Ctrl+K)"
             className="flex items-center gap-2 rounded-lg px-2.5 h-12 min-w-[48px] transition-all duration-200 border-none cursor-pointer flex-shrink-0 hidden sm:flex"
-            style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
+            style={{ background: 'var(--nav-icon-bg)', color: 'var(--nav-icon-color)' }}
           >
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
@@ -290,7 +290,7 @@ export default function Navbar() {
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
             className="flex sm:hidden items-center justify-center w-12 h-12 rounded-lg transition-all duration-200 border-none cursor-pointer flex-shrink-0"
-            style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}
+            style={{ background: 'var(--nav-icon-bg)', color: 'var(--nav-icon-color)' }}
           >
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <circle cx="11" cy="11" r="8" />
@@ -300,9 +300,9 @@ export default function Navbar() {
           <ThemeToggle />
           <button onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu"
             className="lg:hidden flex flex-col gap-[5px] p-3 min-w-[48px] min-h-[48px] items-center justify-center bg-transparent border-none cursor-pointer">
-            <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
-            <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
-            <span className={`block w-5 h-[1.5px] bg-white/60 transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
+            <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
+            <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`block w-5 h-[1.5px] bg-[var(--nav-text-active)] transition-all duration-300 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
           </button>
           </div>
         </div>
@@ -313,21 +313,21 @@ export default function Navbar() {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-[999] flex flex-col pt-14 overflow-y-auto"
-          style={{ background: 'rgba(14,16,18,0.99)', backdropFilter: 'blur(24px)' }}>
+          style={{ background: 'var(--nav-mobile-bg)', backdropFilter: 'blur(24px)' }}>
           <div className="px-3 py-3 flex flex-col">
             {NAV_ITEMS.map((item) => {
               const isExpanded = mobileExpanded === item.en;
               return (
-                <div key={item.en} className="border-b border-white/[0.05] last:border-0">
+                <div key={item.en} className="border-b last:border-0" style={{ borderColor: 'var(--nav-border)' }}>
                   <button
                     onClick={() => setMobileExpanded(isExpanded ? null : item.en)}
                     className="w-full flex items-center justify-between py-4 px-2 text-left border-none bg-transparent cursor-pointer transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="text-[15px] font-semibold text-white/75">{item.label}</span>
+                      <span className="text-[15px] font-semibold" style={{ color: 'var(--nav-text-active)' }}>{item.label}</span>
                     </div>
                     <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
-                      className="text-white/50 transition-transform duration-200"
+                      className="transition-transform duration-200" style={{ color: 'var(--nav-text)' }}
                       style={{ transform: isExpanded ? 'rotate(180deg)' : 'none' }}>
                       <path d="M1 3l4 4 4-4" />
                     </svg>
@@ -346,7 +346,7 @@ export default function Navbar() {
                         >
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-[13px] font-medium text-white/60" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{d.label}</span>
+                              <span className="text-[13px] font-medium" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: 'var(--nav-text)' }}>{d.label}</span>
                               {d.badge && (
                                 <span className="text-[8px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide"
                                   style={{ background: d.badge === 'NEW' ? 'rgba(41,151,255,0.18)' : 'rgba(255,255,255,0.07)', color: d.badge === 'NEW' ? '#2997ff' : 'rgba(255,255,255,0.60)' }}>
@@ -354,7 +354,7 @@ export default function Navbar() {
                                 </span>
                               )}
                             </div>
-                            <div className="text-[10px] text-white/70 mt-0.5">{d.sub}</div>
+                            <div className="text-[10px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{d.sub}</div>
                           </div>
                           {d.external && (
                             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
