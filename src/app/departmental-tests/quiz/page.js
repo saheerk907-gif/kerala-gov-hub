@@ -151,8 +151,8 @@ function QuizInner() {
             <>
               <button
                 onClick={skipRevisionAndContinue}
-                className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 text-white/70 hover:text-white transition-colors"
-                style={{ background: 'rgba(255,255,255,0.07)', outline: '1px solid rgba(255,255,255,0.1)' }}>
+                className="w-full py-3 rounded-2xl text-[13px] font-semibold border-none cursor-pointer mt-1 transition-colors"
+                style={{ background: 'var(--quiz-opt-bg)', color: 'var(--quiz-opt-color)', outline: '1px solid var(--quiz-opt-border)' }}>
                 Skip Revision — Next {nextBatchCount} Questions →
               </button>
               <button
@@ -202,7 +202,7 @@ function QuizInner() {
             <div className="text-white/50 text-sm mb-6">Final Score</div>
 
             {/* Score bar */}
-            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden mb-6">
+            <div className="w-full h-2 rounded-full overflow-hidden mb-6" style={{ background: 'var(--quiz-opt-bg)' }}>
               <div className="h-full rounded-full transition-all duration-1000"
                 style={{ width: `${Math.max(0, pct)}%`, background: grade.col }} />
             </div>
@@ -215,7 +215,7 @@ function QuizInner() {
                 { label: '✗ Wrong',    value: totalWrong,                        col: '#ff453a' },
               ].map(s => (
                 <div key={s.label} className="rounded-2xl py-4"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  style={{ background: 'var(--quiz-opt-bg)', border: '1px solid var(--quiz-opt-border)' }}>
                   <div className="text-[22px] font-black" style={{ color: s.col }}>{s.value}</div>
                   <div className="text-[10px] text-white/55 mt-0.5">{s.label}</div>
                 </div>
@@ -224,7 +224,7 @@ function QuizInner() {
 
             {/* Marking scheme reminder */}
             <div className="rounded-xl px-4 py-3 mb-6 text-[11px] text-white/55 flex justify-center gap-6"
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              style={{ background: 'var(--quiz-opt-bg)', border: '1px solid var(--quiz-opt-border)' }}>
               <span>✓ Correct = <span className="text-[#30d158] font-bold">+1</span></span>
               <span>✗ Wrong = <span className="text-[#ff453a] font-bold">−0.33</span></span>
               <span>Accuracy = <span className="font-bold text-white/50">{pct}%</span></span>
@@ -393,7 +393,7 @@ function QuizInner() {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden mb-5">
+        <div className="w-full h-1.5 rounded-full overflow-hidden mb-5" style={{ background: 'var(--quiz-opt-bg)' }}>
           <div className="h-full rounded-full transition-all duration-500"
             style={{ width: `${progressPct}%`, background: isRevision ? '#ff9f0a' : color }} />
         </div>
@@ -424,12 +424,14 @@ function QuizInner() {
 
           <div className="flex flex-col gap-2.5">
             {options.map(opt => {
-              let style = { background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', outline: '1px solid rgba(255,255,255,0.08)' };
+              let style = { background: 'var(--quiz-opt-bg)', color: 'var(--quiz-opt-color)', outline: '1px solid var(--quiz-opt-border)' };
               if (answered) {
                 if (opt.key === q.correct_answer)
                   style = { background: 'rgba(48,209,88,0.15)', color: '#30d158', outline: '1px solid rgba(48,209,88,0.4)' };
                 else if (opt.key === selected)
                   style = { background: 'rgba(255,69,58,0.15)', color: '#ff453a', outline: '1px solid rgba(255,69,58,0.4)' };
+                else
+                  style = { background: 'var(--quiz-opt-bg)', color: 'var(--quiz-opt-color)', outline: '1px solid var(--quiz-opt-border)' };
               } else if (selected === opt.key) {
                 style = { background: color + '22', color, outline: `1px solid ${color}44` };
               }

@@ -46,6 +46,11 @@
 
   /* Hero vignette */
   --hero-vignette: 18, 20, 22;
+
+  /* Quiz option defaults */
+  --quiz-opt-bg: rgba(255,255,255,0.04);
+  --quiz-opt-color: rgba(255,255,255,0.70);
+  --quiz-opt-border: rgba(255,255,255,0.08);
 }
 
 /* ── Light Mode Variable Overrides ──────────────────────── */
@@ -84,6 +89,11 @@
   --nav-item-active-bg: rgba(0, 0, 0, 0.06);
 
   --hero-vignette: 245, 240, 232;
+
+  /* Quiz option defaults */
+  --quiz-opt-bg: rgba(26,26,46,0.05);
+  --quiz-opt-color: rgba(26,26,46,0.80);
+  --quiz-opt-border: rgba(26,26,46,0.12);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -353,9 +363,9 @@ img, video, svg { max-width: 100%; }
 /* ── Full-page dark wrappers (articles page, nps-aps, etc.) ── */
 [data-theme="light"] .page-bg-dark { background-color: var(--bg-primary) !important; color: var(--text-primary) !important; }
 
-/* ── Article / media cards — intentionally navy-dark in both modes ── */
-[data-theme="light"] .article-card { background: #1a2238 !important; }
-[data-theme="light"] .article-card-overlay { background: linear-gradient(to top, #1a2238 75%, rgba(26,34,56,0.15) 100%) !important; }
+/* ── Article / media cards — white card with image fading to white ── */
+[data-theme="light"] .article-card { background: #ffffff !important; border-color: rgba(26,26,46,0.10) !important; }
+[data-theme="light"] .article-card-overlay { background: linear-gradient(to top, rgba(255,255,255,0.97) 55%, rgba(255,255,255,0.20) 100%) !important; }
 
 /* ── TopBar (Live section) ── */
 [data-theme="light"] .topbar { background: rgba(248,244,238,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
