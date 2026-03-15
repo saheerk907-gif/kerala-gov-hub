@@ -44,15 +44,18 @@ const NewsRow = ({ date, title, category, link = '/news', isFirst }) => (
   </Link>
 );
 
+const VISIBLE = 5;
+
 export default function NewsSection() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchNews() {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/news?select=*&category=eq.news&order=created_at.desc&limit=6`,
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/news?select=*&category=eq.news&order=created_at.desc&limit=10`,
           {
             headers: {
               apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -93,7 +96,7 @@ export default function NewsSection() {
           </div>
         ) : news.length > 0 ? (
           <div>
-            {news.map((item, index) => (
+            {(expanded ? news : news.slice(0, VISIBLE)).map((item, index) => (
               <NewsRow
                 key={item.id}
                 isFirst={index === 0}
@@ -110,6 +113,19 @@ export default function NewsSection() {
           </div>
         )}
       </div>
+
+      {/* Read More / Show Less */}
+      {!loading && news.length > VISIBLE && (
+        <div className="mt-3 flex justify-center">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
+          >
+            {expanded ? 'Show less ↑' : `Read more (${news.length - VISIBLE} more) ↓`}
+          </button>
+        </div>
+      )}
 
       {/* CTA — pinned to bottom, matches OrdersSection */}
       {!loading && news.length > 0 && (

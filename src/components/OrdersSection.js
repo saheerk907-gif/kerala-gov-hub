@@ -1,10 +1,10 @@
 'use client';
 import { useState } from 'react';
 
-const ITEMS_PER_PAGE = 4;
+const VISIBLE = 5;
 
 export default function OrdersSection({ orders }) {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [expanded, setExpanded] = useState(false);
   const [query, setQuery] = useState('');
 
   if (!orders?.length) return null;
@@ -19,18 +19,11 @@ export default function OrdersSection({ orders }) {
       )
     : orders;
 
-  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentOrders = filtered.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const currentOrders = expanded ? filtered : filtered.slice(0, VISIBLE);
 
   const handleSearch = (val) => {
     setQuery(val);
-    setCurrentPage(1);
-  };
-
-  const goToPage = (page) => {
-    setCurrentPage(page);
-    document.getElementById('orders')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setExpanded(false);
   };
 
   return (
@@ -135,31 +128,15 @@ export default function OrdersSection({ orders }) {
         })}
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1.5 mt-4 flex-wrap">
-          <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}
-            className="px-4 py-3 rounded-lg text-[12px] font-semibold text-white/65 disabled:opacity-20 disabled:cursor-not-allowed hover:text-white hover:bg-white/[0.06] transition-all border-0 bg-transparent cursor-pointer">
-            ← മുമ്പ്
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-            const show = page === 1 || page === totalPages || Math.abs(page - currentPage) <= 1;
-            const showEllipsisBefore = page === currentPage - 2 && currentPage > 3;
-            const showEllipsisAfter = page === currentPage + 2 && currentPage < totalPages - 2;
-            if (showEllipsisBefore || showEllipsisAfter)
-              return <span key={`e-${page}`} className="text-white/50 px-1 text-sm">…</span>;
-            if (!show) return null;
-            return (
-              <button key={page} onClick={() => goToPage(page)}
-                className="w-12 h-12 rounded-lg text-[12px] font-bold transition-all border-0 cursor-pointer"
-                style={currentPage === page ? { background: '#ff9f0a', color: 'white' } : { background: 'transparent', color: 'var(--text-dim)' }}>
-                {page}
-              </button>
-            );
-          })}
-          <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}
-            className="px-4 py-3 rounded-lg text-[12px] font-semibold text-white/65 disabled:opacity-20 disabled:cursor-not-allowed hover:text-white hover:bg-white/[0.06] transition-all border-0 bg-transparent cursor-pointer">
-            അടുത്തത് →
+      {/* Read More / Show Less */}
+      {filtered.length > VISIBLE && (
+        <div className="mt-3 flex justify-center">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+            style={{ background: 'rgba(255,159,10,0.08)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.22)' }}
+          >
+            {expanded ? 'Show less ↑' : `Read more (${filtered.length - VISIBLE} more) ↓`}
           </button>
         </div>
       )}
