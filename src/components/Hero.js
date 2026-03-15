@@ -83,24 +83,35 @@ export default function Hero() {
         </div>
 
         {/* Kicker — SEO label above the main title */}
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] mb-3" style={{ color: 'rgba(245,208,96,0.70)' }}>
+        <p className="text-[10px] font-black uppercase tracking-[0.28em] mb-3"
+          style={{ color: isLight ? 'rgba(30,58,95,0.60)' : 'rgba(245,208,96,0.70)' }}>
           Kerala Government Employees Portal
         </p>
 
         {/* Titles — tight single typographic block */}
         <div className="flex flex-col items-center gap-1.5 mb-4">
           <h1 className="text-[clamp(38px,7vw,80px)] font-bold leading-[1] tracking-tight">
-            <span className="bg-clip-text text-transparent" style={{
+            <span className="bg-clip-text text-transparent" style={isLight ? {
+              backgroundImage: 'linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 45%, #1e3a5f 100%)',
+              filter: 'none',
+            } : {
               backgroundImage: 'linear-gradient(135deg, #c8960c 0%, #f5d060 35%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
               filter: 'drop-shadow(0 0 8px rgba(200,150,12,0.50))',
             }}>
               കേരള സർക്കാർ
             </span>
           </h1>
-          {/* Thin gold rule connecting both lines */}
-          <div className="w-12 h-[1.5px] rounded-full" style={{ background: 'linear-gradient(90deg, transparent, rgba(200,150,12,0.8), transparent)' }} />
+          {/* Thin rule connecting both lines */}
+          <div className="w-12 h-[1.5px] rounded-full" style={{
+            background: isLight
+              ? 'linear-gradient(90deg, transparent, rgba(29,78,216,0.50), transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(200,150,12,0.8), transparent)',
+          }} />
           <h2 className="text-[clamp(22px,4vw,52px)] font-bold leading-[1.15] tracking-tight">
-            <span className="bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]" style={{
+            <span className={`bg-clip-text text-transparent bg-[length:200%_auto] ${isLight ? '' : 'animate-shimmer'}`} style={isLight ? {
+              backgroundImage: 'linear-gradient(135deg, #1e40af, #3b82f6, #1e40af)',
+              filter: 'none',
+            } : {
               backgroundImage: 'linear-gradient(135deg, #b8860b, #f5d060, #fce38a, #f5d060, #b8860b)',
               filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.40))',
             }}>
@@ -110,7 +121,8 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-[clamp(12px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-5" style={{ color: 'rgba(252,227,138,0.80)' }}>
+        <p className="text-[clamp(12px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-5"
+          style={{ color: isLight ? 'rgba(30,58,95,0.70)' : 'rgba(252,227,138,0.80)' }}>
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
