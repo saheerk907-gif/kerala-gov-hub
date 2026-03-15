@@ -107,7 +107,7 @@ export default function Hero() {
               key={label}
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(200,150,12,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(200,150,12,0.30)' }}
+              style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
             >
               {label}
             </a>
