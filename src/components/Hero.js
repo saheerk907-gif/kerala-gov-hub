@@ -61,7 +61,7 @@ export default function Hero() {
         </div>
 
         {/* Kicker — SEO label above the main title */}
-        <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/85 mb-3">
+        <p className="text-[10px] font-black uppercase tracking-[0.28em] mb-3" style={{ color: 'rgba(245,208,96,0.70)' }}>
           Kerala Government Employees Portal
         </p>
 
@@ -88,7 +88,7 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-[clamp(12px,1.6vw,15px)] text-white/95 max-w-[520px] leading-relaxed font-medium px-2 mb-5">
+        <p className="text-[clamp(12px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-5" style={{ color: 'rgba(252,227,138,0.80)' }}>
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
@@ -107,7 +107,7 @@ export default function Hero() {
               key={label}
               href={href}
               className="px-4 py-2 inline-flex items-center rounded-full text-[11px] font-bold no-underline transition-all hover:bg-white/10"
-              style={{ background: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.92)', border: '1px solid rgba(255,255,255,0.28)' }}
+              style={{ background: 'rgba(200,150,12,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(200,150,12,0.30)' }}
             >
               {label}
             </a>
@@ -120,11 +120,11 @@ export default function Hero() {
           className="group flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
           aria-label="Scroll to explore"
         >
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 group-hover:text-white/90 transition-colors">
+          <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: 'rgba(245,208,96,0.55)' }}>
             Explore
           </span>
-          <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center group-hover:border-white/50 group-hover:bg-white/5 transition-all duration-300 group-hover:translate-y-1">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" className="text-white/50 group-hover:text-white/80 transition-colors">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: '1px solid rgba(200,150,12,0.30)' }}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: 'rgba(245,208,96,0.55)' }}>
               <path d="M2 4l4 4 4-4"/>
             </svg>
           </div>
