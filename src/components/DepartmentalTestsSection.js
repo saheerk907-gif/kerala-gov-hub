@@ -20,7 +20,7 @@ export default function DepartmentalTestsSection() {
             >
               ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റുകൾ
             </h2>
-            <div className="h-[2px] w-10 bg-gradient-to-r from-[#30d158] to-transparent mt-2 rounded-full" />
+            <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
           </div>
           <Link
             href="/departmental-tests"

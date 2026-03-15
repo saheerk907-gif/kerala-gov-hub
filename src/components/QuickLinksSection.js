@@ -30,7 +30,7 @@ export default function QuickLinksSection({ links }) {
           >
             ഔദ്യോഗിക പോർട്ടലുകൾ
           </h2>
-          <div className="h-[2px] w-10 bg-gradient-to-r from-[#64d2ff] to-transparent mt-2 rounded-full" />
+          <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
         </div>
 
         {/* Compact grid — mobile shows MOBILE_VISIBLE items by default */}
@@ -91,7 +91,7 @@ export default function QuickLinksSection({ links }) {
             <button
               onClick={() => setExpanded(v => !v)}
               className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-              style={{ background: 'rgba(100,210,255,0.08)', color: '#64d2ff', border: '1px solid rgba(100,210,255,0.22)' }}
+              style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
             >
               {expanded ? 'Show less ↑' : `Show all ${links.length} portals ↓`}
             </button>

@@ -35,7 +35,7 @@ export default function SchemesSection({ schemes }) {
           >
             സേവന ചട്ടങ്ങളും ജീവനക്കാര്യ പദ്ധതികളും
           </h2>
-          <div className="h-[2px] w-10 bg-gradient-to-r from-[#bf5af2] to-transparent mt-2 rounded-full" />
+          <div className="h-[2px] w-10 bg-gradient-to-r from-[#ff9f0a] to-transparent mt-2 rounded-full" />
         </div>
 
         {/* Compact 2-col grid of rows */}
