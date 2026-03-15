@@ -127,62 +127,18 @@ export default function PensionCalculationPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <Navbar />
-      <main className="min-h-screen bg-black text-white">
+      <main className="min-h-screen bg-aurora text-white pt-[100px]">
 
-        {/* ── Hero ─────────────────────────────────────────────────────────── */}
-        <div
-          className="relative pt-32 pb-14 px-6 overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #000a1a 0%, #00050d 60%, #000 100%)' }}
-        >
-          <div className="absolute inset-0 opacity-20"
-            style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 0%, #2997ff20, transparent)' }} />
-          <div className="absolute top-0 left-0 right-0 h-px"
-            style={{ background: 'linear-gradient(90deg, transparent, #2997ff40, transparent)' }} />
+        <div className="max-w-3xl mx-auto px-6 py-10 space-y-16">
 
-          <div className="relative max-w-3xl mx-auto">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-xs text-[#6e6e73] mb-8">
-              <a href="/" className="hover:text-white no-underline text-[#6e6e73] transition-colors">Home</a>
-              <span>›</span>
-              <a href="/pension" className="hover:text-white no-underline text-[#6e6e73] transition-colors">Pension Calculator</a>
-              <span>›</span>
-              <span className="text-[#2997ff]">Pension Calculation Guide</span>
-            </div>
-
-            <div className="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-5"
-              style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}>
-              Kerala Service Rules — KSR Part III
-            </div>
-
-            <h1
-              className="text-[clamp(26px,4.5vw,48px)] font-black tracking-tight leading-[1.15] mb-4"
-              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
-            >
-              പെൻഷൻ കണക്കുകൂട്ടൽ
-              <span className="block text-[0.55em] font-bold text-white/60 mt-1 tracking-normal">
-                Pension Calculation — A Step-by-Step Guide
-              </span>
-            </h1>
-
-            <p className="text-[15px] text-[#86868b] leading-relaxed max-w-2xl" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
-              കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പ്രതിമാസ പെൻഷൻ,
-              ശരാശരി വേതനം, അർദ്ധവർഷ യൂണിറ്റുകൾ എന്നിവ ഉപയോഗിച്ച് ഘട്ടം ഘട്ടമായി കണക്കാക്കുന്ന വിധം.
-            </p>
-
-            <div className="mt-6">
-              <a
-                href="/pension"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
-                style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}
-              >
-                Pension Calculator ഉപയോഗിക്കുക →
-              </a>
-            </div>
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-white/60 flex-wrap">
+            <a href="/" className="hover:text-white no-underline text-white/60 transition-colors">Home</a>
+            <span>›</span>
+            <a href="/pension" className="hover:text-white no-underline text-white/60 transition-colors">Pension Calculator</a>
+            <span>›</span>
+            <span className="text-[#ff9f0a]">Pension Calculation Guide</span>
           </div>
-        </div>
-
-        {/* ── Content ──────────────────────────────────────────────────────── */}
-        <div className="max-w-3xl mx-auto px-6 py-14 space-y-16">
 
           {/* ── 1. Introduction / Eligibility ─────────────────────────────── */}
           <Section title="1. ആമുഖം: പെൻഷൻ യോഗ്യതകൾ">
@@ -197,7 +153,7 @@ export default function PensionCalculationPage() {
               </p>
             </Body>
 
-            <Card color="#2997ff" label="Pension Eligibility — Key Rules">
+            <Card color="#ff9f0a" label="Pension Eligibility — Key Rules">
               <div className="space-y-3">
                 {[
                   { label: 'കുറഞ്ഞ സേവന കാലയളവ്', value: '10 വർഷം', desc: 'Pension ലഭിക്കാൻ minimum 10 years qualifying service ആവശ്യം' },
@@ -208,7 +164,7 @@ export default function PensionCalculationPage() {
                       <div className="text-[13px] font-bold text-white/80" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{r.label}</div>
                       <div className="text-[11px] text-white/55 mt-0.5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>{r.desc}</div>
                     </div>
-                    <div className="text-[15px] font-black whitespace-nowrap" style={{ color: '#2997ff' }}>{r.value}</div>
+                    <div className="text-[15px] font-black whitespace-nowrap" style={{ color: '#ff9f0a' }}>{r.value}</div>
                   </div>
                 ))}
               </div>
@@ -241,7 +197,7 @@ export default function PensionCalculationPage() {
             <div className="overflow-x-auto rounded-2xl" style={{ border: '1px solid var(--surface-sm)' }}>
               <table className="w-full text-[13px]">
                 <thead>
-                  <tr style={{ background: 'rgba(41,151,255,0.08)' }}>
+                  <tr style={{ background: 'rgba(255,159,10,0.06)' }}>
                     <th className="text-left px-5 py-3 font-black text-white/50 uppercase text-[10px] tracking-widest w-[40%]">
                       സാഹചര്യം (Scenario)
                     </th>
@@ -308,7 +264,7 @@ export default function PensionCalculationPage() {
                 <div key={s.step} className="flex gap-4 items-start">
                   <div
                     className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-black mt-0.5"
-                    style={{ background: '#2997ff20', color: '#2997ff', border: '1px solid #2997ff30' }}
+                    style={{ background: 'rgba(255,159,10,0.12)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.25)' }}
                   >
                     {s.step}
                   </div>
@@ -365,14 +321,14 @@ export default function PensionCalculationPage() {
             {/* Big formula card */}
             <div
               className="rounded-2xl p-8 text-center"
-              style={{ background: 'rgba(41,151,255,0.06)', border: '1px solid rgba(41,151,255,0.25)' }}
+              style={{ background: 'rgba(255,159,10,0.06)', border: '1px solid rgba(255,159,10,0.25)' }}
             >
-              <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-5">
+              <div className="text-[11px] font-black uppercase tracking-widest text-[#ff9f0a] mb-5">
                 KSR Pension Formula
               </div>
               <div className="text-[clamp(14px,3vw,20px)] font-black text-white font-mono leading-snug">
                 പ്രതിമാസ പെൻഷൻ =
-                <span className="block mt-2 text-[#2997ff]">
+                <span className="block mt-2 text-[#ff9f0a]">
                   (ശരാശരി വേതനം × അർദ്ധവർഷ യൂണിറ്റുകൾ) ÷ 120
                 </span>
               </div>
@@ -383,7 +339,7 @@ export default function PensionCalculationPage() {
                 <span className="px-3 py-1 rounded-full font-bold" style={{ background: '#30d15815', color: '#30d158' }}>
                   Maximum: 50% of AE (or ₹83,400)
                 </span>
-                <span className="px-3 py-1 rounded-full font-bold" style={{ background: '#2997ff15', color: '#2997ff' }}>
+                <span className="px-3 py-1 rounded-full font-bold" style={{ background: 'rgba(255,159,10,0.12)', color: '#ff9f0a' }}>
                   Minimum: ₹9,000/month
                 </span>
               </div>
@@ -417,7 +373,7 @@ export default function PensionCalculationPage() {
                   step: 'ഘട്ടം 1 — ശരാശരി വേതനം',
                   value: '₹1,00,000',
                   desc: 'അവസാന 10 മാസത്തെ Basic Pay ശരാശരി ₹1,00,000 ആണ്.',
-                  color: '#2997ff',
+                  color: '#ff9f0a',
                 },
                 {
                   step: 'ഘട്ടം 2 — Qualifying Service',
@@ -480,7 +436,7 @@ export default function PensionCalculationPage() {
                 {
                   title: '10 മാസത്തെ ശരാശരി',
                   body: 'വിരമിക്കുന്നതിന് തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച 10 മാസത്തെ Basic Pay ശരാശരിയാണ് Average Emoluments. LWA/Suspension ഉണ്ടെങ്കിൽ ആ കാലം ഒഴിവാക്കി തൊട്ടുമുൻപ് ശമ്പളം ലഭിച്ച മാസങ്ങൾ ചേർക്കണം.',
-                  color: '#2997ff',
+                  color: '#ff9f0a',
                 },
                 {
                   title: 'Half-year Units-ന്റെ കൃത്യത',
@@ -532,7 +488,7 @@ export default function PensionCalculationPage() {
                     </span>
                     <span
                       className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black transition-transform group-open:rotate-45"
-                      style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}
+                      style={{ background: 'rgba(255,159,10,0.12)', color: '#ff9f0a' }}
                     >
                       +
                     </span>
@@ -550,9 +506,9 @@ export default function PensionCalculationPage() {
           {/* ── CTA ──────────────────────────────────────────────────────── */}
           <div
             className="rounded-2xl p-7 text-center"
-            style={{ background: 'rgba(41,151,255,0.05)', border: '1px solid rgba(41,151,255,0.15)' }}
+            style={{ background: 'rgba(255,159,10,0.05)', border: '1px solid rgba(255,159,10,0.20)' }}
           >
-            <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff] mb-3">
+            <div className="text-[11px] font-black uppercase tracking-widest text-[#ff9f0a] mb-3">
               Pension Calculator
             </div>
             <p className="text-[15px] text-[#86868b] mb-5" style={{ fontFamily: "var(--font-noto-malayalam), serif" }}>
@@ -562,7 +518,7 @@ export default function PensionCalculationPage() {
             <a
               href="/pension"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all hover:scale-[1.02]"
-              style={{ background: '#2997ff', color: 'white', boxShadow: '0 4px 20px rgba(41,151,255,0.3)' }}
+              style={{ background: '#ff9f0a', color: '#000', boxShadow: '0 4px 20px rgba(255,159,10,0.3)' }}
             >
               Pension Calculator ഉപയോഗിക്കുക →
             </a>
@@ -595,7 +551,7 @@ export default function PensionCalculationPage() {
             <a
               href="/"
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold no-underline"
-              style={{ background: '#2997ff15', color: '#2997ff', border: '1px solid #2997ff30' }}
+              style={{ background: 'rgba(255,159,10,0.10)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.25)' }}
             >
               ← Home
             </a>

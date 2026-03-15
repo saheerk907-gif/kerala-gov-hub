@@ -309,22 +309,19 @@ export default function NPSvsAPSPage() {
   ];
 
   return (
-    <div className="page-bg-dark relative min-h-screen overflow-x-hidden" style={{ background: 'var(--bg-primary)' }}>
-      {/* Background blobs */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full blur-[120px] opacity-[0.06]" style={{ background: '#30d158' }} />
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full blur-[120px] opacity-[0.06]" style={{ background: '#2997ff' }} />
-      </div>
+    <div className="min-h-screen bg-aurora text-white overflow-x-hidden relative">
 
       <div className="relative max-w-[1100px] mx-auto px-4 pt-[100px] pb-16">
 
         {/* Header */}
         <div className="mb-8 flex items-start justify-between flex-wrap gap-4">
           <div>
-            <Link href="/" className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
-              ← {ml ? 'ഹോം' : 'Back to Home'}
-            </Link>
-            <div className="section-label mb-2">Pension Comparison Tool</div>
+            <div className="flex items-center gap-2 text-xs text-white/60 mb-3 flex-wrap">
+              <Link href="/" className="hover:text-white transition-colors no-underline text-white/60">Home</Link>
+              <span>›</span>
+              <span className="text-[#ff9f0a]">{ml ? 'NPS vs APS കാൽക്കുലേറ്റർ' : 'NPS vs APS Calculator'}</span>
+            </div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-[#ff9f0a] mb-2">Pension Comparison Tool</div>
             <h1 className="text-[clamp(22px,3.5vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               NPS vs APS {ml ? 'കാൽക്കുലേറ്റർ' : 'Calculator'}
             </h1>
@@ -367,7 +364,7 @@ export default function NPSvsAPSPage() {
 
           {/* Advanced */}
           <div className="pt-4 border-t border-white/[0.06]">
-            <div className="text-[11px] font-black uppercase tracking-widest text-[#2997ff]/60 mb-4">
+            <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
               {ml ? 'വിപുലമായ ക്രമീകരണങ്ങൾ' : 'Advanced Settings'}
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -505,9 +502,9 @@ export default function NPSvsAPSPage() {
               <button key={t.id} onClick={() => setTab(t.id)}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold whitespace-nowrap transition-all"
                 style={{
-                  background: tab === t.id ? '#2997ff' : 'var(--surface-xs)',
-                  border: tab === t.id ? '1px solid #2997ff' : '1px solid var(--surface-sm)',
-                  color: tab === t.id ? '#fff' : 'var(--text-faint)',
+                  background: tab === t.id ? '#ff9f0a' : 'var(--surface-xs)',
+                  border: tab === t.id ? '1px solid #ff9f0a' : '1px solid var(--surface-sm)',
+                  color: tab === t.id ? '#000' : 'var(--text-faint)',
                   cursor: 'pointer',
                 }}>
                 {t.icon} {t.label}
@@ -561,8 +558,8 @@ export default function NPSvsAPSPage() {
                 <div className="flex gap-3 overflow-x-auto pb-2">
                   {R.data.filter(d => d.isRev).map(d => (
                     <div key={d.year} className="rounded-xl p-3 flex-shrink-0 min-w-[150px]"
-                      style={{ background: 'var(--surface-xs)', border: '1px solid rgba(41,151,255,0.2)' }}>
-                      <div className="text-[10px] font-black text-[#2997ff] mb-1">{d.revLabel}</div>
+                      style={{ background: 'var(--surface-xs)', border: '1px solid rgba(255,159,10,0.2)' }}>
+                      <div className="text-[10px] font-black text-[#ff9f0a] mb-1">{d.revLabel}</div>
                       <div className="text-[11px] text-white/50">Basic: {fmtF(d.basic)}</div>
                       <div className="text-[11px] text-white/55">DA: {d.daPct}%</div>
                     </div>
@@ -726,17 +723,17 @@ export default function NPSvsAPSPage() {
                   <tbody>
                     {R.data.map((r, i) => (
                       <tr key={i} className="border-b transition-colors hover:bg-white/[0.02]"
-                        style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(41,151,255,0.05)' : 'transparent' }}>
+                        style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(255,159,10,0.05)' : 'transparent' }}>
                         <td className="px-4 py-2.5 font-bold text-white/70">
-                          {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-[#2997ff] font-black">REV</span>}
+                          {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-[#ff9f0a] font-black">REV</span>}
                         </td>
                         <td className="px-4 py-2.5 text-white/60">{fmtF(r.basic)}</td>
-                        <td className="px-4 py-2.5 text-[#2997ff]/70">{r.daPct}%</td>
+                        <td className="px-4 py-2.5 text-[#ff9f0a]/70">{r.daPct}%</td>
                         <td className="px-4 py-2.5 text-white/70 font-semibold">{fmtF(r.gross)}</td>
                         <td className="px-4 py-2.5 text-[#ff453a]/70">{fmtF(r.nE)}</td>
                         <td className="px-4 py-2.5 text-[#ff9f0a]/70">{fmtF(r.nG)}</td>
                         <td className="px-4 py-2.5 text-[#30d158]/80 font-semibold">{fmtF(r.mC)}</td>
-                        <td className="px-4 py-2.5 text-[#2997ff] font-bold">{fmt(r.corpus)}</td>
+                        <td className="px-4 py-2.5 text-[#ff9f0a] font-bold">{fmt(r.corpus)}</td>
                         {pvOn && <td className="px-4 py-2.5 text-white/55">{fmt(r.corpusPV)}</td>}
                       </tr>
                     ))}
@@ -747,7 +744,7 @@ export default function NPSvsAPSPage() {
                       <td className="px-4 py-3 font-bold text-[#ff453a]">{fmt(R.empC)}</td>
                       <td className="px-4 py-3 font-bold text-[#ff9f0a]">{fmt(R.govC)}</td>
                       <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.totC)}</td>
-                      <td className="px-4 py-3 font-black text-[#2997ff]">{fmt(R.fC)}</td>
+                      <td className="px-4 py-3 font-black text-[#ff9f0a]">{fmt(R.fC)}</td>
                       {pvOn && <td className="px-4 py-3 font-bold text-white/55">{fmt(Math.round(R.fC * R.rIA))}</td>}
                     </tr>
                   </tfoot>
@@ -765,7 +762,7 @@ export default function NPSvsAPSPage() {
             : 'Illustrative only. Actual amounts depend on pay scales, promotions, DA rates & NPS performance. Consult your pension section for official figures.'}
         </div>
 
-        <FAQSection faqs={NPS_APS_FAQS} accentColor="#ff453a" />
+        <FAQSection faqs={NPS_APS_FAQS} accentColor="#ff9f0a" />
 
       </div>
     </div>
