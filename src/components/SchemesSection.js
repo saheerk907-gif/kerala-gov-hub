@@ -14,10 +14,10 @@ export default function SchemesSection({ schemes }) {
   if (!schemes?.length) return null;
 
   // KSR sub-rules belong inside /ksr — exclude from homepage Resources
+  const KSR_KEYWORDS = ['ksr', 'rule', ' sr ', 'joining time', 'maternity', 'paternity', 'study leave', 'transfer ta', 'family pension', 'disciplinary', 'earned leave', 'dcrg', 'gratuity'];
   const filtered = schemes.filter(s => {
-    const sub = (s.subtitle_en || '').toLowerCase();
-    const title = (s.title_en || '').toLowerCase();
-    return !sub.includes('ksr') && !sub.includes('rule') && !sub.includes(' sr ') && !title.includes('ksr');
+    const combined = [s.subtitle_en, s.title_en, s.title_ml].join(' ').toLowerCase();
+    return !KSR_KEYWORDS.some(kw => combined.includes(kw));
   });
 
   if (!filtered.length) return null;
