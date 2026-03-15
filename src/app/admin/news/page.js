@@ -31,6 +31,15 @@ export default function AddNewsPage() {
       const result = await res.json();
 
       if (res.ok) {
+        // Revalidate homepage so new news appears immediately
+        await fetch('/api/revalidate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '',
+          },
+          body: JSON.stringify({}),
+        });
         alert("✅ വാർത്ത വിജയകരമായി പ്രസിദ്ധീകരിച്ചു!");
         setFormData({ title_ml: '', title_en: '', summary_ml: '', category: 'news' });
       } else {

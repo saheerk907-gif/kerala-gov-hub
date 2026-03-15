@@ -75,6 +75,15 @@ export default function AdminOrders() {
       } else {
         await api('government_orders', 'POST', form);
       }
+      // Revalidate homepage so new order appears immediately
+      await fetch('/api/revalidate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '',
+        },
+        body: JSON.stringify({}),
+      });
       setShowForm(false);
       setForm(EMPTY);
       setEditId(null);
