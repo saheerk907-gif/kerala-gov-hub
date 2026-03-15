@@ -121,7 +121,7 @@ export default function ToolsSection() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <section id="tools" className="relative py-6 md:py-8 px-4 md:px-6">
+    <section id="tools" className="relative py-7 md:py-8 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Header */}

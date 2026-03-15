@@ -34,7 +34,7 @@ export default function OrdersSection({ orders }) {
   };
 
   return (
-    <section id="orders" className="relative py-4 md:py-8 flex flex-col h-full">
+    <section id="orders" className="relative py-5 md:py-8 flex flex-col h-full">
 
       {/* Header */}
       <div className="mb-5">

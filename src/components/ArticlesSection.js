@@ -128,7 +128,7 @@ export default function ArticlesSection() {
   if (!loading && articles.length === 0) return null;
 
   return (
-    <section className="py-6 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
+    <section className="py-7 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
       {/* Header */}
       <div className="mb-6">
         <div className="section-label mb-2">Articles</div>
