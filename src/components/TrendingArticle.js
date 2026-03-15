@@ -28,32 +28,30 @@ export default function TrendingArticle() {
         <div className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
           style={{ background: 'linear-gradient(135deg, rgba(255,159,10,0.1) 0%, rgba(255,69,58,0.06) 100%)', border: '1px solid rgba(255,159,10,0.25)' }}>
 
-          {/* Mobile layout — compact single line */}
-          <div className="flex md:hidden items-center gap-2.5 px-3 py-2.5">
+          {/* Mobile layout */}
+          <div className="flex md:hidden items-center gap-3 px-3 py-3">
             {/* Left: image */}
             {article.image_url ? (
               <img src={article.image_url} alt={article.title_ml}
-                className="w-9 h-9 rounded-lg object-cover flex-shrink-0" />
+                className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
             ) : (
-              <div className="w-9 h-9 rounded-lg flex-shrink-0 flex items-center justify-center"
+              <div className="w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center"
                 style={{ background: 'rgba(255,159,10,0.15)' }}>
                 <span className="text-base">📰</span>
               </div>
             )}
 
-            {/* Label */}
-            <div className="flex items-center gap-1.5 flex-shrink-0">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a] animate-pulse" />
-              <span className="text-[8px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
+            {/* Text block */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a] animate-pulse flex-shrink-0" />
+                <span className="text-[8px] font-black uppercase tracking-widest text-[#ff9f0a]">Trending</span>
+              </div>
+              <p className="text-[13px] font-bold text-white leading-snug line-clamp-2"
+                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                {article.title_ml}
+              </p>
             </div>
-
-            <div className="w-px h-4 bg-white/15 flex-shrink-0" />
-
-            {/* Title — truncated to 1 line */}
-            <p className="text-[12px] font-bold text-white/85 leading-tight truncate flex-1"
-              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-              {article.title_ml}
-            </p>
 
             <svg width="10" height="10" fill="none" stroke="#ff9f0a" strokeWidth="2.5" viewBox="0 0 24 24" className="flex-shrink-0">
               <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
