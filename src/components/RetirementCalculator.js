@@ -7,7 +7,7 @@ import SectionHeader from '@/components/SectionHeader';
 
 const NPS_CUTOFF   = '2013-04-01'; // employees joining on/after this date are NPS
 const MIN_PENSION  = 11500;        // ₹11,500/month minimum pension (current order)
-const MAX_DCRG     = 1400000;      // ₹14,00,000 cap (KSR Rule 77 / Kerala Finance Dept)
+const MAX_DCRG     = 1700000;      // ₹17,00,000 cap (KSR Rule 77 / Kerala Finance Dept)
 const MAX_EL       = 300;
 const ACCENT       = '#30d158';
 
@@ -485,7 +485,7 @@ export default function RetirementCalculator() {
                     label="DCRG (estimate)"
                     amount={calc.financials.dcrg}
                     ineligible={!calc.financials.dcrgEligible ? 'Not eligible — minimum 5 years qualifying service required' : null}
-                    note={calc.financials.dcrgCapped ? 'Capped at ₹14,00,000' : `${calc.qualifyingYears} qualifying years × emoluments`}
+                    note={calc.financials.dcrgCapped ? 'Capped at ₹17,00,000' : `${calc.qualifyingYears} qualifying years × emoluments`}
                   />
                   <MoneyCard
                     label="Leave Encashment (estimate)"
