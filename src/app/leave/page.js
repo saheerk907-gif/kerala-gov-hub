@@ -1,11 +1,12 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LeaveCalculator from '@/components/LeaveCalculator';
+import HPLCalculator from '@/components/HPLCalculator';
 
 export const metadata = {
-  title: 'Earned Leave Calculator — Kerala Service Rules (KSR) | Kerala Government Employees',
+  title: 'Leave Calculator (EL, HPL, Commuted) — Kerala Service Rules (KSR) | Kerala Government Employees',
   description:
-    'Calculate Earned Leave (EL) for Kerala government employees as per KSR Part I. Supports permanent, temporary, vacation department and limited-period officers. Includes KSR FAQ on Maternity Leave, Casual Leave, Half-Pay Leave, Subsistence Allowance, and more.',
+    'Calculate Earned Leave (EL), Half-Pay Leave (HPL) and Commuted Leave for Kerala government employees as per KSR Part I. Includes a "Can I take X days?" eligibility checker, LWA exclusion, and KSR leave rules reference.',
   alternates: { canonical: 'https://keralaemployees.in/leave' },
   keywords:
     'earned leave calculator Kerala, KSR leave rules, Kerala Service Rules leave, EL calculation Kerala, casual leave Kerala, maternity leave Kerala, half pay leave KSR, leave preparatory to retirement, vacation department leave, temporary employee leave Kerala',
@@ -114,6 +115,7 @@ export default function LeavePage() {
           </div>
 
           <LeaveCalculator />
+          <HPLCalculator />
         </div>
       </main>
       <Footer />

@@ -77,11 +77,11 @@ const tools = [
     icon: '📅',
     title: 'Leave Calculator',
     subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',
-    desc: 'EL, CL, ML, Study Leave balance and encashment estimate',
+    desc: 'EL, HPL & Commuted Leave balance — "Can I take X days?" eligibility checker per KSR',
     href: '/leave',
     color: '#64d2ff',
     badge: 'NEW',
-    tags: ['EL', 'CL', 'ML', 'Encashment'],
+    tags: ['EL', 'HPL', 'Commuted', 'CL'],
   },
   {
     icon: '📊',
