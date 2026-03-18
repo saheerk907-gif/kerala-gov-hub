@@ -84,6 +84,16 @@ const tools = [
     tags: ['EL', 'HPL', 'Commuted', 'CL'],
   },
   {
+    icon: '🎯',
+    title: 'Retirement Calculator',
+    subtitle: 'റിട്ടയർമെന്റ് കാൽക്കുലേറ്റർ',
+    desc: 'Retirement date, countdown, LPR date, pension, DCRG and leave encashment estimate — for pre-NPS and NPS employees.',
+    href: '/retirement',
+    color: '#30d158',
+    badge: 'NEW',
+    tags: ['Retirement', 'Pension', 'DCRG', 'LPR'],
+  },
+  {
     icon: '📊',
     title: 'DA Arrear Calculator',
     subtitle: '11th PRC · Mar 2021 onwards',
