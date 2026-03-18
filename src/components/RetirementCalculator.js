@@ -11,15 +11,9 @@ const MAX_DCRG    = 1700000;
 const MAX_EL      = 300;
 const ACCENT      = '#30d158';
 
-// Commutation purchase value table — age next birthday (standard Kerala/Central govt table)
-const COMMUTATION_TABLE = {
-  40: 15.87, 41: 15.64, 42: 15.40, 43: 15.15, 44: 14.90,
-  45: 14.64, 46: 14.37, 47: 14.10, 48: 13.82, 49: 13.54,
-  50: 13.25, 51: 12.95, 52: 12.66, 53: 12.35, 54: 12.05,
-  55: 11.73, 56: 11.42, 57: 11.10, 58: 10.78, 59: 10.46,
-  60: 10.13, 61:  9.81, 62:  9.48, 63:  9.15, 64:  8.82,
-  65:  8.50,
-};
+// Commutation factor — fixed at 11.10 (matches /pension calculator)
+const COMMUTATION_FACTOR = 11.10;
+const MAX_COMMUTE_PCT    = 40;
 
 // ─── Date helpers ─────────────────────────────────────────────────────────────
 
@@ -90,21 +84,19 @@ function calcFinancials({ basicPay, daPercent, elDays, qualifyingYears }) {
 }
 
 /**
- * Pension commutation estimate.
- * commutePct — percentage to commute (0–33.33)
- * lump sum = commuted_monthly × 12 × purchase_value_factor
- * Restored after 15 years from retirement date.
+ * Pension commutation estimate — matches /pension calculator (KSR Part III).
+ * commutePct — percentage to commute (0–40)
+ * lump sum   = commuted_monthly × 11.10 × 12
+ * Restored 12 years after retirement date.
  */
-function calcCommutation(monthlyPension, retirementAge, retirementDate, commutePct) {
-  const ageNext  = Math.min(retirementAge + 1, 65);
-  const factor   = COMMUTATION_TABLE[ageNext];
-  const fraction = Math.min(commutePct / 100, 1 / 3);
-  const commutedMonthly = Math.round(monthlyPension * fraction);
-  const lumpSum         = Math.round(commutedMonthly * 12 * factor);
+function calcCommutation(monthlyPension, retirementDate, commutePct) {
+  const pct             = Math.min(commutePct, MAX_COMMUTE_PCT);
+  const commutedMonthly = Math.round((pct / 100) * monthlyPension);
+  const lumpSum         = Math.round(commutedMonthly * COMMUTATION_FACTOR * 12);
   const reducedPension  = monthlyPension - commutedMonthly;
   const restorationDate = new Date(retirementDate);
-  restorationDate.setFullYear(restorationDate.getFullYear() + 15);
-  return { commutedMonthly, lumpSum, reducedPension, restorationDate, factor, ageNext };
+  restorationDate.setFullYear(restorationDate.getFullYear() + 12);
+  return { commutedMonthly, lumpSum, reducedPension, restorationDate };
 }
 
 // ─── Animated counter hook ────────────────────────────────────────────────────
@@ -333,7 +325,7 @@ export default function RetirementCalculator() {
 
   const commutation = useMemo(() => {
     if (!calc || calc.isNPS || !calc.financials) return null;
-    return calcCommutation(calc.financials.monthlyPension, calc.retirementAge, calc.retirementDate, commutePct);
+    return calcCommutation(calc.financials.monthlyPension, calc.retirementDate, commutePct);
   }, [calc, commutePct]);
 
   return (
@@ -513,7 +505,7 @@ export default function RetirementCalculator() {
                       <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#30d158]/15 text-[#30d158] border border-[#30d158]/20 uppercase tracking-wider">Optional</span>
                     </div>
                     <p className="text-[11px] text-white/45 leading-relaxed mb-4">
-                      You may commute up to <strong className="text-white/70">1/3 (33.33%)</strong> of your monthly pension for a lump sum. The commuted portion is deducted from your monthly pension and restored after <strong className="text-white/70">15 years</strong>.
+                      You may commute up to <strong className="text-white/70">40%</strong> of your monthly pension for a lump sum. The commuted portion is deducted from your monthly pension and restored after <strong className="text-white/70">12 years</strong>.
                     </p>
 
                     {/* Slider */}
@@ -523,7 +515,7 @@ export default function RetirementCalculator() {
                         <span className="text-sm font-[900]" style={{ color: ACCENT }}>{commutePct}%</span>
                       </div>
                       <input
-                        type="range" min="0" max="33" step="1"
+                        type="range" min="0" max="40" step="1"
                         value={commutePct}
                         onChange={e => setCommutePct(Number(e.target.value))}
                         className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
@@ -531,7 +523,7 @@ export default function RetirementCalculator() {
                       />
                       <div className="flex justify-between text-[9px] text-white/30 mt-1">
                         <span>0% (no commutation)</span>
-                        <span>33% (maximum)</span>
+                        <span>40% (maximum)</span>
                       </div>
                     </div>
 
@@ -549,7 +541,7 @@ export default function RetirementCalculator() {
                           <span className="text-base font-[900] tabular-nums" style={{ color: ACCENT }}>
                             ₹{commutation.lumpSum.toLocaleString('en-IN')}
                           </span>
-                          <span className="text-[9px] text-white/35">factor {commutation.factor} (age {commutation.ageNext})</span>
+                          <span className="text-[9px] text-white/35">commuted × 11.10 × 12</span>
                         </div>
                         <div className="flex flex-col gap-1 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
                           <span className="text-[9px] uppercase tracking-wider text-white/50 font-semibold">Reduced Pension</span>
@@ -563,7 +555,7 @@ export default function RetirementCalculator() {
                           <span className="text-[13px] font-[900] text-white leading-snug">
                             {fmtDate(commutation.restorationDate)}
                           </span>
-                          <span className="text-[9px] text-white/35">15 years after retirement</span>
+                          <span className="text-[9px] text-white/35">12 years after retirement</span>
                         </div>
                       </div>
                     ) : commutePct === 0 ? (
@@ -574,7 +566,7 @@ export default function RetirementCalculator() {
               )}
 
               <p className="mt-4 text-[11px] text-white/35 leading-relaxed">
-                Estimates only. Pension is based on last month&apos;s pay; actual pension uses 10-month average emoluments. Commutation lump sum is calculated using the standard purchase value table. Amounts depend on final pay, DA revision, and qualifying service at retirement.
+                Estimates only. Pension is based on last month&apos;s pay; actual pension uses 10-month average emoluments. Commutation lump sum = commuted amount × 11.10 × 12 (KSR Part III). Amounts depend on final pay, DA revision, and qualifying service at retirement.
               </p>
             </div>
           ) : (
