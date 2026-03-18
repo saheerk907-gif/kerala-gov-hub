@@ -105,7 +105,7 @@ function calculateHPL({ joiningDate, lwaRanges, hplTaken, commutedTaken, clTaken
   const hplDue       = Math.max(0, rawHplDue);
   const showOverflow = rawHplDue < 0;
 
-  const commutedEligible     = isPermanent || completedYears >= 3;
+  const commutedEligible     = completedYears >= 3;
   const maxCommutedAvailable = commutedEligible ? Math.floor(hplDue / 2) : 0;
 
   const clRemaining = Math.max(0, 20 - cl);
@@ -149,7 +149,7 @@ function checkLeave({ leaveType, desired, result }) {
 
   if (leaveType === 'Commuted') {
     if (!commutedEligible) {
-      return { ok: false, message: 'Not eligible — Non-permanent employees need 3 years of service for Commuted Leave.' };
+      return { ok: false, message: 'Not eligible — Commuted Leave requires 3 completed years of continuous service.' };
     }
     if (d <= maxCommutedAvailable) {
       const hplAfter = hplDue - d * 2;
@@ -350,11 +350,9 @@ export default function HPLCalculator() {
             </button>
           ))}
         </div>
-        {!isPermanent && (
-          <p className="mt-3 text-[11px] text-amber-400/80 leading-relaxed">
-            ⚠ Commuted Leave requires 3 completed years of continuous service for non-permanent employees.
-          </p>
-        )}
+        <p className="mt-3 text-[11px] text-amber-400/80 leading-relaxed">
+          ⚠ Commuted Leave requires 3 completed years of continuous service for all employees.
+        </p>
       </div>
 
       {/* ── Service Details ── */}
@@ -509,7 +507,7 @@ export default function HPLCalculator() {
               reason={
                 result.commutedEligible
                   ? 'Eligible for Commuted Leave'
-                  : `Commuted Leave available after ${3 - result.completedYears} more year${3 - result.completedYears !== 1 ? 's' : ''} of service`
+                  : `Commuted Leave available after ${3 - result.completedYears} more year${3 - result.completedYears !== 1 ? 's' : ''} of service (3 years required)`
               }
             />
           </div>
@@ -624,7 +622,7 @@ export default function HPLCalculator() {
                 ['LWA exclusion',            'LWA for employment abroad / within country excluded from completed years'],
                 ['Commuted Leave max',       'Half of HPL due at the time of application'],
                 ['HPL debit',                '2 days HPL debited per 1 day of Commuted Leave'],
-                ['Commuted eligibility',     'Permanent: always. Non-permanent: after 3 years continuous service'],
+                ['Commuted eligibility',     'All employees: after 3 completed years of continuous service'],
                 ['CL limit',                 '20 days per calendar year'],
                 ['Combined limit (KSR 86)',  'Commuted Leave + Earned Leave + Vacation ≤ 240 days at a stretch'],
               ].map(([rule, detail]) => (
