@@ -7,6 +7,7 @@ import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
 import NewSection from '@/components/NewSection';
 import ArticlesSection from '@/components/ArticlesSection';
+import ForumSection from '@/components/ForumSection';
 import TrendingArticle from '@/components/TrendingArticle';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import SchemesSection from '@/components/SchemesSection';
@@ -64,7 +65,12 @@ export default async function HomePage() {
         <ArticlesSection />
       </ScrollReveal>
 
-      {/* 6. Audio Classes */}
+      {/* 6. Forum — recent discussions */}
+      <ScrollReveal direction="up" delay={100}>
+        <ForumSection />
+      </ScrollReveal>
+
+      {/* 7. Audio Classes */}
       <ScrollReveal direction="up" delay={100}>
         <AudioClassesSection />
       </ScrollReveal>
