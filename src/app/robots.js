@@ -4,7 +4,7 @@ export default function robots() {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/admin/', '/api/'],
+        disallow: ['/admin/', '/api/', '/forum/'],
       },
     ],
     sitemap: 'https://keralaemployees.in/sitemap.xml',

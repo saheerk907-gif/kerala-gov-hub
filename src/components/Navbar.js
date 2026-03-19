@@ -93,6 +93,19 @@ const NAV_ITEMS = [
     ],
   },
   {
+    label: 'Forum',
+    en: 'Forum',
+    href: '/forum',
+    dropdown: [
+      { label: 'ചർച്ചാ വേദി',      sub: 'Employee Discussion Forum', href: '/forum' },
+      { label: 'സേവന കാര്യങ്ങൾ',   sub: 'Service Matters',           href: '/forum?category=service_matters' },
+      { label: 'പെൻഷൻ ചർച്ച',     sub: 'Pension Discussions',       href: '/forum?category=pension' },
+      { label: 'NPS / APS ചർച്ч', sub: 'NPS & APS discussions',     href: '/forum?category=nps_aps' },
+      { label: 'അവധി ചർച്ച',      sub: 'Leave Discussions',         href: '/forum?category=leave' },
+      { label: 'പൊതു ചർച്ч',      sub: 'General Discussion',        href: '/forum?category=general' },
+    ],
+  },
+  {
     label: 'Portals',
     en: 'Portals',
     href: '#links',

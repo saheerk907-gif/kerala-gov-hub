@@ -14,6 +14,7 @@ const navItems = [
   { href: '/admin/ksr',      label: 'KSR Content',  icon: '📖', en: 'KSR Pages' },
   { href: '/admin/schemes',  label: 'പദ്ധതികൾ',    icon: '📋', en: 'Schemes' },
   { href: '/admin/links',    label: 'ലിങ്കുകൾ',    icon: '🔗', en: 'Links' },
+  { href: '/admin/forum',    label: 'ഫോറം',        icon: '💬', en: 'Forum' },
 ];
 
 async function refreshToken() {
