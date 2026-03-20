@@ -70,6 +70,26 @@ function decode(str) {
     .trim();
 }
 
+// ─── Resolve Google News redirect to the actual article URL ───────────────────
+async function resolveGoogleNewsUrl(url) {
+  if (!url.includes('news.google.com')) return url;
+  try {
+    const res = await fetch(url, {
+      redirect: 'follow',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+        'Accept': 'text/html,application/xhtml+xml',
+      },
+      signal: AbortSignal.timeout(6000),
+    });
+    // res.url is the final URL after all redirects
+    const finalUrl = res.url;
+    return finalUrl && !finalUrl.includes('news.google.com') ? finalUrl : url;
+  } catch {
+    return url;
+  }
+}
+
 // ─── Check if article is relevant ─────────────────────────────────────────────
 function isRelevant(title, desc, lang) {
   const text  = (title + ' ' + desc).toLowerCase();
@@ -109,23 +129,36 @@ export async function GET(request) {
       for (const item of items) {
         if (!isRelevant(item.title, item.desc, feed.lang)) { results.skipped++; continue; }
 
-        // Check duplicate by source_url
-        const { data: existing } = await supabase
+        // Check duplicate by original Google News link first (covers old records)
+        const { data: existingByLink } = await supabase
           .from('news')
           .select('id')
           .eq('source_url', item.link)
           .maybeSingle();
 
-        if (existing) { results.skipped++; continue; }
+        if (existingByLink) { results.skipped++; continue; }
 
-        // Insert
+        // Resolve Google News redirect to the actual article URL
+        const resolvedUrl = await resolveGoogleNewsUrl(item.link);
+
+        // Also check duplicate by resolved URL (covers records already stored with resolved URL)
+        if (resolvedUrl !== item.link) {
+          const { data: existingByResolved } = await supabase
+            .from('news')
+            .select('id')
+            .eq('source_url', resolvedUrl)
+            .maybeSingle();
+          if (existingByResolved) { results.skipped++; continue; }
+        }
+
+        // Insert with the resolved (real) article URL
         const { error } = await supabase.from('news').insert({
           title_en:   item.title,
           title_ml:   feed.lang === 'ml' ? item.title : item.title, // same for now
           summary_ml: item.desc?.slice(0, 300) || '',
           content_ml: item.desc || '',
           category:   'news',
-          source_url: item.link,
+          source_url: resolvedUrl,
           image_url:  item.image || null,
           created_at: item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
         });

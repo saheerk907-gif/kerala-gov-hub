@@ -137,7 +137,8 @@ export default async function NewsDetailPage({ params }) {
   // For RSS articles without real content, fetch the full article server-side
   const needsFetch = isJustHtml(item.content_ml) && item.source_url;
   const fetched = needsFetch ? await fetchArticleContent(item.source_url) : { paragraphs: [], image: null };
-  const displayImage = item.image_url || fetched.image;
+  // For Google News RSS articles, item.image_url is the Google News app logo icon — skip it
+  const displayImage = needsFetch ? fetched.image : (item.image_url || fetched.image);
 
   const articleJsonLd = buildArticleJsonLd({
     title: item.title_en || item.title_ml,
