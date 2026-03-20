@@ -212,7 +212,7 @@ export default async function ExperienceDetailPage({ params }) {
           {/* Body */}
           <div className="px-6 md:px-8 py-6">
             <p
-              className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap"
+              className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap text-justify"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
             >
               {experience.body}

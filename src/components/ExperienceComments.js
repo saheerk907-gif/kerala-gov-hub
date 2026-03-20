@@ -153,7 +153,7 @@ export default function ExperienceComments({ threadId }) {
                       </span>
                     </div>
                     <p
-                      className="text-[13px] leading-relaxed whitespace-pre-wrap"
+                      className="text-[13px] leading-relaxed whitespace-pre-wrap text-justify"
                       style={{ color: 'var(--text-secondary)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}
                     >
                       {reply.body}
