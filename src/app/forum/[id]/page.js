@@ -23,6 +23,25 @@ function formatDate(str) {
   });
 }
 
+const URL_RE = /(https?:\/\/[^\s]+)/g;
+
+function TextWithLinks({ text, className, style }) {
+  const parts = text.split(URL_RE);
+  return (
+    <p className={className} style={style}>
+      {parts.map((part, i) =>
+        URL_RE.test(part) ? (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer"
+            className="underline break-all"
+            style={{ color: '#2997ff' }}>
+            {part}
+          </a>
+        ) : part
+      )}
+    </p>
+  );
+}
+
 export default function ThreadPage({ params }) {
   const { id } = params;
   const router = useRouter();
@@ -129,10 +148,9 @@ export default function ThreadPage({ params }) {
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
               {thread.title}
             </h1>
-            <p className="text-[14px] text-white/80 leading-relaxed whitespace-pre-wrap mb-6"
-              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-              {thread.body}
-            </p>
+            <TextWithLinks text={thread.body}
+              className="text-[14px] text-white/80 leading-relaxed whitespace-pre-wrap mb-6"
+              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
             <div className="flex items-center gap-3 text-[11px] text-white/40 border-t pt-4"
               style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
               <span>{thread.author_name}</span>
@@ -153,10 +171,9 @@ export default function ThreadPage({ params }) {
                   return (
                     <div key={reply.id} className="glass-card rounded-2xl p-5"
                       style={isAdmin ? { borderColor: 'rgba(41,151,255,0.25)', background: 'rgba(41,151,255,0.04)' } : {}}>
-                      <p className="text-[13px] text-white/80 leading-relaxed whitespace-pre-wrap mb-3"
-                        style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                        {reply.body}
-                      </p>
+                      <TextWithLinks text={reply.body}
+                        className="text-[13px] text-white/80 leading-relaxed whitespace-pre-wrap mb-3"
+                        style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }} />
                       <div className="flex items-center gap-2 text-[11px] text-white/35">
                         {isAdmin ? (
                           <span className="px-2 py-0.5 rounded-full text-[10px] font-black"
