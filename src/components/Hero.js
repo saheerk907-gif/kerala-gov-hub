@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   const [isLight, setIsLight] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const check = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
@@ -14,6 +15,19 @@ export default function Hero() {
     return () => observer.disconnect();
   }, []);
 
+  // Trigger entrance animations after first paint
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 60);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Shared entrance animation style — each element gets a different delay
+  const fadeUp = (delay) => ({
+    opacity: mounted ? 1 : 0,
+    transform: mounted ? 'translateY(0)' : 'translateY(22px)',
+    transition: `opacity 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms, transform 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
+  });
+
   return (
     <section
       className="hero-section relative min-h-[50vh] md:min-h-[55vh] flex flex-col items-center justify-center text-center px-4 pt-[48px] md:pt-[56px] lg:pt-[88px] pb-8 md:pb-12 overflow-hidden"
@@ -21,6 +35,18 @@ export default function Hero() {
         background: 'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(200,150,12,0.13) 0%, transparent 65%), radial-gradient(ellipse 60% 40% at 15% 100%, rgba(200,150,12,0.07) 0%, transparent 55%), #f5f0e8',
       } : undefined}
     >
+
+      {/* ── Top accent light bar ── */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] z-20 pointer-events-none"
+        style={{
+          background: isLight
+            ? 'linear-gradient(90deg, transparent 0%, rgba(29,78,216,0.5) 30%, rgba(200,150,12,0.7) 50%, rgba(29,78,216,0.5) 70%, transparent 100%)'
+            : 'linear-gradient(90deg, transparent 0%, rgba(200,150,12,0.3) 20%, rgba(245,208,96,0.9) 50%, rgba(200,150,12,0.3) 80%, transparent 100%)',
+          opacity: mounted ? 1 : 0,
+          transition: 'opacity 1.2s ease 200ms',
+        }}
+      />
 
       {/* ── Background: Secretariat building (dark mode only) ── */}
       {!isLight && (
@@ -63,19 +89,34 @@ export default function Hero() {
         />
       )}
 
-      {/* ── Gold ambient glow centered behind logo (dark only) ── */}
+      {/* ── Gold ambient glow — wider and deeper (dark only) ── */}
       {!isLight && (
-        <div
-          className="absolute top-[25%] left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full blur-[100px] pointer-events-none"
-          style={{ background: 'radial-gradient(circle, rgba(200,150,12,0.10) 0%, transparent 70%)' }}
-        />
+        <>
+          <div
+            className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[120px] pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(200,150,12,0.12) 0%, transparent 70%)' }}
+          />
+          <div
+            className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[200px] h-[200px] rounded-full blur-[60px] pointer-events-none"
+            style={{ background: 'radial-gradient(circle, rgba(245,208,96,0.10) 0%, transparent 70%)' }}
+          />
+        </>
       )}
 
       {/* ── Content ──────────────────────────────────────── */}
       <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-0">
 
-        {/* Logo with badge overlaid */}
-        <div className="relative mb-4 md:mb-5 group cursor-pointer">
+        {/* Logo — with ripple ring */}
+        <div className="relative mb-4 md:mb-5 group cursor-pointer" style={fadeUp(0)}>
+
+          {/* Ripple ring (dark only) */}
+          {!isLight && (
+            <>
+              <div className="absolute inset-0 rounded-full pointer-events-none" style={{ animation: 'ripple 2.8s ease-out infinite', border: '1px solid rgba(200,150,12,0.5)' }} />
+              <div className="absolute inset-0 rounded-full pointer-events-none" style={{ animation: 'ripple 2.8s ease-out infinite 1.4s', border: '1px solid rgba(200,150,12,0.3)' }} />
+            </>
+          )}
+
           {/* Drop shadow (dark only) */}
           {!isLight && <div className="absolute inset-0 rounded-full bg-black/50 blur-[28px] scale-[1.05] translate-y-3 pointer-events-none" />}
 
@@ -97,17 +138,18 @@ export default function Hero() {
                 '0 20px 50px rgba(0,0,0,0.55)',
             }}
           />
-
         </div>
 
-        {/* Kicker — SEO label above the main title */}
-        <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.28em] mb-2 md:mb-3"
-          style={{ color: isLight ? 'rgba(30,58,95,0.60)' : 'rgba(245,208,96,0.70)' }}>
+        {/* Kicker */}
+        <p
+          className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.28em] mb-2 md:mb-3"
+          style={{ ...fadeUp(120), color: isLight ? 'rgba(30,58,95,0.60)' : 'rgba(245,208,96,0.70)' }}
+        >
           Kerala Government Employees Portal
         </p>
 
-        {/* Titles — tight single typographic block */}
-        <div className="flex flex-col items-center gap-1.5 md:gap-1.5 mb-3 md:mb-4">
+        {/* Titles */}
+        <div className="flex flex-col items-center gap-1.5 md:gap-1.5 mb-3 md:mb-4" style={fadeUp(220)}>
           <h1 className="text-[clamp(32px,7vw,80px)] font-bold leading-[1] tracking-tight">
             <span className="bg-clip-text text-transparent" style={isLight ? {
               backgroundImage: 'linear-gradient(135deg, #1e3a5f 0%, #1d4ed8 45%, #1e3a5f 100%)',
@@ -119,8 +161,9 @@ export default function Hero() {
               കേരള സർക്കാർ
             </span>
           </h1>
-          {/* Thin rule connecting both lines */}
-          <div className="w-12 h-[1.5px] rounded-full" style={{
+          <div className="h-[1.5px] rounded-full" style={{
+            width: mounted ? '48px' : '0px',
+            transition: 'width 0.6s cubic-bezier(0.16,1,0.3,1) 500ms',
             background: isLight
               ? 'linear-gradient(90deg, transparent, rgba(29,78,216,0.50), transparent)'
               : 'linear-gradient(90deg, transparent, rgba(200,150,12,0.8), transparent)',
@@ -139,14 +182,16 @@ export default function Hero() {
         </div>
 
         {/* Subtitle */}
-        <p className="text-[clamp(11px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-4 md:mb-5"
-          style={{ color: isLight ? 'rgba(30,58,95,0.70)' : 'rgba(252,227,138,0.80)' }}>
+        <p
+          className="text-[clamp(11px,1.6vw,15px)] max-w-[520px] leading-relaxed font-medium px-2 mb-4 md:mb-5"
+          style={{ ...fadeUp(340), color: isLight ? 'rgba(30,58,95,0.70)' : 'rgba(252,227,138,0.80)' }}
+        >
           സേവന ചട്ടങ്ങൾ മുതൽ ശമ്പള പരിഷ്കരണം വരെ. സർവീസിലുള്ളവർക്കും
           വിരമിച്ചവർക്കും ആവശ്യമായ എല്ലാ വിവരങ്ങളും ഇപ്പോൾ വിരൽത്തുമ്പിൽ.
         </p>
 
         {/* Feature pills */}
-        <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-4 md:mb-6">
+        <div className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-4 md:mb-6" style={fadeUp(460)}>
           {[
             { label: 'MEDISEP', href: '/medisep' },
             { label: 'Pension', href: '/pension' },
@@ -158,10 +203,17 @@ export default function Hero() {
             <a
               key={label}
               href={href}
-              className="px-3 py-1 md:px-4 md:py-2 inline-flex items-center rounded-full text-[10px] md:text-[11px] font-bold no-underline transition-all hover:bg-white/10"
+              className="px-3 py-1 md:px-4 md:py-2 inline-flex items-center rounded-full text-[10px] md:text-[11px] font-bold no-underline transition-all duration-300 hover:scale-105"
               style={isLight
                 ? { background: 'rgba(29,78,216,0.07)', color: '#1d4ed8', border: '1px solid rgba(29,78,216,0.22)' }
-                : { background: 'rgba(255,255,255,0.10)', color: 'rgba(245,208,96,0.88)', border: '1px solid rgba(255,255,255,0.28)' }}
+                : {
+                    background: 'rgba(255,255,255,0.08)',
+                    color: 'rgba(245,208,96,0.88)',
+                    border: '1px solid rgba(200,150,12,0.30)',
+                    boxShadow: '0 0 0 0 rgba(200,150,12,0)',
+                  }}
+              onMouseEnter={e => { if (!isLight) e.currentTarget.style.boxShadow = '0 0 12px 2px rgba(200,150,12,0.20)'; }}
+              onMouseLeave={e => { if (!isLight) e.currentTarget.style.boxShadow = '0 0 0 0 rgba(200,150,12,0)'; }}
             >
               {label}
             </a>
@@ -169,23 +221,27 @@ export default function Hero() {
         </div>
 
         {/* Scroll down button — desktop only */}
-        <button
-          onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-          className="hidden md:flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2"
-          aria-label="Scroll to explore"
-        >
-          <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
-            Explore
-          </span>
-          <div className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1" style={{ border: `1px solid ${isLight ? 'rgba(29,78,216,0.25)' : 'rgba(200,150,12,0.30)'}` }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
-              <path d="M2 4l4 4 4-4"/>
-            </svg>
-          </div>
-        </button>
+        <div style={fadeUp(580)}>
+          <button
+            onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="hidden md:flex flex-col items-center gap-2 bg-transparent border-none cursor-pointer mt-2 group"
+            aria-label="Scroll to explore"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] transition-colors" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
+              Explore
+            </span>
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 group-hover:translate-y-1"
+              style={{ border: `1px solid ${isLight ? 'rgba(29,78,216,0.25)' : 'rgba(200,150,12,0.30)'}` }}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" style={{ color: isLight ? 'rgba(29,78,216,0.50)' : 'rgba(245,208,96,0.55)' }}>
+                <path d="M2 4l4 4 4-4"/>
+              </svg>
+            </div>
+          </button>
+        </div>
 
       </div>
-
 
     </section>
   );
