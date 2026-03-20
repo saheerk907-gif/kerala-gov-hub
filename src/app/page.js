@@ -7,6 +7,7 @@ import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
 import NewSection from '@/components/NewSection';
 import ArticlesSection from '@/components/ArticlesSection';
+import ExperiencesSection from '@/components/ExperiencesSection';
 import ForumSection from '@/components/ForumSection';
 import TrendingArticle from '@/components/TrendingArticle';
 import QuickLinksSection from '@/components/QuickLinksSection';
@@ -63,6 +64,11 @@ export default async function HomePage() {
       {/* 5b. Articles */}
       <ScrollReveal direction="up" delay={100}>
         <ArticlesSection />
+      </ScrollReveal>
+
+      {/* 5c. Employee Experiences */}
+      <ScrollReveal direction="up" delay={100}>
+        <ExperiencesSection />
       </ScrollReveal>
 
       {/* 6. Forum — recent discussions */}
