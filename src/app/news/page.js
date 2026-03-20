@@ -68,7 +68,7 @@ export default function AllNewsPage() {
           {loading ? (
             <div className="flex flex-col gap-3">
               {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="glass-card h-[72px] rounded-2xl animate-pulse" />
+                <div key={i} className="glass-card h-[72px] rounded-2xl skeleton-shimmer" />
               ))}
             </div>
           ) : news.length === 0 ? (

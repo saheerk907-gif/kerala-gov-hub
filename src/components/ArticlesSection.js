@@ -142,9 +142,9 @@ export default function ArticlesSection() {
       {/* Grid */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="col-span-2 h-[200px] md:h-[320px] rounded-2xl animate-pulse bg-white/[0.04]" />
-          <div className="h-[160px] md:h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
-          <div className="hidden md:block h-[280px] rounded-2xl animate-pulse bg-white/[0.04]" />
+          <div className="col-span-2 h-[200px] md:h-[320px] rounded-2xl skeleton-shimmer" />
+          <div className="h-[160px] md:h-[280px] rounded-2xl skeleton-shimmer" />
+          <div className="hidden md:block h-[280px] rounded-2xl skeleton-shimmer" />
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

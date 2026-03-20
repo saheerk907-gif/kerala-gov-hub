@@ -109,7 +109,7 @@ export default function OrdersPage() {
         {loading ? (
           <div className="flex flex-col gap-3">
             {[...Array(8)].map((_, i) => (
-              <div key={i} className="glass-card h-[72px] rounded-[16px] animate-pulse" />
+              <div key={i} className="glass-card h-[72px] rounded-[16px] skeleton-shimmer" />
             ))}
           </div>
         ) : filtered.length === 0 ? (

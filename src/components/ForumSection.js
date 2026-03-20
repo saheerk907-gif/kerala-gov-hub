@@ -64,7 +64,7 @@ export default function ForumSection() {
         {loading ? (
           <div className="flex flex-col gap-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="glass-card h-[64px] rounded-2xl animate-pulse" />
+              <div key={i} className="glass-card h-[64px] rounded-2xl skeleton-shimmer" />
             ))}
           </div>
         ) : threads.length === 0 ? (

@@ -89,7 +89,7 @@ export default function NewsSection() {
         {loading ? (
           <div className="flex flex-col gap-3">
             {[1, 2, 3, 4, 5, 6].map(i => (
-              <div key={i} className="glass-card h-[72px] rounded-[20px] animate-pulse" />
+              <div key={i} className="glass-card h-[72px] rounded-[20px] skeleton-shimmer" />
             ))}
           </div>
         ) : news.length > 0 ? (
