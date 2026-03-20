@@ -10,7 +10,7 @@ function getToken() {
 }
 
 function formatDate(str) {
-  return new Date(str).toLocaleDateString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+  return new Date(str).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
 }
 
 export default function AdminForumPage() {
@@ -27,8 +27,10 @@ export default function AdminForumPage() {
       fetch(`${SUPABASE_URL}/rest/v1/forum_threads?select=*&order=created_at.desc`, { headers }),
       fetch(`${SUPABASE_URL}/rest/v1/forum_replies?select=*&order=created_at.desc`, { headers }),
     ]);
-    setThreads(await tr.json());
-    setReplies(await rr.json());
+    const td = await tr.json();
+    const rd = await rr.json();
+    setThreads(Array.isArray(td) ? td : []);
+    setReplies(Array.isArray(rd) ? rd : []);
     setLoading(false);
   }
 
