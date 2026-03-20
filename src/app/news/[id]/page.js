@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -194,9 +195,9 @@ export default async function NewsDetailPage({ params }) {
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6 py-12">
           {displayImage && (
-            <img src={displayImage} alt={item.title_ml}
-              className="w-full rounded-2xl object-cover mb-10"
-              style={{ maxHeight: '420px' }} />
+            <div className="relative w-full rounded-2xl overflow-hidden mb-10" style={{ height: '420px' }}>
+              <Image src={displayImage} alt={item.title_ml} fill className="object-cover" sizes="(max-width: 768px) 100vw, 768px" />
+            </div>
           )}
 
           {item.content_ml && !isJustHtml(item.content_ml) ? (
