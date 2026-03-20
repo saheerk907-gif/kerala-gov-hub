@@ -19,14 +19,14 @@ function FeaturedCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block col-span-2">
-      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 min-h-[200px] md:min-h-[320px]"
-        style={{ background: '#0a0a0a', border: `1px solid ${color}25` }}>
+      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[200px] md:min-h-[320px]"
+        style={{ border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
               style={{ opacity: 0.35 }} />
-            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 50%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
@@ -66,19 +66,19 @@ function SmallCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block">
-      <div className="article-card relative rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[160px] md:min-h-[240px]"
-        style={{ background: '#0a0a0a', border: `1px solid ${color}25` }}>
+      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[160px] md:min-h-[280px]"
+        style={{ border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
             <img src={article.image_url} alt={article.title_ml}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               style={{ opacity: 0.35 }} />
-            <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 50%, transparent 100%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 50%, transparent 100%)' }} />
           </>
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
         )}
-        <div className="relative z-10 flex flex-col justify-end h-full p-4 md:p-5 min-h-[160px] md:min-h-[240px]">
+        <div className="relative z-10 flex flex-col justify-end h-full p-4 md:p-5 min-h-[160px] md:min-h-[280px]">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
@@ -128,9 +128,10 @@ export default function ArticlesSection() {
   if (!loading && articles.length === 0) return null;
 
   return (
-    <section className="py-7 md:py-14 px-4 md:px-6 max-w-[1200px] mx-auto">
-      {/* Header */}
-      <div className="mb-6">
+    <section className="py-5 md:py-8 px-4 md:px-6 max-w-[1200px] mx-auto">
+
+      {/* Header — matches other sections */}
+      <div className="mb-5">
         <div className="section-label mb-2">Articles</div>
         <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
           style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
@@ -142,9 +143,9 @@ export default function ArticlesSection() {
       {/* Grid */}
       {loading ? (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="col-span-2 h-[200px] md:h-[320px] rounded-2xl skeleton-shimmer" />
-          <div className="h-[160px] md:h-[280px] rounded-2xl skeleton-shimmer" />
-          <div className="hidden md:block h-[280px] rounded-2xl skeleton-shimmer" />
+          <div className="col-span-2 h-[200px] md:h-[320px] rounded-[20px] skeleton-shimmer" />
+          <div className="h-[160px] md:h-[280px] rounded-[20px] skeleton-shimmer" />
+          <div className="hidden md:block h-[280px] rounded-[20px] skeleton-shimmer" />
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -154,17 +155,18 @@ export default function ArticlesSection() {
         </div>
       )}
 
-      {/* Bottom CTA */}
-      <div className="mt-6 text-center">
+      {/* CTA — matches other sections (full-width, surface-xs) */}
+      <div className="mt-4">
         <Link href="/articles"
-          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:scale-[1.02]"
-          style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.2)' }}>
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-[13px] font-bold no-underline transition-all hover:bg-white/[0.08]"
+          style={{ background: 'var(--surface-xs)', color: 'var(--text-primary)' }}>
           എല്ലാ ലേഖനങ്ങളും വായിക്കുക
           <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </Link>
       </div>
+
     </section>
   );
 }
