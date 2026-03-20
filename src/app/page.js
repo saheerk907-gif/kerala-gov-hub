@@ -47,6 +47,11 @@ export default async function HomePage() {
         <ToolsSection />
       </ScrollReveal>
 
+      {/* Employee Experiences */}
+      <ScrollReveal direction="up" delay={100}>
+        <ExperiencesSection />
+      </ScrollReveal>
+
       {/* 4 & 5. Orders + News — side by side */}
       <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
@@ -64,11 +69,6 @@ export default async function HomePage() {
       {/* 5b. Articles */}
       <ScrollReveal direction="up" delay={100}>
         <ArticlesSection />
-      </ScrollReveal>
-
-      {/* 5c. Employee Experiences */}
-      <ScrollReveal direction="up" delay={100}>
-        <ExperiencesSection />
       </ScrollReveal>
 
       {/* 6. Forum — recent discussions */}
