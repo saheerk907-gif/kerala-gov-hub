@@ -238,10 +238,6 @@ img, video, svg { max-width: 100%; }
 @keyframes fadeUp {
   to { opacity: 1; transform: translateY(0); }
 }
-@keyframes ripple {
-  0%   { transform: scale(1);    opacity: 0.6; }
-  100% { transform: scale(2.2);  opacity: 0; }
-}
 @keyframes grainDrift {
   0%   { background-position:   0%   0%; }
   10%  { background-position:  20%  15%; }
