@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import ReadingProgress from '@/components/ReadingProgress';
 import { buildArticleJsonLd } from '@/lib/seo';
 import { sanitize } from '@/lib/sanitize';
 
@@ -151,6 +152,7 @@ export default async function NewsDetailPage({ params }) {
 
   return (
     <>
+      <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <Navbar />
       <main className="min-h-screen bg-aurora text-white">
