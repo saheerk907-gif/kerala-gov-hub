@@ -56,6 +56,12 @@ export default function ThreadPage({ params }) {
   const [replyError, setReplyError] = useState(null);
   const [replySuccess, setReplySuccess] = useState(false);
 
+  // Restore saved author name
+  useEffect(() => {
+    const saved = localStorage.getItem('forum_author_name');
+    if (saved) setReplyForm(p => ({ ...p, author_name: saved }));
+  }, []);
+
   useEffect(() => {
     async function load() {
       try {
@@ -101,6 +107,7 @@ export default function ThreadPage({ params }) {
       const data = await res.json();
       if (!res.ok) { setReplyError(data.error || 'Error'); return; }
       sessionStorage.setItem('forum_last_reply', String(Date.now()));
+      localStorage.setItem('forum_author_name', replyForm.author_name.trim());
       setReplies(prev => [...prev, data.reply]);
       setReplyForm({ author_name: replyForm.author_name, body: '' });
       setReplySuccess(true);

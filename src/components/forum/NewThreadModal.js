@@ -1,6 +1,6 @@
 // src/components/forum/NewThreadModal.js
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const CATEGORIES = [
@@ -23,6 +23,12 @@ export default function NewThreadModal({ onClose, defaultCategory }) {
   });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  // Restore saved author name
+  useEffect(() => {
+    const saved = localStorage.getItem('forum_author_name');
+    if (saved) set('author_name', saved);
+  }, []);
 
   function set(field, value) {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -65,6 +71,7 @@ export default function NewThreadModal({ onClose, defaultCategory }) {
         return;
       }
       sessionStorage.setItem('forum_last_thread', String(Date.now()));
+      localStorage.setItem('forum_author_name', form.author_name.trim());
       router.push(`/forum/${data.thread.id}`);
     } catch {
       setError('Network error. Refresh cheyyuka.');

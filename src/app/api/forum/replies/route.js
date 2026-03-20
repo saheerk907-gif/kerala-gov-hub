@@ -66,5 +66,26 @@ export async function POST(request) {
   }
 
   const [reply] = await res.json();
+
+  // Increment reply_count on the parent thread (best-effort, fire-and-forget)
+  fetch(`${SUPABASE_URL}/rest/v1/forum_threads?id=eq.${threadId}&select=reply_count`, {
+    headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+  })
+    .then(r => r.json())
+    .then(([thread]) => {
+      if (!thread) return;
+      return fetch(`${SUPABASE_URL}/rest/v1/forum_threads?id=eq.${threadId}`, {
+        method: 'PATCH',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({ reply_count: (thread.reply_count || 0) + 1 }),
+      });
+    })
+    .catch(() => {}); // silently ignore if this fails
+
   return NextResponse.json({ reply }, { status: 201 });
 }
