@@ -112,7 +112,7 @@ export default async function ExperienceDetailPage({ params }) {
 
   if (!experience) {
     return (
-      <div className="relative min-h-screen" style={{ background: '#0d0d12' }}>
+      <div className="relative min-h-screen" style={{ background: 'var(--bg-primary)' }}>
         <Navbar />
         <main className="px-4 md:px-6 max-w-[800px] mx-auto pt-24 pb-16 text-center">
           <div className="text-4xl mb-4">🔍</div>
@@ -144,7 +144,7 @@ export default async function ExperienceDetailPage({ params }) {
   const avatarLetter = experience.is_anonymous ? '?' : (experience.author_name || '?').charAt(0).toUpperCase();
 
   return (
-    <div className="relative min-h-screen" style={{ background: '#0d0d12' }}>
+    <div className="relative min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <ReadingProgress />
       <Navbar />
 
@@ -163,7 +163,7 @@ export default async function ExperienceDetailPage({ params }) {
         {/* Article card */}
         <article
           className="glass-card rounded-[24px] overflow-hidden"
-          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+          style={{ border: '1px solid var(--border-sm)' }}
         >
           {/* Header */}
           <div className="p-6 md:p-8 pb-0">
@@ -175,7 +175,7 @@ export default async function ExperienceDetailPage({ params }) {
             </h1>
 
             {/* Author row */}
-            <div className="flex items-center gap-3 pb-6" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="flex items-center gap-3 pb-6" style={{ borderBottom: '1px solid var(--border-xs)' }}>
               <div
                 style={{
                   width: 44,
@@ -221,7 +221,7 @@ export default async function ExperienceDetailPage({ params }) {
           {/* Footer: reactions + forum link */}
           <div
             className="px-6 md:px-8 py-5 flex flex-col gap-4"
-            style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
+            style={{ borderTop: '1px solid var(--border-xs)' }}
           >
             <ExperienceReactions
               experienceId={id}

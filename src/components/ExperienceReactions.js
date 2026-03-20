@@ -91,9 +91,9 @@ export default function ExperienceReactions({ experienceId, initialCounts = {} }
             disabled={isLoading || !fingerprint}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-[13px] font-semibold transition-all duration-200 border cursor-pointer disabled:cursor-not-allowed"
             style={{
-              background: isActive ? `${GREEN}25` : 'rgba(255,255,255,0.06)',
-              border: isActive ? `1px solid ${GREEN}50` : '1px solid rgba(255,255,255,0.12)',
-              color: isActive ? GREEN : 'rgba(255,255,255,0.65)',
+              background: isActive ? `${GREEN}25` : 'var(--surface-sm)',
+              border: isActive ? `1px solid ${GREEN}50` : '1px solid var(--border-sm)',
+              color: isActive ? GREEN : 'var(--text-dim)',
               transform: isLoading ? 'scale(0.96)' : 'scale(1)',
             }}
             aria-pressed={isActive}
@@ -103,7 +103,7 @@ export default function ExperienceReactions({ experienceId, initialCounts = {} }
             <span>{label}</span>
             <span
               className="text-[12px] font-bold"
-              style={{ color: isActive ? GREEN : 'rgba(255,255,255,0.5)' }}
+              style={{ color: isActive ? GREEN : 'var(--text-faint)' }}
             >
               {counts[type]}
             </span>
