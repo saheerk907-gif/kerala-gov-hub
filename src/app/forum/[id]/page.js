@@ -1,6 +1,6 @@
 // src/app/forum/[id]/page.js
 'use client';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Footer from '@/components/Footer';
@@ -24,7 +24,7 @@ function formatDate(str) {
 }
 
 export default function ThreadPage({ params }) {
-  const { id } = use(params);
+  const { id } = params;
   const router = useRouter();
 
   const [thread, setThread] = useState(null);
