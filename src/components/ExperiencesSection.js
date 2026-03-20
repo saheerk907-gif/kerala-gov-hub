@@ -85,8 +85,6 @@ export default function ExperiencesSection() {
     load();
   }, []);
 
-  if (!loading && experiences.length === 0) return null;
-
   return (
     <section className="py-5 md:py-8 px-4 md:px-6 max-w-[1200px] mx-auto">
       {/* Header */}
@@ -113,6 +111,17 @@ export default function ExperiencesSection() {
           <div className="flex flex-col gap-4">
             <SkeletonCard />
             <SkeletonCard />
+          </div>
+        </div>
+      ) : experiences.length === 0 ? (
+        <div
+          className="rounded-[20px] py-10 text-center"
+          style={{ background: 'var(--surface-xs)', border: '1px solid rgba(255,255,255,0.07)' }}
+        >
+          <div style={{ fontSize: 32, marginBottom: 8 }}>✍️</div>
+          <div className="font-bold text-white text-[14px] mb-1">ഇനിയും അനുഭവങ്ങൾ ഇല്ല</div>
+          <div className="text-[12px]" style={{ color: 'rgba(255,255,255,0.45)' }}>
+            Be the first to share your experience
           </div>
         </div>
       ) : (
