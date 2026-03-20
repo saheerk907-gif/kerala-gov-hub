@@ -21,17 +21,24 @@ export default function AdminForumPage() {
 
   async function fetchAll() {
     setLoading(true);
-    const token = getToken();
-    const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` };
-    const [tr, rr] = await Promise.all([
-      fetch(`${SUPABASE_URL}/rest/v1/forum_threads?select=*&order=created_at.desc`, { headers }),
-      fetch(`${SUPABASE_URL}/rest/v1/forum_replies?select=*&order=created_at.desc`, { headers }),
-    ]);
-    const td = await tr.json();
-    const rd = await rr.json();
-    setThreads(Array.isArray(td) ? td : []);
-    setReplies(Array.isArray(rd) ? rd : []);
-    setLoading(false);
+    try {
+      const token = getToken();
+      const headers = { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` };
+      const [tr, rr] = await Promise.all([
+        fetch(`${SUPABASE_URL}/rest/v1/forum_threads?select=*&order=created_at.desc`, { headers }),
+        fetch(`${SUPABASE_URL}/rest/v1/forum_replies?select=*&order=created_at.desc`, { headers }),
+      ]);
+      const td = await tr.json();
+      const rd = await rr.json();
+      setThreads(Array.isArray(td) ? td : []);
+      setReplies(Array.isArray(rd) ? rd : []);
+    } catch (err) {
+      console.error('Forum fetch error:', err);
+      setThreads([]);
+      setReplies([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => { fetchAll(); }, []);
