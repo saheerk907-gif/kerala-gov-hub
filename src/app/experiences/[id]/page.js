@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ReadingProgress from '@/components/ReadingProgress';
 import ExperienceReactions from '@/components/ExperienceReactions';
+import ExperienceComments from '@/components/ExperienceComments';
 
 export const revalidate = 60;
 
@@ -218,27 +219,20 @@ export default async function ExperienceDetailPage({ params }) {
             </p>
           </div>
 
-          {/* Footer: reactions + forum link */}
+          {/* Footer: reactions */}
           <div
-            className="px-6 md:px-8 py-5 flex flex-col gap-4"
+            className="px-6 md:px-8 py-5"
             style={{ borderTop: '1px solid var(--border-xs)' }}
           >
             <ExperienceReactions
               experienceId={id}
               initialCounts={reactionCounts}
             />
-
-            {experience.forum_thread_id && (
-              <Link
-                href={`/forum/${experience.forum_thread_id}`}
-                className="inline-flex items-center gap-2 text-[13px] font-semibold no-underline transition-colors"
-                style={{ color: GREEN }}
-              >
-                💬 {commentCount} comment{commentCount !== 1 ? 's' : ''} — Discuss in Forum →
-              </Link>
-            )}
           </div>
         </article>
+
+        {/* Comments */}
+        <ExperienceComments threadId={experience.forum_thread_id || null} />
 
         {/* Back CTA */}
         <div className="mt-6 text-center">
