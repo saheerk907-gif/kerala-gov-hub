@@ -8,6 +8,10 @@ const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const GREEN = '#30d158';
 const GOLD = '#c8960c';
 
+function formatDate(str) {
+  return new Date(str).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
 function getToken() {
   return sessionStorage.getItem('admin_token') || SUPABASE_KEY;
 }
@@ -34,9 +38,30 @@ function StatusBadge({ status }) {
 }
 
 export default function AdminExperiencesPage() {
+  const [tab, setTab] = useState('experiences');
   const [experiences, setExperiences] = useState([]);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionState, setActionState] = useState({}); // id -> 'loading'|'error'
+
+  async function fetchComments(exps) {
+    const threadIds = exps.map(e => e.forum_thread_id).filter(Boolean);
+    if (!threadIds.length) { setComments([]); return; }
+    const token = getToken();
+    const ids = threadIds.map(id => `"${id}"`).join(',');
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/forum_replies?thread_id=in.(${ids})&order=created_at.desc&select=id,body,author_name,is_hidden,created_at,thread_id`,
+      { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` } }
+    );
+    const data = await res.json();
+    // attach experience title for context
+    const threadToExp = {};
+    exps.forEach(e => { if (e.forum_thread_id) threadToExp[e.forum_thread_id] = e.title; });
+    const enriched = Array.isArray(data)
+      ? data.map(r => ({ ...r, experience_title: threadToExp[r.thread_id] || '—' }))
+      : [];
+    setComments(enriched);
+  }
 
   async function fetchAll() {
     setLoading(true);
@@ -52,7 +77,9 @@ export default function AdminExperiencesPage() {
         }
       );
       const data = await res.json();
-      setExperiences(Array.isArray(data) ? data : []);
+      const exps = Array.isArray(data) ? data : [];
+      setExperiences(exps);
+      await fetchComments(exps);
     } catch (err) {
       console.error('Experiences admin fetch error:', err);
       setExperiences([]);
@@ -96,6 +123,29 @@ export default function AdminExperiencesPage() {
     callAction(id, `/api/admin/experiences/${id}/reject`, 'POST');
   }
 
+  async function toggleCommentHidden(commentId, currentHidden) {
+    const token = getToken();
+    await fetch(`${SUPABASE_URL}/rest/v1/forum_replies?id=eq.${commentId}`, {
+      method: 'PATCH',
+      headers: {
+        apikey: SUPABASE_KEY, Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json', Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ is_hidden: !currentHidden }),
+    });
+    await fetchAll();
+  }
+
+  async function deleteComment(commentId) {
+    if (!confirm('Delete this comment permanently?')) return;
+    const token = getToken();
+    await fetch(`${SUPABASE_URL}/rest/v1/forum_replies?id=eq.${commentId}`, {
+      method: 'DELETE',
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}`, Prefer: 'return=minimal' },
+    });
+    await fetchAll();
+  }
+
   function togglePin(id) {
     callAction(id, `/api/admin/experiences/${id}/pin`, 'PATCH');
   }
@@ -128,8 +178,22 @@ export default function AdminExperiencesPage() {
         </button>
       </div>
 
-      {/* Summary */}
-      <div className="flex gap-3 mb-6 flex-wrap">
+      {/* Tabs */}
+      <div className="flex gap-2 mb-6">
+        {[
+          { key: 'experiences', label: `Experiences (${experiences.length})` },
+          { key: 'comments', label: `Comments (${comments.length})` },
+        ].map(t => (
+          <button key={t.key} onClick={() => setTab(t.key)}
+            className="px-4 py-2 rounded-xl text-sm font-semibold border-none cursor-pointer transition-all"
+            style={{ background: tab === t.key ? '#2997ff' : 'rgba(255,255,255,0.05)', color: tab === t.key ? '#fff' : '#86868b' }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Summary — only on experiences tab */}
+      {tab === 'experiences' && <div className="flex gap-3 mb-6 flex-wrap">
         {grouped.map(({ label, items, accent }) => (
           <div
             key={label}
@@ -139,10 +203,64 @@ export default function AdminExperiencesPage() {
             {label}: {items.length}
           </div>
         ))}
-      </div>
+      </div>}
 
       {loading ? (
         <div className="text-[#86868b] text-sm">Loading...</div>
+      ) : tab === 'comments' ? (
+        /* ── Comments tab ── */
+        <div className="overflow-x-auto rounded-2xl border border-white/[0.06]">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/[0.06]" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Comment</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Author</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Experience</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Date</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Status</th>
+                <th className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-[#6e6e73]">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {comments.length === 0 ? (
+                <tr><td colSpan={6} className="px-4 py-8 text-center text-[#6e6e73] text-sm">No comments yet.</td></tr>
+              ) : comments.map(c => (
+                <tr key={c.id} className="border-b border-white/[0.04] hover:bg-white/[0.02] transition-colors"
+                  style={{ opacity: c.is_hidden ? 0.5 : 1 }}>
+                  <td className="px-4 py-3 max-w-[240px]">
+                    <div className="text-xs text-white/80 truncate">{c.body}</div>
+                  </td>
+                  <td className="px-4 py-3 text-[#86868b] text-xs whitespace-nowrap">{c.author_name}</td>
+                  <td className="px-4 py-3 text-[#86868b] text-xs max-w-[160px]">
+                    <div className="truncate">{c.experience_title}</div>
+                  </td>
+                  <td className="px-4 py-3 text-[#86868b] text-xs whitespace-nowrap">{formatDate(c.created_at)}</td>
+                  <td className="px-4 py-3">
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${c.is_hidden ? 'bg-red-500/15 text-red-400' : 'bg-green-500/15 text-green-400'}`}>
+                      {c.is_hidden ? 'Hidden' : 'Visible'}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => toggleCommentHidden(c.id, c.is_hidden)}
+                        className="px-3 py-1 rounded-lg text-[11px] font-semibold border-none cursor-pointer transition-all"
+                        style={{ background: c.is_hidden ? 'rgba(52,199,89,0.15)' : 'rgba(255,159,10,0.15)', color: c.is_hidden ? '#34c759' : '#ff9f0a' }}>
+                        {c.is_hidden ? 'Show' : 'Hide'}
+                      </button>
+                      <button
+                        onClick={() => deleteComment(c.id)}
+                        className="px-3 py-1 rounded-lg text-[11px] font-semibold border-none cursor-pointer transition-all"
+                        style={{ background: 'rgba(255,69,58,0.15)', color: '#ff453a' }}>
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <div className="flex flex-col gap-8">
           {grouped.map(({ label, items, accent }) =>
