@@ -148,19 +148,30 @@ export default function ThreadPage({ params }) {
                 {replies.length} മറുപടി{replies.length > 1 ? 'കൾ' : ''}
               </div>
               <div className="flex flex-col gap-3">
-                {replies.map(reply => (
-                  <div key={reply.id} className="glass-card rounded-2xl p-5">
-                    <p className="text-[13px] text-white/80 leading-relaxed whitespace-pre-wrap mb-3"
-                      style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                      {reply.body}
-                    </p>
-                    <div className="flex items-center gap-2 text-[11px] text-white/35">
-                      <span>{reply.author_name}</span>
-                      <span>·</span>
-                      <span>{formatDate(reply.created_at)}</span>
+                {replies.map(reply => {
+                  const isAdmin = reply.is_admin || reply.author_name === 'Admin';
+                  return (
+                    <div key={reply.id} className="glass-card rounded-2xl p-5"
+                      style={isAdmin ? { borderColor: 'rgba(41,151,255,0.25)', background: 'rgba(41,151,255,0.04)' } : {}}>
+                      <p className="text-[13px] text-white/80 leading-relaxed whitespace-pre-wrap mb-3"
+                        style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                        {reply.body}
+                      </p>
+                      <div className="flex items-center gap-2 text-[11px] text-white/35">
+                        {isAdmin ? (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-black"
+                            style={{ background: 'rgba(41,151,255,0.15)', color: '#2997ff' }}>
+                            ✦ Admin
+                          </span>
+                        ) : (
+                          <span>{reply.author_name}</span>
+                        )}
+                        <span>·</span>
+                        <span>{formatDate(reply.created_at)}</span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}
