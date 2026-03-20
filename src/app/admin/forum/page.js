@@ -88,7 +88,6 @@ export default function AdminForumPage() {
           body: replyText.trim(),
           author_name: 'Admin',
           thread_id: threadId,
-          is_admin: true,
         }),
       });
       if (!res.ok) {
