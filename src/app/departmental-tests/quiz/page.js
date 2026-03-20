@@ -10,11 +10,37 @@ const BATCH_SIZE = 20;
 const PENALTY = 1 / 3; // -0.33 per wrong answer
 
 async function fetchQuestions(testId, paper) {
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/quiz_questions?test_id=eq.${testId}&paper_number=eq.${paper}&order=sort_order.asc`,
-    { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-  );
-  return res.json();
+  const PAGE = 1000;
+  let all = [];
+  let offset = 0;
+
+  while (true) {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/quiz_questions?test_id=eq.${testId}&paper_number=eq.${paper}&order=sort_order.asc&limit=${PAGE}&offset=${offset}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          Prefer: 'count=exact',
+        },
+      }
+    );
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) break;
+    all = all.concat(data);
+    offset += data.length;
+
+    // Content-Range: 0-99/101  — use total to know when done
+    const contentRange = res.headers.get('content-range');
+    if (contentRange) {
+      const total = parseInt(contentRange.split('/')[1], 10);
+      if (!isNaN(total) && offset >= total) break;
+    }
+    // If no content-range (CORS may not expose it), keep fetching until empty response
+    // Do NOT break on data.length < PAGE — server max_rows may be lower than PAGE
+  }
+
+  return all;
 }
 
 function ScoreBadge({ score, color }) {
