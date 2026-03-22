@@ -106,8 +106,9 @@ export default function PdfCanvas({
   const pdfCanvasRef = useRef(null);
   const overlayRef   = useRef(null);
   const textareaRef  = useRef(null);
-  const [viewport, setViewport] = useState(null);
-  const [cursor, setCursor]     = useState('crosshair');
+  const [viewport,       setViewport]       = useState(null);
+  const [cursor,         setCursor]         = useState('crosshair');
+  const [textPanel,      setTextPanel]      = useState(null); // { left, top } | null
   const drawing     = useRef(false);
   const startPt     = useRef({ x: 0, y: 0 });
   const currentPath = useRef([]);
@@ -286,24 +287,33 @@ export default function PdfCanvas({
     return null;
   }
 
+  function showTextPanel(canvasX, canvasY) {
+    const rect   = overlayRef.current.getBoundingClientRect();
+    const PW = 360, PH = 260;
+    const left = Math.max(12, Math.min(rect.left + canvasX, window.innerWidth  - PW - 12));
+    const top  = Math.max(12, Math.min(rect.top  + canvasY, window.innerHeight - PH - 12));
+    setTextPanel({ left, top });
+    setTimeout(() => {
+      const ta = textareaRef.current;
+      if (!ta) return;
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = ta.value.length;
+    }, 40);
+  }
+
   // Open textarea pre-filled with an existing text annotation for editing
   function openTextEditor(ann) {
-    commitTextarea(); // save any open textarea first
+    commitTextarea(true); // save any open textarea first (silent=true → don't close panel yet)
     editingAnnRef.current = ann.id;
-    onMoveStart?.(); // push undo snapshot
-    const rect = overlayRef.current.getBoundingClientRect();
-    const ta = textareaRef.current;
-    ta.style.left       = `${rect.left + ann.x}px`;
-    ta.style.top        = `${rect.top  + ann.y - (ann.fontSize || 14)}px`;
-    ta.style.fontSize   = `${ann.fontSize || 14}px`;
-    ta.style.fontWeight = ann.bold   ? 'bold'   : 'normal';
-    ta.style.fontStyle  = ann.italic ? 'italic' : 'normal';
-    ta.style.color      = ann.color || style.color;
-    ta.style.display    = 'block';
-    ta.value = ann.text || '';
-    ta.focus();
-    // move cursor to end
-    ta.selectionStart = ta.selectionEnd = ta.value.length;
+    onMoveStart?.();
+    textareaRef.current.value = ann.text || '';
+    showTextPanel(ann.x, ann.y - (ann.fontSize || style.fontSize));
+  }
+
+  function cancelTextarea() {
+    textareaRef.current.value = '';
+    editingAnnRef.current = null;
+    setTextPanel(null);
   }
 
   function onPointerDown(e) {
@@ -359,17 +369,8 @@ export default function PdfCanvas({
     if (activeTool === 'text') {
       commitTextarea();
       pendingText.current = { x, y };
-      const rect = overlayRef.current.getBoundingClientRect();
-      const ta = textareaRef.current;
-      ta.style.left     = `${rect.left + x}px`;
-      ta.style.top      = `${rect.top  + y}px`;
-      ta.style.fontSize = `${style.fontSize}px`;
-      ta.style.fontWeight = style.bold ? 'bold' : 'normal';
-      ta.style.fontStyle  = style.italic ? 'italic' : 'normal';
-      ta.style.color    = style.color;
-      ta.style.display  = 'block';
-      ta.value = '';
-      ta.focus();
+      textareaRef.current.value = '';
+      showTextPanel(x, y);
       return;
     }
 
@@ -461,26 +462,24 @@ export default function PdfCanvas({
     }
   }
 
-  function commitTextarea() {
+  function commitTextarea(silent = false) {
     const ta = textareaRef.current;
-    if (!ta || ta.style.display === 'none') return;
-    ta.style.display = 'none';
+    if (!ta) return;
+    if (!silent) setTextPanel(null);
 
     const text = ta.value.trim();
     const editId = editingAnnRef.current;
     editingAnnRef.current = null;
+    ta.value = '';
 
+    if (!text) {
+      if (editId) { onDeleteAnnotation?.(editId); onSelectionChange?.(null); }
+      return;
+    }
     if (editId) {
-      // Editing an existing annotation
-      if (text) {
-        onUpdateAnnotation?.(editId, { text });
-      } else {
-        onDeleteAnnotation?.(editId); // deleted all text → remove
-        onSelectionChange?.(null);
-      }
+      onUpdateAnnotation?.(editId, { text });
     } else {
-      // New annotation
-      if (!text || !pendingText.current) return;
+      if (!pendingText.current) return;
       const { x, y } = pendingText.current;
       onAddAnnotation({
         type: 'text', x, y, width: 0, height: 0, points: [],
@@ -488,7 +487,6 @@ export default function PdfCanvas({
         opacity: style.opacity, bold: style.bold, italic: style.italic,
       });
     }
-    ta.value = '';
   }
 
   function onDoubleClick(e) {
@@ -558,18 +556,96 @@ export default function PdfCanvas({
         onDoubleClick={onDoubleClick}
       />
       {miniToolbar}
-      <textarea
-        ref={textareaRef}
-        onBlur={commitTextarea}
-        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitTextarea(); } }}
-        style={{
-          display: 'none', position: 'fixed', zIndex: 50,
-          minWidth: 140, minHeight: 32,
-          background: 'rgba(255,255,255,0.97)', border: '2px dashed #2997ff',
-          borderRadius: 4, padding: '4px 8px', outline: 'none', resize: 'none',
-          fontFamily: 'sans-serif', color: '#000',
-        }}
-      />
+
+      {/* ── Floating text editor panel ── */}
+      {textPanel && (
+        <div
+          onPointerDown={e => e.stopPropagation()}
+          style={{
+            position: 'fixed',
+            left: textPanel.left, top: textPanel.top,
+            zIndex: 200,
+            width: 360, maxWidth: 'calc(100vw - 24px)',
+            background: 'rgba(14,14,22,0.98)',
+            border: '1.5px solid rgba(41,151,255,0.7)',
+            borderRadius: 16,
+            boxShadow: '0 16px 64px rgba(0,0,0,0.8), 0 0 0 4px rgba(41,151,255,0.08)',
+            padding: 16,
+            display: 'flex', flexDirection: 'column', gap: 10,
+          }}
+        >
+          {/* Header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: '#fff' }}>✏️ Text Editor</span>
+            <span style={{ flex: 1 }} />
+            <span style={{
+              fontSize: 11, color: 'rgba(255,255,255,0.4)',
+              background: 'rgba(255,255,255,0.06)', borderRadius: 6, padding: '2px 8px',
+            }}>
+              {style.bold ? 'Bold ' : ''}{style.italic ? 'Italic ' : ''}{style.fontSize}px
+            </span>
+          </div>
+
+          {/* Textarea — WYSIWYG styling */}
+          <textarea
+            ref={textareaRef}
+            placeholder="Type your text here…"
+            onKeyDown={e => {
+              if (e.key === 'Escape') { e.preventDefault(); cancelTextarea(); }
+              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); commitTextarea(); }
+            }}
+            style={{
+              width: '100%', boxSizing: 'border-box',
+              minHeight: 110, maxHeight: 260,
+              background: '#fff',
+              border: '1.5px solid rgba(41,151,255,0.4)',
+              borderRadius: 10,
+              padding: '12px 14px',
+              fontSize: Math.max(14, style.fontSize),
+              fontWeight: style.bold   ? 'bold'   : 'normal',
+              fontStyle:  style.italic ? 'italic' : 'normal',
+              color: style.color === '#ffffff' ? '#111' : style.color,
+              fontFamily: 'sans-serif',
+              lineHeight: 1.5,
+              outline: 'none',
+              resize: 'vertical',
+            }}
+          />
+
+          {/* Hint */}
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.28)', textAlign: 'center', marginTop: -4 }}>
+            Shift+Enter — new line &nbsp;·&nbsp; Ctrl+Enter — place &nbsp;·&nbsp; Esc — cancel
+          </div>
+
+          {/* Buttons */}
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={cancelTextarea}
+              style={{
+                flex: 1, padding: '10px 0', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                borderRadius: 10, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)',
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => commitTextarea()}
+              style={{
+                flex: 2, padding: '10px 0', fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                borderRadius: 10, border: 'none',
+                background: '#2997ff', color: '#fff',
+                boxShadow: '0 4px 16px rgba(41,151,255,0.4)',
+              }}
+            >
+              ✓ Place Text
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden textarea used only when panel is not shown (keep ref alive) */}
+      {!textPanel && <textarea ref={textareaRef} style={{ display: 'none' }} readOnly />}
     </div>
   );
 }
