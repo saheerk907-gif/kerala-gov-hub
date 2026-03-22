@@ -1,12 +1,11 @@
 'use client';
 import { useState, useRef } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
-import { GlobalWorkerOptions, version as pdfjsVersion } from 'pdfjs-dist';
+import { GlobalWorkerOptions } from 'pdfjs-dist';
 import GlassTool from '@/components/pdf-tools/GlassTool';
 import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 
-GlobalWorkerOptions.workerSrc =
-  `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.min.js`;
+GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const btn = {
   width: '100%', padding: '13px', borderRadius: 12, border: 'none',
