@@ -67,11 +67,18 @@ const DAY_COLORS = {
   sun:     { bg: '#3b82f6', text: '#fff', label: 'Sunday' },
   sat2:    { bg: '#7c3aed', text: '#fff', label: '2nd Sat' },
   leave:   { bg: '#f59e0b', text: '#fff', label: 'Your Leave' },
+  work:    { bg: 'rgba(148,163,184,0.25)', text: '#94a3b8', label: 'Working' },
 };
 
 function toDate(str) { return new Date(str + 'T00:00:00'); }
 function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
-function ds(d) { return d.toISOString().slice(0, 10); }
+// Use local date string (not UTC) to avoid IST off-by-one bug
+function ds(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 function fmtShort(d) { return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' }); }
 function fmtRange(s, e) {
   const so = s.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
@@ -202,8 +209,8 @@ function Stepper({ label, value, onChange, min = 0, max = 60 }) {
 function DayStrip({ days }) {
   return (
     <div style={{ display: 'flex', gap: 3, flexWrap: 'wrap', marginTop: 12 }}>
-      {days.map((day, i) => {
-        const c = DAY_COLORS[day.type];
+      {days.filter(day => day.type !== 'work').map((day, i) => {
+        const c = DAY_COLORS[day.type] || DAY_COLORS.work;
         return (
           <div key={i} title={`${DAYS[day.date.getDay()]} ${day.date.getDate()} — ${c.label}`} style={{
             minWidth: 30, padding: '4px 2px', borderRadius: 8,
