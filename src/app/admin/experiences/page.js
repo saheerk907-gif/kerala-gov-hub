@@ -16,10 +16,6 @@ function getToken() {
   return sessionStorage.getItem('admin_token') || SUPABASE_KEY;
 }
 
-function formatDate(str) {
-  return new Date(str).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
-}
-
 function StatusBadge({ status }) {
   const styles = {
     pending: { bg: 'rgba(255,159,10,0.15)', color: '#ff9f0a' },
