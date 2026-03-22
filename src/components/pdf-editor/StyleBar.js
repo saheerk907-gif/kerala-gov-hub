@@ -3,6 +3,24 @@
 
 const COLOURS = ['#000000','#2997ff','#ff453a','#30d158','#ff9f0a','#ffffff'];
 
+function ToggleBtn({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        borderRadius: 7, cursor: 'pointer', fontSize: 13, fontWeight: 800,
+        border: `1px solid ${active ? 'rgba(41,151,255,0.6)' : 'rgba(255,255,255,0.12)'}`,
+        background: active ? 'rgba(41,151,255,0.2)' : 'rgba(255,255,255,0.06)',
+        color: active ? '#2997ff' : 'rgba(255,255,255,0.55)',
+        boxShadow: active ? '0 0 0 2px rgba(41,151,255,0.15)' : 'none',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function StyleBar({ style, onChange }) {
   return (
     <div
@@ -35,6 +53,18 @@ export default function StyleBar({ style, onChange }) {
             }}
           />
         ))}
+      </div>
+
+      <span style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.08)' }} />
+
+      {/* Bold / Italic */}
+      <div className="flex items-center gap-1">
+        <ToggleBtn active={style.bold} onClick={() => onChange({ ...style, bold: !style.bold })}>
+          B
+        </ToggleBtn>
+        <ToggleBtn active={style.italic} onClick={() => onChange({ ...style, italic: !style.italic })}>
+          <em>I</em>
+        </ToggleBtn>
       </div>
 
       <span style={{ width: 1, height: 18, background: 'rgba(255,255,255,0.08)' }} />

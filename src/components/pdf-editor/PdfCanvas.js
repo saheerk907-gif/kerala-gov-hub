@@ -2,7 +2,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-const HANDLE_R = 8; // hit-test radius in CSS-px
+const HANDLE_R = 8;
 
 function hitTest(ann, x, y) {
   const PAD = 8;
@@ -36,7 +36,6 @@ function getBBox(ann) {
   return { x: ann.x, y: ann.y, w: ann.width || 0, h: ann.height || 0 };
 }
 
-// Returns 8 handle positions in CSS-px: TL,T,TR,R,BR,B,BL,L
 function getHandles(ann) {
   const bb = getBBox(ann);
   const PAD = 6;
@@ -54,7 +53,6 @@ function hitTestHandle(handles, x, y) {
   return -1;
 }
 
-// CSS cursor for each handle (TL,T,TR,R,BR,B,BL,L)
 const HANDLE_CURSORS = [
   'nw-resize','n-resize','ne-resize','e-resize',
   'se-resize','s-resize','sw-resize','w-resize',
@@ -72,18 +70,10 @@ function applyResize(origAnn, handleIdx, dx, dy) {
     else if (handleIdx === 5) { y2 += dy; }
     else if (handleIdx === 6) { x1 += dx; y2 += dy; }
     else if (handleIdx === 7) { x1 += dx; }
-    const newW = Math.max(10, x2 - x1);
-    const newH = Math.max(10, y2 - y1);
-    const scX = newW / Math.max(1, bb.w);
-    const scY = newH / Math.max(1, bb.h);
-    return {
-      points: origAnn.points.map(([px, py]) => [
-        x1 + (px - bb.x) * scX,
-        y1 + (py - bb.y) * scY,
-      ]),
-    };
+    const newW = Math.max(10, x2 - x1), newH = Math.max(10, y2 - y1);
+    const scX = newW / Math.max(1, bb.w), scY = newH / Math.max(1, bb.h);
+    return { points: origAnn.points.map(([px, py]) => [x1 + (px - bb.x) * scX, y1 + (py - bb.y) * scY]) };
   }
-
   let { x, y, width, height } = origAnn;
   if (handleIdx === 0) { x += dx; y += dy; width -= dx; height -= dy; }
   else if (handleIdx === 1) { y += dy; height -= dy; }
@@ -94,6 +84,15 @@ function applyResize(origAnn, handleIdx, dx, dy) {
   else if (handleIdx === 6) { x += dx; width -= dx; height += dy; }
   else if (handleIdx === 7) { x += dx; width -= dx; }
   return { x, y, width: Math.max(10, width), height: Math.max(10, height) };
+}
+
+function canvasFont(ann) {
+  const parts = [];
+  if (ann.italic) parts.push('italic');
+  if (ann.bold)   parts.push('bold');
+  parts.push(`${ann.fontSize || 14}px`);
+  parts.push('sans-serif');
+  return parts.join(' ');
 }
 
 export default function PdfCanvas({
@@ -115,136 +114,166 @@ export default function PdfCanvas({
   const pendingText = useRef(null);
   const movingRef   = useRef(null);
   const resizingRef = useRef(null);
+  const previewRef  = useRef(null); // live shape preview { x1,y1,x2,y2,tool }
 
-  // ── Render PDF page ────────────────────────────────────────────────
+  // Store a stable redraw function so pointer events can call it
+  const redrawFnRef = useRef(null);
+
+  // ── Render PDF page ──────────────────────────────────────────────
   useEffect(() => {
     if (!pdfDoc) return;
     let cancelled = false;
-
     async function render() {
       const page   = await pdfDoc.getPage(pageIndex + 1);
       const dpr    = window.devicePixelRatio || 1;
       const baseVp = page.getViewport({ scale: 1 });
-
       const availW   = wrapRef.current?.clientWidth || (window.innerWidth - 100);
       const scaleCSS = Math.min(Math.max(availW * 0.98 / baseVp.width, 1.0), 5.0);
       const vp       = page.getViewport({ scale: scaleCSS * dpr });
-
       const canvas  = pdfCanvasRef.current;
       const overlay = overlayRef.current;
       if (!canvas || !overlay || cancelled) return;
-
       canvas.width  = overlay.width  = vp.width;
       canvas.height = overlay.height = vp.height;
       canvas.style.width  = overlay.style.width  = `${vp.width  / dpr}px`;
       canvas.style.height = overlay.style.height = `${vp.height / dpr}px`;
-
       await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
-      if (!cancelled) {
-        setViewport(vp);
-        onScaleChange?.(scaleCSS);
-      }
+      if (!cancelled) { setViewport(vp); onScaleChange?.(scaleCSS); }
     }
-
     const t = setTimeout(render, 0);
     return () => { cancelled = true; clearTimeout(t); };
   }, [pdfDoc, pageIndex]);
 
-  // ── Redraw overlay annotations + selection ─────────────────────────
+  // ── Redraw overlay ───────────────────────────────────────────────
   useEffect(() => {
     const canvas = overlayRef.current;
     if (!canvas || !viewport) return;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const dpr = window.devicePixelRatio || 1;
-    const sx  = canvas.width  / (viewport.width  / dpr);
-    const sy  = canvas.height / (viewport.height / dpr);
 
-    for (const ann of annotations) {
-      ctx.save();
-      ctx.globalAlpha = ann.opacity ?? 1;
+    function redraw() {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const dpr = window.devicePixelRatio || 1;
+      const sx  = canvas.width  / (viewport.width  / dpr);
+      const sy  = canvas.height / (viewport.height / dpr);
 
-      if (ann.type === 'text') {
-        ctx.font = `${ann.fontSize * sx}px sans-serif`;
-        ctx.fillStyle = ann.color;
-        ctx.fillText(ann.text, ann.x * sx, ann.y * sy);
-      } else if (ann.type === 'whiteout') {
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
-      } else if (ann.type === 'rect') {
-        ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
-        ctx.strokeRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
-      } else if (ann.type === 'circle') {
-        ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.ellipse(
-          (ann.x + ann.width / 2) * sx, (ann.y + ann.height / 2) * sy,
-          Math.abs(ann.width / 2) * sx, Math.abs(ann.height / 2) * sy, 0, 0, Math.PI * 2
-        );
-        ctx.stroke();
-      } else if (ann.type === 'line') {
-        ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(ann.x * sx, ann.y * sy);
-        ctx.lineTo((ann.x + ann.width) * sx, (ann.y + ann.height) * sy);
-        ctx.stroke();
-      } else if (ann.type === 'draw') {
-        ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
-        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-        ctx.beginPath();
-        ann.points.forEach(([px, py], i) => {
-          if (i === 0) ctx.moveTo(px * sx, py * sy);
-          else ctx.lineTo(px * sx, py * sy);
-        });
-        ctx.stroke();
-      } else if (ann.type === 'highlight') {
-        ctx.fillStyle = ann.color || '#ffff00';
-        ctx.globalAlpha = 0.35;
-        ctx.fillRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
-      } else if (ann.type === 'sign') {
-        const img = new Image();
-        img.src = ann.imageDataUrl;
-        img.onload = () => ctx.drawImage(img, ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
-      }
-      ctx.restore();
-    }
-
-    // Selection border + 8 resize handles
-    if (selectedId) {
-      const sel = annotations.find(a => a.id === selectedId);
-      if (sel) {
-        const bb  = getBBox(sel);
-        const PAD = 6;
-        const bx  = (bb.x - PAD) * sx, by  = (bb.y - PAD) * sy;
-        const bw  = (bb.w + PAD * 2) * sx, bh = (bb.h + PAD * 2) * sy;
-
+      for (const ann of annotations) {
         ctx.save();
-        ctx.globalAlpha = 1;
-        ctx.strokeStyle = '#2997ff'; ctx.lineWidth = 2;
-        ctx.setLineDash([6, 3]);
-        ctx.strokeRect(bx, by, bw, bh);
-        ctx.setLineDash([]);
-
-        // Draw 8 handles — blue fill, white border, visible on any background
-        const handles = getHandles(sel);
-        handles.forEach(([hx, hy]) => {
+        ctx.globalAlpha = ann.opacity ?? 1;
+        if (ann.type === 'text') {
+          ctx.font = canvasFont({ ...ann, fontSize: ann.fontSize * sx });
+          ctx.fillStyle = ann.color;
+          ctx.fillText(ann.text, ann.x * sx, ann.y * sy);
+        } else if (ann.type === 'whiteout') {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
+        } else if (ann.type === 'rect') {
+          ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
+          ctx.strokeRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
+        } else if (ann.type === 'circle') {
+          ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
           ctx.beginPath();
-          ctx.arc(hx * sx, hy * sy, 7, 0, Math.PI * 2);
-          ctx.fillStyle = '#2997ff';
-          ctx.fill();
-          ctx.strokeStyle = '#ffffff';
-          ctx.lineWidth = 2;
+          ctx.ellipse(
+            (ann.x + ann.width / 2) * sx, (ann.y + ann.height / 2) * sy,
+            Math.abs(ann.width / 2) * sx, Math.abs(ann.height / 2) * sy, 0, 0, Math.PI * 2
+          );
           ctx.stroke();
-        });
+        } else if (ann.type === 'line') {
+          ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(ann.x * sx, ann.y * sy);
+          ctx.lineTo((ann.x + ann.width) * sx, (ann.y + ann.height) * sy);
+          ctx.stroke();
+        } else if (ann.type === 'draw') {
+          ctx.strokeStyle = ann.color; ctx.lineWidth = 2;
+          ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.beginPath();
+          ann.points.forEach(([px, py], i) => {
+            if (i === 0) ctx.moveTo(px * sx, py * sy);
+            else ctx.lineTo(px * sx, py * sy);
+          });
+          ctx.stroke();
+        } else if (ann.type === 'highlight') {
+          ctx.fillStyle = ann.color || '#ffff00';
+          ctx.globalAlpha = 0.35;
+          ctx.fillRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
+        } else if (ann.type === 'sign') {
+          const img = new Image();
+          img.src = ann.imageDataUrl;
+          img.onload = () => ctx.drawImage(img, ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
+        }
         ctx.restore();
       }
+
+      // Live shape preview while dragging
+      const prev = previewRef.current;
+      if (prev) {
+        const px = Math.min(prev.x1, prev.x2) * sx;
+        const py = Math.min(prev.y1, prev.y2) * sy;
+        const pw = Math.abs(prev.x2 - prev.x1) * sx;
+        const ph = Math.abs(prev.y2 - prev.y1) * sy;
+        ctx.save();
+        ctx.setLineDash([5, 4]);
+        ctx.lineWidth = 1.5;
+        if (prev.tool === 'whiteout') {
+          ctx.fillStyle = 'rgba(255,255,255,0.55)';
+          ctx.fillRect(px, py, pw, ph);
+          ctx.strokeStyle = '#2997ff';
+          ctx.strokeRect(px, py, pw, ph);
+        } else if (prev.tool === 'rect') {
+          ctx.strokeStyle = '#2997ff';
+          ctx.strokeRect(px, py, pw, ph);
+        } else if (prev.tool === 'circle') {
+          ctx.strokeStyle = '#2997ff';
+          ctx.beginPath();
+          ctx.ellipse(px + pw / 2, py + ph / 2, Math.abs(pw / 2), Math.abs(ph / 2), 0, 0, Math.PI * 2);
+          ctx.stroke();
+        } else if (prev.tool === 'line') {
+          ctx.strokeStyle = '#2997ff';
+          ctx.beginPath();
+          ctx.moveTo(prev.x1 * sx, prev.y1 * sy);
+          ctx.lineTo(prev.x2 * sx, prev.y2 * sy);
+          ctx.stroke();
+        } else if (prev.tool === 'highlight') {
+          ctx.fillStyle = 'rgba(255,255,0,0.35)';
+          ctx.fillRect(px, py, pw, ph);
+          ctx.strokeStyle = '#2997ff';
+          ctx.strokeRect(px, py, pw, ph);
+        }
+        ctx.restore();
+      }
+
+      // Selection border + 8 handles
+      if (selectedId) {
+        const sel = annotations.find(a => a.id === selectedId);
+        if (sel) {
+          const bb = getBBox(sel);
+          const PAD = 6;
+          const bx = (bb.x - PAD) * sx, by = (bb.y - PAD) * sy;
+          const bw = (bb.w + PAD * 2) * sx, bh = (bb.h + PAD * 2) * sy;
+          ctx.save();
+          ctx.globalAlpha = 1;
+          ctx.strokeStyle = '#2997ff'; ctx.lineWidth = 2;
+          ctx.setLineDash([6, 3]);
+          ctx.strokeRect(bx, by, bw, bh);
+          ctx.setLineDash([]);
+          getHandles(sel).forEach(([hx, hy]) => {
+            ctx.beginPath();
+            ctx.arc(hx * sx, hy * sy, 7, 0, Math.PI * 2);
+            ctx.fillStyle = '#2997ff'; ctx.fill();
+            ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+          });
+          ctx.restore();
+        }
+      }
     }
+
+    redrawFnRef.current = redraw;
+    redraw();
   }, [annotations, viewport, selectedId]);
 
   function getCanvasCoords(e) {
-    const canvas = overlayRef.current;
-    const rect   = canvas.getBoundingClientRect();
-    const src    = e.touches ? e.touches[0] : e;
+    const rect = overlayRef.current.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
     return { x: src.clientX - rect.left, y: src.clientY - rect.top };
   }
 
@@ -259,12 +288,11 @@ export default function PdfCanvas({
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
 
-    // Check resize handles first (if something already selected)
+    // Resize handle check
     if (selectedId) {
       const sel = annotations.find(a => a.id === selectedId);
       if (sel) {
-        const handles = getHandles(sel);
-        const hIdx = hitTestHandle(handles, x, y);
+        const hIdx = hitTestHandle(getHandles(sel), x, y);
         if (hIdx !== -1) {
           onMoveStart?.();
           resizingRef.current = {
@@ -301,6 +329,8 @@ export default function PdfCanvas({
       ta.style.left     = `${rect.left + x}px`;
       ta.style.top      = `${rect.top  + y}px`;
       ta.style.fontSize = `${style.fontSize}px`;
+      ta.style.fontWeight = style.bold ? 'bold' : 'normal';
+      ta.style.fontStyle  = style.italic ? 'italic' : 'normal';
       ta.style.color    = style.color;
       ta.style.display  = 'block';
       ta.value = '';
@@ -319,8 +349,7 @@ export default function PdfCanvas({
 
     if (resizingRef.current) {
       const { id, handleIdx, startX, startY, origAnn } = resizingRef.current;
-      const updates = applyResize(origAnn, handleIdx, x - startX, y - startY);
-      onUpdateAnnotation?.(id, updates);
+      onUpdateAnnotation?.(id, applyResize(origAnn, handleIdx, x - startX, y - startY));
       setCursor(HANDLE_CURSORS[handleIdx]);
       return;
     }
@@ -336,40 +365,45 @@ export default function PdfCanvas({
       return;
     }
 
-    if (drawing.current && activeTool === 'draw') {
-      currentPath.current.push([x, y]);
-      const canvas = overlayRef.current;
-      const ctx = canvas.getContext('2d');
-      const pts = currentPath.current;
-      if (pts.length < 2) return;
-      const dpr = window.devicePixelRatio || 1;
-      const scx  = canvas.width / (viewport.width / dpr);
-      const scy  = canvas.height / (viewport.height / dpr);
-      ctx.strokeStyle = style.color; ctx.lineWidth = 2;
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(pts[pts.length - 2][0] * scx, pts[pts.length - 2][1] * scy);
-      ctx.lineTo(pts[pts.length - 1][0] * scx, pts[pts.length - 1][1] * scy);
-      ctx.stroke();
+    if (drawing.current) {
+      if (activeTool === 'draw') {
+        currentPath.current.push([x, y]);
+        const canvas = overlayRef.current;
+        const ctx = canvas.getContext('2d');
+        const pts = currentPath.current;
+        if (pts.length < 2) return;
+        const dpr = window.devicePixelRatio || 1;
+        const scx = canvas.width / (viewport.width / dpr);
+        const scy = canvas.height / (viewport.height / dpr);
+        ctx.strokeStyle = style.color; ctx.lineWidth = 2;
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(pts[pts.length - 2][0] * scx, pts[pts.length - 2][1] * scy);
+        ctx.lineTo(pts[pts.length - 1][0] * scx, pts[pts.length - 1][1] * scy);
+        ctx.stroke();
+      } else if (['whiteout','rect','circle','line','highlight'].includes(activeTool)) {
+        // Show live preview
+        previewRef.current = { tool: activeTool, x1: startPt.current.x, y1: startPt.current.y, x2: x, y2: y };
+        redrawFnRef.current?.();
+      }
       return;
     }
 
-    if (!drawing.current) {
-      // Hover over resize handle?
-      if (selectedId) {
-        const sel = annotations.find(a => a.id === selectedId);
-        if (sel) {
-          const hIdx = hitTestHandle(getHandles(sel), x, y);
-          if (hIdx !== -1) { setCursor(HANDLE_CURSORS[hIdx]); return; }
-        }
+    // Hover cursors
+    if (selectedId) {
+      const sel = annotations.find(a => a.id === selectedId);
+      if (sel) {
+        const hIdx = hitTestHandle(getHandles(sel), x, y);
+        if (hIdx !== -1) { setCursor(HANDLE_CURSORS[hIdx]); return; }
       }
-      const hit = findAnnotationAt(x, y);
-      setCursor(hit ? 'grab' : activeTool === 'text' ? 'text' : 'crosshair');
     }
+    const hit = findAnnotationAt(x, y);
+    setCursor(hit ? 'grab' : activeTool === 'text' ? 'text' : 'crosshair');
   }
 
   function onPointerUp(e) {
     e.preventDefault();
+    previewRef.current = null; // clear live preview
     if (resizingRef.current) { resizingRef.current = null; setCursor('default'); return; }
     if (movingRef.current)   { movingRef.current   = null; setCursor('grab');    return; }
     if (!drawing.current) return;
@@ -401,23 +435,21 @@ export default function PdfCanvas({
     const { x, y } = pendingText.current;
     onAddAnnotation({
       type: 'text', x, y, width: 0, height: 0, points: [],
-      text: ta.value, color: style.color, fontSize: style.fontSize, opacity: style.opacity,
+      text: ta.value, color: style.color, fontSize: style.fontSize,
+      opacity: style.opacity, bold: style.bold, italic: style.italic,
     });
     ta.value = '';
     ta.style.display = 'none';
   }
 
-  // Mini-toolbar above selected annotation
   const selectedAnn = annotations.find(a => a.id === selectedId);
   let miniToolbar = null;
   if (selectedAnn) {
-    const bb     = getBBox(selectedAnn);
-    const tbTop  = Math.max(4, bb.y - 46);
-    const tbLeft = Math.max(0, bb.x);
+    const bb = getBBox(selectedAnn);
     miniToolbar = (
       <div
         style={{
-          position: 'absolute', left: tbLeft, top: tbTop,
+          position: 'absolute', left: Math.max(0, bb.x), top: Math.max(4, bb.y - 46),
           display: 'flex', gap: 4, alignItems: 'center',
           background: 'rgba(18,18,26,0.96)',
           border: '1px solid rgba(255,255,255,0.14)',

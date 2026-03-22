@@ -17,7 +17,18 @@ export default function usePdfDownload() {
       const arrayBuffer = await originalFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const pages  = pdfDoc.getPages();
-      const font   = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const fonts  = {
+        normal:     await pdfDoc.embedFont(StandardFonts.Helvetica),
+        bold:       await pdfDoc.embedFont(StandardFonts.HelveticaBold),
+        italic:     await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+        boldItalic: await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique),
+      };
+      function pickFont(ann) {
+        if (ann.bold && ann.italic) return fonts.boldItalic;
+        if (ann.bold)   return fonts.bold;
+        if (ann.italic) return fonts.italic;
+        return fonts.normal;
+      }
 
       for (const [pageIndex, anns] of annotationsMap.entries()) {
         if (!anns || !anns.length) continue;
@@ -40,7 +51,7 @@ export default function usePdfDownload() {
             page.drawText(ann.text || '', {
               x: pdfX, y: pdfH - ann.y * scaleY,
               size: (ann.fontSize || 14) * scaleX,
-              font, color: hexToRgb(ann.color || '#000000'),
+              font: pickFont(ann), color: hexToRgb(ann.color || '#000000'),
               opacity: ann.opacity ?? 1,
             });
           } else if (ann.type === 'sign' && ann.imageDataUrl) {

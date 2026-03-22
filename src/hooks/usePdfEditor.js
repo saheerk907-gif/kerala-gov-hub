@@ -10,7 +10,7 @@ export default function usePdfEditor() {
   const [redoStack,   setRedoStack]   = useState(new Map()); // pageIndex -> Annotation[][]
   const [activeTool,  setActiveTool]  = useState('text');
   const [currentPage, setCurrentPage] = useState(0);
-  const [style, setStyle] = useState({ color: '#000000', fontSize: 14, opacity: 1 });
+  const [style, setStyle] = useState({ color: '#000000', fontSize: 14, opacity: 1, bold: false, italic: false });
 
   const getPageAnnotations = useCallback((pageIndex) =>
     annotations.get(pageIndex) || [], [annotations]);
