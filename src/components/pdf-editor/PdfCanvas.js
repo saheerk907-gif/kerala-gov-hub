@@ -320,33 +320,36 @@ export default function PdfCanvas({
     }
     lastTapRef.current = { x, y, time: now };
 
-    // Resize handle check
-    if (selectedId) {
-      const sel = annotations.find(a => a.id === selectedId);
-      if (sel) {
-        const hIdx = hitTestHandle(getHandles(sel), x, y);
-        if (hIdx !== -1) {
-          onMoveStart?.();
-          resizingRef.current = {
-            id: sel.id, handleIdx: hIdx, startX: x, startY: y,
-            origAnn: { ...sel, points: sel.points ? sel.points.map(p => [...p]) : [] },
-          };
-          setCursor(HANDLE_CURSORS[hIdx]);
-          return;
+    // When text tool is active, skip hit/move/resize — always place text
+    if (activeTool !== 'text') {
+      // Resize handle check
+      if (selectedId) {
+        const sel = annotations.find(a => a.id === selectedId);
+        if (sel) {
+          const hIdx = hitTestHandle(getHandles(sel), x, y);
+          if (hIdx !== -1) {
+            onMoveStart?.();
+            resizingRef.current = {
+              id: sel.id, handleIdx: hIdx, startX: x, startY: y,
+              origAnn: { ...sel, points: sel.points ? sel.points.map(p => [...p]) : [] },
+            };
+            setCursor(HANDLE_CURSORS[hIdx]);
+            return;
+          }
         }
       }
-    }
 
-    const hit = findAnnotationAt(x, y);
-    if (hit) {
-      onSelectionChange?.(hit.id);
-      onMoveStart?.();
-      movingRef.current = {
-        id: hit.id, startX: x, startY: y,
-        origAnn: { ...hit, points: hit.points ? hit.points.map(p => [...p]) : [] },
-      };
-      setCursor('grabbing');
-      return;
+      const hit = findAnnotationAt(x, y);
+      if (hit) {
+        onSelectionChange?.(hit.id);
+        onMoveStart?.();
+        movingRef.current = {
+          id: hit.id, startX: x, startY: y,
+          origAnn: { ...hit, points: hit.points ? hit.points.map(p => [...p]) : [] },
+        };
+        setCursor('grabbing');
+        return;
+      }
     }
 
     onSelectionChange?.(null);
