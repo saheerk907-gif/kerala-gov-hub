@@ -7,9 +7,10 @@ const HANDLE_R = 8;
 function hitTest(ann, x, y) {
   const PAD = 8;
   if (ann.type === 'text') {
-    const h = (ann.fontSize || 14) + 6;
-    return x >= ann.x - PAD && x <= ann.x + 200 + PAD &&
-           y >= ann.y - h - PAD && y <= ann.y + PAD;
+    const w = ann.width  || 200;
+    const h = ann.height || (ann.fontSize || 14) + 8;
+    return x >= ann.x - PAD && x <= ann.x + w + PAD &&
+           y >= ann.y - PAD && y <= ann.y + h + PAD;
   }
   if (ann.type === 'draw') {
     if (!ann.points?.length) return false;
@@ -24,7 +25,7 @@ function hitTest(ann, x, y) {
 
 function getBBox(ann) {
   if (ann.type === 'text') {
-    return { x: ann.x, y: ann.y - (ann.fontSize || 14) - 2, w: 200, h: (ann.fontSize || 14) + 4 };
+    return { x: ann.x, y: ann.y, w: ann.width || 200, h: ann.height || (ann.fontSize || 14) + 8 };
   }
   if (ann.type === 'draw') {
     if (!ann.points?.length) return { x: 0, y: 0, w: 0, h: 0 };
@@ -163,9 +164,13 @@ export default function PdfCanvas({
         ctx.save();
         ctx.globalAlpha = ann.opacity ?? 1;
         if (ann.type === 'text') {
-          ctx.font = canvasFont({ ...ann, fontSize: ann.fontSize * sx });
+          const fs = (ann.fontSize || 14) * sx;
+          ctx.font = canvasFont({ ...ann, fontSize: fs });
           ctx.fillStyle = ann.color;
-          ctx.fillText(ann.text, ann.x * sx, ann.y * sy);
+          const lineH = fs * 1.3;
+          (ann.text || '').split('\n').forEach((line, i) => {
+            ctx.fillText(line, ann.x * sx, (ann.y * sy) + fs + i * lineH);
+          });
         } else if (ann.type === 'whiteout') {
           ctx.fillStyle = '#ffffff';
           ctx.fillRect(ann.x * sx, ann.y * sy, ann.width * sx, ann.height * sy);
@@ -294,7 +299,9 @@ export default function PdfCanvas({
     const rect = overlayRef.current.getBoundingClientRect();
     const ta = textareaRef.current;
     ta.style.left       = `${rect.left + ann.x}px`;
-    ta.style.top        = `${rect.top  + ann.y - (ann.fontSize || style.fontSize)}px`;
+    ta.style.top        = `${rect.top  + ann.y}px`;
+    ta.style.width      = `${Math.max(160, ann.width || 200)}px`;
+    ta.style.height     = 'auto';
     ta.style.fontSize   = `${Math.max(13, ann.fontSize || style.fontSize)}px`;
     ta.style.fontWeight = ann.bold   ? 'bold'   : 'normal';
     ta.style.fontStyle  = ann.italic ? 'italic' : 'normal';
@@ -364,6 +371,8 @@ export default function PdfCanvas({
       const ta = textareaRef.current;
       ta.style.left       = `${rect.left + x}px`;
       ta.style.top        = `${rect.top  + y}px`;
+      ta.style.width      = '200px';
+      ta.style.height     = 'auto';
       ta.style.fontSize   = `${Math.max(13, style.fontSize)}px`;
       ta.style.fontWeight = style.bold   ? 'bold'   : 'normal';
       ta.style.fontStyle  = style.italic ? 'italic' : 'normal';
@@ -477,6 +486,8 @@ export default function PdfCanvas({
   function commitTextarea() {
     const ta = textareaRef.current;
     if (!ta || ta.style.display === 'none') return;
+    const taW = ta.offsetWidth  || 200;
+    const taH = ta.scrollHeight || (style.fontSize + 8);
     ta.style.display = 'none';
 
     const text = ta.value.trim();
@@ -489,12 +500,12 @@ export default function PdfCanvas({
       return;
     }
     if (editId) {
-      onUpdateAnnotation?.(editId, { text });
+      onUpdateAnnotation?.(editId, { text, width: taW, height: taH });
     } else {
       if (!pendingText.current) return;
       const { x, y } = pendingText.current;
       onAddAnnotation({
-        type: 'text', x, y, width: 0, height: 0, points: [],
+        type: 'text', x, y, width: taW, height: taH, points: [],
         text, color: style.color, fontSize: style.fontSize,
         opacity: style.opacity, bold: style.bold, italic: style.italic,
       });

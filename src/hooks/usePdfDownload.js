@@ -48,11 +48,18 @@ export default function usePdfDownload() {
           const pdfY = pdfH - ann.y * scaleY - (ann.height || 0) * scaleY;
 
           if (ann.type === 'text') {
-            page.drawText(ann.text || '', {
-              x: pdfX, y: pdfH - ann.y * scaleY,
-              size: (ann.fontSize || 14) * scaleX,
-              font: pickFont(ann), color: hexToRgb(ann.color || '#000000'),
-              opacity: ann.opacity ?? 1,
+            // ann.y is top of box; pdf-lib y=0 is bottom; baseline = top + fontSize
+            const lines = (ann.text || '').split('\n');
+            const fs    = (ann.fontSize || 14) * scaleX;
+            const lineH = fs * 1.3;
+            lines.forEach((line, i) => {
+              page.drawText(line, {
+                x: pdfX,
+                y: pdfH - (ann.y + (ann.fontSize || 14)) * scaleY - i * lineH,
+                size: fs,
+                font: pickFont(ann), color: hexToRgb(ann.color || '#000000'),
+                opacity: ann.opacity ?? 1,
+              });
             });
           } else if (ann.type === 'sign' && ann.imageDataUrl) {
             const imgBytes = await fetch(ann.imageDataUrl).then(r => r.arrayBuffer());
