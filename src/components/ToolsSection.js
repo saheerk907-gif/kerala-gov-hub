@@ -39,6 +39,24 @@ const pdfTools = [
     color: '#7c3aed',
     badge: 'NEW',
   },
+  {
+    icon: '📦',
+    title: 'PDF Compressor',
+    subtitle: 'PDF കംപ്രസ്സർ',
+    desc: 'Reduce PDF file size for portal uploads — Low / Medium / High quality presets',
+    href: '/tools/pdf-compressor',
+    color: '#f59e0b',
+    badge: 'NEW',
+  },
+  {
+    icon: '🖼️',
+    title: 'Image to PDF',
+    subtitle: 'ചിത്രം → PDF',
+    desc: 'Convert JPG, PNG images to a PDF — reorder pages, browser-only',
+    href: '/tools/image-to-pdf',
+    color: '#ec4899',
+    badge: 'NEW',
+  },
 ];
 
 const tools = [
