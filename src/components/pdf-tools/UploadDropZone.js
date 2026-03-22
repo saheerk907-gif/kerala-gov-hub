@@ -25,20 +25,22 @@ export default function UploadDropZone({ onFiles, multiple = false, label = 'Dro
       onDragLeave={() => setDragging(false)}
       onDrop={handleDrop}
       style={{
-        border: `2px dashed ${dragging ? '#10b981' : 'rgba(16,185,129,0.45)'}`,
+        border: `2px dashed ${dragging ? 'rgba(41,151,255,0.7)' : 'rgba(255,255,255,0.12)'}`,
         borderRadius: 14,
-        padding: '28px 20px',
+        padding: '32px 20px',
         textAlign: 'center',
         cursor: 'pointer',
-        background: dragging ? 'rgba(16,185,129,0.08)' : 'rgba(255,255,255,0.35)',
+        background: dragging ? 'rgba(41,151,255,0.07)' : 'rgba(255,255,255,0.03)',
         transition: 'all 0.2s',
         marginBottom: 20,
         userSelect: 'none',
       }}
     >
-      <div style={{ fontSize: 28, marginBottom: 8 }}>📎</div>
-      <p style={{ color: '#0f766e', fontWeight: 600, fontSize: 14, margin: 0 }}>{label}</p>
-      <p style={{ color: '#94a3b8', fontSize: 12, marginTop: 4 }}>PDF only</p>
+      <div style={{ fontSize: 28, marginBottom: 8, opacity: 0.7 }}>📎</div>
+      <p style={{ color: dragging ? '#2997ff' : 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: 14, margin: 0 }}>
+        {label}
+      </p>
+      <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 4 }}>PDF only</p>
       <input
         ref={inputRef}
         type="file"

@@ -6,14 +6,14 @@ import GlassTool from '@/components/pdf-tools/GlassTool';
 import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 
 const btn = {
-  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-  background: 'linear-gradient(135deg,#10b981,#0284c7)',
+  width: '100%', padding: '14px', borderRadius: 12, border: 'none',
+  background: 'linear-gradient(135deg,#2997ff,#0ea5e9)',
   color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer',
   marginTop: 8, letterSpacing: 0.3,
+  boxShadow: '0 4px 20px rgba(41,151,255,0.25)',
 };
-const btnDisabled = { ...btn, opacity: 0.5, cursor: 'not-allowed' };
+const btnDisabled = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
 
-// Parse "1-3, 5, 7-9" into 0-based page indices
 function parseRanges(str, totalPages) {
   if (!str.trim()) return Array.from({ length: totalPages }, (_, i) => i);
   const indices = new Set();
@@ -61,7 +61,6 @@ export default function PdfSplitterClient() {
     setStatus('splitting');
     try {
       if (blankRange) {
-        // Every page as separate file → zip
         const zip = new JSZip();
         for (let i = 0; i < pageCount; i++) {
           const out = await PDFDocument.create();
@@ -78,7 +77,6 @@ export default function PdfSplitterClient() {
         setStatus('No valid pages in that range.');
         return;
       } else {
-        // Single output PDF with selected pages
         const out = await PDFDocument.create();
         const pages = await out.copyPages(file.doc, indices);
         pages.forEach(p => out.addPage(p));
@@ -110,21 +108,22 @@ export default function PdfSplitterClient() {
         <>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 10,
-            background: 'rgba(255,255,255,0.55)', borderRadius: 10,
+            background: 'rgba(255,255,255,0.05)', borderRadius: 10,
             padding: '9px 14px', marginBottom: 20, fontSize: 13,
+            border: '1px solid rgba(255,255,255,0.08)',
           }}>
             <span>📄</span>
-            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#1e293b' }}>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.8)' }}>
               {file.file.name}
             </span>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>{pageCount} pages</span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>{pageCount} pages</span>
             <button
               onClick={() => { setFile(null); setPageCount(0); setStatus(null); }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 16 }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16 }}
             >×</button>
           </div>
 
-          <label style={{ fontSize: 13, fontWeight: 600, color: '#1e293b', display: 'block', marginBottom: 6 }}>
+          <label style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: 1, display: 'block', marginBottom: 8 }}>
             Pages to extract
           </label>
           <input
@@ -133,14 +132,14 @@ export default function PdfSplitterClient() {
             value={range}
             onChange={e => { setRange(e.target.value); setStatus(null); }}
             style={{
-              width: '100%', padding: '10px 14px', borderRadius: 10,
-              border: '1px solid rgba(255,255,255,0.8)',
-              background: 'rgba(255,255,255,0.5)', fontSize: 13, color: '#1e293b',
-              outline: 'none', marginBottom: 6, boxSizing: 'border-box',
+              width: '100%', padding: '11px 14px', borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(255,255,255,0.05)', fontSize: 13,
+              color: '#fff', outline: 'none', marginBottom: 6, boxSizing: 'border-box',
             }}
           />
-          <p style={{ color: '#64748b', fontSize: 12, marginBottom: 16 }}>
-            {rangeLabel || 'Leave blank to split every page into separate files (downloaded as .zip)'}
+          <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, marginBottom: 16 }}>
+            {rangeLabel || 'Leave blank to split every page into separate files (.zip)'}
           </p>
 
           <button
@@ -154,15 +153,13 @@ export default function PdfSplitterClient() {
       )}
 
       {status === 'done' && (
-        <p style={{ color: '#10b981', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>
-          ✓ Download started
-        </p>
+        <p style={{ color: '#30d158', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>✓ Download started</p>
       )}
       {status && status.startsWith('error') && (
-        <p style={{ color: '#ef4444', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
+        <p style={{ color: '#ff453a', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
       )}
-      {status && status === 'No valid pages in that range.' && (
-        <p style={{ color: '#f59e0b', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
+      {status === 'No valid pages in that range.' && (
+        <p style={{ color: '#ff9f0a', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
       )}
     </GlassTool>
   );

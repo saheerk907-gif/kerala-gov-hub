@@ -6,18 +6,17 @@ import GlassTool from '@/components/pdf-tools/GlassTool';
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/gif,image/bmp';
 
 const btn = {
-  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-  background: 'linear-gradient(135deg,#10b981,#0284c7)',
+  width: '100%', padding: '14px', borderRadius: 12, border: 'none',
+  background: 'linear-gradient(135deg,#2997ff,#0ea5e9)',
   color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer',
   marginTop: 8, letterSpacing: 0.3,
+  boxShadow: '0 4px 20px rgba(41,151,255,0.25)',
 };
-const btnDisabled = { ...btn, opacity: 0.5, cursor: 'not-allowed' };
+const btnDisabled = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
 
-// A4 in points (72 pts/inch)
 const A4 = { w: 595.28, h: 841.89 };
 
 async function imageFileToBytes(file) {
-  // Normalise everything to PNG via canvas so pdf-lib can always embed it
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
@@ -35,7 +34,7 @@ async function imageFileToBytes(file) {
 }
 
 export default function ImageToPdfClient() {
-  const [images, setImages] = useState([]); // [{ file, previewUrl, id }]
+  const [images, setImages] = useState([]);
   const [status, setStatus] = useState(null);
   const inputRef = useRef(null);
 
@@ -57,19 +56,13 @@ export default function ImageToPdfClient() {
 
   function moveUp(idx) {
     if (idx === 0) return;
-    setImages(prev => {
-      const arr = [...prev];
-      [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]];
-      return arr;
-    });
+    setImages(prev => { const arr = [...prev]; [arr[idx - 1], arr[idx]] = [arr[idx], arr[idx - 1]]; return arr; });
   }
 
   function moveDown(idx) {
     setImages(prev => {
       if (idx >= prev.length - 1) return prev;
-      const arr = [...prev];
-      [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]];
-      return arr;
+      const arr = [...prev]; [arr[idx], arr[idx + 1]] = [arr[idx + 1], arr[idx]]; return arr;
     });
   }
 
@@ -78,36 +71,24 @@ export default function ImageToPdfClient() {
     setStatus('converting');
     try {
       const pdfDoc = await PDFDocument.create();
-
       for (const img of images) {
         const { bytes } = await imageFileToBytes(img.file);
         const embedded = await pdfDoc.embedPng(bytes);
         const { width: iw, height: ih } = embedded;
-
-        // Fit image inside A4 with margins, preserving aspect ratio
         const margin = 20;
         const maxW = A4.w - margin * 2;
         const maxH = A4.h - margin * 2;
-        const scale = Math.min(maxW / iw, maxH / ih, 1); // don't upscale
+        const scale = Math.min(maxW / iw, maxH / ih, 1);
         const dw = iw * scale;
         const dh = ih * scale;
-
         const page = pdfDoc.addPage([A4.w, A4.h]);
-        page.drawImage(embedded, {
-          x: (A4.w - dw) / 2,
-          y: (A4.h - dh) / 2,
-          width: dw,
-          height: dh,
-        });
+        page.drawImage(embedded, { x: (A4.w - dw) / 2, y: (A4.h - dh) / 2, width: dw, height: dh });
       }
-
       const bytes = await pdfDoc.save();
       const blob  = new Blob([bytes], { type: 'application/pdf' });
       const url   = URL.createObjectURL(blob);
       const a     = document.createElement('a');
-      a.href = url;
-      a.download = 'images.pdf';
-      a.click();
+      a.href = url; a.download = 'images.pdf'; a.click();
       setTimeout(() => URL.revokeObjectURL(url), 5000);
       setStatus('done');
     } catch (err) {
@@ -126,16 +107,17 @@ export default function ImageToPdfClient() {
         onDragOver={e => e.preventDefault()}
         onDrop={e => { e.preventDefault(); addImages(e.dataTransfer.files); }}
         style={{
-          border: '2px dashed rgba(16,185,129,0.45)', borderRadius: 14,
-          padding: '22px 20px', textAlign: 'center', cursor: 'pointer',
-          background: 'rgba(255,255,255,0.35)', marginBottom: 16,
+          border: '2px dashed rgba(255,255,255,0.12)', borderRadius: 14,
+          padding: '28px 20px', textAlign: 'center', cursor: 'pointer',
+          background: 'rgba(255,255,255,0.03)', marginBottom: 16,
+          transition: 'all 0.2s',
         }}
       >
-        <div style={{ fontSize: 28, marginBottom: 6 }}>🖼️</div>
-        <p style={{ color: '#0f766e', fontWeight: 600, fontSize: 14, margin: 0 }}>
+        <div style={{ fontSize: 28, marginBottom: 6, opacity: 0.6 }}>🖼️</div>
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: 14, margin: 0 }}>
           Drop images here or click to browse
         </p>
-        <p style={{ color: '#94a3b8', fontSize: 11, marginTop: 4 }}>JPG, PNG, WEBP, BMP supported</p>
+        <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, marginTop: 4 }}>JPG, PNG, WEBP, BMP supported</p>
         <input
           ref={inputRef} type="file" accept={ACCEPT} multiple style={{ display: 'none' }}
           onChange={e => { addImages(e.target.files); e.target.value = ''; }}
@@ -144,30 +126,30 @@ export default function ImageToPdfClient() {
 
       {images.length > 0 && (
         <>
-          <p style={{ fontSize: 11, color: '#64748b', marginBottom: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 1 }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginBottom: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1 }}>
             {images.length} image{images.length > 1 ? 's' : ''} — each becomes one page
           </p>
 
-          {/* Thumbnail list */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
             {images.map((img, idx) => (
               <div key={img.id} style={{
                 display: 'flex', alignItems: 'center', gap: 10,
-                background: 'rgba(255,255,255,0.55)', borderRadius: 10, padding: '8px 12px',
+                background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}>
                 <img src={img.previewUrl} alt="" style={{
                   width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0,
                 }} />
-                <span style={{ flex: 1, fontSize: 12, color: '#1e293b', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <span style={{ flex: 1, fontSize: 12, color: 'rgba(255,255,255,0.75)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {idx + 1}. {img.file.name}
                 </span>
-                <div style={{ display: 'flex', gap: 4 }}>
+                <div style={{ display: 'flex', gap: 2 }}>
                   <button onClick={() => moveUp(idx)} disabled={idx === 0}
-                    style={{ background: 'none', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#64748b', fontSize: 14, padding: '2px 4px' }}>↑</button>
+                    style={{ background: 'none', border: 'none', cursor: idx === 0 ? 'default' : 'pointer', color: idx === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.45)', fontSize: 14, padding: '2px 6px' }}>↑</button>
                   <button onClick={() => moveDown(idx)} disabled={idx === images.length - 1}
-                    style={{ background: 'none', border: 'none', cursor: idx === images.length - 1 ? 'default' : 'pointer', color: idx === images.length - 1 ? '#cbd5e1' : '#64748b', fontSize: 14, padding: '2px 4px' }}>↓</button>
+                    style={{ background: 'none', border: 'none', cursor: idx === images.length - 1 ? 'default' : 'pointer', color: idx === images.length - 1 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.45)', fontSize: 14, padding: '2px 6px' }}>↓</button>
                   <button onClick={() => removeImage(img.id)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 16, padding: '2px 4px' }}>×</button>
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16, padding: '2px 6px' }}>×</button>
                 </div>
               </div>
             ))}
@@ -178,7 +160,7 @@ export default function ImageToPdfClient() {
           </button>
 
           {status === 'done' && (
-            <p style={{ color: '#10b981', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>
+            <p style={{ color: '#30d158', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>
               ✓ images.pdf downloaded
             </p>
           )}
@@ -186,7 +168,7 @@ export default function ImageToPdfClient() {
       )}
 
       {status && status.startsWith('error') && (
-        <p style={{ color: '#ef4444', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
+        <p style={{ color: '#ff453a', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
       )}
     </GlassTool>
   );

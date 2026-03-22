@@ -8,25 +8,27 @@ import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const btn = {
-  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-  background: 'linear-gradient(135deg,#10b981,#0284c7)',
+  width: '100%', padding: '14px', borderRadius: 12, border: 'none',
+  background: 'linear-gradient(135deg,#2997ff,#0ea5e9)',
   color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer',
   marginTop: 8, letterSpacing: 0.3,
+  boxShadow: '0 4px 20px rgba(41,151,255,0.25)',
 };
-const btnDisabled = { ...btn, opacity: 0.5, cursor: 'not-allowed' };
-const outlineBtn = {
-  padding: '8px 16px', borderRadius: 9, border: '1px solid rgba(16,185,129,0.5)',
-  background: 'rgba(255,255,255,0.5)', color: '#0f766e', fontWeight: 600,
-  fontSize: 13, cursor: 'pointer',
-};
+const btnDisabled = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
 const ocrBtn = {
-  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-  background: 'linear-gradient(135deg,#7c3aed,#0284c7)',
+  width: '100%', padding: '14px', borderRadius: 12, border: 'none',
+  background: 'linear-gradient(135deg,#bf5af2,#2997ff)',
   color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer',
   marginTop: 8, letterSpacing: 0.3,
+  boxShadow: '0 4px 20px rgba(191,90,242,0.2)',
+};
+const outlineBtn = {
+  padding: '9px 18px', borderRadius: 10,
+  border: '1px solid rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)',
+  fontWeight: 600, fontSize: 13, cursor: 'pointer',
 };
 
-// Smarter text joining that preserves Malayalam text flow
 function joinPageItems(items) {
   let result = '';
   for (let i = 0; i < items.length; i++) {
@@ -36,7 +38,6 @@ function joinPageItems(items) {
     if (item.hasEOL) {
       result += '\n';
     } else if (i < items.length - 1 && items[i + 1]?.str) {
-      // Add space only if neither ends/starts with Malayalam or zero-width joiner
       const next = items[i + 1].str;
       const endsWithMal = /[\u0D00-\u0D7F]$/.test(item.str);
       const startsWithMal = /^[\u0D00-\u0D7F]/.test(next);
@@ -46,7 +47,6 @@ function joinPageItems(items) {
   return result.normalize('NFC');
 }
 
-// Render a pdfjs page to a canvas at given scale
 async function renderPageToCanvas(page, scale = 2) {
   const viewport = page.getViewport({ scale });
   const canvas = document.createElement('canvas');
@@ -61,7 +61,7 @@ export default function PdfToTextClient() {
   const [file, setFile] = useState(null);
   const [pdfDoc, setPdfDoc] = useState(null);
   const [text, setText] = useState('');
-  const [status, setStatus] = useState(null); // null | 'loading' | 'extracting' | 'ocr' | 'done' | 'error:...'
+  const [status, setStatus] = useState(null);
   const [ocrProgress, setOcrProgress] = useState('');
   const [copied, setCopied] = useState(false);
   const workerRef = useRef(null);
@@ -104,7 +104,6 @@ export default function PdfToTextClient() {
     setStatus('ocr');
     setOcrProgress('Loading Malayalam OCR engine…');
     try {
-      // Lazy-load Tesseract to keep initial bundle small
       const { createWorker } = await import('tesseract.js');
       const worker = await createWorker('mal+eng', 1, {
         logger: m => {
@@ -114,7 +113,6 @@ export default function PdfToTextClient() {
         },
       });
       workerRef.current = worker;
-
       const parts = [];
       for (let i = 1; i <= pdfDoc.numPages; i++) {
         setOcrProgress(`OCR: page ${i} of ${pdfDoc.numPages}…`);
@@ -123,7 +121,6 @@ export default function PdfToTextClient() {
         const { data: { text: pageText } } = await worker.recognize(canvas);
         parts.push(`--- Page ${i} ---\n${pageText.trim()}`);
       }
-
       await worker.terminate();
       workerRef.current = null;
       setText(parts.join('\n\n'));
@@ -165,40 +162,41 @@ export default function PdfToTextClient() {
       )}
 
       {status === 'loading' && (
-        <p style={{ color: '#64748b', fontSize: 13, textAlign: 'center', padding: 16 }}>Loading PDF…</p>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center', padding: 16 }}>Loading PDF…</p>
       )}
 
       {pdfDoc && !text && (
         <>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 10,
-            background: 'rgba(255,255,255,0.55)', borderRadius: 10,
+            background: 'rgba(255,255,255,0.05)', borderRadius: 10,
             padding: '9px 14px', marginBottom: 16, fontSize: 13,
+            border: '1px solid rgba(255,255,255,0.08)',
           }}>
             <span>📄</span>
-            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#1e293b' }}>
+            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.8)' }}>
               {file.name}
             </span>
-            <span style={{ color: '#94a3b8', fontSize: 11 }}>{pdfDoc.numPages} pages</span>
+            <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>{pdfDoc.numPages} pages</span>
             <button onClick={handleReset}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 16 }}>×</button>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16 }}>×</button>
           </div>
 
           <button style={busy ? btnDisabled : btn} disabled={busy} onClick={handleExtract}>
             {status === 'extracting' ? 'Extracting…' : '📃 Extract Text (Fast)'}
           </button>
 
-          <button style={busy ? { ...ocrBtn, opacity: 0.5, cursor: 'not-allowed' } : ocrBtn} disabled={busy} onClick={handleOcr}>
+          <button style={busy ? { ...ocrBtn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' } : ocrBtn} disabled={busy} onClick={handleOcr}>
             {status === 'ocr' ? ocrProgress || 'Running OCR…' : '🔍 Malayalam OCR (Accurate)'}
           </button>
 
-          <p style={{ color: '#64748b', fontSize: 11, marginTop: 10, lineHeight: 1.5, textAlign: 'center' }}>
-            <b>Fast</b> — works for Unicode PDFs (most modern documents)<br />
-            <b>Malayalam OCR</b> — use this for scanned PDFs or garbled text (~30s per page)
+          <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, marginTop: 12, lineHeight: 1.6, textAlign: 'center' }}>
+            <b style={{ color: 'rgba(255,255,255,0.5)' }}>Fast</b> — works for Unicode PDFs (most modern documents)<br />
+            <b style={{ color: 'rgba(255,255,255,0.5)' }}>Malayalam OCR</b> — for scanned PDFs or garbled text (~30s/page)
           </p>
 
           {status === 'ocr' && ocrProgress && (
-            <p style={{ color: '#7c3aed', fontSize: 12, textAlign: 'center', marginTop: 8, fontWeight: 600 }}>
+            <p style={{ color: '#bf5af2', fontSize: 12, textAlign: 'center', marginTop: 8, fontWeight: 600 }}>
               {ocrProgress}
             </p>
           )}
@@ -207,10 +205,10 @@ export default function PdfToTextClient() {
 
       {text && (
         <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#1e293b' }}>Extracted text</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)' }}>Extracted text</span>
             <button onClick={handleReset}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8', fontSize: 12 }}>
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.3)', fontSize: 12 }}>
               ← New file
             </button>
           </div>
@@ -219,9 +217,9 @@ export default function PdfToTextClient() {
             value={text}
             style={{
               width: '100%', height: 280, padding: '12px 14px', borderRadius: 12,
-              border: '1px solid rgba(255,255,255,0.8)',
-              background: 'rgba(255,255,255,0.45)', fontSize: 13,
-              color: '#1e293b', resize: 'vertical',
+              border: '1px solid rgba(255,255,255,0.09)',
+              background: 'rgba(255,255,255,0.04)', fontSize: 13,
+              color: 'rgba(255,255,255,0.8)', resize: 'vertical',
               fontFamily: "'Noto Sans Malayalam', 'Meera', sans-serif",
               lineHeight: 1.8, boxSizing: 'border-box', outline: 'none',
             }}
@@ -234,8 +232,6 @@ export default function PdfToTextClient() {
               ⬇ Save as .txt
             </button>
           </div>
-
-          {/* Try OCR if text looks wrong */}
           <button
             style={{ ...ocrBtn, marginTop: 14, fontSize: 13, padding: '10px' }}
             onClick={() => { setText(''); handleOcr(); }}
@@ -247,7 +243,7 @@ export default function PdfToTextClient() {
       )}
 
       {status && status.startsWith('error') && (
-        <p style={{ color: '#ef4444', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
+        <p style={{ color: '#ff453a', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
       )}
     </GlassTool>
   );

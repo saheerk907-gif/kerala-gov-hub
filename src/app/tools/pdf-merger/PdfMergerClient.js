@@ -5,16 +5,17 @@ import GlassTool from '@/components/pdf-tools/GlassTool';
 import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 
 const btn = {
-  width: '100%', padding: '13px', borderRadius: 12, border: 'none',
-  background: 'linear-gradient(135deg,#10b981,#0284c7)',
+  width: '100%', padding: '14px', borderRadius: 12, border: 'none',
+  background: 'linear-gradient(135deg,#2997ff,#0ea5e9)',
   color: '#fff', fontWeight: 700, fontSize: 15, cursor: 'pointer',
   marginTop: 8, letterSpacing: 0.3,
+  boxShadow: '0 4px 20px rgba(41,151,255,0.25)',
 };
-const btnDisabled = { ...btn, opacity: 0.5, cursor: 'not-allowed' };
+const btnDisabled = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
 
 export default function PdfMergerClient() {
   const [files, setFiles] = useState([]);
-  const [status, setStatus] = useState(null); // null | 'merging' | 'done' | string(error)
+  const [status, setStatus] = useState(null);
 
   function addFiles(newFiles) {
     setFiles(prev => [...prev, ...newFiles]);
@@ -49,8 +50,6 @@ export default function PdfMergerClient() {
     }
   }
 
-  const totalPages = null; // could add page count later
-
   return (
     <GlassTool icon="🗂️" title="PDF Merger" titleMl="PDF ലയനം">
       <UploadDropZone onFiles={addFiles} multiple label="Drop PDF files here or click to browse" />
@@ -60,19 +59,20 @@ export default function PdfMergerClient() {
           {files.map((f, i) => (
             <div key={i} style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              background: 'rgba(255,255,255,0.55)', borderRadius: 10,
+              background: 'rgba(255,255,255,0.05)', borderRadius: 10,
               padding: '9px 14px', marginBottom: 8, fontSize: 13,
+              border: '1px solid rgba(255,255,255,0.08)',
             }}>
               <span style={{ fontSize: 16 }}>📄</span>
-              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#1e293b' }}>
+              <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'rgba(255,255,255,0.8)' }}>
                 {i + 1}. {f.name}
               </span>
-              <span style={{ color: '#94a3b8', fontSize: 11, whiteSpace: 'nowrap' }}>
+              <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11, whiteSpace: 'nowrap' }}>
                 {(f.size / 1024).toFixed(0)} KB
               </span>
               <button
                 onClick={() => removeFile(i)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 16, lineHeight: 1 }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16, lineHeight: 1 }}
                 title="Remove"
               >×</button>
             </div>
@@ -89,18 +89,18 @@ export default function PdfMergerClient() {
       </button>
 
       {files.length === 1 && (
-        <p style={{ color: '#94a3b8', fontSize: 12, textAlign: 'center', marginTop: 8 }}>
+        <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: 12, textAlign: 'center', marginTop: 8 }}>
           Add at least one more PDF to merge
         </p>
       )}
 
       {status === 'done' && (
-        <p style={{ color: '#10b981', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>
+        <p style={{ color: '#30d158', fontSize: 13, textAlign: 'center', marginTop: 10, fontWeight: 600 }}>
           ✓ merged.pdf downloaded
         </p>
       )}
       {status && status.startsWith('error') && (
-        <p style={{ color: '#ef4444', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
+        <p style={{ color: '#ff453a', fontSize: 12, textAlign: 'center', marginTop: 10 }}>{status}</p>
       )}
     </GlassTool>
   );
