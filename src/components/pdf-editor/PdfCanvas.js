@@ -543,6 +543,27 @@ export default function PdfCanvas({
             ✏️ Edit
           </button>
         )}
+        {selectedAnn.type === 'line' && (
+          <button
+            onClick={() => {
+              onMoveStart?.();
+              const { width, height } = selectedAnn;
+              if (Math.abs(width) >= Math.abs(height)) {
+                // snap to horizontal
+                onUpdateAnnotation?.(selectedAnn.id, { height: 0 });
+              } else {
+                // snap to vertical
+                onUpdateAnnotation?.(selectedAnn.id, { width: 0 });
+              }
+            }}
+            style={{
+              background: 'rgba(41,151,255,0.15)', border: '1px solid rgba(41,151,255,0.4)',
+              color: '#2997ff', borderRadius: 7, padding: '4px 12px',
+              fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>
+            ⟂ Straighten
+          </button>
+        )}
         <button
           onClick={() => { onDeleteAnnotation?.(selectedAnn.id); onSelectionChange?.(null); }}
           style={{
