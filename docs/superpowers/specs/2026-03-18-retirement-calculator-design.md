@@ -71,8 +71,7 @@ daysRemainder = daysLeft % 30 (approx)
 totalServiceDays = retirementDate - DOJ
 serviceYears = Math.floor(totalServiceDays / 365.25)
 serviceMonths = Math.floor((totalServiceDays % 365.25) / 30.44)
-qualifyingYears = Math.min(serviceYears + (serviceMonths >= 6 ? 1 : 0), 33)
-// >= 6 months rounds up (6 months or more = full year)
+qualifyingYears = Math.min(serviceYears + (serviceMonths > 6 ? 1 : 0), 33)
 ```
 
 ### LPR Start Date (Pre-NPS only)
@@ -90,22 +89,16 @@ daAmount = Math.round(basicPay * daPercent / 100)
 emoluments = basicPay + daAmount           // last month emoluments proxy
 
 // Pension = 50% of average emoluments (last 10 months). Using last month pay as proxy — acceptable approximation.
-monthlyPension = Math.max(11500, Math.round(emoluments / 2))
-// Floor of ₹11,500/month (current minimum pension)
-// If formula result < ₹11,500, display ₹11,500 with note "Minimum pension applies"
+monthlyPension = Math.max(9000, Math.round(emoluments / 2))
+// Floor of ₹9,000/month per 11th PRC minimum pension order
+// If formula result < ₹9,000, display ₹9,000 with note "Minimum pension applies"
 
-// qualifyingYears rounding: serviceMonths >= 6 rounds UP to next year (6 months or more = full year)
-// Example: 20 years 7 months → 21 years. 20 years 5 months → 20 years.
-// Max qualifying years = 33
-qualifyingYears = Math.min(serviceYears + (serviceMonths >= 6 ? 1 : 0), 33)
-
-// Formula: DCRG = (emoluments ÷ 2) × number of six-month periods
-// Six-month periods = qualifyingYears × 2
-// Simplified: DCRG = emoluments × qualifyingYears
-// Cap = ₹14,00,000 (per Kerala Finance Dept / KSR Rule 77)
-// NOTE: existing /dcrg calculator uses ₹20L cap — that is incorrect. This calculator uses ₹14L.
-dcrgRaw = emoluments * qualifyingYears
-dcrg = qualifyingYears >= 5 ? Math.min(dcrgRaw, 1400000) : 0
+// qualifyingYears rounding: serviceMonths > 6 rounds up (exactly 6 months does NOT round up)
+// Max qualifying years = 33; matches existing DCRG calculator at /dcrg
+dcrgRaw = Math.ceil(emoluments * qualifyingYears / 2)
+dcrg = qualifyingYears >= 5 ? Math.min(dcrgRaw, 2000000) : 0
+// Cap = ₹20,00,000 — matches MAX_DCRG constant in existing /dcrg calculator
+// Note: FAQ text in /dcrg says ₹14L; code uses ₹20L. Code is authoritative here.
 dcrgEligible = qualifyingYears >= 5   // minimum 5 years qualifying service required
 
 leaveEncashment = Math.round(emoluments / 30 * elDays)
@@ -202,7 +195,7 @@ RetirementCalculator
 | `retirementDate <= today` | Replace countdown with "You have retired on [date]" message; still show financial estimates for reference |
 | `elDays = 0` | Hide LPR Start Date from Key Dates and Timeline |
 | `qualifyingYears < 5` | DCRG card shows "Not eligible — minimum 5 years qualifying service required" |
-| `monthlyPension < 11500` | Show ₹11,500 with "Minimum pension applies" note |
+| `monthlyPension < 9000` | Show ₹9,000 with "Minimum pension applies (11th PRC)" note |
 | Re-appointed employee | Out of scope — add note in UI: "If you have a break in service or were re-appointed, please verify your qualifying service manually" |
 
 ---
