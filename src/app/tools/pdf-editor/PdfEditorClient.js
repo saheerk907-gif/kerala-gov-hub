@@ -6,10 +6,10 @@ import usePdfEditor from '@/hooks/usePdfEditor';
 import usePdfDownload from '@/hooks/usePdfDownload';
 
 // Set up PDF.js worker on client only (avoids SSR DOMMatrix error)
+// Worker is served from /public to avoid CDN version mismatches
 if (typeof window !== 'undefined') {
-  import('pdfjs-dist').then(({ GlobalWorkerOptions, version }) => {
-    GlobalWorkerOptions.workerSrc =
-      `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.min.js`;
+  import('pdfjs-dist').then(({ GlobalWorkerOptions }) => {
+    GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
   });
 }
 
