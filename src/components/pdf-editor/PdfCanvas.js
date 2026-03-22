@@ -2,6 +2,8 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
+const HANDLE_R = 8; // hit-test radius in CSS-px
+
 function hitTest(ann, x, y) {
   const PAD = 8;
   if (ann.type === 'text') {
@@ -34,6 +36,66 @@ function getBBox(ann) {
   return { x: ann.x, y: ann.y, w: ann.width || 0, h: ann.height || 0 };
 }
 
+// Returns 8 handle positions in CSS-px: TL,T,TR,R,BR,B,BL,L
+function getHandles(ann) {
+  const bb = getBBox(ann);
+  const PAD = 6;
+  const x1 = bb.x - PAD, y1 = bb.y - PAD;
+  const x2 = bb.x + bb.w + PAD, y2 = bb.y + bb.h + PAD;
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  return [[x1,y1],[mx,y1],[x2,y1],[x2,my],[x2,y2],[mx,y2],[x1,y2],[x1,my]];
+}
+
+function hitTestHandle(handles, x, y) {
+  for (let i = 0; i < handles.length; i++) {
+    const [hx, hy] = handles[i];
+    if (Math.abs(x - hx) <= HANDLE_R && Math.abs(y - hy) <= HANDLE_R) return i;
+  }
+  return -1;
+}
+
+// CSS cursor for each handle (TL,T,TR,R,BR,B,BL,L)
+const HANDLE_CURSORS = [
+  'nw-resize','n-resize','ne-resize','e-resize',
+  'se-resize','s-resize','sw-resize','w-resize',
+];
+
+function applyResize(origAnn, handleIdx, dx, dy) {
+  if (origAnn.type === 'draw') {
+    const bb = getBBox(origAnn);
+    let x1 = bb.x, y1 = bb.y, x2 = bb.x + bb.w, y2 = bb.y + bb.h;
+    if (handleIdx === 0) { x1 += dx; y1 += dy; }
+    else if (handleIdx === 1) { y1 += dy; }
+    else if (handleIdx === 2) { x2 += dx; y1 += dy; }
+    else if (handleIdx === 3) { x2 += dx; }
+    else if (handleIdx === 4) { x2 += dx; y2 += dy; }
+    else if (handleIdx === 5) { y2 += dy; }
+    else if (handleIdx === 6) { x1 += dx; y2 += dy; }
+    else if (handleIdx === 7) { x1 += dx; }
+    const newW = Math.max(10, x2 - x1);
+    const newH = Math.max(10, y2 - y1);
+    const scX = newW / Math.max(1, bb.w);
+    const scY = newH / Math.max(1, bb.h);
+    return {
+      points: origAnn.points.map(([px, py]) => [
+        x1 + (px - bb.x) * scX,
+        y1 + (py - bb.y) * scY,
+      ]),
+    };
+  }
+
+  let { x, y, width, height } = origAnn;
+  if (handleIdx === 0) { x += dx; y += dy; width -= dx; height -= dy; }
+  else if (handleIdx === 1) { y += dy; height -= dy; }
+  else if (handleIdx === 2) { width += dx; y += dy; height -= dy; }
+  else if (handleIdx === 3) { width += dx; }
+  else if (handleIdx === 4) { width += dx; height += dy; }
+  else if (handleIdx === 5) { height += dy; }
+  else if (handleIdx === 6) { x += dx; width -= dx; height += dy; }
+  else if (handleIdx === 7) { x += dx; width -= dx; }
+  return { x, y, width: Math.max(10, width), height: Math.max(10, height) };
+}
+
 export default function PdfCanvas({
   pdfDoc, pageIndex, annotations, onAddAnnotation,
   activeTool, style, onSignRequest,
@@ -52,8 +114,9 @@ export default function PdfCanvas({
   const currentPath = useRef([]);
   const pendingText = useRef(null);
   const movingRef   = useRef(null);
+  const resizingRef = useRef(null);
 
-  // ── Render PDF page (fills container width) ──────────────────────
+  // ── Render PDF page ────────────────────────────────────────────────
   useEffect(() => {
     if (!pdfDoc) return;
     let cancelled = false;
@@ -63,7 +126,6 @@ export default function PdfCanvas({
       const dpr    = window.devicePixelRatio || 1;
       const baseVp = page.getViewport({ scale: 1 });
 
-      // Fill the wrapper width; clamp to reasonable bounds
       const availW   = wrapRef.current?.clientWidth || (window.innerWidth - 100);
       const scaleCSS = Math.min(Math.max(availW * 0.98 / baseVp.width, 1.0), 5.0);
       const vp       = page.getViewport({ scale: scaleCSS * dpr });
@@ -84,12 +146,11 @@ export default function PdfCanvas({
       }
     }
 
-    // Small delay to let layout settle so clientWidth is correct
     const t = setTimeout(render, 0);
     return () => { cancelled = true; clearTimeout(t); };
   }, [pdfDoc, pageIndex]);
 
-  // ── Redraw overlay annotations + selection border ────────────────
+  // ── Redraw overlay annotations + selection ─────────────────────────
   useEffect(() => {
     const canvas = overlayRef.current;
     if (!canvas || !viewport) return;
@@ -148,7 +209,7 @@ export default function PdfCanvas({
       ctx.restore();
     }
 
-    // Selection border
+    // Selection border + 8 resize handles
     if (selectedId) {
       const sel = annotations.find(a => a.id === selectedId);
       if (sel) {
@@ -156,16 +217,25 @@ export default function PdfCanvas({
         const PAD = 6;
         const bx  = (bb.x - PAD) * sx, by  = (bb.y - PAD) * sy;
         const bw  = (bb.w + PAD * 2) * sx, bh = (bb.h + PAD * 2) * sy;
+
         ctx.save();
         ctx.globalAlpha = 1;
         ctx.strokeStyle = '#2997ff'; ctx.lineWidth = 2;
         ctx.setLineDash([6, 3]);
         ctx.strokeRect(bx, by, bw, bh);
         ctx.setLineDash([]);
-        ctx.fillStyle = '#2997ff';
-        for (const [hx, hy] of [[bx, by],[bx+bw, by],[bx, by+bh],[bx+bw, by+bh]]) {
-          ctx.beginPath(); ctx.arc(hx, hy, 5, 0, Math.PI * 2); ctx.fill();
-        }
+
+        // Draw 8 handles — blue fill, white border, visible on any background
+        const handles = getHandles(sel);
+        handles.forEach(([hx, hy]) => {
+          ctx.beginPath();
+          ctx.arc(hx * sx, hy * sy, 7, 0, Math.PI * 2);
+          ctx.fillStyle = '#2997ff';
+          ctx.fill();
+          ctx.strokeStyle = '#ffffff';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        });
         ctx.restore();
       }
     }
@@ -188,6 +258,24 @@ export default function PdfCanvas({
   function onPointerDown(e) {
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
+
+    // Check resize handles first (if something already selected)
+    if (selectedId) {
+      const sel = annotations.find(a => a.id === selectedId);
+      if (sel) {
+        const handles = getHandles(sel);
+        const hIdx = hitTestHandle(handles, x, y);
+        if (hIdx !== -1) {
+          onMoveStart?.();
+          resizingRef.current = {
+            id: sel.id, handleIdx: hIdx, startX: x, startY: y,
+            origAnn: { ...sel, points: sel.points ? sel.points.map(p => [...p]) : [] },
+          };
+          setCursor(HANDLE_CURSORS[hIdx]);
+          return;
+        }
+      }
+    }
 
     const hit = findAnnotationAt(x, y);
     if (hit) {
@@ -229,6 +317,14 @@ export default function PdfCanvas({
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
 
+    if (resizingRef.current) {
+      const { id, handleIdx, startX, startY, origAnn } = resizingRef.current;
+      const updates = applyResize(origAnn, handleIdx, x - startX, y - startY);
+      onUpdateAnnotation?.(id, updates);
+      setCursor(HANDLE_CURSORS[handleIdx]);
+      return;
+    }
+
     if (movingRef.current) {
       const { id, startX, startY, origAnn } = movingRef.current;
       const dx = x - startX, dy = y - startY;
@@ -247,18 +343,26 @@ export default function PdfCanvas({
       const pts = currentPath.current;
       if (pts.length < 2) return;
       const dpr = window.devicePixelRatio || 1;
-      const sx  = canvas.width / (viewport.width / dpr);
-      const sy  = canvas.height / (viewport.height / dpr);
+      const scx  = canvas.width / (viewport.width / dpr);
+      const scy  = canvas.height / (viewport.height / dpr);
       ctx.strokeStyle = style.color; ctx.lineWidth = 2;
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.beginPath();
-      ctx.moveTo(pts[pts.length - 2][0] * sx, pts[pts.length - 2][1] * sy);
-      ctx.lineTo(pts[pts.length - 1][0] * sx, pts[pts.length - 1][1] * sy);
+      ctx.moveTo(pts[pts.length - 2][0] * scx, pts[pts.length - 2][1] * scy);
+      ctx.lineTo(pts[pts.length - 1][0] * scx, pts[pts.length - 1][1] * scy);
       ctx.stroke();
       return;
     }
 
     if (!drawing.current) {
+      // Hover over resize handle?
+      if (selectedId) {
+        const sel = annotations.find(a => a.id === selectedId);
+        if (sel) {
+          const hIdx = hitTestHandle(getHandles(sel), x, y);
+          if (hIdx !== -1) { setCursor(HANDLE_CURSORS[hIdx]); return; }
+        }
+      }
       const hit = findAnnotationAt(x, y);
       setCursor(hit ? 'grab' : activeTool === 'text' ? 'text' : 'crosshair');
     }
@@ -266,11 +370,8 @@ export default function PdfCanvas({
 
   function onPointerUp(e) {
     e.preventDefault();
-    if (movingRef.current) {
-      movingRef.current = null;
-      setCursor('grab');
-      return;
-    }
+    if (resizingRef.current) { resizingRef.current = null; setCursor('default'); return; }
+    if (movingRef.current)   { movingRef.current   = null; setCursor('grab');    return; }
     if (!drawing.current) return;
     drawing.current = false;
     const { x, y } = getCanvasCoords(e);
@@ -306,7 +407,7 @@ export default function PdfCanvas({
     ta.style.display = 'none';
   }
 
-  // Mini-toolbar for selected annotation
+  // Mini-toolbar above selected annotation
   const selectedAnn = annotations.find(a => a.id === selectedId);
   let miniToolbar = null;
   if (selectedAnn) {
@@ -330,7 +431,7 @@ export default function PdfCanvas({
           {selectedAnn.type}
         </span>
         <span style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.1)', margin: '0 4px' }} />
-        <button title="Move — drag the annotation"
+        <button title="Drag to move"
           style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'default', fontSize: 15, padding: '0 2px', lineHeight: 1 }}>
           ⠿
         </button>
