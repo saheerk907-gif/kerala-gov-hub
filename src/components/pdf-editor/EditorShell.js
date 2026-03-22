@@ -183,8 +183,6 @@ export default function EditorShell({
               onScaleChange={onScaleChange}
             />
           </div>
-
-          <StyleBar style={style} onChange={handleStyleChange} isMobile={isMobile} />
         </div>
       </div>
 
@@ -234,6 +232,20 @@ export default function EditorShell({
           >
             ⬇ Download PDF
           </button>
+        </div>
+      </div>
+
+      {/* StyleBar — fixed above bottom action bar, always visible */}
+      <div style={{
+        position: 'fixed',
+        bottom: isMobile ? 68 : 72,
+        left: 0, right: 0,
+        display: 'flex', justifyContent: 'center',
+        zIndex: 15,
+        pointerEvents: 'none',
+      }}>
+        <div style={{ pointerEvents: 'auto' }}>
+          <StyleBar style={style} onChange={handleStyleChange} isMobile={isMobile} />
         </div>
       </div>
 

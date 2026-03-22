@@ -20,10 +20,7 @@ export default function StyleBar({ style, onChange, isMobile }) {
   return (
     <div
       style={{
-        position: 'sticky',
-        bottom: 14,
-        margin: isMobile ? '10px 0 0' : '16px auto 0',
-        width: isMobile ? '100%' : 'fit-content',
+        width: isMobile ? 'calc(100vw - 16px)' : 'fit-content',
         maxWidth: '100%',
         background: 'rgba(22,22,32,0.97)',
         backdropFilter: 'blur(24px)',

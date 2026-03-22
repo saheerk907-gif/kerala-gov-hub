@@ -106,8 +106,11 @@ export default function PdfCanvas({
   const pdfCanvasRef = useRef(null);
   const overlayRef   = useRef(null);
   const textareaRef  = useRef(null);
-  const [viewport, setViewport] = useState(null);
-  const [cursor,   setCursor]   = useState('crosshair');
+  const [viewport,      setViewport]      = useState(null);
+  const [cursor,        setCursor]        = useState('crosshair');
+  const [textEditorPos, setTextEditorPos] = useState(null); // {left,top} | null
+  const [textEditorSty, setTextEditorSty] = useState({});   // fontSize,fontWeight,etc
+  const editorDragRef = useRef(null);
   const drawing     = useRef(false);
   const startPt     = useRef({ x: 0, y: 0 });
   const currentPath = useRef([]);
@@ -287,23 +290,55 @@ export default function PdfCanvas({
     return null;
   }
 
-  // Open textarea pre-filled with an existing text annotation for editing
+  function showTextEditor(screenLeft, screenTop, taStyle, initialValue) {
+    const PW = 260;
+    const left = Math.max(8, Math.min(screenLeft, window.innerWidth  - PW - 8));
+    const top  = Math.max(8, Math.min(screenTop,  window.innerHeight - 160));
+    setTextEditorPos({ left, top });
+    setTextEditorSty(taStyle);
+    setTimeout(() => {
+      const ta = textareaRef.current;
+      if (!ta) return;
+      ta.value = initialValue;
+      ta.focus();
+      ta.selectionStart = ta.selectionEnd = ta.value.length;
+    }, 30);
+  }
+
   function openTextEditor(ann) {
     commitTextarea();
     editingAnnRef.current = ann.id;
     onMoveStart?.();
     const rect = overlayRef.current.getBoundingClientRect();
-    const ta = textareaRef.current;
-    ta.style.left       = `${rect.left + ann.x}px`;
-    ta.style.top        = `${rect.top  + ann.y - (ann.fontSize || style.fontSize) - 4}px`;
-    ta.style.fontSize   = `${Math.max(13, ann.fontSize || style.fontSize)}px`;
-    ta.style.fontWeight = ann.bold   ? 'bold'   : 'normal';
-    ta.style.fontStyle  = ann.italic ? 'italic' : 'normal';
-    ta.style.color      = ann.color || style.color;
-    ta.style.display    = 'block';
-    ta.value = ann.text || '';
-    ta.focus();
-    ta.selectionStart = ta.selectionEnd = ta.value.length;
+    showTextEditor(
+      rect.left + ann.x,
+      rect.top  + ann.y - (ann.fontSize || style.fontSize) - 8,
+      {
+        fontSize:   Math.max(13, ann.fontSize || style.fontSize),
+        fontWeight: ann.bold   ? 'bold'   : 'normal',
+        fontStyle:  ann.italic ? 'italic' : 'normal',
+        color:      ann.color === '#ffffff' ? '#111' : (ann.color || style.color),
+      },
+      ann.text || '',
+    );
+  }
+
+  function startDraggingEditor(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const startX = e.clientX, startY = e.clientY;
+    const { left: origL, top: origT } = textEditorPos;
+    editorDragRef.current = true;
+    function onMove(ev) {
+      setTextEditorPos({ left: origL + ev.clientX - startX, top: origT + ev.clientY - startY });
+    }
+    function onUp() {
+      editorDragRef.current = false;
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerup', onUp);
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerup', onUp);
   }
 
   function onPointerDown(e) {
@@ -363,16 +398,17 @@ export default function PdfCanvas({
       commitTextarea();
       pendingText.current = { x, y };
       const rect = overlayRef.current.getBoundingClientRect();
-      const ta = textareaRef.current;
-      ta.style.left       = `${rect.left + x}px`;
-      ta.style.top        = `${rect.top  + y}px`;
-      ta.style.fontSize   = `${Math.max(13, style.fontSize)}px`;
-      ta.style.fontWeight = style.bold   ? 'bold'   : 'normal';
-      ta.style.fontStyle  = style.italic ? 'italic' : 'normal';
-      ta.style.color      = style.color === '#ffffff' ? '#111' : style.color;
-      ta.style.display    = 'block';
-      ta.value = '';
-      ta.focus();
+      showTextEditor(
+        rect.left + x,
+        rect.top  + y,
+        {
+          fontSize:   Math.max(13, style.fontSize),
+          fontWeight: style.bold   ? 'bold'   : 'normal',
+          fontStyle:  style.italic ? 'italic' : 'normal',
+          color:      style.color === '#ffffff' ? '#111' : style.color,
+        },
+        '',
+      );
       return;
     }
 
@@ -477,9 +513,8 @@ export default function PdfCanvas({
   }
 
   function commitTextarea() {
-    const ta = textareaRef.current;
-    if (!ta || ta.style.display === 'none') return;
-    ta.style.display = 'none';
+    if (!textEditorPos) return;
+    setTextEditorPos(null);
 
     const text = ta.value.trim();
     const editId = editingAnnRef.current;
@@ -571,24 +606,63 @@ export default function PdfCanvas({
       />
       {miniToolbar}
 
-      <textarea
-        ref={textareaRef}
-        onBlur={commitTextarea}
-        onKeyDown={e => {
-          if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitTextarea(); }
-          if (e.key === 'Escape') { e.preventDefault(); commitTextarea(); }
-        }}
+      {/* Draggable text editor panel */}
+      <div
         style={{
-          display: 'none', position: 'fixed', zIndex: 50,
-          minWidth: 180, minHeight: 36,
-          background: 'rgba(255,255,255,0.97)',
-          border: '2px solid #2997ff',
-          borderRadius: 6, padding: '6px 10px',
-          outline: 'none', resize: 'none',
-          fontFamily: 'sans-serif',
-          boxShadow: '0 4px 20px rgba(41,151,255,0.35)',
+          position: 'fixed',
+          left: textEditorPos?.left ?? -9999,
+          top:  textEditorPos?.top  ?? -9999,
+          display: textEditorPos ? 'flex' : 'none',
+          flexDirection: 'column',
+          zIndex: 200,
+          minWidth: 240, maxWidth: 'calc(100vw - 24px)',
+          borderRadius: 12,
+          overflow: 'hidden',
+          boxShadow: '0 8px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(41,151,255,0.4)',
         }}
-      />
+        onPointerDown={e => e.stopPropagation()}
+      >
+        {/* Drag handle */}
+        <div
+          onPointerDown={startDraggingEditor}
+          style={{
+            background: '#2997ff',
+            padding: '7px 12px',
+            cursor: 'grab',
+            display: 'flex', alignItems: 'center', gap: 8,
+            userSelect: 'none', touchAction: 'none',
+            flexShrink: 0,
+          }}
+        >
+          <span style={{ fontSize: 14, color: '#fff', lineHeight: 1 }}>⠿</span>
+          <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', letterSpacing: '0.03em' }}>TEXT EDITOR</span>
+          <span style={{ flex: 1 }} />
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.65)' }}>Enter ✓ · Esc ✕</span>
+        </div>
+        {/* Textarea */}
+        <textarea
+          ref={textareaRef}
+          onBlur={commitTextarea}
+          onKeyDown={e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commitTextarea(); }
+            if (e.key === 'Escape') { e.preventDefault(); commitTextarea(); }
+          }}
+          style={{
+            display: 'block', width: '100%', boxSizing: 'border-box',
+            minWidth: 240, minHeight: 52,
+            background: '#fff',
+            border: 'none',
+            padding: '10px 12px',
+            outline: 'none', resize: 'both',
+            fontFamily: 'sans-serif',
+            fontSize:   textEditorSty.fontSize   || 14,
+            fontWeight: textEditorSty.fontWeight || 'normal',
+            fontStyle:  textEditorSty.fontStyle  || 'normal',
+            color:      textEditorSty.color      || '#000',
+            lineHeight: 1.5,
+          }}
+        />
+      </div>
     </div>
   );
 }
