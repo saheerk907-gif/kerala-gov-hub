@@ -85,6 +85,7 @@ export default function PdfEditorClient() {
       onDownload={handleDownload}
       onUpdateAnnotation={editor.updateAnnotation}
       onMoveStart={editor.pushUndoSnapshot}
+      onDeleteAnnotation={editor.deleteAnnotation}
     />
   );
 }

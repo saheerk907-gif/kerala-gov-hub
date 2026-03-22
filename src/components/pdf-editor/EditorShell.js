@@ -15,7 +15,7 @@ export default function EditorShell({
   style, setStyle,
   onUndo, onRedo, canUndo, canRedo,
   onOpenNew, onDownload,
-  onUpdateAnnotation, onMoveStart,
+  onUpdateAnnotation, onMoveStart, onDeleteAnnotation,
 }) {
   const [showSign, setShowSign] = useState(false);
   const [signPos,  setSignPos]  = useState({ x: 0, y: 0 });
@@ -107,6 +107,7 @@ export default function EditorShell({
               onSignRequest={handleSignRequest}
               onUpdateAnnotation={(id, updates) => onUpdateAnnotation(currentPage, id, updates)}
               onMoveStart={() => onMoveStart(currentPage)}
+              onDeleteAnnotation={(id) => onDeleteAnnotation(currentPage, id)}
             />
           </div>
 

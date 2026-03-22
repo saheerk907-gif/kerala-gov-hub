@@ -95,13 +95,30 @@ export default function usePdfEditor() {
     });
   }, []);
 
+  // Delete an annotation (undoable)
+  const deleteAnnotation = useCallback((pageIndex, id) => {
+    setUndoStack(prev => {
+      const next = new Map(prev);
+      const stack = next.get(pageIndex) || [];
+      next.set(pageIndex, [...stack, getPageAnnotations(pageIndex)]);
+      return next;
+    });
+    setRedoStack(prev => { const n = new Map(prev); n.delete(pageIndex); return n; });
+    setAnnotations(prev => {
+      const next = new Map(prev);
+      const page = next.get(pageIndex) || [];
+      next.set(pageIndex, page.filter(ann => ann.id !== id));
+      return next;
+    });
+  }, [getPageAnnotations]);
+
   return {
     annotations, activeTool, setActiveTool,
     currentPage, setCurrentPage,
     style, setStyle,
     getPageAnnotations, addAnnotation,
     undo, redo, clearAll,
-    pushUndoSnapshot, updateAnnotation,
+    pushUndoSnapshot, updateAnnotation, deleteAnnotation,
     canUndo: (pageIndex) => (undoStack.get(pageIndex) || []).length > 0,
     canRedo: (pageIndex) => (redoStack.get(pageIndex) || []).length > 0,
   };
