@@ -44,8 +44,8 @@ const pdfTools = [
 const tools = [
   {
     icon: '💰',
-    title: '12th PRC കാൽക്കുലേറ്റർ',
-    subtitle: 'Pay Revision Calculator',
+    title: 'Know Your Revised Salary',
+    subtitle: '12th Pay Revision Commission',
     desc: 'ഇപ്പോഴത്തെയും പരിഷ്കരിച്ചതുമായ ശമ്പളം ഒരിടത്ത് കണക്കാക്കൂ',
     href: '/prc',
     color: '#2997ff',
