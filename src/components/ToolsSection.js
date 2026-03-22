@@ -14,6 +14,33 @@ export default function ToolsSection() {
       badge: 'New',
       tags: ['pdf', 'editor', 'sign', 'annotate'],
     },
+    {
+      icon: '🗂️',
+      title: 'PDF Merger',
+      titleMl: 'PDF ലയനം',
+      desc: 'Combine multiple PDF files into one — browser-only, files never leave your device',
+      href: '/tools/pdf-merger',
+      color: '#10b981',
+      tags: ['pdf', 'merge', 'combine'],
+    },
+    {
+      icon: '✂️',
+      title: 'PDF Splitter',
+      titleMl: 'PDF വിഭജനം',
+      desc: 'Extract pages or split a PDF by range — browser-only, files never leave your device',
+      href: '/tools/pdf-splitter',
+      color: '#0284c7',
+      tags: ['pdf', 'split', 'extract', 'pages'],
+    },
+    {
+      icon: '📃',
+      title: 'PDF to Text',
+      titleMl: 'PDF → ടെക്സ്റ്റ്',
+      desc: 'Extract all text from a PDF — copy or save as .txt, browser-only',
+      href: '/tools/pdf-to-text',
+      color: '#7c3aed',
+      tags: ['pdf', 'text', 'extract', 'ocr'],
+    },
   ];
 
   return (
