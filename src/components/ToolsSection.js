@@ -1,85 +1,225 @@
 'use client';
-
+import { useState } from 'react';
 import Link from 'next/link';
 
+const tools = [
+  {
+    icon: '📝',
+    title: 'PDF Editor',
+    titleMl: 'PDF എഡിറ്റർ',
+    desc: 'Edit, annotate, sign and whiteout PDFs — all in your browser, files never leave your device',
+    href: '/tools/pdf-editor',
+    color: '#2997ff',
+    badge: 'New',
+    tags: ['pdf', 'editor', 'sign', 'annotate'],
+  },
+  {
+    icon: '💰',
+    title: '12th PRC കാൽക്കുലേറ്റർ',
+    subtitle: 'Pay Revision Calculator',
+    desc: 'ഇപ്പോഴത്തെയും പരിഷ്കരിച്ചതുമായ ശമ്പളം ഒരിടത്ത് കണക്കാക്കൂ',
+    href: '/prc',
+    color: '#2997ff',
+    badge: 'NEW',
+    tags: ['Fitment', 'DA', 'HRA', 'Net Pay'],
+  },
+  {
+    icon: '📊',
+    title: 'NPS vs APS Comparison Calculator',
+    subtitle: 'Pension Comparison Tool',
+    desc: 'NPS-ഉം APS-ഉം തമ്മിലുള്ള വ്യത്യാസം — corpus growth, post-retirement charts',
+    href: '/nps-aps',
+    color: '#ff453a',
+    badge: 'NEW',
+    tags: ['NPS', 'APS', 'Corpus', 'Pension'],
+  },
+  {
+    icon: '📊',
+    title: 'NPS — National Pension System',
+    subtitle: 'NPS Guide & Resources',
+    desc: 'NPS contribution rules, PRAN, withdrawal, GOs, circulars, calculator — 01.04.2013 മുതൽ നിയമിതർക്ക്',
+    href: '/nps',
+    color: '#bf5af2',
+    badge: null,
+    tags: ['NPS', 'PRAN', 'Corpus', 'APS'],
+  },
+  {
+    icon: '📖',
+    title: 'Kerala Service Rules',
+    subtitle: 'KSR Parts I–III',
+    desc: 'Leave rules, service conditions, pay rules — all KSR chapters',
+    href: '/ksr',
+    color: '#bf5af2',
+    badge: null,
+    tags: ['Leave', 'Pay', 'Service', 'Conduct'],
+  },
+  {
+    icon: '💰',
+    title: 'Pension Calculator',
+    subtitle: 'KSR Part III — Monthly Pension',
+    desc: 'Average Emoluments, half-year units, family pension — KSR Part III അനുസരിച്ച് പെൻഷൻ കണക്കാക്കൂ',
+    href: '/pension',
+    color: '#2997ff',
+    badge: 'NEW',
+    tags: ['Pension', 'AE', 'Family Pension', 'DA'],
+  },
+  {
+    icon: '🎖️',
+    title: 'DCRG Calculator',
+    subtitle: 'Death-cum-Retirement Gratuity',
+    desc: 'KSR Rule 77 അനുസരിച്ച് DCRG / Death Gratuity കണക്കാക്കൂ — retirement & death cases',
+    href: '/dcrg',
+    color: '#c8960c',
+    badge: 'NEW',
+    tags: ['DCRG', 'Gratuity', 'KSR', 'Death'],
+  },
+  {
+    icon: '💸',
+    title: 'Income Tax Calculator',
+    subtitle: 'FY 2025–26 (AY 2026–27)',
+    desc: 'New & Old Regime tax — HRA, 80C, GPF, SLI, NPS, Medisep, all deductions',
+    href: '/income-tax',
+    color: '#ff9f0a',
+    badge: 'NEW',
+    tags: ['New Regime', 'Old Regime', '80C', 'HRA'],
+  },
+  {
+    icon: '📅',
+    title: 'Leave Calculator',
+    subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',
+    desc: 'EL, HPL & Commuted Leave balance — "Can I take X days?" eligibility checker per KSR',
+    href: '/leave',
+    color: '#64d2ff',
+    badge: 'NEW',
+    tags: ['EL', 'HPL', 'Commuted', 'CL'],
+  },
+  {
+    icon: '🎯',
+    title: 'Retirement Calculator',
+    subtitle: 'റിട്ടയർമെന്റ് കാൽക്കുലേറ്റർ',
+    desc: 'Retirement date, countdown, LPR date, pension, DCRG and leave encashment estimate — for pre-NPS and NPS employees.',
+    href: '/retirement',
+    color: '#30d158',
+    badge: 'NEW',
+    tags: ['Retirement', 'Pension', 'DCRG', 'LPR'],
+  },
+  {
+    icon: '📊',
+    title: 'DA Arrear Calculator',
+    subtitle: '11th PRC · Mar 2021 onwards',
+    desc: 'Month-wise DA arrear with increment & promotion support. All G.O.s included.',
+    href: '/da-arrear',
+    color: '#ff9f0a',
+    badge: 'NEW',
+    tags: ['DA Arrear', 'G.O.', 'Month-wise', 'Print'],
+  },
+  {
+    icon: '📋',
+    title: 'Pay Scales / ശമ്പള സ്കെയിൽ',
+    subtitle: '11th PRC · S1–S27',
+    desc: 'Kerala Govt pay scales — 11th, 10th, 9th PRC. Master scale & all revised scales.',
+    href: '/pay-scales',
+    color: '#2997ff',
+    badge: null,
+    tags: ['11th PRC', '10th PRC', 'Master Scale', 'S1-S27'],
+  },
+  {
+    icon: '⚖️',
+    title: 'Acts & Rules / നിയമങ്ങൾ',
+    subtitle: 'Kerala Government Laws',
+    desc: 'Land Assignment Act, Labour Laws, Forest Act, KER — PDF & summary of all major Kerala acts.',
+    href: '/acts-rules',
+    color: '#bf5af2',
+    badge: 'NEW',
+    tags: ['Land Act', 'Labour', 'Forest', 'PDF'],
+  },
+];
+
+const MOBILE_VISIBLE = 6;
+
 export default function ToolsSection() {
-  const tools = [
-    {
-      icon: '📝',
-      title: 'PDF Editor',
-      titleMl: 'PDF എഡിറ്റർ',
-      desc: 'Edit, annotate, sign and whiteout PDFs — all in your browser, files never leave your device',
-      href: '/tools/pdf-editor',
-      color: '#2997ff',
-      badge: 'New',
-      tags: ['pdf', 'editor', 'sign', 'annotate'],
-    },
-    {
-      icon: '🗂️',
-      title: 'PDF Merger',
-      titleMl: 'PDF ലയനം',
-      desc: 'Combine multiple PDF files into one — browser-only, files never leave your device',
-      href: '/tools/pdf-merger',
-      color: '#10b981',
-      tags: ['pdf', 'merge', 'combine'],
-    },
-    {
-      icon: '✂️',
-      title: 'PDF Splitter',
-      titleMl: 'PDF വിഭജനം',
-      desc: 'Extract pages or split a PDF by range — browser-only, files never leave your device',
-      href: '/tools/pdf-splitter',
-      color: '#0284c7',
-      tags: ['pdf', 'split', 'extract', 'pages'],
-    },
-    {
-      icon: '📃',
-      title: 'PDF to Text',
-      titleMl: 'PDF → ടെക്സ്റ്റ്',
-      desc: 'Extract all text from a PDF — copy or save as .txt, browser-only',
-      href: '/tools/pdf-to-text',
-      color: '#7c3aed',
-      tags: ['pdf', 'text', 'extract', 'ocr'],
-    },
-  ];
+  const [expanded, setExpanded] = useState(false);
 
   return (
-    <section className="py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-center">Tools</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool, idx) => (
-            <Link key={idx} href={tool.href}>
-              <div className="p-6 border rounded-lg hover:shadow-lg transition-shadow cursor-pointer bg-white">
-                <div className="flex items-start justify-between mb-3">
-                  <span className="text-4xl">{tool.icon}</span>
-                  {tool.badge && (
-                    <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium">
-                      {tool.badge}
-                    </span>
-                  )}
-                </div>
-                <h3 className="text-xl font-bold mb-1">{tool.title}</h3>
-                {tool.titleMl && (
-                  <p className="text-sm text-gray-600 mb-2">{tool.titleMl}</p>
-                )}
-                <p className="text-gray-700 text-sm">{tool.desc}</p>
-                {tool.tags && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {tool.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+    <section id="tools" className="relative py-7 md:py-8 px-4 md:px-6">
+      <div className="max-w-[1200px] mx-auto">
+
+        {/* Header */}
+        <div className="mb-6">
+          <div className="section-label mb-2">Tools & Calculators</div>
+          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            ടൂളുകൾ
+          </h2>
+          <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
+        </div>
+
+        {/* 2-col on mobile, 4-col on desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {tools.map((t, idx) => (
+            <div key={t.title} className={idx >= MOBILE_VISIBLE && !expanded ? 'md:block hidden' : 'block'}>
+            <Link
+              key={t.title}
+              href={t.href}
+              className="glass-card group relative flex flex-col items-start text-left rounded-[16px] p-3.5 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
+            >
+              {/* Badge */}
+              {t.badge && t.badge !== 'SOON' && (
+                <span
+                  className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+                  style={{ background: 'rgba(41,151,255,0.2)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.3)' }}
+                >
+                  NEW
+                </span>
+              )}
+              {t.badge === 'SOON' && (
+                <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/50 border border-white/[0.08]">
+                  SOON
+                </span>
+              )}
+
+              {/* Glow blob */}
+              <div
+                className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                style={{ background: t.color + '25' }}
+              />
+
+              {/* Icon */}
+              <div
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-xl mb-2.5 transition-transform duration-200 group-hover:scale-105"
+                style={{ background: t.color + '20', border: `1px solid ${t.color}35` }}
+              >
+                {t.icon}
               </div>
+
+              {/* Title */}
+              <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                {t.title}
+              </h3>
+              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/70">
+                {t.subtitle}
+              </div>
+
+              {/* Bottom accent */}
+              <div
+                className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
+              />
             </Link>
+            </div>
           ))}
         </div>
+
+        {/* Show more / less — mobile only */}
+        <div className="md:hidden mt-4 flex justify-center">
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
+          >
+            {expanded ? 'Show less ↑' : `Show all ${tools.length} tools ↓`}
+          </button>
+        </div>
+
       </div>
     </section>
   );

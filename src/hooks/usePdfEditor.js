@@ -10,7 +10,7 @@ export default function usePdfEditor() {
   const [redoStack,   setRedoStack]   = useState(new Map()); // pageIndex -> Annotation[][]
   const [activeTool,  setActiveTool]  = useState('text');
   const [currentPage, setCurrentPage] = useState(0);
-  const [style, setStyle] = useState({ color: '#000000', fontSize: 14, opacity: 1 });
+  const [style, setStyle] = useState({ color: '#000000', fontSize: 14, opacity: 1, bold: false, italic: false });
 
   const getPageAnnotations = useCallback((pageIndex) =>
     annotations.get(pageIndex) || [], [annotations]);
@@ -74,12 +74,51 @@ export default function usePdfEditor() {
     setCurrentPage(0);
   }, []);
 
+  // Push current state to undo stack without adding an annotation (used before drag-move)
+  const pushUndoSnapshot = useCallback((pageIndex) => {
+    setUndoStack(prev => {
+      const next = new Map(prev);
+      const stack = next.get(pageIndex) || [];
+      next.set(pageIndex, [...stack, getPageAnnotations(pageIndex)]);
+      return next;
+    });
+    setRedoStack(prev => { const n = new Map(prev); n.delete(pageIndex); return n; });
+  }, [getPageAnnotations]);
+
+  // Update an existing annotation in place (used for drag-move)
+  const updateAnnotation = useCallback((pageIndex, id, updates) => {
+    setAnnotations(prev => {
+      const next = new Map(prev);
+      const page = next.get(pageIndex) || [];
+      next.set(pageIndex, page.map(ann => ann.id === id ? { ...ann, ...updates } : ann));
+      return next;
+    });
+  }, []);
+
+  // Delete an annotation (undoable)
+  const deleteAnnotation = useCallback((pageIndex, id) => {
+    setUndoStack(prev => {
+      const next = new Map(prev);
+      const stack = next.get(pageIndex) || [];
+      next.set(pageIndex, [...stack, getPageAnnotations(pageIndex)]);
+      return next;
+    });
+    setRedoStack(prev => { const n = new Map(prev); n.delete(pageIndex); return n; });
+    setAnnotations(prev => {
+      const next = new Map(prev);
+      const page = next.get(pageIndex) || [];
+      next.set(pageIndex, page.filter(ann => ann.id !== id));
+      return next;
+    });
+  }, [getPageAnnotations]);
+
   return {
     annotations, activeTool, setActiveTool,
     currentPage, setCurrentPage,
     style, setStyle,
     getPageAnnotations, addAnnotation,
     undo, redo, clearAll,
+    pushUndoSnapshot, updateAnnotation, deleteAnnotation,
     canUndo: (pageIndex) => (undoStack.get(pageIndex) || []).length > 0,
     canRedo: (pageIndex) => (redoStack.get(pageIndex) || []).length > 0,
   };

@@ -1,28 +1,32 @@
-// src/app/tools/pdf-editor/PdfEditorClient.js
 'use client';
-import { useState } from 'react';
-import * as pdfjsLib from 'pdfjs-dist';
-import { GlobalWorkerOptions, version as pdfjsVersion } from 'pdfjs-dist';
+import { useState, useRef } from 'react';
 import UploadZone from '@/components/pdf-editor/UploadZone';
 import EditorShell from '@/components/pdf-editor/EditorShell';
 import usePdfEditor from '@/hooks/usePdfEditor';
 import usePdfDownload from '@/hooks/usePdfDownload';
 
-GlobalWorkerOptions.workerSrc =
-  `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.min.js`;
+// Set up PDF.js worker on client only (avoids SSR DOMMatrix error)
+// Worker is served from /public to avoid CDN version mismatches
+if (typeof window !== 'undefined') {
+  import('pdfjs-dist').then(({ GlobalWorkerOptions }) => {
+    GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+  });
+}
 
 export default function PdfEditorClient() {
-  const [file,     setFile]     = useState(null);
-  const [pdfDoc,   setPdfDoc]   = useState(null);
-  const [pageCount,setPageCount]= useState(0);
-  const [loadError,setLoadError]= useState(null);
+  const [file,      setFile]      = useState(null);
+  const [pdfDoc,    setPdfDoc]    = useState(null);
+  const [pageCount, setPageCount] = useState(0);
+  const [loadError, setLoadError] = useState(null);
+  const renderScaleRef = useRef(1.5);
 
-  const editor   = usePdfEditor();
+  const editor = usePdfEditor();
   const { download } = usePdfDownload();
 
   async function handleFile(f) {
     setLoadError(null);
     try {
+      const pdfjsLib = await import('pdfjs-dist');
       const arrayBuffer = await f.arrayBuffer();
       const doc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
       setFile(f);
@@ -44,7 +48,7 @@ export default function PdfEditorClient() {
   }
 
   function handleDownload() {
-    return download(file, editor.annotations);
+    return download(file, editor.annotations, () => renderScaleRef.current);
   }
 
   if (!file || !pdfDoc) {
@@ -80,6 +84,10 @@ export default function PdfEditorClient() {
       canRedo={editor.canRedo}
       onOpenNew={handleOpenNew}
       onDownload={handleDownload}
+      onUpdateAnnotation={editor.updateAnnotation}
+      onMoveStart={editor.pushUndoSnapshot}
+      onDeleteAnnotation={editor.deleteAnnotation}
+      onScaleChange={s => { renderScaleRef.current = s; }}
     />
   );
 }

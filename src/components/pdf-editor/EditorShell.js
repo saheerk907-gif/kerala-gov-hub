@@ -1,6 +1,6 @@
 // src/components/pdf-editor/EditorShell.js
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Toolbar from './Toolbar';
 import PageThumbnails from './PageThumbnails';
 import PdfCanvas from './PdfCanvas';
@@ -15,10 +15,21 @@ export default function EditorShell({
   style, setStyle,
   onUndo, onRedo, canUndo, canRedo,
   onOpenNew, onDownload,
+  onUpdateAnnotation, onMoveStart, onDeleteAnnotation,
+  onScaleChange,
 }) {
-  const [showSign, setShowSign] = useState(false);
-  const [signPos,  setSignPos]  = useState({ x: 0, y: 0 });
-  const [dlError,  setDlError]  = useState(null);
+  const [showSign,      setShowSign]      = useState(false);
+  const [signPos,       setSignPos]       = useState({ x: 0, y: 0 });
+  const [dlError,       setDlError]       = useState(null);
+  const [selectedAnnId, setSelectedAnnId] = useState(null);
+  const [isMobile,      setIsMobile]      = useState(false);
+
+  useEffect(() => {
+    function check() { setIsMobile(window.innerWidth < 768); }
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   function handleSignRequest(pos) { setSignPos(pos); setShowSign(true); }
   function handleSignConfirm(dataUrl) {
@@ -36,35 +47,90 @@ export default function EditorShell({
     if (!result?.ok) setDlError('Download failed. Please try again.');
   }
 
+  function handlePageChange(p) {
+    setSelectedAnnId(null);
+    setCurrentPage(p);
+  }
+
+  function handleStyleChange(newStyle) {
+    setStyle(newStyle);
+    if (selectedAnnId) {
+      const pageAnns = annotations.get(currentPage) || [];
+      const sel = pageAnns.find(a => a.id === selectedAnnId);
+      if (sel?.type === 'text') {
+        onUpdateAnnotation(currentPage, selectedAnnId, {
+          color: newStyle.color,
+          fontSize: newStyle.fontSize,
+          opacity: newStyle.opacity,
+        });
+      }
+    }
+  }
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
+
       {/* Top bar */}
       <div
-        className="flex items-center gap-3 px-4 flex-shrink-0"
         style={{
-          height: 48, background: 'rgba(255,255,255,0.04)',
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '0 12px', flexShrink: 0,
+          height: isMobile ? 48 : 56,
+          background: 'rgba(255,255,255,0.04)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           backdropFilter: 'blur(20px)',
         }}
       >
-        <span className="text-[14px] font-[900] text-white">PDF Editor</span>
-        <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{file?.name}</span>
+        <span style={{ fontSize: isMobile ? 13 : 15, fontWeight: 900, color: '#fff', whiteSpace: 'nowrap' }}>
+          PDF Editor
+        </span>
+
+        {/* File name — hide on very small screens */}
+        {!isMobile && (
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>
+            {file?.name}
+          </span>
+        )}
+
         <span style={{ flex: 1 }} />
-        {dlError && <span className="text-[11px]" style={{ color: '#ff453a' }}>{dlError}</span>}
-        <button
-          onClick={onOpenNew}
-          className="text-[11px] font-[700] border-none cursor-pointer rounded-[10px] px-3 py-1.5"
-          style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)' }}
-        >
-          📂 Open New
-        </button>
-        <button
-          onClick={handleDownload}
-          className="text-[11px] font-[700] border-none cursor-pointer rounded-[10px] px-3 py-1.5"
-          style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158', border: '1px solid rgba(48,209,88,0.3)' }}
-        >
-          ⬇ Download PDF
-        </button>
+
+        {/* Mobile: page navigation arrows */}
+        {isMobile && pageCount > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
+              disabled={currentPage === 0}
+              style={{
+                width: 32, height: 32, borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.07)', color: '#fff', fontSize: 16,
+                cursor: currentPage === 0 ? 'default' : 'pointer',
+                opacity: currentPage === 0 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >‹</button>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', minWidth: 40, textAlign: 'center' }}>
+              {currentPage + 1}/{pageCount}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(pageCount - 1, currentPage + 1))}
+              disabled={currentPage === pageCount - 1}
+              style={{
+                width: 32, height: 32, borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.07)', color: '#fff', fontSize: 16,
+                cursor: currentPage === pageCount - 1 ? 'default' : 'pointer',
+                opacity: currentPage === pageCount - 1 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >›</button>
+          </div>
+        )}
+
+        {/* Desktop hint */}
+        {!isMobile && (
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+            ⬇ Download PDF at the bottom
+          </span>
+        )}
       </div>
 
       {/* Toolbar */}
@@ -75,27 +141,32 @@ export default function EditorShell({
         onRedo={() => onRedo(currentPage)}
         canUndo={canUndo(currentPage)}
         canRedo={canRedo(currentPage)}
+        isMobile={isMobile}
       />
 
-      {/* Body: thumbnails + canvas */}
+      {/* Body: thumbnails (desktop only) + canvas */}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <PageThumbnails
-          pdfDoc={pdfDoc}
-          pageCount={pageCount}
-          currentPage={currentPage}
-          onPageChange={setCurrentPage}
-        />
+
+        {/* Page thumbnails — hidden on mobile */}
+        {!isMobile && (
+          <PageThumbnails
+            pdfDoc={pdfDoc}
+            pageCount={pageCount}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        )}
 
         {/* Scrollable canvas area */}
         <div
           style={{
             flex: 1, overflowY: 'auto',
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            padding: '24px 32px 80px',
+            display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+            padding: isMobile ? '8px 4px 80px' : '24px 16px 80px',
             background: 'rgba(0,0,0,0.2)',
           }}
         >
-          <div data-page-index={currentPage}>
+          <div data-page-index={currentPage} style={{ width: '100%' }}>
             <PdfCanvas
               pdfDoc={pdfDoc}
               pageIndex={currentPage}
@@ -104,19 +175,78 @@ export default function EditorShell({
               activeTool={activeTool}
               style={style}
               onSignRequest={handleSignRequest}
+              onUpdateAnnotation={(id, updates) => onUpdateAnnotation(currentPage, id, updates)}
+              onMoveStart={() => onMoveStart(currentPage)}
+              onDeleteAnnotation={(id) => { onDeleteAnnotation(currentPage, id); setSelectedAnnId(null); }}
+              selectedId={selectedAnnId}
+              onSelectionChange={setSelectedAnnId}
+              onScaleChange={onScaleChange}
             />
           </div>
-
-          <StyleBar style={style} onChange={setStyle} />
         </div>
       </div>
 
-      {/* Privacy bar */}
+      {/* Bottom action bar */}
       <div
-        className="text-center flex-shrink-0 py-1.5"
-        style={{ fontSize: 9, color: 'rgba(255,255,255,0.15)', borderTop: '1px solid rgba(255,255,255,0.04)' }}
+        style={{
+          display: 'flex', alignItems: 'center',
+          justifyContent: isMobile ? 'center' : 'space-between',
+          flexShrink: 0,
+          padding: isMobile ? '0 12px' : '0 24px',
+          gap: 10,
+          height: isMobile ? 60 : 64,
+          background: 'rgba(10,10,20,0.97)',
+          borderTop: '1px solid rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(20px)',
+        }}
       >
-        🔒 All processing happens locally in your browser — no file is uploaded to any server
+        {!isMobile && (
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
+            🔒 All processing is local — no file leaves your browser
+          </span>
+        )}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flex: isMobile ? 1 : 'unset' }}>
+          {dlError && <span style={{ fontSize: 11, color: '#ff453a' }}>{dlError}</span>}
+          <button
+            onClick={onOpenNew}
+            style={{
+              fontSize: isMobile ? 12 : 13, fontWeight: 700, cursor: 'pointer',
+              borderRadius: 10, padding: isMobile ? '8px 12px' : '9px 18px',
+              border: '1px solid rgba(255,255,255,0.18)',
+              background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            📂 {isMobile ? 'New' : 'Open New'}
+          </button>
+          <button
+            onClick={handleDownload}
+            style={{
+              fontSize: isMobile ? 13 : 15, fontWeight: 800, cursor: 'pointer',
+              borderRadius: 12, padding: isMobile ? '9px 20px' : '11px 28px',
+              background: '#30d158', color: '#000', border: 'none',
+              boxShadow: '0 4px 20px rgba(48,209,88,0.5)',
+              flex: isMobile ? 1 : 'unset',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            ⬇ Download PDF
+          </button>
+        </div>
+      </div>
+
+      {/* StyleBar — fixed above bottom action bar, always visible */}
+      <div style={{
+        position: 'fixed',
+        bottom: isMobile ? 68 : 72,
+        left: 0, right: 0,
+        display: 'flex', justifyContent: 'center',
+        zIndex: 15,
+        pointerEvents: 'none',
+      }}>
+        <div style={{ pointerEvents: 'auto' }}>
+          <StyleBar style={style} onChange={handleStyleChange} isMobile={isMobile} />
+        </div>
       </div>
 
       {showSign && (

@@ -1,0 +1,42 @@
+<h2>Visual style for the tool pages</h2>
+<p class="subtitle">The existing PDF Editor uses a dark "aurora" background. Which style fits the new tools?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0f;padding:20px;border-radius:8px">
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:20px;max-width:340px;margin:auto">
+        <div style="width:60px;height:60px;background:linear-gradient(135deg,#2997ff22,#2997ff44);border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px">🗂️</div>
+        <div style="color:#fff;font-weight:700;text-align:center;margin-bottom:6px;font-size:15px">PDF Merger</div>
+        <div style="color:#aaa;font-size:12px;text-align:center;margin-bottom:16px">Drop PDF files here</div>
+        <div style="border:2px dashed rgba(41,151,255,0.4);border-radius:10px;padding:24px;text-align:center;color:#2997ff;font-size:13px">
+          + Add PDFs
+        </div>
+        <button style="width:100%;margin-top:14px;background:#2997ff;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;cursor:pointer">Merge & Download</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Dark (match PDF Editor)</h3>
+      <p>Same dark aurora background as the existing editor. Consistent look across all PDF tools.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#f4f6fb;padding:20px;border-radius:8px">
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;max-width:340px;margin:auto;box-shadow:0 2px 12px rgba(0,0,0,0.08)">
+        <div style="width:60px;height:60px;background:#eff6ff;border-radius:12px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:28px">🗂️</div>
+        <div style="color:#1a202c;font-weight:700;text-align:center;margin-bottom:6px;font-size:15px">PDF Merger</div>
+        <div style="color:#718096;font-size:12px;text-align:center;margin-bottom:16px">Drop PDF files here</div>
+        <div style="border:2px dashed #93c5fd;border-radius:10px;padding:24px;text-align:center;color:#2563eb;font-size:13px;background:#f0f9ff">
+          + Add PDFs
+        </div>
+        <button style="width:100%;margin-top:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;cursor:pointer;border-radius:8px">Merge & Download</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Light (clean / minimal)</h3>
+      <p>White card on light grey background. Feels simpler and more accessible for government users.</p>
+    </div>
+  </div>
+
+</div>

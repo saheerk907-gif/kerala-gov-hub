@@ -1,0 +1,43 @@
+<h2>How interactive should the new PDF tools be?</h2>
+<p class="subtitle">Pick the complexity level that fits your users best</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Simple &amp; Fast</h3>
+      <p>Upload → click button → download. No previews, no drag-and-drop ordering. Works for users who just need a quick result.</p>
+      <ul style="margin-top:8px;padding-left:18px;font-size:13px;color:#aaa">
+        <li>Merger: upload files → merge → download</li>
+        <li>Splitter: upload + type page range → split → download</li>
+        <li>PDF to Text: upload → extract → copy/download text</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Interactive with Previews</h3>
+      <p>Drag-to-reorder file list for merger, visual page thumbnails for splitter, paginated text view for extractor.</p>
+      <ul style="margin-top:8px;padding-left:18px;font-size:13px;color:#aaa">
+        <li>Merger: drag files to reorder before merging</li>
+        <li>Splitter: click thumbnail pages to select them</li>
+        <li>PDF to Text: see text per page with copy buttons</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Mixed — Simple for now, build on it later</h3>
+      <p>Start with Simple &amp; Fast for all three, but design it cleanly enough to add interactivity in a future update.</p>
+      <ul style="margin-top:8px;padding-left:18px;font-size:13px;color:#aaa">
+        <li>No drag-and-drop yet, but clean file list UI</li>
+        <li>Text range input for splitter (e.g. "1-3, 5, 7-9")</li>
+        <li>Full text output with single copy button</li>
+      </ul>
+    </div>
+  </div>
+</div>

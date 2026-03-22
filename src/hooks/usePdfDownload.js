@@ -11,12 +11,24 @@ function hexToRgb(hex) {
 }
 
 export default function usePdfDownload() {
-  const download = useCallback(async (originalFile, annotationsMap) => {
+  // getRenderScale: optional fn returning the CSS-px scale used when rendering the PDF canvas
+  const download = useCallback(async (originalFile, annotationsMap, getRenderScale) => {
     try {
       const arrayBuffer = await originalFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       const pages  = pdfDoc.getPages();
-      const font   = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const fonts  = {
+        normal:     await pdfDoc.embedFont(StandardFonts.Helvetica),
+        bold:       await pdfDoc.embedFont(StandardFonts.HelveticaBold),
+        italic:     await pdfDoc.embedFont(StandardFonts.HelveticaOblique),
+        boldItalic: await pdfDoc.embedFont(StandardFonts.HelveticaBoldOblique),
+      };
+      function pickFont(ann) {
+        if (ann.bold && ann.italic) return fonts.boldItalic;
+        if (ann.bold)   return fonts.bold;
+        if (ann.italic) return fonts.italic;
+        return fonts.normal;
+      }
 
       for (const [pageIndex, anns] of annotationsMap.entries()) {
         if (!anns || !anns.length) continue;
@@ -25,9 +37,9 @@ export default function usePdfDownload() {
         const pdfW = page.getWidth();
         const pdfH = page.getHeight();
 
-        // Annotations are stored in overlay canvas px at 1× DPR (CSS px).
-        // PdfCanvas renders at RENDER_SCALE=1.5, so 1 CSS px = 1/1.5 PDF points.
-        const RENDER_SCALE = 1.5;
+        // Annotations stored in CSS-px at the render scale used by PdfCanvas.
+        // Convert: 1 CSS px = 1/RENDER_SCALE PDF points.
+        const RENDER_SCALE = getRenderScale ? getRenderScale() : 1.5;
         const scaleX = 1 / RENDER_SCALE;
         const scaleY = 1 / RENDER_SCALE;
 
@@ -36,11 +48,18 @@ export default function usePdfDownload() {
           const pdfY = pdfH - ann.y * scaleY - (ann.height || 0) * scaleY;
 
           if (ann.type === 'text') {
-            page.drawText(ann.text || '', {
-              x: pdfX, y: pdfH - ann.y * scaleY,
-              size: (ann.fontSize || 14) * scaleX,
-              font, color: hexToRgb(ann.color || '#000000'),
-              opacity: ann.opacity ?? 1,
+            // ann.y is top of box; pdf-lib y=0 is bottom; baseline = top + fontSize
+            const lines = (ann.text || '').split('\n');
+            const fs    = (ann.fontSize || 14) * scaleX;
+            const lineH = fs * 1.3;
+            lines.forEach((line, i) => {
+              page.drawText(line, {
+                x: pdfX,
+                y: pdfH - (ann.y + (ann.fontSize || 14)) * scaleY - i * lineH,
+                size: fs,
+                font: pickFont(ann), color: hexToRgb(ann.color || '#000000'),
+                opacity: ann.opacity ?? 1,
+              });
             });
           } else if (ann.type === 'sign' && ann.imageDataUrl) {
             const imgBytes = await fetch(ann.imageDataUrl).then(r => r.arrayBuffer());
