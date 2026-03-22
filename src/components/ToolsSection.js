@@ -59,6 +59,18 @@ const pdfTools = [
   },
 ];
 
+const utilityTools = [
+  {
+    icon: '⬛',
+    title: 'QR Code Generator',
+    subtitle: 'QR കോഡ് ജനറേറ്റർ',
+    desc: 'Generate QR codes for URLs, portal links, text — custom colour & size',
+    href: '/tools/qr-generator',
+    color: '#0ea5e9',
+    badge: 'NEW',
+  },
+];
+
 const tools = [
   {
     icon: '💰',
@@ -250,6 +262,17 @@ export default function ToolsSection() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {pdfTools.map((t) => (
+            <ToolCard key={t.href} t={t} />
+          ))}
+        </div>
+
+        {/* Utilities sub-section */}
+        <div className="mb-3 flex items-center gap-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">Utilities</span>
+          <div className="flex-1 h-px bg-white/[0.07]" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          {utilityTools.map((t) => (
             <ToolCard key={t.href} t={t} />
           ))}
         </div>
