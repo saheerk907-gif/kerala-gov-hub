@@ -213,11 +213,14 @@ function DayStrip({ days }) {
         const c = DAY_COLORS[day.type] || DAY_COLORS.work;
         return (
           <div key={i} title={`${DAYS[day.date.getDay()]} ${day.date.getDate()} — ${c.label}`} style={{
-            minWidth: 30, padding: '4px 2px', borderRadius: 8,
-            background: c.bg, textAlign: 'center', flex: '0 0 auto',
+            minWidth: 34, padding: '5px 3px', borderRadius: 9,
+            background: 'rgba(255,255,255,0.04)',
+            border: `1px solid ${c.bg}55`,
+            textAlign: 'center', flex: '0 0 auto',
           }}>
-            <div style={{ fontSize: 8, fontWeight: 700, color: 'rgba(255,255,255,0.75)', lineHeight: 1 }}>{DAYS[day.date.getDay()]}</div>
-            <div style={{ fontSize: 13, fontWeight: 900, color: c.text, lineHeight: 1.2 }}>{day.date.getDate()}</div>
+            <div style={{ fontSize: 8, fontWeight: 700, color: c.bg, lineHeight: 1, opacity: 0.85 }}>{DAYS[day.date.getDay()]}</div>
+            <div style={{ fontSize: 13, fontWeight: 900, color: '#fff', lineHeight: 1.3 }}>{day.date.getDate()}</div>
+            <div style={{ width: 4, height: 4, borderRadius: '50%', background: c.bg, margin: '2px auto 0' }} />
           </div>
         );
       })}
