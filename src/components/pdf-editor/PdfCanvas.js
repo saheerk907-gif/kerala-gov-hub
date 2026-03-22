@@ -2,21 +2,43 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
+// Returns true if (x, y) in CSS-px space hits the annotation
+function hitTest(ann, x, y) {
+  const PAD = 8;
+  if (ann.type === 'text') {
+    const h = (ann.fontSize || 14) + 6;
+    // text baseline is at y; rendered above that
+    return x >= ann.x - PAD && x <= ann.x + 160 + PAD &&
+           y >= ann.y - h - PAD && y <= ann.y + PAD;
+  }
+  if (ann.type === 'draw') {
+    if (!ann.points?.length) return false;
+    const xs = ann.points.map(p => p[0]);
+    const ys = ann.points.map(p => p[1]);
+    return x >= Math.min(...xs) - PAD && x <= Math.max(...xs) + PAD &&
+           y >= Math.min(...ys) - PAD && y <= Math.max(...ys) + PAD;
+  }
+  return x >= ann.x - PAD && x <= ann.x + (ann.width || 0) + PAD &&
+         y >= ann.y - PAD && y <= ann.y + (ann.height || 0) + PAD;
+}
+
 export default function PdfCanvas({
   pdfDoc, pageIndex, annotations, onAddAnnotation,
   activeTool, style, onSignRequest,
+  onUpdateAnnotation, onMoveStart,
 }) {
-  const containerRef  = useRef(null);
-  const pdfCanvasRef  = useRef(null);
-  const overlayRef    = useRef(null);
-  const textareaRef   = useRef(null);
+  const pdfCanvasRef = useRef(null);
+  const overlayRef   = useRef(null);
+  const textareaRef  = useRef(null);
   const [viewport, setViewport] = useState(null);
-  const drawing = useRef(false);
-  const startPt = useRef({ x: 0, y: 0 });
+  const drawing     = useRef(false);
+  const startPt     = useRef({ x: 0, y: 0 });
   const currentPath = useRef([]);
-  const pendingText = useRef(null); // { x, y }
+  const pendingText = useRef(null);
+  const movingRef   = useRef(null); // { id, startX, startY, origAnn }
+  const [cursor, setCursor] = useState('crosshair');
 
-  // Render PDF page
+  // ── Render PDF page ──────────────────────────────────────────────
   useEffect(() => {
     if (!pdfDoc) return;
     let cancelled = false;
@@ -24,7 +46,7 @@ export default function PdfCanvas({
       const page = await pdfDoc.getPage(pageIndex + 1);
       const dpr  = window.devicePixelRatio || 1;
       const vp   = page.getViewport({ scale: 1.5 * dpr });
-      const canvas = pdfCanvasRef.current;
+      const canvas  = pdfCanvasRef.current;
       const overlay = overlayRef.current;
       if (!canvas || !overlay || cancelled) return;
       canvas.width  = overlay.width  = vp.width;
@@ -38,20 +60,19 @@ export default function PdfCanvas({
     return () => { cancelled = true; };
   }, [pdfDoc, pageIndex]);
 
-  // Redraw overlay annotations
+  // ── Redraw overlay annotations ───────────────────────────────────
   useEffect(() => {
     const canvas = overlayRef.current;
     if (!canvas || !viewport) return;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     const dpr = window.devicePixelRatio || 1;
+    const sx  = canvas.width  / (viewport.width  / dpr);
+    const sy  = canvas.height / (viewport.height / dpr);
 
     for (const ann of annotations) {
       ctx.save();
-      ctx.globalAlpha = ann.opacity;
-
-      const sx = canvas.width  / (viewport.width  / dpr);
-      const sy = canvas.height / (viewport.height / dpr);
+      ctx.globalAlpha = ann.opacity ?? 1;
 
       if (ann.type === 'text') {
         ctx.font = `${ann.fontSize * sx}px sans-serif`;
@@ -99,79 +120,125 @@ export default function PdfCanvas({
     }
   }, [annotations, viewport]);
 
+  // ── Coordinate helper ────────────────────────────────────────────
   function getCanvasCoords(e) {
     const canvas = overlayRef.current;
     const rect   = canvas.getBoundingClientRect();
     const src    = e.touches ? e.touches[0] : e;
-    return {
-      x: (src.clientX - rect.left),
-      y: (src.clientY - rect.top),
-    };
+    return { x: src.clientX - rect.left, y: src.clientY - rect.top };
   }
 
+  function findAnnotationAt(x, y) {
+    for (let i = annotations.length - 1; i >= 0; i--) {
+      if (hitTest(annotations[i], x, y)) return annotations[i];
+    }
+    return null;
+  }
+
+  // ── Pointer handlers ─────────────────────────────────────────────
   function onPointerDown(e) {
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
 
+    // Always check for a hit on existing annotation first → drag-move
+    const hit = findAnnotationAt(x, y);
+    if (hit) {
+      onMoveStart?.();   // push undo snapshot before move
+      movingRef.current = {
+        id: hit.id,
+        startX: x, startY: y,
+        origAnn: {
+          ...hit,
+          points: hit.points ? hit.points.map(p => [...p]) : [],
+        },
+      };
+      setCursor('grabbing');
+      return;
+    }
+
+    // No hit — use the active tool
     if (activeTool === 'sign') {
       onSignRequest({ x, y });
       return;
     }
 
     if (activeTool === 'text') {
-      // commit any existing textarea first
       commitTextarea();
       pendingText.current = { x, y };
-      // position & show textarea
-      const canvas = overlayRef.current;
-      const rect   = canvas.getBoundingClientRect();
+      const rect = overlayRef.current.getBoundingClientRect();
       const ta = textareaRef.current;
-      ta.style.left    = `${rect.left + x}px`;
-      ta.style.top     = `${rect.top  + y}px`;
+      ta.style.left     = `${rect.left + x}px`;
+      ta.style.top      = `${rect.top  + y}px`;
       ta.style.fontSize = `${style.fontSize}px`;
-      ta.style.color   = style.color;
-      ta.style.display = 'block';
+      ta.style.color    = style.color;
+      ta.style.display  = 'block';
       ta.value = '';
       ta.focus();
       return;
     }
 
-    drawing.current = true;
-    startPt.current = { x, y };
+    drawing.current     = true;
+    startPt.current     = { x, y };
     currentPath.current = [[x, y]];
   }
 
   function onPointerMove(e) {
     e.preventDefault();
-    if (!drawing.current) return;
     const { x, y } = getCanvasCoords(e);
 
-    if (activeTool === 'draw') {
+    // ── Drag-move an existing annotation ──
+    if (movingRef.current) {
+      const { id, startX, startY, origAnn } = movingRef.current;
+      const dx = x - startX;
+      const dy = y - startY;
+      if (origAnn.type === 'draw') {
+        onUpdateAnnotation?.(id, { points: origAnn.points.map(([px, py]) => [px + dx, py + dy]) });
+      } else {
+        onUpdateAnnotation?.(id, { x: origAnn.x + dx, y: origAnn.y + dy });
+      }
+      return;
+    }
+
+    // ── Live draw preview ──
+    if (drawing.current && activeTool === 'draw') {
       currentPath.current.push([x, y]);
-      // live preview
       const canvas = overlayRef.current;
       const ctx = canvas.getContext('2d');
       const pts = currentPath.current;
       if (pts.length < 2) return;
       const dpr = window.devicePixelRatio || 1;
-      const sx = canvas.width / (viewport.width / dpr);
-      const sy = canvas.height / (viewport.height / dpr);
+      const sx  = canvas.width  / (viewport.width  / dpr);
+      const sy  = canvas.height / (viewport.height / dpr);
       ctx.strokeStyle = style.color; ctx.lineWidth = 2;
       ctx.lineCap = 'round'; ctx.lineJoin = 'round';
       ctx.beginPath();
       ctx.moveTo(pts[pts.length - 2][0] * sx, pts[pts.length - 2][1] * sy);
       ctx.lineTo(pts[pts.length - 1][0] * sx, pts[pts.length - 1][1] * sy);
       ctx.stroke();
+      return;
+    }
+
+    // ── Hover: update cursor ──
+    if (!drawing.current) {
+      const hit = findAnnotationAt(x, y);
+      setCursor(hit ? 'grab' : activeTool === 'text' ? 'text' : 'crosshair');
     }
   }
 
   function onPointerUp(e) {
     e.preventDefault();
+
+    // End drag-move
+    if (movingRef.current) {
+      movingRef.current = null;
+      setCursor('crosshair');
+      return;
+    }
+
     if (!drawing.current) return;
     drawing.current = false;
     const { x, y } = getCanvasCoords(e);
     const { x: sx, y: sy } = startPt.current;
-
     const base = { color: style.color, opacity: style.opacity, fontSize: style.fontSize };
 
     if (activeTool === 'draw') {
@@ -204,20 +271,17 @@ export default function PdfCanvas({
   }
 
   return (
-    <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }}>
-      {/* PDF render canvas */}
+    <div style={{ position: 'relative', display: 'inline-block' }}>
       <canvas ref={pdfCanvasRef} style={{ display: 'block', borderRadius: 6 }} />
 
-      {/* Annotation overlay */}
       <canvas
         ref={overlayRef}
-        style={{ position: 'absolute', top: 0, left: 0, touchAction: 'none', cursor: activeTool === 'text' ? 'text' : 'crosshair' }}
+        style={{ position: 'absolute', top: 0, left: 0, touchAction: 'none', cursor }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
       />
 
-      {/* Text input (floats over page at pointer position) */}
       <textarea
         ref={textareaRef}
         onBlur={commitTextarea}

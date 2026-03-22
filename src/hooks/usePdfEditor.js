@@ -74,12 +74,34 @@ export default function usePdfEditor() {
     setCurrentPage(0);
   }, []);
 
+  // Push current state to undo stack without adding an annotation (used before drag-move)
+  const pushUndoSnapshot = useCallback((pageIndex) => {
+    setUndoStack(prev => {
+      const next = new Map(prev);
+      const stack = next.get(pageIndex) || [];
+      next.set(pageIndex, [...stack, getPageAnnotations(pageIndex)]);
+      return next;
+    });
+    setRedoStack(prev => { const n = new Map(prev); n.delete(pageIndex); return n; });
+  }, [getPageAnnotations]);
+
+  // Update an existing annotation in place (used for drag-move)
+  const updateAnnotation = useCallback((pageIndex, id, updates) => {
+    setAnnotations(prev => {
+      const next = new Map(prev);
+      const page = next.get(pageIndex) || [];
+      next.set(pageIndex, page.map(ann => ann.id === id ? { ...ann, ...updates } : ann));
+      return next;
+    });
+  }, []);
+
   return {
     annotations, activeTool, setActiveTool,
     currentPage, setCurrentPage,
     style, setStyle,
     getPageAnnotations, addAnnotation,
     undo, redo, clearAll,
+    pushUndoSnapshot, updateAnnotation,
     canUndo: (pageIndex) => (undoStack.get(pageIndex) || []).length > 0,
     canRedo: (pageIndex) => (redoStack.get(pageIndex) || []).length > 0,
   };

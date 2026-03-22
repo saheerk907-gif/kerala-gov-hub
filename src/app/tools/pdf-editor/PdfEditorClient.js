@@ -83,6 +83,8 @@ export default function PdfEditorClient() {
       canRedo={editor.canRedo}
       onOpenNew={handleOpenNew}
       onDownload={handleDownload}
+      onUpdateAnnotation={editor.updateAnnotation}
+      onMoveStart={editor.pushUndoSnapshot}
     />
   );
 }
