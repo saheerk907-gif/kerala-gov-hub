@@ -2,16 +2,15 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const tools = [
+const pdfTools = [
   {
     icon: '📝',
     title: 'PDF Editor',
-    titleMl: 'PDF എഡിറ്റർ',
+    subtitle: 'PDF എഡിറ്റർ',
     desc: 'Edit, annotate, sign and whiteout PDFs — all in your browser, files never leave your device',
     href: '/tools/pdf-editor',
     color: '#2997ff',
     badge: 'New',
-    tags: ['pdf', 'editor', 'sign', 'annotate'],
   },
   {
     icon: '🗂️',
@@ -21,7 +20,6 @@ const tools = [
     href: '/tools/pdf-merger',
     color: '#10b981',
     badge: 'NEW',
-    tags: ['pdf', 'merge', 'combine'],
   },
   {
     icon: '✂️',
@@ -31,7 +29,6 @@ const tools = [
     href: '/tools/pdf-splitter',
     color: '#0284c7',
     badge: 'NEW',
-    tags: ['pdf', 'split', 'extract'],
   },
   {
     icon: '📃',
@@ -41,8 +38,10 @@ const tools = [
     href: '/tools/pdf-to-text',
     color: '#7c3aed',
     badge: 'NEW',
-    tags: ['pdf', 'text', 'extract'],
   },
+];
+
+const tools = [
   {
     icon: '💰',
     title: '12th PRC കാൽക്കുലേറ്റർ',
@@ -167,6 +166,49 @@ const tools = [
 
 const MOBILE_VISIBLE = 6;
 
+function ToolCard({ t }) {
+  return (
+    <Link
+      href={t.href}
+      className="glass-card group relative flex flex-col items-start text-left rounded-[16px] p-3.5 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
+    >
+      {t.badge && t.badge !== 'SOON' && (
+        <span
+          className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
+          style={{ background: 'rgba(41,151,255,0.2)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.3)' }}
+        >
+          NEW
+        </span>
+      )}
+      {t.badge === 'SOON' && (
+        <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/50 border border-white/[0.08]">
+          SOON
+        </span>
+      )}
+      <div
+        className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+        style={{ background: t.color + '25' }}
+      />
+      <div
+        className="w-9 h-9 rounded-xl flex items-center justify-center text-xl mb-2.5 transition-transform duration-200 group-hover:scale-105"
+        style={{ background: t.color + '20', border: `1px solid ${t.color}35` }}
+      >
+        {t.icon}
+      </div>
+      <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+        {t.title}
+      </h3>
+      <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/70">
+        {t.subtitle}
+      </div>
+      <div
+        className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+        style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
+      />
+    </Link>
+  );
+}
+
 export default function ToolsSection() {
   const [expanded, setExpanded] = useState(false);
 
@@ -183,58 +225,26 @@ export default function ToolsSection() {
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
         </div>
 
-        {/* 2-col on mobile, 4-col on desktop */}
+        {/* PDF Tools sub-section */}
+        <div className="mb-3 flex items-center gap-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">PDF Tools</span>
+          <div className="flex-1 h-px bg-white/[0.07]" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+          {pdfTools.map((t) => (
+            <ToolCard key={t.href} t={t} />
+          ))}
+        </div>
+
+        {/* Calculators sub-section */}
+        <div className="mb-3 flex items-center gap-3">
+          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">Calculators & Guides</span>
+          <div className="flex-1 h-px bg-white/[0.07]" />
+        </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {tools.map((t, idx) => (
             <div key={t.title} className={idx >= MOBILE_VISIBLE && !expanded ? 'md:block hidden' : 'block'}>
-            <Link
-              key={t.title}
-              href={t.href}
-              className="glass-card group relative flex flex-col items-start text-left rounded-[16px] p-3.5 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
-            >
-              {/* Badge */}
-              {t.badge && t.badge !== 'SOON' && (
-                <span
-                  className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full"
-                  style={{ background: 'rgba(41,151,255,0.2)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.3)' }}
-                >
-                  NEW
-                </span>
-              )}
-              {t.badge === 'SOON' && (
-                <span className="absolute top-2 right-2 text-[7px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-white/[0.06] text-white/50 border border-white/[0.08]">
-                  SOON
-                </span>
-              )}
-
-              {/* Glow blob */}
-              <div
-                className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                style={{ background: t.color + '25' }}
-              />
-
-              {/* Icon */}
-              <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center text-xl mb-2.5 transition-transform duration-200 group-hover:scale-105"
-                style={{ background: t.color + '20', border: `1px solid ${t.color}35` }}
-              >
-                {t.icon}
-              </div>
-
-              {/* Title */}
-              <h3 className="text-[13px] md:text-[14px] font-bold text-white/90 leading-snug mb-0.5 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                {t.title}
-              </h3>
-              <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/70">
-                {t.subtitle}
-              </div>
-
-              {/* Bottom accent */}
-              <div
-                className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
-              />
-            </Link>
+              <ToolCard t={t} />
             </div>
           ))}
         </div>
