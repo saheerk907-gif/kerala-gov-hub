@@ -18,7 +18,7 @@ function timeAgo(dateStr) {
 }
 
 function getAvatarColor(name) {
-  if (!name) return 'rgba(255,255,255,0.15)';
+  if (!name) return 'var(--surface-md)';
   const code = name.charCodeAt(0);
   const hue = (code * 47) % 360;
   return `hsl(${hue}, 60%, 45%)`;
@@ -32,13 +32,13 @@ function Avatar({ name, isAnonymous, size = 40 }) {
           width: size,
           height: size,
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.15)',
+          background: 'var(--surface-md)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           fontSize: size * 0.4,
           fontWeight: 700,
-          color: 'rgba(255,255,255,0.6)',
+          color: 'var(--text-secondary)',
           flexShrink: 0,
         }}
       >
@@ -89,15 +89,15 @@ export default function ExperienceCard({ experience, featured = false }) {
   const displayAuthor = is_anonymous ? 'Anonymous' : (author_name || 'Anonymous');
 
   // Border/bg logic: pinned takes priority over featured
-  let cardBg = 'transparent';
-  let cardBorder = '1px solid rgba(255,255,255,0.08)';
+  let cardBg = 'var(--bg-card)';
+  let cardBorder = '1px solid var(--border-xs)';
 
   if (is_pinned) {
     cardBg = `rgba(200,150,12,0.06)`;
-    cardBorder = `1px solid rgba(200,150,12,0.2)`;
+    cardBorder = `1px solid rgba(200,150,12,0.25)`;
   } else if (featured) {
     cardBg = `rgba(48,209,88,0.08)`;
-    cardBorder = `1px solid rgba(48,209,88,0.2)`;
+    cardBorder = `1px solid rgba(48,209,88,0.25)`;
   }
 
   return (
@@ -115,8 +115,8 @@ export default function ExperienceCard({ experience, featured = false }) {
             fontFamily: 'Georgia, serif',
             fontSize: '5rem',
             lineHeight: 1,
-            opacity: 0.06,
-            color: '#fff',
+            opacity: 0.08,
+            color: 'var(--text-primary)',
             userSelect: 'none',
             pointerEvents: 'none',
           }}
@@ -166,7 +166,7 @@ export default function ExperienceCard({ experience, featured = false }) {
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-auto pt-3"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          style={{ borderTop: '1px solid var(--border-xs)' }}>
           {/* Author */}
           <div className="flex items-center gap-2 min-w-0">
             <Avatar name={author_name} isAnonymous={is_anonymous} size={28} />
