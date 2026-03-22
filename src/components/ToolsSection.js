@@ -4,6 +4,16 @@ import Link from 'next/link';
 
 const tools = [
   {
+    icon: '📝',
+    title: 'PDF Editor',
+    titleMl: 'PDF എഡിറ്റർ',
+    desc: 'Edit, annotate, sign and whiteout PDFs — all in your browser, files never leave your device',
+    href: '/tools/pdf-editor',
+    color: '#2997ff',
+    badge: 'New',
+    tags: ['pdf', 'editor', 'sign', 'annotate'],
+  },
+  {
     icon: '💰',
     title: '12th PRC കാൽക്കുലേറ്റർ',
     subtitle: 'Pay Revision Calculator',
