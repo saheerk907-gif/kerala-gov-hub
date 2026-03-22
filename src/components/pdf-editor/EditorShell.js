@@ -74,30 +74,9 @@ export default function EditorShell({
         <span className="text-[15px] font-[900] text-white">PDF Editor</span>
         <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.35)' }}>{file?.name}</span>
         <span style={{ flex: 1 }} />
-        {dlError && <span className="text-[12px]" style={{ color: '#ff453a' }}>{dlError}</span>}
-        <button
-          onClick={onOpenNew}
-          style={{
-            fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            borderRadius: 10, padding: '8px 16px', border: '1px solid rgba(255,255,255,0.15)',
-            background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.7)',
-          }}
-        >
-          📂 Open New
-        </button>
-        <button
-          onClick={handleDownload}
-          style={{
-            fontSize: 14, fontWeight: 800, cursor: 'pointer',
-            borderRadius: 10, padding: '10px 22px',
-            background: 'rgba(48,209,88,0.25)', color: '#30d158',
-            border: '1.5px solid rgba(48,209,88,0.55)',
-            boxShadow: '0 0 0 3px rgba(48,209,88,0.12)',
-            letterSpacing: '0.01em',
-          }}
-        >
-          ⬇ Download PDF
-        </button>
+        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
+          Edit your PDF — then click ⬇ Download PDF at the bottom
+        </span>
       </div>
 
       {/* Toolbar */}
@@ -150,12 +129,47 @@ export default function EditorShell({
         </div>
       </div>
 
-      {/* Privacy bar */}
+      {/* Bottom action bar — always visible */}
       <div
-        className="text-center flex-shrink-0 py-1.5"
-        style={{ fontSize: 9, color: 'rgba(255,255,255,0.15)', borderTop: '1px solid rgba(255,255,255,0.04)' }}
+        className="flex items-center justify-between flex-shrink-0 px-6"
+        style={{
+          height: 64,
+          background: 'rgba(10,10,20,0.97)',
+          borderTop: '1px solid rgba(255,255,255,0.12)',
+          backdropFilter: 'blur(20px)',
+        }}
       >
-        🔒 All processing happens locally in your browser — no file is uploaded to any server
+        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
+          🔒 All processing is local — no file leaves your browser
+        </span>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          {dlError && <span style={{ fontSize: 12, color: '#ff453a' }}>{dlError}</span>}
+          <button
+            onClick={onOpenNew}
+            style={{
+              fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              borderRadius: 10, padding: '9px 18px',
+              border: '1px solid rgba(255,255,255,0.18)',
+              background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)',
+            }}
+          >
+            📂 Open New
+          </button>
+          <button
+            onClick={handleDownload}
+            style={{
+              fontSize: 15, fontWeight: 800, cursor: 'pointer',
+              borderRadius: 12, padding: '11px 28px',
+              background: '#30d158',
+              color: '#000',
+              border: 'none',
+              boxShadow: '0 4px 20px rgba(48,209,88,0.5)',
+              letterSpacing: '0.01em',
+            }}
+          >
+            ⬇ Download PDF
+          </button>
+        </div>
       </div>
 
       {showSign && (
