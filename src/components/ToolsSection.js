@@ -40,15 +40,6 @@ const pdfTools = [
     badge: 'NEW',
   },
   {
-    icon: '📦',
-    title: 'PDF Compressor',
-    subtitle: 'PDF കംപ്രസ്സർ',
-    desc: 'Reduce PDF file size for portal uploads — Low / Medium / High quality presets',
-    href: '/tools/pdf-compressor',
-    color: '#f59e0b',
-    badge: 'NEW',
-  },
-  {
     icon: '🖼️',
     title: 'Image to PDF',
     subtitle: 'ചിത്രം → PDF',
