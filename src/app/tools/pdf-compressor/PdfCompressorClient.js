@@ -9,9 +9,9 @@ import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 const QUALITY_PRESETS = {
-  low:    { label: 'Low',    scale: 0.6, jpegQ: 0.45, desc: 'Smallest file, lower quality' },
-  medium: { label: 'Medium', scale: 0.8, jpegQ: 0.65, desc: 'Good balance of size & quality' },
-  high:   { label: 'High',   scale: 1.0, jpegQ: 0.82, desc: 'Best quality, moderate reduction' },
+  low:    { label: 'Low',    scale: 1.5, jpegQ: 0.72, desc: '~144 DPI · readable, smaller file' },
+  medium: { label: 'Medium', scale: 2.0, jpegQ: 0.82, desc: '~192 DPI · good balance' },
+  high:   { label: 'High',   scale: 2.5, jpegQ: 0.88, desc: '~240 DPI · near-original quality' },
 };
 
 function fmtSize(bytes) {
