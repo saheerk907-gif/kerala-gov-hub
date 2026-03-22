@@ -611,12 +611,11 @@ export default function PdfCanvas({
         style={{
           display: 'none', position: 'fixed', zIndex: 50,
           minWidth: 160, minHeight: 34,
-          background: 'rgba(255,255,255,0.97)',
-          border: '2px solid #2997ff',
-          borderRadius: 6, padding: '6px 10px',
+          background: 'transparent',
+          border: '2px dashed #2997ff',
+          borderRadius: 4, padding: '6px 10px',
           outline: 'none', resize: 'none',
           fontFamily: 'sans-serif',
-          boxShadow: '0 4px 20px rgba(41,151,255,0.3)',
         }}
       />
     </div>
