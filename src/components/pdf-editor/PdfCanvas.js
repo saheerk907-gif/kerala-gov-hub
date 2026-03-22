@@ -115,8 +115,9 @@ export default function PdfCanvas({
   const movingRef   = useRef(null);
   const resizingRef = useRef(null);
   const previewRef  = useRef(null); // live shape preview { x1,y1,x2,y2,tool }
-  const editingAnnRef = useRef(null); // id of text annotation being edited
-  const lastTapRef    = useRef(null); // { x, y, time } for mobile double-tap
+  const editingAnnRef     = useRef(null); // id of text annotation being edited
+  const lastTapRef        = useRef(null); // { x, y, time } for mobile double-tap
+  const pendingTextEditRef = useRef(null); // text ann pending edit (cleared if drag occurs)
 
   // Store a stable redraw function so pointer events can call it
   const redrawFnRef = useRef(null);
@@ -319,36 +320,38 @@ export default function PdfCanvas({
     }
     lastTapRef.current = { x, y, time: now };
 
-    // When text tool is active, skip hit/move/resize — always place text
-    if (activeTool !== 'text') {
-      // Resize handle check
-      if (selectedId) {
-        const sel = annotations.find(a => a.id === selectedId);
-        if (sel) {
-          const hIdx = hitTestHandle(getHandles(sel), x, y);
-          if (hIdx !== -1) {
-            onMoveStart?.();
-            resizingRef.current = {
-              id: sel.id, handleIdx: hIdx, startX: x, startY: y,
-              origAnn: { ...sel, points: sel.points ? sel.points.map(p => [...p]) : [] },
-            };
-            setCursor(HANDLE_CURSORS[hIdx]);
-            return;
-          }
+    // ── Resize handle check (all tools) ──────────────────────────
+    if (selectedId) {
+      const sel = annotations.find(a => a.id === selectedId);
+      if (sel) {
+        const hIdx = hitTestHandle(getHandles(sel), x, y);
+        if (hIdx !== -1) {
+          onMoveStart?.();
+          resizingRef.current = {
+            id: sel.id, handleIdx: hIdx, startX: x, startY: y,
+            origAnn: { ...sel, points: sel.points ? sel.points.map(p => [...p]) : [] },
+          };
+          setCursor(HANDLE_CURSORS[hIdx]);
+          return;
         }
       }
+    }
 
-      const hit = findAnnotationAt(x, y);
-      if (hit) {
-        onSelectionChange?.(hit.id);
-        onMoveStart?.();
-        movingRef.current = {
-          id: hit.id, startX: x, startY: y,
-          origAnn: { ...hit, points: hit.points ? hit.points.map(p => [...p]) : [] },
-        };
-        setCursor('grabbing');
-        return;
+    // ── Hit any annotation → move it (all tools) ─────────────────
+    const hit = findAnnotationAt(x, y);
+    if (hit) {
+      onSelectionChange?.(hit.id);
+      onMoveStart?.();
+      movingRef.current = {
+        id: hit.id, startX: x, startY: y,
+        origAnn: { ...hit, points: hit.points ? hit.points.map(p => [...p]) : [] },
+      };
+      setCursor('grabbing');
+      // If text tool + text annotation: open editor only if user doesn't drag
+      if (activeTool === 'text' && hit.type === 'text') {
+        pendingTextEditRef.current = hit;
       }
+      return;
     }
 
     onSelectionChange?.(null);
@@ -356,10 +359,7 @@ export default function PdfCanvas({
     if (activeTool === 'sign') { onSignRequest({ x, y }); return; }
 
     if (activeTool === 'text') {
-      // Clicking an existing text annotation → edit it, don't create new
-      const hit = findAnnotationAt(x, y);
-      if (hit?.type === 'text') { openTextEditor(hit); return; }
-      // Otherwise create a new text box
+      // Clicked empty space → create new text box
       commitTextarea();
       pendingText.current = { x, y };
       const rect = overlayRef.current.getBoundingClientRect();
@@ -395,6 +395,10 @@ export default function PdfCanvas({
     if (movingRef.current) {
       const { id, startX, startY, origAnn } = movingRef.current;
       const dx = x - startX, dy = y - startY;
+      // If dragged more than 4px, cancel pending text edit (this is a move, not a click)
+      if (pendingTextEditRef.current && Math.hypot(dx, dy) > 4) {
+        pendingTextEditRef.current = null;
+      }
       if (origAnn.type === 'draw') {
         onUpdateAnnotation?.(id, { points: origAnn.points.map(([px, py]) => [px + dx, py + dy]) });
       } else {
@@ -443,7 +447,15 @@ export default function PdfCanvas({
     e.preventDefault();
     previewRef.current = null; // clear live preview
     if (resizingRef.current) { resizingRef.current = null; setCursor('default'); return; }
-    if (movingRef.current)   { movingRef.current   = null; setCursor('grab');    return; }
+    if (movingRef.current) {
+      const pendingEdit = pendingTextEditRef.current;
+      pendingTextEditRef.current = null;
+      movingRef.current = null;
+      setCursor('grab');
+      // Clean tap on text annotation with text tool → open editor
+      if (pendingEdit) openTextEditor(pendingEdit);
+      return;
+    }
     if (!drawing.current) return;
     drawing.current = false;
     const { x, y } = getCanvasCoords(e);
