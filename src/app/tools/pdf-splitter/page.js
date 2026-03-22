@@ -1,4 +1,6 @@
-import PdfSplitterClient from './PdfSplitterClient';
+import dynamic from 'next/dynamic';
+
+const PdfSplitterClient = dynamic(() => import('./PdfSplitterClient'), { ssr: false });
 
 export const metadata = {
   title: 'PDF Splitter — Kerala Gov Employee Hub',

@@ -1,4 +1,6 @@
-import PdfToTextClient from './PdfToTextClient';
+import dynamic from 'next/dynamic';
+
+const PdfToTextClient = dynamic(() => import('./PdfToTextClient'), { ssr: false });
 
 export const metadata = {
   title: 'PDF to Text — Kerala Gov Employee Hub',

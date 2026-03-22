@@ -1,4 +1,6 @@
-import PdfMergerClient from './PdfMergerClient';
+import dynamic from 'next/dynamic';
+
+const PdfMergerClient = dynamic(() => import('./PdfMergerClient'), { ssr: false });
 
 export const metadata = {
   title: 'PDF Merger — Kerala Gov Employee Hub',
@@ -8,3 +10,4 @@ export const metadata = {
 export default function PdfMergerPage() {
   return <PdfMergerClient />;
 }
+
