@@ -2,7 +2,6 @@ import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getNews }
 import AudioClassesSection from '@/components/AudioClassesSection';
 import Hero from '@/components/Hero';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
-import SectionNav from '@/components/SectionNav';
 import ToolsSection from '@/components/ToolsSection';
 import OrdersSection from '@/components/OrdersSection';
 import NewSection from '@/components/NewSection';
@@ -35,9 +34,6 @@ export default async function HomePage() {
 
       {/* 2. Live breaking news ticker */}
       <AnnouncementBanner />
-
-      {/* 3. Sticky section jump bar (appears after scrolling) */}
-      <SectionNav />
 
       {/* Trending Article */}
       <TrendingArticle />
