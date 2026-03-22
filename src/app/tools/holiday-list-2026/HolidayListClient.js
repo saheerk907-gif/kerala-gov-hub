@@ -193,14 +193,14 @@ const TABS = ['Holidays', 'Planner', 'Restricted'];
 // ── Stepper component ──────────────────────────────────────
 function Stepper({ label, value, onChange, min = 0, max = 60 }) {
   return (
-    <div style={{ flex: 1, background: 'rgba(255,255,255,0.5)', borderRadius: 14, padding: '10px 14px', border: '1px solid rgba(255,255,255,0.75)' }}>
-      <div style={{ fontSize: 10, fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{label}</div>
+    <div style={{ flex: 1, background: 'rgba(255,255,255,0.05)', borderRadius: 14, padding: '12px 14px', border: '1px solid rgba(255,255,255,0.09)' }}>
+      <div style={{ fontSize: 10, fontWeight: 800, color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{label}</div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <button onClick={() => onChange(Math.max(min, value - 1))} style={{ width: 28, height: 28, borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 900, fontSize: 16, background: 'rgba(255,255,255,0.7)', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-        <span style={{ flex: 1, textAlign: 'center', fontSize: 22, fontWeight: 900, color: '#0f172a' }}>{value}</span>
-        <button onClick={() => onChange(Math.min(max, value + 1))} style={{ width: 28, height: 28, borderRadius: 8, border: 'none', cursor: 'pointer', fontWeight: 900, fontSize: 16, background: 'rgba(255,255,255,0.7)', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+        <button onClick={() => onChange(Math.max(min, value - 1))} style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', fontWeight: 900, fontSize: 16, background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+        <span style={{ flex: 1, textAlign: 'center', fontSize: 22, fontWeight: 900, color: '#fff' }}>{value}</span>
+        <button onClick={() => onChange(Math.min(max, value + 1))} style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', fontWeight: 900, fontSize: 16, background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
       </div>
-      <div style={{ fontSize: 10, color: '#94a3b8', textAlign: 'center', marginTop: 4 }}>days</div>
+      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', textAlign: 'center', marginTop: 4 }}>days</div>
     </div>
   );
 }
@@ -287,88 +287,88 @@ export default function HolidayListClient() {
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   }
 
-  const cardStyle = {
-    background: 'rgba(255,255,255,0.58)', backdropFilter: 'blur(18px)',
-    border: '1px solid rgba(255,255,255,0.78)', borderRadius: 20,
-    overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.06)',
-  };
+  // Dark glass token aliases
+  const card  = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 20, overflow: 'hidden' };
+  const card2 = { background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 16 };
 
   const remainingLeave = clDays + elDays - plannedLeave;
   const budgetOk = remainingLeave >= 0;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg,#d1fae5 0%,#dbeafe 50%,#e0f2fe 100%)', padding: '40px 16px 64px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'fixed', width: 320, height: 320, background: 'rgba(16,185,129,0.15)', borderRadius: '50%', bottom: -80, left: -80, filter: 'blur(70px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'fixed', width: 260, height: 260, background: 'rgba(14,165,233,0.12)', borderRadius: '50%', top: -60, right: -60, filter: 'blur(60px)', pointerEvents: 'none' }} />
+    <div style={{ minHeight: '100vh', background: '#121416', color: '#fff', fontFamily: 'inherit' }}>
+      {/* Ambient glows */}
+      <div style={{ position: 'fixed', width: 500, height: 500, borderRadius: '50%', background: 'rgba(41,151,255,0.06)', filter: 'blur(100px)', top: -100, right: -100, pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', width: 400, height: 400, borderRadius: '50%', background: 'rgba(48,209,88,0.05)', filter: 'blur(90px)', bottom: -80, left: -80, pointerEvents: 'none', zIndex: 0 }} />
 
-      <div style={{ maxWidth: 660, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 680, margin: '0 auto', padding: '48px 16px 80px' }}>
 
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{ fontSize: 44, marginBottom: 8 }}>📅</div>
-          <h1 style={{ fontSize: 26, fontWeight: 800, color: '#0f172a', margin: 0 }}>Kerala Govt Holidays 2026</h1>
-          <p style={{ fontSize: 13, color: '#475569', marginTop: 4 }}>കേരള സർക്കാർ അവധി ദിനങ്ങൾ — Official GAD List</p>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 60, height: 60, borderRadius: 18, fontSize: 28, marginBottom: 16, background: 'rgba(41,151,255,0.10)', border: '1px solid rgba(41,151,255,0.18)' }}>📅</div>
+          <h1 style={{ fontSize: 28, fontWeight: 900, margin: '0 0 6px', letterSpacing: '-0.02em' }}>Kerala Govt Holidays 2026</h1>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.4)', margin: 0 }}>കേരള സർക്കാർ അവധി ദിനങ്ങൾ — Official GAD List</p>
         </div>
 
         {/* Next holiday */}
         {next && (
-          <div style={{ ...cardStyle, padding: '18px 22px', marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <div style={{ ...card2, padding: '18px 22px', marginBottom: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <div>
-              <div style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>Next Holiday</div>
-              <div style={{ fontSize: 17, fontWeight: 800, color: '#0f172a' }}>{next.name}</div>
-              <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{next.nameMl} · {toDate(next.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 5 }}>Next Holiday</div>
+              <div style={{ fontSize: 17, fontWeight: 800 }}>{next.name}</div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', marginTop: 3 }}>{next.nameMl} · {toDate(next.date).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</div>
             </div>
-            <div style={{ background: 'linear-gradient(135deg,#10b981,#0284c7)', borderRadius: 14, padding: '10px 16px', textAlign: 'center', flexShrink: 0 }}>
-              <div style={{ fontSize: 26, fontWeight: 900, color: '#fff', lineHeight: 1 }}>{daysToNext === 0 ? '🎉' : daysToNext}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.85)', marginTop: 2 }}>{daysToNext === 0 ? 'Today!' : daysToNext === 1 ? 'Tomorrow' : 'days away'}</div>
+            <div style={{ background: 'linear-gradient(135deg,#2997ff,#30d158)', borderRadius: 14, padding: '10px 18px', textAlign: 'center', flexShrink: 0 }}>
+              <div style={{ fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1 }}>{daysToNext === 0 ? '🎉' : daysToNext}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.8)', marginTop: 2 }}>{daysToNext === 0 ? 'Today!' : daysToNext === 1 ? 'Tomorrow' : 'days away'}</div>
             </div>
           </div>
         )}
 
         {/* Stats */}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-          {[{ label: 'Total', value: HOLIDAYS.length }, { label: 'National', value: HOLIDAYS.filter(h => h.type === 'national').length }, { label: 'Remaining', value: upcoming.length }, { label: 'On Sunday', value: ON_SUNDAY.length }].map(s => (
-            <div key={s.label} style={{ flex: 1, background: 'rgba(255,255,255,0.55)', borderRadius: 14, padding: '12px 8px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.8)' }}>
-              <div style={{ fontSize: 22, fontWeight: 900, color: '#0f172a' }}>{s.value}</div>
-              <div style={{ fontSize: 10, color: '#64748b', marginTop: 2 }}>{s.label}</div>
+        <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
+          {[{ label: 'Total', value: HOLIDAYS.length, color: '#2997ff' }, { label: 'National', value: HOLIDAYS.filter(h => h.type === 'national').length, color: '#ff9f0a' }, { label: 'Remaining', value: upcoming.length, color: '#30d158' }, { label: 'On Sunday', value: ON_SUNDAY.length, color: '#ff453a' }].map(s => (
+            <div key={s.label} style={{ flex: 1, ...card2, padding: '14px 8px', textAlign: 'center' }}>
+              <div style={{ fontSize: 24, fontWeight: 900, color: s.color }}>{s.value}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 3 }}>{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: 6, marginBottom: 20, background: 'rgba(255,255,255,0.4)', borderRadius: 14, padding: 5 }}>
+        <div style={{ display: 'flex', gap: 4, marginBottom: 24, background: 'rgba(255,255,255,0.04)', borderRadius: 14, padding: 4, border: '1px solid rgba(255,255,255,0.07)' }}>
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)} style={{
-              flex: 1, padding: '9px 6px', borderRadius: 10, border: 'none', cursor: 'pointer',
+              flex: 1, padding: '10px 6px', borderRadius: 11, border: 'none', cursor: 'pointer',
               fontWeight: 700, fontSize: 13,
-              background: tab === t ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'transparent',
-              color: tab === t ? '#fff' : '#475569', transition: 'all 0.15s',
+              background: tab === t ? 'linear-gradient(135deg,#2997ff,#0ea5e9)' : 'transparent',
+              color: tab === t ? '#fff' : 'rgba(255,255,255,0.45)', transition: 'all 0.15s',
+              boxShadow: tab === t ? '0 2px 12px rgba(41,151,255,0.3)' : 'none',
             }}>{t}</button>
           ))}
         </div>
 
         {/* ── HOLIDAYS TAB ── */}
         {tab === 'Holidays' && (<>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
             {['all', 'national', 'state'].map(f => (
               <button key={f} onClick={() => setFilter(f)} style={{
-                padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer',
-                fontWeight: 700, fontSize: 12,
-                background: filter === f ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'rgba(255,255,255,0.55)',
-                color: filter === f ? '#fff' : '#475569', transition: 'all 0.15s',
+                padding: '6px 16px', borderRadius: 20, cursor: 'pointer', fontWeight: 700, fontSize: 12,
+                background: filter === f ? 'linear-gradient(135deg,#2997ff,#0ea5e9)' : 'rgba(255,255,255,0.07)',
+                border: filter === f ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                color: filter === f ? '#fff' : 'rgba(255,255,255,0.55)', transition: 'all 0.15s',
               }}>{f === 'all' ? 'All' : f === 'national' ? '🇮🇳 National' : '🌴 State'}</button>
             ))}
-            <button onClick={handleDownload} style={{ marginLeft: 'auto', padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'linear-gradient(135deg,#6366f1,#0284c7)', color: '#fff' }}>
+            <button onClick={handleDownload} style={{ marginLeft: 'auto', padding: '6px 16px', borderRadius: 20, border: 'none', cursor: 'pointer', fontWeight: 700, fontSize: 12, background: 'linear-gradient(135deg,#bf5af2,#2997ff)', color: '#fff' }}>
               📆 Add to Calendar
             </button>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {Object.entries(byMonth).map(([mk, holidays]) => {
               const [yr, mon] = mk.split('-');
               return (
-                <div key={mk} style={cardStyle}>
-                  <div style={{ padding: '10px 18px', background: 'rgba(255,255,255,0.4)', borderBottom: '1px solid rgba(255,255,255,0.6)', fontSize: 12, fontWeight: 800, color: '#1e293b', letterSpacing: 0.5 }}>
+                <div key={mk} style={card}>
+                  <div style={{ padding: '10px 18px', background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.07)', fontSize: 11, fontWeight: 800, color: 'rgba(255,255,255,0.35)', letterSpacing: 1, textTransform: 'uppercase' }}>
                     {MONTHS[parseInt(mon) - 1]} {yr}
                   </div>
                   {holidays.map((h, idx) => {
@@ -377,16 +377,21 @@ export default function HolidayListClient() {
                     const isTdy  = d.getTime() === today.getTime();
                     const meta   = TYPE_META[h.type];
                     return (
-                      <div key={h.date + h.name} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 18px', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.5)' : 'none', opacity: isPast ? 0.42 : 1, background: isTdy ? 'rgba(16,185,129,0.07)' : 'transparent' }}>
-                        <div style={{ minWidth: 42, textAlign: 'center', flexShrink: 0, background: 'rgba(255,255,255,0.6)', borderRadius: 10, padding: '5px 3px', border: isTdy ? '2px solid #10b981' : '1px solid rgba(255,255,255,0.8)' }}>
-                          <div style={{ fontSize: 19, fontWeight: 900, color: '#0f172a', lineHeight: 1 }}>{d.getDate()}</div>
-                          <div style={{ fontSize: 9, fontWeight: 700, color: '#94a3b8', marginTop: 1 }}>{DAYS[d.getDay()]}</div>
+                      <div key={h.date + h.name} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '13px 18px', borderTop: idx > 0 ? '1px solid rgba(255,255,255,0.06)' : 'none', opacity: isPast ? 0.35 : 1, background: isTdy ? 'rgba(41,151,255,0.06)' : 'transparent' }}>
+                        <div style={{ minWidth: 44, textAlign: 'center', flexShrink: 0, background: isTdy ? 'rgba(41,151,255,0.15)' : 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '6px 4px', border: isTdy ? '1px solid rgba(41,151,255,0.4)' : '1px solid rgba(255,255,255,0.09)' }}>
+                          <div style={{ fontSize: 20, fontWeight: 900, lineHeight: 1 }}>{d.getDate()}</div>
+                          <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.4)', marginTop: 2 }}>{DAYS[d.getDay()]}</div>
                         </div>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 13, fontWeight: 700, color: '#1e293b' }}>{h.name}{isTdy && <span style={{ marginLeft: 6, fontSize: 10, color: '#10b981', fontWeight: 800 }}>● Today</span>}</div>
-                          <div style={{ fontSize: 11, color: '#64748b', marginTop: 1 }}>{h.nameMl}{h.moon && <span style={{ color: '#f59e0b', marginLeft: 6 }}>🌙 moon-dependent</span>}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>
+                            {h.name}
+                            {isTdy && <span style={{ marginLeft: 8, fontSize: 10, color: '#30d158', fontWeight: 800 }}>● Today</span>}
+                          </div>
+                          <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
+                            {h.nameMl}{h.moon && <span style={{ color: '#ff9f0a', marginLeft: 8 }}>🌙 moon-dependent</span>}
+                          </div>
                         </div>
-                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 20, background: meta.bg, color: meta.color, border: `1px solid ${meta.color}30`, flexShrink: 0 }}>{meta.label}</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 20, background: meta.bg, color: meta.color, border: `1px solid ${meta.color}40`, flexShrink: 0 }}>{meta.label}</span>
                       </div>
                     );
                   })}
@@ -395,17 +400,17 @@ export default function HolidayListClient() {
             })}
           </div>
 
-          <div style={{ ...cardStyle, marginTop: 16, padding: '14px 18px' }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>⚠ Falls on Sunday — no substitute declared</div>
+          <div style={{ ...card2, marginTop: 16, padding: '14px 18px' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: '#ff9f0a', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>⚠ Falls on Sunday — no substitute declared</div>
             {ON_SUNDAY.map(h => (
-              <div key={h.date} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#64748b', padding: '5px 0', borderTop: '1px solid rgba(255,255,255,0.5)' }}>
+              <div key={h.date} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: 'rgba(255,255,255,0.45)', padding: '6px 0', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
                 <span>{h.name}</span>
-                <span style={{ fontWeight: 700 }}>{toDate(h.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
+                <span style={{ fontWeight: 700, color: 'rgba(255,255,255,0.6)' }}>{toDate(h.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>
               </div>
             ))}
           </div>
 
-          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: 11, marginTop: 16, lineHeight: 1.6 }}>
+          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 11, marginTop: 16, lineHeight: 1.6 }}>
             Source: General Administration Department, Kerala · Moon-sighting dates are approximate.
           </p>
         </>)}
@@ -414,35 +419,35 @@ export default function HolidayListClient() {
         {tab === 'Planner' && (<>
 
           {/* Leave Budget */}
-          <div style={{ ...cardStyle, padding: '18px 20px', marginBottom: 16 }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: '#0f172a', marginBottom: 14 }}>
-              🎯 Set your leave balance
-              <span style={{ fontSize: 11, fontWeight: 500, color: '#64748b', marginLeft: 8 }}>to see what you can plan</span>
+          <div style={{ ...card2, padding: '20px', marginBottom: 16 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'rgba(255,255,255,0.85)', marginBottom: 16 }}>
+              🎯 Your leave balance
+              <span style={{ fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.35)', marginLeft: 8 }}>set to see what you can plan</span>
             </div>
             <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
               <Stepper label="CL (Casual Leave)" value={clDays} onChange={setClDays} max={30} />
               <Stepper label="EL (Earned Leave)" value={elDays} onChange={setElDays} max={60} />
             </div>
 
-            {/* Budget summary bar */}
-            <div style={{ background: budgetOk ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)', borderRadius: 12, padding: '12px 16px', border: `1px solid ${budgetOk ? 'rgba(16,185,129,0.25)' : 'rgba(239,68,68,0.25)'}` }}>
+            {/* Budget summary */}
+            <div style={{ background: budgetOk ? 'rgba(48,209,88,0.07)' : 'rgba(255,69,58,0.08)', borderRadius: 12, padding: '14px 16px', border: `1px solid ${budgetOk ? 'rgba(48,209,88,0.2)' : 'rgba(255,69,58,0.25)'}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
                 {[
-                  { label: 'Total Budget', value: clDays + elDays, color: '#0284c7' },
-                  { label: 'Leave Used', value: plannedLeave, color: '#f59e0b' },
-                  { label: 'Remaining', value: remainingLeave, color: budgetOk ? '#10b981' : '#ef4444' },
-                  { label: 'Days Off Planned', value: plannedDaysOff, color: '#7c3aed' },
+                  { label: 'Total Budget', value: clDays + elDays, color: '#2997ff' },
+                  { label: 'Leave Used',   value: plannedLeave,    color: '#ff9f0a' },
+                  { label: 'Remaining',    value: remainingLeave,  color: budgetOk ? '#30d158' : '#ff453a' },
+                  { label: 'Days Off',     value: plannedDaysOff,  color: '#bf5af2' },
                 ].map(s => (
                   <div key={s.label} style={{ textAlign: 'center', minWidth: 60 }}>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: s.color }}>{s.value}</div>
-                    <div style={{ fontSize: 9, color: '#94a3b8', marginTop: 2 }}>{s.label}</div>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: s.color }}>{s.value}</div>
+                    <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)', marginTop: 2 }}>{s.label}</div>
                   </div>
                 ))}
               </div>
               {planned.size > 0 && (
-                <div style={{ marginTop: 10, fontSize: 12, color: budgetOk ? '#10b981' : '#ef4444', fontWeight: 600, textAlign: 'center' }}>
+                <div style={{ marginTop: 10, fontSize: 12, color: budgetOk ? '#30d158' : '#ff453a', fontWeight: 600, textAlign: 'center' }}>
                   {budgetOk
-                    ? `✅ ${planned.size} break${planned.size > 1 ? 's' : ''} planned — ${remainingLeave} leave days remaining`
+                    ? `✅ ${planned.size} break${planned.size > 1 ? 's' : ''} planned — ${remainingLeave} days remaining`
                     : `⚠️ Over budget by ${Math.abs(remainingLeave)} day${Math.abs(remainingLeave) > 1 ? 's' : ''}`}
                 </div>
               )}
@@ -450,9 +455,9 @@ export default function HolidayListClient() {
           </div>
 
           {/* Legend */}
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
-            {Object.entries(DAY_COLORS).map(([k, c]) => (
-              <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: '#475569' }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
+            {Object.entries(DAY_COLORS).filter(([k]) => k !== 'work').map(([k, c]) => (
+              <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>
                 <div style={{ width: 14, height: 14, borderRadius: 4, background: c.bg }} />
                 {c.label}
               </div>
@@ -460,92 +465,88 @@ export default function HolidayListClient() {
           </div>
 
           {/* Sort + Filter */}
-          <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.45)', borderRadius: 10, padding: 3, flex: 1 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 18, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 3, flex: 1, border: '1px solid rgba(255,255,255,0.08)' }}>
               {[['date', '📅 Date'], ['value', '⚡ Best Value'], ['days', '🏆 Most Days']].map(([k, lbl]) => (
                 <button key={k} onClick={() => setSortBy(k)} style={{
-                  flex: 1, padding: '6px 4px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                  fontWeight: 700, fontSize: 11,
-                  background: sortBy === k ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'transparent',
-                  color: sortBy === k ? '#fff' : '#64748b', transition: 'all 0.15s',
-                  whiteSpace: 'nowrap',
+                  flex: 1, padding: '7px 4px', borderRadius: 9, border: 'none', cursor: 'pointer',
+                  fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap',
+                  background: sortBy === k ? 'linear-gradient(135deg,#2997ff,#0ea5e9)' : 'transparent',
+                  color: sortBy === k ? '#fff' : 'rgba(255,255,255,0.4)', transition: 'all 0.15s',
                 }}>{lbl}</button>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: 4, background: 'rgba(255,255,255,0.45)', borderRadius: 10, padding: 3 }}>
-              {[['all', 'All'], ['natural', '🟢'], ['1', '1 leave'], ['2+', '2+']].map(([k, lbl]) => (
+            <div style={{ display: 'flex', gap: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: 3, border: '1px solid rgba(255,255,255,0.08)' }}>
+              {[['all', 'All'], ['natural', '🟢 Free'], ['1', '1 leave'], ['2+', '2+']].map(([k, lbl]) => (
                 <button key={k} onClick={() => setFilterLeave(k)} style={{
-                  padding: '6px 10px', borderRadius: 8, border: 'none', cursor: 'pointer',
-                  fontWeight: 700, fontSize: 11,
-                  background: filterLeave === k ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'transparent',
-                  color: filterLeave === k ? '#fff' : '#64748b', transition: 'all 0.15s',
-                  whiteSpace: 'nowrap',
+                  padding: '7px 10px', borderRadius: 9, border: 'none', cursor: 'pointer',
+                  fontWeight: 700, fontSize: 11, whiteSpace: 'nowrap',
+                  background: filterLeave === k ? 'linear-gradient(135deg,#2997ff,#0ea5e9)' : 'transparent',
+                  color: filterLeave === k ? '#fff' : 'rgba(255,255,255,0.4)', transition: 'all 0.15s',
                 }}>{lbl}</button>
               ))}
             </div>
           </div>
 
           {/* Plan cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {plannerData.map(p => {
-              const isPast    = p.end < today;
+              const isPast     = p.end < today;
               const isUpcoming = !isPast && allPlans.filter(x => x.end >= today)[0]?.id === p.id;
-              const isPlanned = planned.has(p.id);
-              const natural   = p.leaveCnt === 0;
+              const isPlanned  = planned.has(p.id);
+              const natural    = p.leaveCnt === 0;
               const overBudget = isPlanned && !budgetOk;
 
               return (
                 <div key={p.id} style={{
-                  ...cardStyle, padding: '16px 18px',
-                  opacity: isPast ? 0.45 : 1,
-                  outline: isPlanned ? `2px solid ${overBudget ? '#ef4444' : '#10b981'}` : isUpcoming ? '2px solid rgba(14,165,233,0.5)' : 'none',
+                  ...card2, padding: '18px',
+                  opacity: isPast ? 0.35 : 1,
+                  outline: isPlanned
+                    ? `2px solid ${overBudget ? 'rgba(255,69,58,0.6)' : 'rgba(48,209,88,0.5)'}`
+                    : isUpcoming ? '2px solid rgba(41,151,255,0.4)' : 'none',
                   transition: 'outline 0.2s',
                 }}>
-                  {/* Card header */}
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 5 }}>
-                        {isUpcoming && <span style={{ fontSize: 10, fontWeight: 800, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '2px 8px', borderRadius: 20, border: '1px solid rgba(2,132,199,0.25)' }}>⭐ UPCOMING</span>}
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
+                        {isUpcoming && <span style={{ fontSize: 10, fontWeight: 800, color: '#2997ff', background: 'rgba(41,151,255,0.12)', padding: '2px 9px', borderRadius: 20, border: '1px solid rgba(41,151,255,0.25)' }}>⭐ UPCOMING</span>}
                         {natural
-                          ? <span style={{ fontSize: 10, fontWeight: 800, color: '#10b981', background: 'rgba(16,185,129,0.1)', padding: '2px 8px', borderRadius: 20, border: '1px solid rgba(16,185,129,0.25)' }}>✅ FREE</span>
-                          : <span style={{ fontSize: 10, fontWeight: 800, color: '#f59e0b', background: 'rgba(245,158,11,0.1)', padding: '2px 8px', borderRadius: 20, border: '1px solid rgba(245,158,11,0.25)' }}>📋 {p.leaveCnt} leave{p.leaveCnt > 1 ? 's' : ''}</span>}
+                          ? <span style={{ fontSize: 10, fontWeight: 800, color: '#30d158', background: 'rgba(48,209,88,0.1)', padding: '2px 9px', borderRadius: 20, border: '1px solid rgba(48,209,88,0.25)' }}>✅ FREE</span>
+                          : <span style={{ fontSize: 10, fontWeight: 800, color: '#ff9f0a', background: 'rgba(255,159,10,0.1)', padding: '2px 9px', borderRadius: 20, border: '1px solid rgba(255,159,10,0.25)' }}>📋 {p.leaveCnt} leave{p.leaveCnt > 1 ? 's' : ''}</span>}
                         {p.efficiency !== 999 && (
-                          <span style={{ fontSize: 10, fontWeight: 800, color: '#7c3aed', background: 'rgba(124,58,237,0.08)', padding: '2px 8px', borderRadius: 20, border: '1px solid rgba(124,58,237,0.2)' }}>
+                          <span style={{ fontSize: 10, fontWeight: 800, color: '#bf5af2', background: 'rgba(191,90,242,0.1)', padding: '2px 9px', borderRadius: 20, border: '1px solid rgba(191,90,242,0.2)' }}>
                             ⚡ {p.efficiency}× value
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: 15, fontWeight: 800, color: '#0f172a' }}>{p.holiday.name}</div>
-                      <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{fmtRange(p.start, p.end)}</div>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: 'rgba(255,255,255,0.92)' }}>{p.holiday.name}</div>
+                      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', marginTop: 3 }}>{fmtRange(p.start, p.end)}</div>
                     </div>
-                    <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 48 }}>
-                      <div style={{ fontSize: 30, fontWeight: 900, lineHeight: 1, color: natural ? '#10b981' : p.leaveCnt === 1 ? '#f59e0b' : '#f97316' }}>{p.totalDays}</div>
-                      <div style={{ fontSize: 10, color: '#94a3b8' }}>days off</div>
+                    <div style={{ textAlign: 'center', flexShrink: 0, minWidth: 52 }}>
+                      <div style={{ fontSize: 32, fontWeight: 900, lineHeight: 1, color: natural ? '#30d158' : p.leaveCnt === 1 ? '#ff9f0a' : '#ff6b35' }}>{p.totalDays}</div>
+                      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>days off</div>
                     </div>
                   </div>
 
-                  {/* Day strip */}
                   <DayStrip days={p.days} />
 
-                  {/* Leave days list */}
                   {p.leaveDays.length > 0 && (
-                    <div style={{ marginTop: 10, fontSize: 12, color: '#92400e', background: 'rgba(245,158,11,0.08)', padding: '8px 12px', borderRadius: 10, border: '1px solid rgba(245,158,11,0.2)' }}>
-                      Apply leave on: <b>{p.leaveDays.map(ld => toDate(ld).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })).join(', ')}</b>
+                    <div style={{ marginTop: 12, fontSize: 12, color: '#ff9f0a', background: 'rgba(255,159,10,0.07)', padding: '9px 13px', borderRadius: 10, border: '1px solid rgba(255,159,10,0.18)' }}>
+                      Apply leave on: <b style={{ color: 'rgba(255,255,255,0.75)' }}>{p.leaveDays.map(ld => toDate(ld).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' })).join(', ')}</b>
                     </div>
                   )}
 
-                  {/* Plan toggle button */}
                   {!isPast && (
                     <button onClick={() => togglePlan(p.id)} style={{
-                      marginTop: 12, width: '100%', padding: '10px', borderRadius: 12, border: 'none', cursor: 'pointer',
+                      marginTop: 12, width: '100%', padding: '11px', borderRadius: 12, border: 'none', cursor: 'pointer',
                       fontWeight: 700, fontSize: 13, transition: 'all 0.2s',
                       background: isPlanned
-                        ? overBudget ? 'rgba(239,68,68,0.1)' : 'rgba(16,185,129,0.1)'
-                        : 'rgba(255,255,255,0.5)',
-                      color: isPlanned ? (overBudget ? '#ef4444' : '#10b981') : '#64748b',
+                        ? overBudget ? 'rgba(255,69,58,0.12)' : 'rgba(48,209,88,0.1)'
+                        : 'rgba(255,255,255,0.06)',
+                      color: isPlanned ? (overBudget ? '#ff453a' : '#30d158') : 'rgba(255,255,255,0.5)',
                       border: isPlanned
-                        ? `1px solid ${overBudget ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}`
-                        : '1px solid rgba(255,255,255,0.7)',
+                        ? `1px solid ${overBudget ? 'rgba(255,69,58,0.3)' : 'rgba(48,209,88,0.25)'}`
+                        : '1px solid rgba(255,255,255,0.1)',
                     }}>
                       {isPlanned ? (overBudget ? '⚠️ Planned (over budget)' : '✓ Planned — click to remove') : '+ Plan this break'}
                     </button>
@@ -555,7 +556,7 @@ export default function HolidayListClient() {
             })}
           </div>
 
-          <p style={{ textAlign: 'center', color: '#94a3b8', fontSize: 11, marginTop: 16 }}>
+          <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.2)', fontSize: 11, marginTop: 16 }}>
             Only 2nd Saturdays are off · 1st / 3rd / 4th Saturdays are working days · Subject to official gazette dates
           </p>
         </>)}
@@ -563,23 +564,23 @@ export default function HolidayListClient() {
         {/* ── RESTRICTED TAB ── */}
         {tab === 'Restricted' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ background: 'rgba(255,255,255,0.55)', borderRadius: 14, padding: '12px 16px', fontSize: 13, color: '#64748b', lineHeight: 1.6 }}>
-              Restricted holidays are applicable only to employees of specific communities. Each employee may avail <b style={{ color: '#1e293b' }}>2 restricted holidays per year</b> from the list.
+            <div style={{ ...card2, padding: '14px 18px', fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7 }}>
+              Restricted holidays apply only to employees of specific communities. Each employee may avail <b style={{ color: 'rgba(255,255,255,0.8)' }}>2 restricted holidays per year</b> from the list.
             </div>
             {RESTRICTED.map(h => {
               const d = toDate(h.date);
               const isPast = d < today;
               return (
-                <div key={h.date} style={{ ...cardStyle, padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 14, opacity: isPast ? 0.45 : 1 }}>
-                  <div style={{ minWidth: 44, textAlign: 'center', flexShrink: 0, background: 'rgba(255,255,255,0.6)', borderRadius: 10, padding: '6px 4px', border: '1px solid rgba(255,255,255,0.8)' }}>
-                    <div style={{ fontSize: 20, fontWeight: 900, color: '#0f172a', lineHeight: 1 }}>{d.getDate()}</div>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: '#94a3b8', marginTop: 1 }}>{MONTHS[d.getMonth()].slice(0, 3)}</div>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: '#94a3b8' }}>{DAYS[d.getDay()]}</div>
+                <div key={h.date} style={{ ...card2, padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 16, opacity: isPast ? 0.35 : 1 }}>
+                  <div style={{ minWidth: 48, textAlign: 'center', flexShrink: 0, background: 'rgba(255,255,255,0.06)', borderRadius: 12, padding: '7px 4px', border: '1px solid rgba(255,255,255,0.09)' }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, lineHeight: 1 }}>{d.getDate()}</div>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>{MONTHS[d.getMonth()].slice(0, 3)}</div>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.35)' }}>{DAYS[d.getDay()]}</div>
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{h.name}</div>
-                    <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{h.nameMl}</div>
-                    <div style={{ fontSize: 11, color: '#7c3aed', marginTop: 4, fontWeight: 600 }}>👥 {h.community}</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.9)' }}>{h.name}</div>
+                    <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>{h.nameMl}</div>
+                    <div style={{ fontSize: 11, color: '#bf5af2', marginTop: 5, fontWeight: 600 }}>👥 {h.community}</div>
                   </div>
                 </div>
               );
