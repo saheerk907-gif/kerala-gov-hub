@@ -69,6 +69,15 @@ const utilityTools = [
     color: '#0ea5e9',
     badge: 'NEW',
   },
+  {
+    icon: '📅',
+    title: 'Holiday List 2026',
+    subtitle: 'അവധി ദിനങ്ങൾ 2026',
+    desc: 'Kerala Govt holidays 2026 — next holiday countdown + iCal export',
+    href: '/tools/holiday-list-2026',
+    color: '#10b981',
+    badge: 'NEW',
+  },
 ];
 
 const tools = [
