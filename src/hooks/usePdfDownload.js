@@ -11,7 +11,8 @@ function hexToRgb(hex) {
 }
 
 export default function usePdfDownload() {
-  const download = useCallback(async (originalFile, annotationsMap) => {
+  // getRenderScale: optional fn returning the CSS-px scale used when rendering the PDF canvas
+  const download = useCallback(async (originalFile, annotationsMap, getRenderScale) => {
     try {
       const arrayBuffer = await originalFile.arrayBuffer();
       const pdfDoc = await PDFDocument.load(arrayBuffer);
@@ -25,9 +26,9 @@ export default function usePdfDownload() {
         const pdfW = page.getWidth();
         const pdfH = page.getHeight();
 
-        // Annotations are stored in overlay canvas px at 1× DPR (CSS px).
-        // PdfCanvas renders at RENDER_SCALE=1.5, so 1 CSS px = 1/1.5 PDF points.
-        const RENDER_SCALE = 1.5;
+        // Annotations stored in CSS-px at the render scale used by PdfCanvas.
+        // Convert: 1 CSS px = 1/RENDER_SCALE PDF points.
+        const RENDER_SCALE = getRenderScale ? getRenderScale() : 1.5;
         const scaleX = 1 / RENDER_SCALE;
         const scaleY = 1 / RENDER_SCALE;
 

@@ -16,10 +16,12 @@ export default function EditorShell({
   onUndo, onRedo, canUndo, canRedo,
   onOpenNew, onDownload,
   onUpdateAnnotation, onMoveStart, onDeleteAnnotation,
+  onScaleChange,
 }) {
-  const [showSign, setShowSign] = useState(false);
-  const [signPos,  setSignPos]  = useState({ x: 0, y: 0 });
-  const [dlError,  setDlError]  = useState(null);
+  const [showSign,      setShowSign]      = useState(false);
+  const [signPos,       setSignPos]       = useState({ x: 0, y: 0 });
+  const [dlError,       setDlError]       = useState(null);
+  const [selectedAnnId, setSelectedAnnId] = useState(null);
 
   function handleSignRequest(pos) { setSignPos(pos); setShowSign(true); }
   function handleSignConfirm(dataUrl) {
@@ -37,32 +39,62 @@ export default function EditorShell({
     if (!result?.ok) setDlError('Download failed. Please try again.');
   }
 
+  function handlePageChange(p) {
+    setSelectedAnnId(null);
+    setCurrentPage(p);
+  }
+
+  // When style changes, also update the selected text annotation in real-time
+  function handleStyleChange(newStyle) {
+    setStyle(newStyle);
+    if (selectedAnnId) {
+      const pageAnns = annotations.get(currentPage) || [];
+      const sel = pageAnns.find(a => a.id === selectedAnnId);
+      if (sel?.type === 'text') {
+        onUpdateAnnotation(currentPage, selectedAnnId, {
+          color: newStyle.color,
+          fontSize: newStyle.fontSize,
+          opacity: newStyle.opacity,
+        });
+      }
+    }
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
       {/* Top bar */}
       <div
         className="flex items-center gap-3 px-4 flex-shrink-0"
         style={{
-          height: 48, background: 'rgba(255,255,255,0.04)',
+          height: 56, background: 'rgba(255,255,255,0.04)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           backdropFilter: 'blur(20px)',
         }}
       >
-        <span className="text-[14px] font-[900] text-white">PDF Editor</span>
-        <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>{file?.name}</span>
+        <span className="text-[15px] font-[900] text-white">PDF Editor</span>
+        <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.35)' }}>{file?.name}</span>
         <span style={{ flex: 1 }} />
-        {dlError && <span className="text-[11px]" style={{ color: '#ff453a' }}>{dlError}</span>}
+        {dlError && <span className="text-[12px]" style={{ color: '#ff453a' }}>{dlError}</span>}
         <button
           onClick={onOpenNew}
-          className="text-[11px] font-[700] border-none cursor-pointer rounded-[10px] px-3 py-1.5"
-          style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)' }}
+          style={{
+            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            borderRadius: 10, padding: '8px 16px', border: '1px solid rgba(255,255,255,0.15)',
+            background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.7)',
+          }}
         >
           📂 Open New
         </button>
         <button
           onClick={handleDownload}
-          className="text-[11px] font-[700] border-none cursor-pointer rounded-[10px] px-3 py-1.5"
-          style={{ background: 'rgba(48,209,88,0.15)', color: '#30d158', border: '1px solid rgba(48,209,88,0.3)' }}
+          style={{
+            fontSize: 14, fontWeight: 800, cursor: 'pointer',
+            borderRadius: 10, padding: '10px 22px',
+            background: 'rgba(48,209,88,0.25)', color: '#30d158',
+            border: '1.5px solid rgba(48,209,88,0.55)',
+            boxShadow: '0 0 0 3px rgba(48,209,88,0.12)',
+            letterSpacing: '0.01em',
+          }}
         >
           ⬇ Download PDF
         </button>
@@ -84,19 +116,19 @@ export default function EditorShell({
           pdfDoc={pdfDoc}
           pageCount={pageCount}
           currentPage={currentPage}
-          onPageChange={setCurrentPage}
+          onPageChange={handlePageChange}
         />
 
-        {/* Scrollable canvas area */}
+        {/* Scrollable canvas area — full width, minimal padding */}
         <div
           style={{
             flex: 1, overflowY: 'auto',
-            display: 'flex', flexDirection: 'column', alignItems: 'center',
-            padding: '24px 32px 80px',
+            display: 'flex', flexDirection: 'column', alignItems: 'stretch',
+            padding: '24px 16px 80px',
             background: 'rgba(0,0,0,0.2)',
           }}
         >
-          <div data-page-index={currentPage}>
+          <div data-page-index={currentPage} style={{ width: '100%' }}>
             <PdfCanvas
               pdfDoc={pdfDoc}
               pageIndex={currentPage}
@@ -107,11 +139,14 @@ export default function EditorShell({
               onSignRequest={handleSignRequest}
               onUpdateAnnotation={(id, updates) => onUpdateAnnotation(currentPage, id, updates)}
               onMoveStart={() => onMoveStart(currentPage)}
-              onDeleteAnnotation={(id) => onDeleteAnnotation(currentPage, id)}
+              onDeleteAnnotation={(id) => { onDeleteAnnotation(currentPage, id); setSelectedAnnId(null); }}
+              selectedId={selectedAnnId}
+              onSelectionChange={setSelectedAnnId}
+              onScaleChange={onScaleChange}
             />
           </div>
 
-          <StyleBar style={style} onChange={setStyle} />
+          <StyleBar style={style} onChange={handleStyleChange} />
         </div>
       </div>
 

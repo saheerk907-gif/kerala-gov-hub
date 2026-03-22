@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import UploadZone from '@/components/pdf-editor/UploadZone';
 import EditorShell from '@/components/pdf-editor/EditorShell';
 import usePdfEditor from '@/hooks/usePdfEditor';
@@ -18,6 +18,7 @@ export default function PdfEditorClient() {
   const [pdfDoc,    setPdfDoc]    = useState(null);
   const [pageCount, setPageCount] = useState(0);
   const [loadError, setLoadError] = useState(null);
+  const renderScaleRef = useRef(1.5);
 
   const editor = usePdfEditor();
   const { download } = usePdfDownload();
@@ -47,7 +48,7 @@ export default function PdfEditorClient() {
   }
 
   function handleDownload() {
-    return download(file, editor.annotations);
+    return download(file, editor.annotations, () => renderScaleRef.current);
   }
 
   if (!file || !pdfDoc) {
@@ -86,6 +87,7 @@ export default function PdfEditorClient() {
       onUpdateAnnotation={editor.updateAnnotation}
       onMoveStart={editor.pushUndoSnapshot}
       onDeleteAnnotation={editor.deleteAnnotation}
+      onScaleChange={s => { renderScaleRef.current = s; }}
     />
   );
 }
