@@ -44,6 +44,21 @@ const ON_SUNDAY = [
 const DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
+// Second Saturdays 2026 — the ONLY Saturdays that are off for Kerala Govt employees
+function getSecondSaturdays(year) {
+  const result = [];
+  for (let m = 0; m < 12; m++) {
+    let count = 0;
+    for (let day = 1; day <= 31; day++) {
+      const d = new Date(year, m, day);
+      if (d.getMonth() !== m) break;
+      if (d.getDay() === 6) { count++; if (count === 2) { result.push(d); break; } }
+    }
+  }
+  return result;
+}
+const SECOND_SATS_2026 = getSecondSaturdays(2026);
+
 const TYPE_META = {
   national: { label: 'National', color: '#f97316', bg: 'rgba(249,115,22,0.12)' },
   state:    { label: 'State',    color: '#10b981', bg: 'rgba(16,185,129,0.12)' },
@@ -57,17 +72,7 @@ function fmtShort(d) { return d.toLocaleDateString('en-IN', { weekday:'short', d
 // Build long weekend / leave optimizer data
 function buildPlanner() {
   const holidayDates = new Set(HOLIDAYS.map(h => h.date));
-
-  // Second Saturdays 2026
-  const secondSats = new Set();
-  for (let m = 0; m < 12; m++) {
-    let count = 0;
-    for (let day = 1; day <= 31; day++) {
-      const d = new Date(2026, m, day);
-      if (d.getMonth() !== m) break;
-      if (d.getDay() === 6) { count++; if (count === 2) { secondSats.add(d.toISOString().slice(0,10)); break; } }
-    }
-  }
+  const secondSats   = new Set(SECOND_SATS_2026.map(d => d.toISOString().slice(0,10)));
 
   function isOff(dateStr) {
     const d = toDate(dateStr);
@@ -309,8 +314,33 @@ export default function HolidayListClient() {
 
         {/* ── PLANNER TAB ── */}
         {tab === 'Planner' && (<>
-          <div style={{ background:'rgba(255,255,255,0.55)', borderRadius:14, padding:'14px 18px', marginBottom:16, fontSize:13, color:'#475569', lineHeight:1.6 }}>
-            <b style={{ color:'#0f172a' }}>Holiday Planner</b> — Shows long weekends and how many leave days (CL/EL) you need to extend them. Second Saturdays are counted as off days.
+          <div style={{ background:'rgba(255,255,255,0.55)', borderRadius:14, padding:'14px 18px', marginBottom:12, fontSize:13, color:'#475569', lineHeight:1.6 }}>
+            <b style={{ color:'#0f172a' }}>Holiday Planner</b> — Shows long weekends and how many CL/EL days you need to extend them.<br />
+            <span style={{ fontSize:12, color:'#7c3aed', fontWeight:600 }}>
+              ℹ️ Only 2nd Saturday of each month is off for Kerala Govt employees. 1st, 3rd, 4th Saturdays are working days.
+            </span>
+          </div>
+
+          {/* Second Saturdays 2026 */}
+          <div style={{ background:'rgba(255,255,255,0.45)', borderRadius:14, padding:'12px 16px', marginBottom:16, border:'1px solid rgba(255,255,255,0.75)' }}>
+            <div style={{ fontSize:11, fontWeight:800, color:'#7c3aed', textTransform:'uppercase', letterSpacing:1, marginBottom:10 }}>📅 2nd Saturdays 2026 (Off days)</div>
+            <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+              {SECOND_SATS_2026.map(d => {
+                const isPast = d < new Date(); isPast;
+                const ds = d.toISOString().slice(0,10);
+                return (
+                  <span key={ds} style={{
+                    fontSize:11, fontWeight:700, padding:'4px 10px', borderRadius:20,
+                    background: d < new Date() ? 'rgba(148,163,184,0.15)' : 'rgba(124,58,237,0.10)',
+                    color: d < new Date() ? '#94a3b8' : '#7c3aed',
+                    border: `1px solid ${d < new Date() ? 'rgba(148,163,184,0.2)' : 'rgba(124,58,237,0.25)'}`,
+                    opacity: d < new Date() ? 0.6 : 1,
+                  }}>
+                    {d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}
+                  </span>
+                );
+              })}
+            </div>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
             {plannerData.map((p,i)=>{
@@ -359,7 +389,7 @@ export default function HolidayListClient() {
             })}
           </div>
           <p style={{ textAlign:'center', color:'#94a3b8', fontSize:11, marginTop:16 }}>
-            Second Saturdays counted as off · Subject to official gazette dates
+            Only 2nd Saturdays are off · 1st / 3rd / 4th Saturdays are working days · Subject to official gazette dates
           </p>
         </>)}
 
