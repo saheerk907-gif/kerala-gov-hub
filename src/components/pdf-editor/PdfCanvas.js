@@ -367,6 +367,10 @@ export default function PdfCanvas({
     if (activeTool === 'sign') { onSignRequest({ x, y }); return; }
 
     if (activeTool === 'text') {
+      // Clicking an existing text annotation → edit it, don't create new
+      const hit = findAnnotationAt(x, y);
+      if (hit?.type === 'text') { openTextEditor(hit); return; }
+      // Otherwise create a new text box (even over whiteout / other shapes)
       commitTextarea();
       pendingText.current = { x, y };
       textareaRef.current.value = '';
