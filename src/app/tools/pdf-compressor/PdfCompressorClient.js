@@ -8,12 +8,6 @@ import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 
 GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
-const QUALITY_PRESETS = {
-  low:    { label: 'Low',    scale: 1.5, jpegQ: 0.72, desc: '~144 DPI · readable, smaller file' },
-  medium: { label: 'Medium', scale: 2.0, jpegQ: 0.82, desc: '~192 DPI · good balance' },
-  high:   { label: 'High',   scale: 2.5, jpegQ: 0.88, desc: '~240 DPI · near-original quality' },
-};
-
 function fmtSize(bytes) {
   if (bytes < 1024) return bytes + ' B';
   if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
@@ -28,54 +22,83 @@ const btn = {
 };
 const btnDisabled = { ...btn, opacity: 0.5, cursor: 'not-allowed' };
 
+const MODES = [
+  {
+    key: 'lossless',
+    label: 'Lossless',
+    icon: '✨',
+    desc: 'No quality loss — best for text & GOs',
+    warning: null,
+  },
+  {
+    key: 'raster',
+    label: 'Aggressive',
+    icon: '📉',
+    desc: 'Rasterise pages — for scanned/image PDFs only',
+    warning: 'May blur text. Use only for scanned documents.',
+  },
+];
+
+// Lossless: reload with pdf-lib and re-save with object stream compression
+async function compressLossless(arrayBuffer) {
+  const pdfDoc = await PDFDocument.load(arrayBuffer, { ignoreEncryption: true });
+  const bytes  = await pdfDoc.save({ useObjectStreams: true, addDefaultPage: false });
+  return bytes;
+}
+
+// Raster: render each page to canvas → embed as JPEG (for scanned PDFs)
+async function compressRaster(arrayBuffer, onProgress) {
+  const scale  = 2.2;
+  const jpegQ  = 0.88;
+  const pdfSrc = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  const outDoc = await PDFDocument.create();
+
+  for (let i = 1; i <= pdfSrc.numPages; i++) {
+    onProgress(`Compressing page ${i} of ${pdfSrc.numPages}…`);
+    const page     = await pdfSrc.getPage(i);
+    const viewport = page.getViewport({ scale });
+    const canvas   = document.createElement('canvas');
+    canvas.width   = Math.round(viewport.width);
+    canvas.height  = Math.round(viewport.height);
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+    const jpegDataUrl = canvas.toDataURL('image/jpeg', jpegQ);
+    const jpegBytes   = await fetch(jpegDataUrl).then(r => r.arrayBuffer());
+    const jpegImage   = await outDoc.embedJpg(jpegBytes);
+    const pdfPage     = outDoc.addPage([canvas.width, canvas.height]);
+    pdfPage.drawImage(jpegImage, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+  }
+
+  return await outDoc.save();
+}
+
 export default function PdfCompressorClient() {
-  const [file, setFile] = useState(null);
-  const [quality, setQuality] = useState('medium');
-  const [status, setStatus] = useState(null);
+  const [file, setFile]       = useState(null);
+  const [mode, setMode]       = useState('lossless');
+  const [status, setStatus]   = useState(null);
   const [progress, setProgress] = useState('');
-  const [result, setResult] = useState(null); // { originalSize, compressedSize, url, filename }
+  const [result, setResult]   = useState(null);
 
   async function handleFile([f]) {
-    setFile(f);
-    setResult(null);
-    setStatus(null);
+    setFile(f); setResult(null); setStatus(null);
   }
 
   async function handleCompress() {
     if (!file) return;
-    setStatus('compressing');
-    setResult(null);
-    const preset = QUALITY_PRESETS[quality];
-
+    setStatus('compressing'); setResult(null);
     try {
-      const buf = await file.arrayBuffer();
-      const pdfSrc = await pdfjsLib.getDocument({ data: buf }).promise;
-      const numPages = pdfSrc.numPages;
-      const outDoc = await PDFDocument.create();
+      const arrayBuffer = await file.arrayBuffer();
+      let compressedBytes;
 
-      for (let i = 1; i <= numPages; i++) {
-        setProgress(`Compressing page ${i} of ${numPages}…`);
-        const page = await pdfSrc.getPage(i);
-        const viewport = page.getViewport({ scale: preset.scale });
-
-        const canvas = document.createElement('canvas');
-        canvas.width  = Math.round(viewport.width);
-        canvas.height = Math.round(viewport.height);
-        await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-
-        // Convert to JPEG blob at chosen quality
-        const jpegDataUrl = canvas.toDataURL('image/jpeg', preset.jpegQ);
-        const jpegBytes = await fetch(jpegDataUrl).then(r => r.arrayBuffer());
-        const jpegImage = await outDoc.embedJpg(jpegBytes);
-
-        const pdfPage = outDoc.addPage([canvas.width, canvas.height]);
-        pdfPage.drawImage(jpegImage, { x: 0, y: 0, width: canvas.width, height: canvas.height });
+      if (mode === 'lossless') {
+        setProgress('Recompressing…');
+        compressedBytes = await compressLossless(arrayBuffer);
+      } else {
+        compressedBytes = await compressRaster(arrayBuffer, setProgress);
       }
 
-      const compressedBytes = await outDoc.save();
       const blob = new Blob([compressedBytes], { type: 'application/pdf' });
       const url  = URL.createObjectURL(blob);
-
       setResult({
         originalSize:   file.size,
         compressedSize: compressedBytes.byteLength,
@@ -101,10 +124,11 @@ export default function PdfCompressorClient() {
   }
 
   const saving = result ? Math.round((1 - result.compressedSize / result.originalSize) * 100) : 0;
-  const busy = status === 'compressing';
+  const busy   = status === 'compressing';
 
   return (
     <GlassTool icon="📦" title="PDF Compressor" titleMl="PDF കംപ്രസ്സർ">
+
       {!file && <UploadDropZone onFiles={handleFile} label="Drop a PDF here or click to browse" />}
 
       {file && !result && (
@@ -119,27 +143,36 @@ export default function PdfCompressorClient() {
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#1e293b' }}>
               {file.name}
             </span>
-            <span style={{ color: '#94a3b8', fontSize: 11, whiteSpace: 'nowrap' }}>{fmtSize(file.size)}</span>
+            <span style={{ color: '#94a3b8', fontSize: 11 }}>{fmtSize(file.size)}</span>
             <button onClick={handleReset}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: 16 }}>×</button>
           </div>
 
-          {/* Quality selector */}
-          <p style={{ fontSize: 12, fontWeight: 700, color: '#475569', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 1 }}>
-            Quality
+          {/* Mode selector */}
+          <p style={{ fontSize: 11, fontWeight: 700, color: '#475569', marginBottom: 10, textTransform: 'uppercase', letterSpacing: 1 }}>
+            Method
           </p>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-            {Object.entries(QUALITY_PRESETS).map(([key, p]) => (
-              <button key={key} onClick={() => setQuality(key)} style={{
-                flex: 1, padding: '10px 6px', borderRadius: 10, border: 'none', cursor: 'pointer',
-                fontWeight: 700, fontSize: 13,
-                background: quality === key ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'rgba(255,255,255,0.45)',
-                color: quality === key ? '#fff' : '#475569',
-                boxShadow: quality === key ? '0 4px 12px rgba(16,185,129,0.25)' : 'none',
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+            {MODES.map(m => (
+              <button key={m.key} onClick={() => setMode(m.key)} style={{
+                display: 'flex', alignItems: 'flex-start', gap: 12,
+                padding: '12px 14px', borderRadius: 12, border: 'none', cursor: 'pointer', textAlign: 'left',
+                background: mode === m.key
+                  ? 'linear-gradient(135deg,rgba(16,185,129,0.15),rgba(2,132,199,0.15))'
+                  : 'rgba(255,255,255,0.45)',
+                outline: mode === m.key ? '2px solid rgba(16,185,129,0.5)' : '1px solid rgba(255,255,255,0.6)',
                 transition: 'all 0.15s',
               }}>
-                {p.label}
-                <div style={{ fontSize: 10, fontWeight: 500, marginTop: 2, opacity: 0.8 }}>{p.desc.split(',')[0]}</div>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>{m.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: '#1e293b' }}>{m.label}</div>
+                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 2 }}>{m.desc}</div>
+                  {m.warning && (
+                    <div style={{ fontSize: 11, color: '#f59e0b', marginTop: 4, fontWeight: 600 }}>
+                      ⚠ {m.warning}
+                    </div>
+                  )}
+                </div>
               </button>
             ))}
           </div>
@@ -152,7 +185,6 @@ export default function PdfCompressorClient() {
 
       {result && (
         <>
-          {/* Size comparison */}
           <div style={{
             background: 'rgba(255,255,255,0.55)', borderRadius: 14,
             padding: '18px 20px', marginBottom: 16,
@@ -165,23 +197,25 @@ export default function PdfCompressorClient() {
               <div style={{ fontSize: 22 }}>→</div>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 4 }}>COMPRESSED</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#10b981' }}>{fmtSize(result.compressedSize)}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: saving > 0 ? '#10b981' : '#f59e0b' }}>
+                  {fmtSize(result.compressedSize)}
+                </div>
               </div>
               <div style={{
-                background: 'linear-gradient(135deg,#10b981,#0284c7)', borderRadius: 10,
-                padding: '8px 14px', textAlign: 'center',
+                background: saving > 0 ? 'linear-gradient(135deg,#10b981,#0284c7)' : 'rgba(100,116,139,0.2)',
+                borderRadius: 10, padding: '8px 14px', textAlign: 'center',
               }}>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)' }}>SAVED</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#fff' }}>{saving}%</div>
+                <div style={{ fontSize: 11, color: saving > 0 ? 'rgba(255,255,255,0.8)' : '#94a3b8' }}>SAVED</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: saving > 0 ? '#fff' : '#64748b' }}>
+                  {saving > 0 ? `${saving}%` : '~0%'}
+                </div>
               </div>
             </div>
-            {/* Progress bar */}
-            <div style={{ background: 'rgba(0,0,0,0.08)', borderRadius: 99, height: 6, overflow: 'hidden' }}>
-              <div style={{
-                width: `${100 - saving}%`, height: '100%',
-                background: 'linear-gradient(90deg,#10b981,#0284c7)', borderRadius: 99,
-              }} />
-            </div>
+            {saving <= 0 && (
+              <p style={{ fontSize: 12, color: '#f59e0b', textAlign: 'center', marginTop: 4 }}>
+                This PDF is already well-optimised. Try Aggressive mode if you need a smaller file.
+              </p>
+            )}
           </div>
 
           <button style={btn} onClick={handleDownload}>⬇ Download Compressed PDF</button>
