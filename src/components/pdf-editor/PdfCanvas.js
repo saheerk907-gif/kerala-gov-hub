@@ -115,6 +115,8 @@ export default function PdfCanvas({
   const movingRef   = useRef(null);
   const resizingRef = useRef(null);
   const previewRef  = useRef(null); // live shape preview { x1,y1,x2,y2,tool }
+  const editingAnnRef = useRef(null); // id of text annotation being edited
+  const lastTapRef    = useRef(null); // { x, y, time } for mobile double-tap
 
   // Store a stable redraw function so pointer events can call it
   const redrawFnRef = useRef(null);
@@ -284,9 +286,39 @@ export default function PdfCanvas({
     return null;
   }
 
+  // Open textarea pre-filled with an existing text annotation for editing
+  function openTextEditor(ann) {
+    commitTextarea(); // save any open textarea first
+    editingAnnRef.current = ann.id;
+    onMoveStart?.(); // push undo snapshot
+    const rect = overlayRef.current.getBoundingClientRect();
+    const ta = textareaRef.current;
+    ta.style.left       = `${rect.left + ann.x}px`;
+    ta.style.top        = `${rect.top  + ann.y - (ann.fontSize || 14)}px`;
+    ta.style.fontSize   = `${ann.fontSize || 14}px`;
+    ta.style.fontWeight = ann.bold   ? 'bold'   : 'normal';
+    ta.style.fontStyle  = ann.italic ? 'italic' : 'normal';
+    ta.style.color      = ann.color || style.color;
+    ta.style.display    = 'block';
+    ta.value = ann.text || '';
+    ta.focus();
+    // move cursor to end
+    ta.selectionStart = ta.selectionEnd = ta.value.length;
+  }
+
   function onPointerDown(e) {
     e.preventDefault();
     const { x, y } = getCanvasCoords(e);
+
+    // ── Mobile double-tap detection ───────────────────────────────
+    const now = Date.now();
+    const last = lastTapRef.current;
+    if (last && now - last.time < 350 && Math.abs(x - last.x) < 20 && Math.abs(y - last.y) < 20) {
+      lastTapRef.current = null;
+      const hit = findAnnotationAt(x, y);
+      if (hit?.type === 'text') { openTextEditor(hit); return; }
+    }
+    lastTapRef.current = { x, y, time: now };
 
     // Resize handle check
     if (selectedId) {
@@ -428,18 +460,38 @@ export default function PdfCanvas({
 
   function commitTextarea() {
     const ta = textareaRef.current;
-    if (!ta || ta.style.display === 'none' || !ta.value.trim()) {
-      if (ta) ta.style.display = 'none';
-      return;
-    }
-    const { x, y } = pendingText.current;
-    onAddAnnotation({
-      type: 'text', x, y, width: 0, height: 0, points: [],
-      text: ta.value, color: style.color, fontSize: style.fontSize,
-      opacity: style.opacity, bold: style.bold, italic: style.italic,
-    });
-    ta.value = '';
+    if (!ta || ta.style.display === 'none') return;
     ta.style.display = 'none';
+
+    const text = ta.value.trim();
+    const editId = editingAnnRef.current;
+    editingAnnRef.current = null;
+
+    if (editId) {
+      // Editing an existing annotation
+      if (text) {
+        onUpdateAnnotation?.(editId, { text });
+      } else {
+        onDeleteAnnotation?.(editId); // deleted all text → remove
+        onSelectionChange?.(null);
+      }
+    } else {
+      // New annotation
+      if (!text || !pendingText.current) return;
+      const { x, y } = pendingText.current;
+      onAddAnnotation({
+        type: 'text', x, y, width: 0, height: 0, points: [],
+        text, color: style.color, fontSize: style.fontSize,
+        opacity: style.opacity, bold: style.bold, italic: style.italic,
+      });
+    }
+    ta.value = '';
+  }
+
+  function onDoubleClick(e) {
+    const { x, y } = getCanvasCoords(e);
+    const hit = findAnnotationAt(x, y);
+    if (hit?.type === 'text') openTextEditor(hit);
   }
 
   const selectedAnn = annotations.find(a => a.id === selectedId);
@@ -467,6 +519,17 @@ export default function PdfCanvas({
           style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'default', fontSize: 15, padding: '0 2px', lineHeight: 1 }}>
           ⠿
         </button>
+        {selectedAnn.type === 'text' && (
+          <button
+            onClick={() => openTextEditor(selectedAnn)}
+            style={{
+              background: 'rgba(41,151,255,0.15)', border: '1px solid rgba(41,151,255,0.4)',
+              color: '#2997ff', borderRadius: 7, padding: '4px 12px',
+              fontSize: 12, fontWeight: 700, cursor: 'pointer',
+            }}>
+            ✏️ Edit
+          </button>
+        )}
         <button
           onClick={() => { onDeleteAnnotation?.(selectedAnn.id); onSelectionChange?.(null); }}
           style={{
@@ -489,6 +552,7 @@ export default function PdfCanvas({
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
+        onDoubleClick={onDoubleClick}
       />
       {miniToolbar}
       <textarea
