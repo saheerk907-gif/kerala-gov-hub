@@ -7,7 +7,7 @@ const TOOL_GROUPS = [
     { id: 'whiteout',  label: '⬜ Whiteout' },
   ],
   [
-    { id: 'rect',      label: '▭ Rectangle' },
+    { id: 'rect',      label: '▭ Rect' },
     { id: 'circle',    label: '○ Circle' },
     { id: 'line',      label: '╱ Line' },
   ],
@@ -20,32 +20,43 @@ const TOOL_GROUPS = [
   ],
 ];
 
-export default function Toolbar({ activeTool, onToolChange, onUndo, onRedo, canUndo, canRedo }) {
+export default function Toolbar({ activeTool, onToolChange, onUndo, onRedo, canUndo, canRedo, isMobile }) {
+  const btnPad  = isMobile ? '6px 10px' : '8px 16px';
+  const btnSize = isMobile ? 11 : 13;
+
   return (
     <div
-      className="flex items-center gap-1.5 flex-wrap px-4 flex-shrink-0"
       style={{
-        minHeight: 52,
+        display: 'flex', alignItems: 'center', gap: 6,
+        padding: isMobile ? '0 8px' : '0 16px',
+        minHeight: isMobile ? 44 : 52,
+        flexShrink: 0,
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
         background: 'rgba(255,255,255,0.05)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
         backdropFilter: 'blur(20px)',
       }}
     >
       {TOOL_GROUPS.map((group, gi) => (
-        <span key={gi} className="flex items-center gap-1.5">
+        <span key={gi} style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
           {gi > 0 && (
-            <span style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.1)', margin: '0 4px', display: 'inline-block', flexShrink: 0 }} />
+            <span style={{ width: 1, height: 20, background: 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
           )}
           {group.map(tool => (
             <button
               key={tool.id}
               onClick={() => onToolChange(tool.id)}
               style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                padding: '8px 16px',
-                fontSize: 13, fontWeight: 700,
+                display: 'flex', alignItems: 'center', gap: 4,
+                padding: btnPad,
+                fontSize: btnSize, fontWeight: 700,
                 borderRadius: 10, cursor: 'pointer',
                 transition: 'all 0.15s',
+                flexShrink: 0,
+                whiteSpace: 'nowrap',
                 background: activeTool === tool.id ? 'rgba(41,151,255,0.2)' : 'rgba(255,255,255,0.06)',
                 color: activeTool === tool.id ? '#2997ff' : 'rgba(255,255,255,0.7)',
                 border: `1px solid ${activeTool === tool.id ? 'rgba(41,151,255,0.5)' : 'rgba(255,255,255,0.1)'}`,
@@ -58,26 +69,27 @@ export default function Toolbar({ activeTool, onToolChange, onUndo, onRedo, canU
         </span>
       ))}
 
-      <span style={{ flex: 1 }} />
+      <span style={{ flex: 1, minWidth: 8 }} />
 
-      <button
-        onClick={onUndo} disabled={!canUndo}
-        style={{
-          padding: '8px 14px', fontSize: 13, fontWeight: 700,
-          borderRadius: 10, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)',
-          background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)',
-          opacity: canUndo ? 1 : 0.3,
-        }}
-      >↩ Undo</button>
-      <button
-        onClick={onRedo} disabled={!canRedo}
-        style={{
-          padding: '8px 14px', fontSize: 13, fontWeight: 700,
-          borderRadius: 10, cursor: 'pointer', border: '1px solid rgba(255,255,255,0.1)',
-          background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)',
-          opacity: canRedo ? 1 : 0.3,
-        }}
-      >↪ Redo</button>
+      {/* Undo / Redo */}
+      {[
+        { label: '↩', title: 'Undo', onClick: onUndo, enabled: canUndo },
+        { label: '↪', title: 'Redo', onClick: onRedo, enabled: canRedo },
+      ].map(({ label, title, onClick, enabled }) => (
+        <button
+          key={title}
+          title={title}
+          onClick={onClick}
+          disabled={!enabled}
+          style={{
+            padding: btnPad, fontSize: btnSize, fontWeight: 700,
+            borderRadius: 10, cursor: 'pointer',
+            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)',
+            opacity: enabled ? 1 : 0.3, flexShrink: 0, whiteSpace: 'nowrap',
+          }}
+        >{label} {title}</button>
+      ))}
     </div>
   );
 }

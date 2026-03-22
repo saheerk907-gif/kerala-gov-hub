@@ -1,6 +1,6 @@
 // src/components/pdf-editor/EditorShell.js
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Toolbar from './Toolbar';
 import PageThumbnails from './PageThumbnails';
 import PdfCanvas from './PdfCanvas';
@@ -22,6 +22,14 @@ export default function EditorShell({
   const [signPos,       setSignPos]       = useState({ x: 0, y: 0 });
   const [dlError,       setDlError]       = useState(null);
   const [selectedAnnId, setSelectedAnnId] = useState(null);
+  const [isMobile,      setIsMobile]      = useState(false);
+
+  useEffect(() => {
+    function check() { setIsMobile(window.innerWidth < 768); }
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   function handleSignRequest(pos) { setSignPos(pos); setShowSign(true); }
   function handleSignConfirm(dataUrl) {
@@ -44,7 +52,6 @@ export default function EditorShell({
     setCurrentPage(p);
   }
 
-  // When style changes, also update the selected text annotation in real-time
   function handleStyleChange(newStyle) {
     setStyle(newStyle);
     if (selectedAnnId) {
@@ -61,22 +68,69 @@ export default function EditorShell({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100dvh', overflow: 'hidden' }}>
+
       {/* Top bar */}
       <div
-        className="flex items-center gap-3 px-4 flex-shrink-0"
         style={{
-          height: 56, background: 'rgba(255,255,255,0.04)',
+          display: 'flex', alignItems: 'center', gap: 8,
+          padding: '0 12px', flexShrink: 0,
+          height: isMobile ? 48 : 56,
+          background: 'rgba(255,255,255,0.04)',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
           backdropFilter: 'blur(20px)',
         }}
       >
-        <span className="text-[15px] font-[900] text-white">PDF Editor</span>
-        <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.35)' }}>{file?.name}</span>
-        <span style={{ flex: 1 }} />
-        <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>
-          Edit your PDF — then click ⬇ Download PDF at the bottom
+        <span style={{ fontSize: isMobile ? 13 : 15, fontWeight: 900, color: '#fff', whiteSpace: 'nowrap' }}>
+          PDF Editor
         </span>
+
+        {/* File name — hide on very small screens */}
+        {!isMobile && (
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>
+            {file?.name}
+          </span>
+        )}
+
+        <span style={{ flex: 1 }} />
+
+        {/* Mobile: page navigation arrows */}
+        {isMobile && pageCount > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <button
+              onClick={() => handlePageChange(Math.max(0, currentPage - 1))}
+              disabled={currentPage === 0}
+              style={{
+                width: 32, height: 32, borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.07)', color: '#fff', fontSize: 16,
+                cursor: currentPage === 0 ? 'default' : 'pointer',
+                opacity: currentPage === 0 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >‹</button>
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', minWidth: 40, textAlign: 'center' }}>
+              {currentPage + 1}/{pageCount}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(pageCount - 1, currentPage + 1))}
+              disabled={currentPage === pageCount - 1}
+              style={{
+                width: 32, height: 32, borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                background: 'rgba(255,255,255,0.07)', color: '#fff', fontSize: 16,
+                cursor: currentPage === pageCount - 1 ? 'default' : 'pointer',
+                opacity: currentPage === pageCount - 1 ? 0.3 : 1,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >›</button>
+          </div>
+        )}
+
+        {/* Desktop hint */}
+        {!isMobile && (
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', whiteSpace: 'nowrap' }}>
+            ⬇ Download PDF at the bottom
+          </span>
+        )}
       </div>
 
       {/* Toolbar */}
@@ -87,23 +141,28 @@ export default function EditorShell({
         onRedo={() => onRedo(currentPage)}
         canUndo={canUndo(currentPage)}
         canRedo={canRedo(currentPage)}
+        isMobile={isMobile}
       />
 
-      {/* Body: thumbnails + canvas */}
+      {/* Body: thumbnails (desktop only) + canvas */}
       <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-        <PageThumbnails
-          pdfDoc={pdfDoc}
-          pageCount={pageCount}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
 
-        {/* Scrollable canvas area — full width, minimal padding */}
+        {/* Page thumbnails — hidden on mobile */}
+        {!isMobile && (
+          <PageThumbnails
+            pdfDoc={pdfDoc}
+            pageCount={pageCount}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+        {/* Scrollable canvas area */}
         <div
           style={{
             flex: 1, overflowY: 'auto',
             display: 'flex', flexDirection: 'column', alignItems: 'stretch',
-            padding: '24px 16px 80px',
+            padding: isMobile ? '8px 4px 80px' : '24px 16px 80px',
             background: 'rgba(0,0,0,0.2)',
           }}
         >
@@ -125,46 +184,52 @@ export default function EditorShell({
             />
           </div>
 
-          <StyleBar style={style} onChange={handleStyleChange} />
+          <StyleBar style={style} onChange={handleStyleChange} isMobile={isMobile} />
         </div>
       </div>
 
-      {/* Bottom action bar — always visible */}
+      {/* Bottom action bar */}
       <div
-        className="flex items-center justify-between flex-shrink-0 px-6"
         style={{
-          height: 64,
+          display: 'flex', alignItems: 'center',
+          justifyContent: isMobile ? 'center' : 'space-between',
+          flexShrink: 0,
+          padding: isMobile ? '0 12px' : '0 24px',
+          gap: 10,
+          height: isMobile ? 60 : 64,
           background: 'rgba(10,10,20,0.97)',
           borderTop: '1px solid rgba(255,255,255,0.12)',
           backdropFilter: 'blur(20px)',
         }}
       >
-        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
-          🔒 All processing is local — no file leaves your browser
-        </span>
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          {dlError && <span style={{ fontSize: 12, color: '#ff453a' }}>{dlError}</span>}
+        {!isMobile && (
+          <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>
+            🔒 All processing is local — no file leaves your browser
+          </span>
+        )}
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center', flex: isMobile ? 1 : 'unset' }}>
+          {dlError && <span style={{ fontSize: 11, color: '#ff453a' }}>{dlError}</span>}
           <button
             onClick={onOpenNew}
             style={{
-              fontSize: 13, fontWeight: 700, cursor: 'pointer',
-              borderRadius: 10, padding: '9px 18px',
+              fontSize: isMobile ? 12 : 13, fontWeight: 700, cursor: 'pointer',
+              borderRadius: 10, padding: isMobile ? '8px 12px' : '9px 18px',
               border: '1px solid rgba(255,255,255,0.18)',
               background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)',
+              whiteSpace: 'nowrap',
             }}
           >
-            📂 Open New
+            📂 {isMobile ? 'New' : 'Open New'}
           </button>
           <button
             onClick={handleDownload}
             style={{
-              fontSize: 15, fontWeight: 800, cursor: 'pointer',
-              borderRadius: 12, padding: '11px 28px',
-              background: '#30d158',
-              color: '#000',
-              border: 'none',
+              fontSize: isMobile ? 13 : 15, fontWeight: 800, cursor: 'pointer',
+              borderRadius: 12, padding: isMobile ? '9px 20px' : '11px 28px',
+              background: '#30d158', color: '#000', border: 'none',
               boxShadow: '0 4px 20px rgba(48,209,88,0.5)',
-              letterSpacing: '0.01em',
+              flex: isMobile ? 1 : 'unset',
+              whiteSpace: 'nowrap',
             }}
           >
             ⬇ Download PDF
