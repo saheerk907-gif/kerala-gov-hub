@@ -117,6 +117,14 @@ function OutputField({ label, value, highlight }) {
   );
 }
 
+function NumInput({ value, setter, max }) {
+  return (
+    <input type="number" value={value} min={0} max={max}
+      onChange={e => setter(e.target.value)}
+      className={inputClass} style={GLASS.input} />
+  );
+}
+
 const fmt = n => n != null ? Math.round(n).toLocaleString('en-IN') : '';
 
 // ─── Main component ────────────────────────────────────────────────────────────
@@ -153,33 +161,7 @@ export default function PensionCalculator() {
 
   const dobSet = f => v => setDob(p => ({ ...p, [f]: v }));
 
-  const numInput = (value, setter, max) => (
-    <input type="number" value={value} min={0} max={max}
-      onChange={e => setter(e.target.value)}
-      className={inputClass} style={GLASS.input} />
-  );
-
   return (
-    <div className="relative min-h-screen bg-aurora overflow-x-hidden">
-      <div className="max-w-[960px] mx-auto px-4 pt-[100px] pb-16">
-
-        {/* Header */}
-        <div className="mb-8">
-          <Link href="/"
-            className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-white/50 hover:text-white/60 no-underline transition-colors mb-3">
-            ← Back to Home
-          </Link>
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/45 mb-2">Kerala Service Rules — Part III</div>
-          <h1 className="text-[clamp(22px,4vw,40px)] font-[900] tracking-[-0.03em] text-white leading-tight"
-            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-            പെൻഷൻ Calculator
-          </h1>
-          <p className="text-[12px] text-white/50 mt-1">
-            Basic Pension · Family Pension · DCRG · Commutation Value
-          </p>
-        </div>
-
-        {/* Card */}
         <div className="rounded-3xl p-6 md:p-8"
           style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
 
@@ -222,22 +204,22 @@ export default function PensionCalculator() {
 
               {/* Total Qualifying Service */}
               <Field label="Total Qualifying Service" sub="(Years)">
-                {numInput(qs, setQs, 33)}
+                <NumInput value={qs} setter={setQs} max={33} />
               </Field>
 
               {/* Average Emoluments */}
               <Field label="Average Emoluments" sub="( Last Ten Months Salary Divided By Ten )">
-                {numInput(avgEmol, setAvgEmol, 999999)}
+                <NumInput value={avgEmol} setter={setAvgEmol} max={999999} />
               </Field>
 
               {/* Last Month Emoluments */}
               <Field label="Last Month Emoluments" sub="(Pay + DA)">
-                {numInput(lastEmol, setLastEmol, 999999)}
+                <NumInput value={lastEmol} setter={setLastEmol} max={999999} />
               </Field>
 
               {/* Commutation % */}
               <Field label="Percentage of Pension to be Commuted" sub="(e.g. 20 , Maximum 40%)">
-                {numInput(commutePct, setCommutePct, 40)}
+                <NumInput value={commutePct} setter={setCommutePct} max={40} />
               </Field>
             </div>
 
@@ -289,8 +271,5 @@ export default function PensionCalculator() {
             </button>
           </div>
         </div>
-
-      </div>
-    </div>
   );
 }
