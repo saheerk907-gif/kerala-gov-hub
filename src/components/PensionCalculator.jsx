@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
 
 // ─── Retirement date helpers ───────────────────────────────────────────────────
 function lastDayOfMonth(year, month) {          // month: 1-based
@@ -162,114 +161,109 @@ export default function PensionCalculator() {
   const dobSet = f => v => setDob(p => ({ ...p, [f]: v }));
 
   return (
-        <div className="rounded-3xl p-6 md:p-8"
-          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
+    <div className="rounded-3xl p-6 md:p-8"
+      style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
 
-            {/* ── LEFT COLUMN: Inputs ──────────────────────────────────── */}
-            <div className="flex flex-col gap-5">
+        {/* ── LEFT COLUMN: Inputs ──────────────────────────────────── */}
+        <div className="flex flex-col gap-5">
 
-              {/* Type of Retirement */}
-              <Field label="Type of Retirement">
-                <select value={retType} onChange={e => setRetType(e.target.value)}
-                  className={inputClass} style={GLASS.input}>
-                  <option value="P">Pension</option>
-                  <option value="S">Superannuation</option>
-                  <option value="I">Invalid</option>
-                  <option value="V">Voluntary</option>
-                </select>
-              </Field>
+          {/* Type of Retirement */}
+          <Field label="Type of Retirement">
+            <select value={retType} onChange={e => setRetType(e.target.value)}
+              className={inputClass} style={GLASS.input}>
+              <option value="P">Pension</option>
+              <option value="S">Superannuation</option>
+              <option value="I">Invalid</option>
+              <option value="V">Voluntary</option>
+            </select>
+          </Field>
 
-              {/* Date of Birth */}
-              <Field label="Date of Birth">
-                <div className="grid grid-cols-3 gap-2">
-                  <select value={dob.day} onChange={e => dobSet('day')(e.target.value)}
-                    className={inputClass} style={GLASS.input}>
-                    <option value="">Day</option>
-                    {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
-                  </select>
-                  <select value={dob.month} onChange={e => dobSet('month')(e.target.value)}
-                    className={inputClass} style={GLASS.input}>
-                    <option value="">Month</option>
-                    {MONTHS.map(m => <option key={m} value={m}>{m}</option>)}
-                  </select>
-                  <select value={dob.year} onChange={e => dobSet('year')(e.target.value)}
-                    className={inputClass} style={GLASS.input}>
-                    <option value="">Year</option>
-                    {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-                  </select>
-                </div>
-              </Field>
-
-              {/* Total Qualifying Service */}
-              <Field label="Total Qualifying Service" sub="(Years)">
-                <NumInput value={qs} setter={setQs} max={33} />
-              </Field>
-
-              {/* Average Emoluments */}
-              <Field label="Average Emoluments" sub="( Last Ten Months Salary Divided By Ten )">
-                <NumInput value={avgEmol} setter={setAvgEmol} max={999999} />
-              </Field>
-
-              {/* Last Month Emoluments */}
-              <Field label="Last Month Emoluments" sub="(Pay + DA)">
-                <NumInput value={lastEmol} setter={setLastEmol} max={999999} />
-              </Field>
-
-              {/* Commutation % */}
-              <Field label="Percentage of Pension to be Commuted" sub="(e.g. 20 , Maximum 40%)">
-                <NumInput value={commutePct} setter={setCommutePct} max={40} />
-              </Field>
+          {/* Date of Birth */}
+          <Field label="Date of Birth">
+            <div className="grid grid-cols-3 gap-2">
+              <select value={dob.day} onChange={e => dobSet('day')(e.target.value)}
+                className={inputClass} style={GLASS.input}>
+                <option value="">Day</option>
+                {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
+              </select>
+              <select value={dob.month} onChange={e => dobSet('month')(e.target.value)}
+                className={inputClass} style={GLASS.input}>
+                <option value="">Month</option>
+                {MONTHS.map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
+              <select value={dob.year} onChange={e => dobSet('year')(e.target.value)}
+                className={inputClass} style={GLASS.input}>
+                <option value="">Year</option>
+                {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+              </select>
             </div>
+          </Field>
 
-            {/* ── RIGHT COLUMN: Outputs ────────────────────────────────── */}
-            <div className="flex flex-col gap-5">
+          {/* Total Qualifying Service */}
+          <Field label="Total Qualifying Service" sub="(Years)">
+            <NumInput value={qs} setter={setQs} max={33} />
+          </Field>
 
-              {/* Row 1: Dates */}
-              <div className="grid grid-cols-2 gap-4">
-                <OutputField label="Date of Retirement" value={fmtDate(retDate)} />
-                <OutputField label="Date of Restore"    value={fmtDate(restDate)} />
-              </div>
+          {/* Average Emoluments */}
+          <Field label="Average Emoluments" sub="( Last Ten Months Salary Divided By Ten )">
+            <NumInput value={avgEmol} setter={setAvgEmol} max={999999} />
+          </Field>
 
-              {/* Row 2: Basic + Reduced */}
-              <div className="grid grid-cols-2 gap-4">
-                <OutputField label="Basic Pension (Rs.)"   value={fmt(result?.pension)}        highlight={!!result?.pension} />
-                <OutputField label="Reduced Pension (Rs.)" value={fmt(result?.reducedPension)}  highlight={!!result?.reducedPension} />
-              </div>
+          {/* Last Month Emoluments */}
+          <Field label="Last Month Emoluments" sub="(Pay + DA)">
+            <NumInput value={lastEmol} setter={setLastEmol} max={999999} />
+          </Field>
 
-              {/* Row 3: Family Pension */}
-              <OutputField label="Normal Family Pension (Rs.)" value={fmt(result?.familyPension)} highlight={!!result?.familyPension} />
-
-              {/* Row 4: DCRG */}
-              <OutputField label="DCRG (Rs.)" value={fmt(result?.dcrg)} highlight={!!result?.dcrg} />
-
-              {/* Row 5: Pension Commuted */}
-              <OutputField label="Pension Commuted (Rs.)" value={fmt(result?.commutedAmt)} highlight={!!result?.commutedAmt} />
-
-              {/* Row 6: Commuted Value */}
-              <OutputField label="Commuted Value (Rs.)" value={fmt(result?.commutedValue)} highlight={!!result?.commutedValue} />
-            </div>
-          </div>
-
-          {/* Disclaimer */}
-          <p className="mt-6 text-center text-[12px] italic" style={{ color: '#ff453a' }}>
-            * The results are only indicators. Refer codes for authenticity
-          </p>
-
-          {/* Action buttons */}
-          <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/"
-              className="flex-1 sm:flex-none sm:min-w-[180px] text-center px-8 py-3.5 rounded-2xl text-[14px] font-black no-underline tracking-wide transition-all hover:scale-[1.02]"
-              style={{ background: 'linear-gradient(135deg, #2997ff, #0a84ff)', color: '#fff', boxShadow: '0 6px 24px rgba(41,151,255,0.3)' }}>
-              HOME
-            </Link>
-            <button onClick={clear}
-              className="flex-1 sm:flex-none sm:min-w-[180px] px-8 py-3.5 rounded-2xl text-[14px] font-black tracking-wide transition-all hover:scale-[1.02]"
-              style={{ background: 'linear-gradient(135deg, #ff9f0a, #ff6b00)', color: '#fff', boxShadow: '0 6px 24px rgba(255,159,10,0.3)' }}>
-              CLEAR
-            </button>
-          </div>
+          {/* Commutation % */}
+          <Field label="Percentage of Pension to be Commuted" sub="(e.g. 20 , Maximum 40%)">
+            <NumInput value={commutePct} setter={setCommutePct} max={40} />
+          </Field>
         </div>
+
+        {/* ── RIGHT COLUMN: Outputs ────────────────────────────────── */}
+        <div className="flex flex-col gap-5">
+
+          {/* Row 1: Dates */}
+          <div className="grid grid-cols-2 gap-4">
+            <OutputField label="Date of Retirement" value={fmtDate(retDate)} />
+            <OutputField label="Date of Restore"    value={fmtDate(restDate)} />
+          </div>
+
+          {/* Row 2: Basic + Reduced */}
+          <div className="grid grid-cols-2 gap-4">
+            <OutputField label="Basic Pension (Rs.)"   value={fmt(result?.pension)}        highlight={!!result?.pension} />
+            <OutputField label="Reduced Pension (Rs.)" value={fmt(result?.reducedPension)}  highlight={!!result?.reducedPension} />
+          </div>
+
+          {/* Row 3: Family Pension */}
+          <OutputField label="Normal Family Pension (Rs.)" value={fmt(result?.familyPension)} highlight={!!result?.familyPension} />
+
+          {/* Row 4: DCRG */}
+          <OutputField label="DCRG (Rs.)" value={fmt(result?.dcrg)} highlight={!!result?.dcrg} />
+
+          {/* Row 5: Pension Commuted */}
+          <OutputField label="Pension Commuted (Rs.)" value={fmt(result?.commutedAmt)} highlight={!!result?.commutedAmt} />
+
+          {/* Row 6: Commuted Value */}
+          <OutputField label="Commuted Value (Rs.)" value={fmt(result?.commutedValue)} highlight={!!result?.commutedValue} />
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <p className="mt-6 text-center text-[12px] italic" style={{ color: '#ff453a' }}>
+        * The results are only indicators. Refer codes for authenticity
+      </p>
+
+      {/* Action buttons */}
+      <div className="mt-8 flex justify-center">
+        <button onClick={clear}
+          className="sm:min-w-[180px] px-8 py-3.5 rounded-2xl text-[14px] font-black tracking-wide transition-all hover:scale-[1.02]"
+          style={{ background: 'linear-gradient(135deg, #ff9f0a, #ff6b00)', color: '#fff', boxShadow: '0 6px 24px rgba(255,159,10,0.3)' }}>
+          CLEAR
+        </button>
+      </div>
+    </div>
   );
 }
