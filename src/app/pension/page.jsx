@@ -48,10 +48,10 @@ export default function PensionPage() {
 
         {/* Bilingual intro */}
         <div className="mb-8 flex flex-col gap-3">
-          <p className="text-[14px] text-white/70">
+          <p className="text-[14px] text-white/70 leading-relaxed text-justify">
             Kerala government employees retiring under the traditional pension scheme can use this calculator to estimate their monthly pension, Death-cum-Retirement Gratuity (DCRG), commutation value, and family pension — all calculated as per Kerala Service Rules (KSR) Part III. Enter your date of birth, total qualifying service, average emoluments, and commutation percentage to get instant results. This tool supports all retirement types: Pension, Superannuation, Invalid, and Voluntary. Applicable for employees who joined service before January 1, 2013.
           </p>
-          <p className="text-[13px] text-white/60"
+          <p className="text-[13px] text-white/60 leading-relaxed text-justify"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             കേരള സർക്കാർ ജീവനക്കാർക്ക് Retirement-ൽ ലഭിക്കുന്ന പെൻഷൻ Kerala Service Rules (KSR) Part III-ന് അനുസൃതമായി കണക്കാക്കുന്നു. Basic Pension = (Average Emoluments × Qualifying Service Years) ÷ 60 എന്ന ഫോർമുല ഉപയോഗിക്കുന്നു. Average Emoluments എന്നത് Retirement-ന് മുൻപുള്ള അവസാന 10 മാസത്തെ Basic Pay + DA-ന്റെ ശരാശരിയാണ്. Maximum Qualifying Service 30 വർഷമാണ്; അതിൽ കൂടുതൽ സർവ്വീസ് Pension Amount വർദ്ധിപ്പിക്കില്ല. ഈ Calculator ഉപയോഗിച്ച് Basic Pension, Normal Family Pension, DCRG, Commutation Value എന്നിവ ഒരേ സമയം കണക്കാക്കാം. Pension-ന്റെ Maximum 40% വരെ Commute ചെയ്ത് Lump Sum ആയി സ്വീകരിക്കാം; Commuted Pension 12 വർഷം കഴിഞ്ഞ് Restore ആകും. 2013 January 1-ന് ശേഷം Join ചെയ്ത ജീവനക്കാർ NPS-ൽ ഉൾപ്പെടുന്നതിനാൽ ഈ Calculator Traditional Pension ആനുകൂല്യങ്ങൾ കണക്കാക്കാൻ ഉദ്ദേശിച്ചതാണ്.
           </p>
@@ -140,7 +140,7 @@ export default function PensionPage() {
                     <path d="M2 5l5 5 5-5"/>
                   </svg>
                 </summary>
-                <p className="px-5 pb-5 text-[13px] text-white/78 leading-relaxed"
+                <p className="px-5 pb-5 text-[13px] text-white/78 leading-relaxed text-justify"
                   style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {faq.a}
                 </p>

@@ -42,7 +42,7 @@ export default function RetirementPage() {
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             Retirement Calculator — Kerala Government Employees
           </h1>
-          <p className="text-[13px] text-white/60 leading-relaxed mb-8"
+          <p className="text-[13px] text-white/60 leading-relaxed text-justify mb-8"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             കേരള സർക്കാർ ജീവനക്കാരുടെ Retirement Date, Leave Preparatory to Retirement (LPR) Start Date, Monthly Pension, DCRG തുക എന്നിവ ഈ Calculator ഉപയോഗിച്ച് കണക്കാക്കാം. KSR Part III-ന് അനുസൃതമായി Retirement Age 56 വർഷം ആണ്. ജനന മാസത്തിന്റെ അവസാന ദിവസം ആണ് Retirement Date; ജനനം 1-ആം തീയ്യതിയാണെങ്കിൽ ഒരു മാസം മുൻപ് Retire ആകും. Superannuation Retirement-ൽ (Teachers) 56 വർഷം ശേഷം Academic Term-ന്റെ അവസാനം (March 31 / May 31) ആണ് തീയ്യതി. Traditional Pension (pre-2013) ഉം NPS (2013-ന് ശേഷം) ഉം ഈ Calculator-ൽ Support ചെയ്യുന്നു.
           </p>
@@ -101,7 +101,7 @@ export default function RetirementPage() {
                       <path d="M2 5l5 5 5-5"/>
                     </svg>
                   </summary>
-                  <p className="px-5 pb-5 text-[13px] text-white/78 leading-relaxed"
+                  <p className="px-5 pb-5 text-[13px] text-white/78 leading-relaxed text-justify"
                     style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {faq.a}
                   </p>
