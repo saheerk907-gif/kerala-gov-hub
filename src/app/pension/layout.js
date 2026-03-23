@@ -2,9 +2,9 @@ import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
   title: 'Kerala Govt Pension Calculator 2026 – Calculate Basic Pension & Commutation',
-  description: 'Calculate Kerala government employee pension, commutation, gratuity, and retirement benefits. Based on latest Kerala Service Rules.',
+  description: 'Kerala govt employee pension calculator 2026 — instantly calculate basic pension, DCRG, commutation value and family pension. Based on Kerala Service Rules (KSR) Part III.',
   path: '/pension',
-  keywords: ['Kerala pension calculator', 'pension commutation', 'gratuity calculator', 'retirement benefits Kerala', 'പെൻഷൻ കണക്കുകൂട്ടൽ'],
+  keywords: ['Kerala pension calculator', 'Kerala govt pension 2026', 'basic pension calculation', 'KSR Part III pension', 'pension commutation Kerala', 'DCRG calculator', 'family pension Kerala', 'retirement gratuity Kerala', 'പെൻഷൻ കണക്കുകൂട്ടൽ', 'കേരള സർക്കാർ പെൻഷൻ'],
 });
 
 const faqJsonLd = {
