@@ -30,7 +30,7 @@ Because `<FAQSection />` is `'use client'`, **do not use it** in the server page
    `Home › Pension Calculator`
    Styled as: `<a href="/">Home</a> › <span>Pension Calculator</span>`
 
-2. **H1** — `"Kerala Govt Pension Calculator 2026 — Calculate Basic Pension, DCRG & Commutation"`
+2. **H1** — `"Kerala Govt Pension Calculator 2026 — Calculate Basic Pension & Commutation"`
 
 3. **Intro — bilingual, two paragraphs:**
 
@@ -96,7 +96,7 @@ Keep the existing `FAQPage` JSON-LD and `buildMetadata` call unchanged.
 
 ### Metadata Title Update (in `layout.js` `buildMetadata` call)
 
-Change title to: `"Kerala Govt Pension Calculator 2026 – Calculate Basic Pension, DCRG & Commutation"`
+Change title to: `"Kerala Govt Pension Calculator 2026 – Calculate Basic Pension & Commutation"`
 
 ---
 
