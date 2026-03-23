@@ -30,20 +30,45 @@ Because `<FAQSection />` is `'use client'`, **do not use it** in the server page
    `Home › Pension Calculator`
    Styled as: `<a href="/">Home</a> › <span>Pension Calculator</span>`
 
-2. **H1** — `"Kerala Pension Calculator 2026 — Basic Pension, DCRG & Commutation"`
+2. **H1** — `"Kerala Govt Pension Calculator 2026 — Calculate Basic Pension, DCRG & Commutation"`
 
-3. **Intro paragraph** — server-rendered, ~150 words in Malayalam:
+3. **Intro — bilingual, two paragraphs:**
 
+   **English paragraph (80–100 words, SEO keyword capture):**
+   > Kerala government employees retiring under the traditional pension scheme can use this calculator to estimate their monthly pension, Death-cum-Retirement Gratuity (DCRG), commutation value, and family pension — all calculated as per Kerala Service Rules (KSR) Part III. Enter your date of birth, total qualifying service, average emoluments, and commutation percentage to get instant results. This tool supports all retirement types: Pension, Superannuation, Invalid, and Voluntary. Applicable for employees who joined service before January 1, 2013.
+
+   **Malayalam paragraph (120–150 words, local relevance):**
    > കേരള സർക്കാർ ജീവനക്കാർക്ക് Retirement-ൽ ലഭിക്കുന്ന പെൻഷൻ Kerala Service Rules (KSR) Part III-ന് അനുസൃതമായി കണക്കാക്കുന്നു. Basic Pension = (Average Emoluments × Qualifying Service Years) ÷ 60 എന്ന ഫോർമുല ഉപയോഗിക്കുന്നു. Average Emoluments എന്നത് Retirement-ന് മുൻപുള്ള അവസാന 10 മാസത്തെ Basic Pay + DA-ന്റെ ശരാശരിയാണ്. Maximum Qualifying Service 30 വർഷമാണ്; അതിൽ കൂടുതൽ സർവ്വീസ് Pension Amount വർദ്ധിപ്പിക്കില്ല. ഈ Calculator ഉപയോഗിച്ച് Basic Pension, Normal Family Pension, Death-cum-Retirement Gratuity (DCRG), Commutation Value എന്നിവ ഒരേ സമയം കണക്കാക്കാം. Pension-ന്റെ Maximum 40% വരെ Commute ചെയ്ത് Lump Sum ആയി സ്വീകരിക്കാം; Commuted Pension Retirement Date മുതൽ 12 വർഷം കഴിഞ്ഞ് Restore ആകും. Retirement Age 56 വർഷം ആണ്. 2013 January 1-ന് ശേഷം Join ചെയ്ത ജീവനക്കാർ NPS-ൽ ഉൾപ്പെടുന്നതിനാൽ ഈ Calculator Traditional Pension ആനുകൂല്യങ്ങൾ കണക്കാക്കാൻ ഉദ്ദേശിച്ചതാണ്.
 
 4. **`<PensionCalculator />`** — client component, identical behaviour and UI to current
 
-5. **"ഇനിയും വായിക്കുക" section** — replace the existing plain text links (lines 323–334 of current page) with 2 styled link cards matching the existing dark glass theme (`background: var(--surface-xs)`, `border: 1px solid var(--surface-sm)`, `rounded-2xl`). Cards:
-   - Card 1: "പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം" → `/pension-calculation`
-   - Card 2: "Pension Forms Download (24 Forms)" → `/pension-forms`
-   - The `→` arrow is a decorative `aria-hidden="true"` span inside each card, not part of the link text
+5. **Example output block** — static server-rendered block showing a sample calculation with realistic values. Render before the "ഇനിയും വായിക്കുക" section:
+   ```
+   ഉദാഹരണം (Example)
+   Last Pay (Average Emoluments): ₹70,000
+   Qualifying Service: 30 years
+   ─────────────────────────────
+   ✔ Basic Pension:    ₹35,000 / month
+   ✔ DCRG:            ₹10,50,000
+   ✔ Family Pension:  ₹21,000 / month
+   ✔ Commutation (40%): ₹16,80,000 lump sum → Reduced Pension ₹21,000/month
+   ```
+   Style: dark glass card (`var(--surface-xs)` background), monospace values, green checkmarks (`#30d158`), amber heading (`#ff9f0a`).
 
-6. **Static FAQ section** — server-rendered `<section>` with `<h2>പതിവ് ചോദ്യങ്ങൾ</h2>` and the 6 existing FAQ questions/answers rendered as static HTML (not the `FAQSection` client component). Use `<details>/<summary>` or plain `<div>` per item with the same amber accent color (`#ff9f0a`) styling.
+6. **"ഇനിയും വായിക്കുക" section** — replace the existing plain text links (lines 323–334 of current page) with 2 rich link cards matching the dark glass theme. Each card has: **Title**, **one-line description**, and **CTA label**. Layout: side-by-side on desktop, stacked on mobile.
+   - Card 1:
+     - Title: "പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം"
+     - Desc: "KSR Part III pension formula, half-year units, and worked examples explained step by step"
+     - CTA: "Read Guide"
+     - Link: `/pension-calculation`
+   - Card 2:
+     - Title: "Pension Forms Download"
+     - Desc: "All 24 official pension forms — Form 1 to Form 24 — ready to download"
+     - CTA: "Download Forms"
+     - Link: `/pension-forms`
+   - The `→` arrow (if used) is a decorative `aria-hidden="true"` span, not part of the link text
+
+8. **Static FAQ section** — server-rendered `<section>` with `<h2>പതിവ് ചോദ്യങ്ങൾ</h2>` and the 6 existing FAQ questions/answers rendered as static HTML (not the `FAQSection` client component). Use `<details>/<summary>` or plain `<div>` per item with the same amber accent color (`#ff9f0a`) styling.
 
 ### Schema Updates (`layout.js`)
 
@@ -71,7 +96,7 @@ Keep the existing `FAQPage` JSON-LD and `buildMetadata` call unchanged.
 
 ### Metadata Title Update (in `layout.js` `buildMetadata` call)
 
-Change title to: `"Kerala Pension Calculator 2026 – Govt Employee Pension, DCRG & Commutation"`
+Change title to: `"Kerala Govt Pension Calculator 2026 – Calculate Basic Pension, DCRG & Commutation"`
 
 ---
 
