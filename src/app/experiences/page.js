@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ExperienceCard from '@/components/ExperienceCard';
+import { trendingScore as calcTrendingScore, readTime } from '@/lib/experiences';
 
 export const revalidate = 60;
 
@@ -62,17 +63,57 @@ async function getReactionCounts(experienceIds) {
   }
 }
 
+async function getRecentReactions(experienceIds) {
+  if (!experienceIds.length) return {};
+  try {
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    const ids = experienceIds.map((id) => `"${id}"`).join(',');
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/experience_reactions?experience_id=in.(${ids})&created_at=gte.${sevenDaysAgo}&select=experience_id`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        next: { revalidate: 60 },
+      }
+    );
+    if (!res.ok) return {};
+    const rows = await res.json();
+    const counts = {};
+    if (Array.isArray(rows)) {
+      for (const r of rows) {
+        counts[r.experience_id] = (counts[r.experience_id] || 0) + 1;
+      }
+    }
+    return counts;
+  } catch {
+    return {};
+  }
+}
+
 export default async function ExperiencesPage() {
   const experiences = await getExperiences();
   const ids = experiences.map((e) => e.id);
-  const reactionCounts = await getReactionCounts(ids);
+  const [reactionCounts, recentCounts] = await Promise.all([
+    getReactionCounts(ids),
+    getRecentReactions(ids),
+  ]);
 
-  const enriched = experiences.map((e) => ({
-    ...e,
-    helpful_count: reactionCounts[e.id]?.helpful || 0,
-    relatable_count: reactionCounts[e.id]?.relatable || 0,
-    comment_count: 0,
-  }));
+  const enriched = experiences.map((e) => {
+    const helpful = reactionCounts[e.id]?.helpful || 0;
+    const relatable = reactionCounts[e.id]?.relatable || 0;
+    const recentReactions = recentCounts[e.id] || 0;
+    return {
+      ...e,
+      helpful_count: helpful,
+      relatable_count: relatable,
+      comment_count: 0,
+      recentReactions,
+      trendingScore: calcTrendingScore(recentReactions, helpful + relatable, e.published_at),
+      readTime: readTime(e.body),
+    };
+  });
 
   const pinnedList = enriched.filter((e) => e.is_pinned);
   const regularList = enriched.filter((e) => !e.is_pinned);
