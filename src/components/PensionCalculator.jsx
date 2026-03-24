@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── Retirement date helpers ───────────────────────────────────────────────────
 function lastDayOfMonth(year, month) {          // month: 1-based
@@ -143,6 +144,14 @@ export default function PensionCalculator() {
   const [restDate,  setRestDate]  = useState(null);
   const [result,    setResult]    = useState(null);
 
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = result === null;
+    if (wasNull && result !== null) setAnimKey(k => k + 1);
+  }, [result]);
+
   const recalc = useCallback(() => {
     const rd = getRetirementDate(dob, retType);
     setRetDate(rd);
@@ -233,21 +242,45 @@ export default function PensionCalculator() {
 
           {/* Row 2: Basic + Reduced */}
           <div className="grid grid-cols-2 gap-4">
-            <OutputField label="Basic Pension (Rs.)"   value={fmt(result?.pension)}        highlight={!!result?.pension} />
-            <OutputField label="Reduced Pension (Rs.)" value={fmt(result?.reducedPension)}  highlight={!!result?.reducedPension} />
+            <OutputField
+              label="Basic Pension (Rs.)"
+              value={result ? <AnimatedNumber value={result.pension} animKey={animKey} /> : '—'}
+              highlight={!!result}
+            />
+            <OutputField
+              label="Reduced Pension (Rs.)"
+              value={result ? <AnimatedNumber value={result.reducedPension} animKey={animKey} /> : '—'}
+              highlight={!!result}
+            />
           </div>
 
           {/* Row 3: Family Pension */}
-          <OutputField label="Normal Family Pension (Rs.)" value={fmt(result?.familyPension)} highlight={!!result?.familyPension} />
+          <OutputField
+            label="Normal Family Pension (Rs.)"
+            value={result ? <AnimatedNumber value={result.familyPension} animKey={animKey} /> : '—'}
+            highlight={!!result}
+          />
 
           {/* Row 4: DCRG */}
-          <OutputField label="DCRG (Rs.)" value={fmt(result?.dcrg)} highlight={!!result?.dcrg} />
+          <OutputField
+            label="DCRG (Rs.)"
+            value={result ? <AnimatedNumber value={result.dcrg} animKey={animKey} /> : '—'}
+            highlight={!!result}
+          />
 
           {/* Row 5: Pension Commuted */}
-          <OutputField label="Pension Commuted (Rs.)" value={fmt(result?.commutedAmt)} highlight={!!result?.commutedAmt} />
+          <OutputField
+            label="Pension Commuted (Rs.)"
+            value={result ? <AnimatedNumber value={result.commutedAmt} animKey={animKey} /> : '—'}
+            highlight={!!result}
+          />
 
           {/* Row 6: Commuted Value */}
-          <OutputField label="Commuted Value (Rs.)" value={fmt(result?.commutedValue)} highlight={!!result?.commutedValue} />
+          <OutputField
+            label="Commuted Value (Rs.)"
+            value={result ? <AnimatedNumber value={result.commutedValue} animKey={animKey} /> : '—'}
+            highlight={!!result}
+          />
         </div>
       </div>
 
