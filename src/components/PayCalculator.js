@@ -1,6 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 const FITMENT_OPTIONS = [
   { label: 'Scenario A – 1.35×', factor: 1.35 },
@@ -96,6 +97,14 @@ export default function PayCalculator() {
     const rev = calcRevised(base, selectedIncr, newDAP, hraR, fitment, parseFloat(sliOv)||0, parseFloat(gpfOv)||0, pensionType);
     setResult({ cur, rev, newDAP, fitment });
   }, [basicPay, daP, hraR, sliOv, gpfOv, pensionType, selectedIncr, selectedFitment]);
+
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = result === null;
+    if (wasNull && result !== null) setAnimKey(k => k + 1);
+  }, [result]);
 
   const netHike   = result ? result.rev.net   - result.cur.net   : 0;
   const grossHike = result ? result.rev.gross - result.cur.gross : 0;
@@ -243,22 +252,22 @@ export default function PayCalculator() {
               <div className="grid grid-cols-[1fr_auto_1fr] gap-3 mb-5 items-center">
                 <div className="bg-white/10 rounded-xl p-3 sm:p-4 text-center">
                   <div className="text-[9px] text-white/60 uppercase mb-1 sm:mb-2">ഇപ്പോൾ</div>
-                  <div className="text-xl sm:text-2xl font-black">{fmt(result.cur.net)}</div>
+                  <div className="text-xl sm:text-2xl font-black"><AnimatedNumber value={result.cur.net} animKey={animKey} /></div>
                 </div>
                 <div className="text-center text-white/60 text-xl px-1">→</div>
                 <div className="bg-white/20 rounded-xl p-3 sm:p-4 text-center border border-white/30 backdrop-blur-sm">
                   <div className="text-[9px] text-[#ff9f0a] uppercase mb-1 sm:mb-2 font-bold">പുതിയ ശമ്പളം</div>
-                  <div className="text-2xl sm:text-3xl font-black text-white">{fmt(result.rev.net)}</div>
+                  <div className="text-2xl sm:text-3xl font-black text-white"><AnimatedNumber value={result.rev.net} animKey={animKey} /></div>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 sm:gap-3 bg-black/10 rounded-xl p-3 sm:p-4 text-center">
                 <div>
                   <div className="text-[9px] text-white/60 uppercase mb-1">Net Hike</div>
-                  <div className="text-xl font-black text-[#30d158]">{fmt(netHike)}</div>
+                  <div className="text-xl font-black text-[#30d158]"><AnimatedNumber value={netHike} animKey={animKey} /></div>
                 </div>
                 <div>
                   <div className="text-[9px] text-white/60 uppercase mb-1">Annual Gain</div>
-                  <div className="text-xl font-black text-[#30d158]">{fmt(netHike * 12)}</div>
+                  <div className="text-xl font-black text-[#30d158]"><AnimatedNumber value={netHike * 12} animKey={animKey} /></div>
                 </div>
                 <div>
                   <div className="text-[9px] text-white/60 uppercase mb-1">Fitment</div>
@@ -278,7 +287,7 @@ export default function PayCalculator() {
                     {[['Gross', s.data.gross], ['Deductions', -s.data.totalDed], ['Net Pay', s.data.net]].map(([l, v]) => (
                       <div key={l} className={`flex justify-between text-sm ${l === 'Net Pay' ? 'font-black pt-3 border-t border-white/[0.08]' : ''}`}>
                         <span className="text-white/60">{l}</span>
-                        <span className={l === 'Deductions' ? 'text-[#ff453a]' : 'text-white/90'}>{fmt(v)}</span>
+                        <span className={l === 'Deductions' ? 'text-[#ff453a]' : 'text-white/90'}><AnimatedNumber value={v} animKey={animKey} /></span>
                       </div>
                     ))}
                   </div>
@@ -309,9 +318,9 @@ export default function PayCalculator() {
                   ].map(([l, c, r, bold]) => (
                     <tr key={l} className={`border-b border-white/[0.08]/50 ${bold ? 'font-bold bg-white/[0.06]/30' : ''}`}>
                       <td className="py-2.5 text-white/60">{l}</td>
-                      <td className="py-2.5 text-right">{fmt(c)}</td>
-                      <td className="py-2.5 text-right text-[#30d158]">{fmt(r)}</td>
-                      <td className="py-2.5 text-right font-bold">{fmt(r-c)}</td>
+                      <td className="py-2.5 text-right"><AnimatedNumber value={c} animKey={animKey} /></td>
+                      <td className="py-2.5 text-right text-[#30d158]"><AnimatedNumber value={r} animKey={animKey} /></td>
+                      <td className="py-2.5 text-right font-bold"><AnimatedNumber value={r-c} animKey={animKey} /></td>
                     </tr>
                   ))}
                 </tbody>
