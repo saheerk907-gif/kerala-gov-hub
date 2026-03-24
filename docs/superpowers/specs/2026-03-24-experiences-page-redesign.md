@@ -1,4 +1,4 @@
-# Experiences Page Redesign — Social Feed
+# Experiences Page Redesign — Social Feed + SEO Engine
 **Date:** 2026-03-24
 **Status:** Approved
 **Scope:** `/experiences` listing page, `/experiences/[id]` detail page
@@ -7,10 +7,11 @@
 
 ## Goal
 
-Transform the experiences page from a basic card grid into a social feed that:
+Transform the experiences page into a **community + UGC + retention loop** that:
 1. Immediately tells first-time visitors what the page is and why it exists
 2. Encourages employees to share their own experiences
 3. Feels like a modern social platform with votes and discussion front and center
+4. Ranks for low-competition, high-intent Malayalam/English search queries
 
 No department filtering. No new Supabase tables required.
 
@@ -21,8 +22,8 @@ No department filtering. No new Supabase tables required.
 - `experiences` — `id, title, body, author_name, department, is_anonymous, is_pinned, published_at, status`
 - `experience_reactions` — `id, experience_id, type ('helpful'|'relatable'), created_at, fingerprint TEXT NOT NULL`
   - `created_at` defaults to `now()` in DB
-  - `fingerprint` is used by the existing `/api/experiences/react` route for deduplication — do not omit from any insert
-- `forum_replies` — `id, thread_id` — used by `ExperienceComments` on detail page via `experiences.forum_thread_id`. Not changed by this spec.
+  - `fingerprint` used by `/api/experiences/react` for deduplication — never omit from inserts
+- `forum_replies` — `id, thread_id` — used by `ExperienceComments` on detail page via `experiences.forum_thread_id`. Not changed.
 
 ---
 
@@ -57,47 +58,91 @@ Three **non-clickable, decorative-only** pills — `pointer-events: none`, no ro
 
 Stats fetched server-side (ISR revalidate 3600). Label: **"Updated hourly"** (not "Live").
 
-Three Supabase REST queries in `ExperiencesHero` server component:
+Hero stats use **two count queries** (not full row fetch — avoids data volume issues):
 ```
 GET /rest/v1/experiences?status=eq.published&select=count&head=true
+    → Prefer: count=exact header → total stories
+
+GET /rest/v1/experiences?status=eq.published&is_anonymous=eq.true&select=count&head=true
+    → Prefer: count=exact header → anonymous story count
+
 GET /rest/v1/experience_reactions?select=count&head=true
-GET /rest/v1/experiences?status=eq.published&select=is_anonymous
+    → Prefer: count=exact header → total reactions
 ```
-Anonymous %: `Math.round(100 * rows.filter(r => r.is_anonymous).length / rows.length)`. If `rows.length === 0`, display `0%` for all stats.
+
+Anonymous %: `Math.round(100 * anonymousCount / totalCount)`. If `totalCount === 0`, display `0%` for all stats.
 
 Displayed as: `47 കഥകൾ · 210 പ്രതികരണങ്ങൾ · 60% അജ്ഞാതം`
 
-**Count-up animation**: implemented in `ExperiencesHeroStats` — a `'use client'` child component that receives pre-fetched counts as props. Uses `requestAnimationFrame` loop, 1.2s easeOut. `ExperiencesHero` itself is a server component; it passes counts as props to `ExperiencesHeroStats`.
+**Count-up animation**: `ExperiencesHeroStats` — `'use client'` component, receives counts as props from server parent `ExperiencesHero`. Uses `requestAnimationFrame`, 1.2s easeOut.
 
-CTA button: `+ അനുഭവം പങ്കിടുക →` links to `/experiences/submit`.
-Below button: `Anonymous posting supported` (white/40, 11px).
+CTA button: `+ അനുഭവം പങ്കിടുക →` → `/experiences/submit`
+Below button: `Anonymous posting supported` (white/40, 11px)
 
 ---
 
-## Section 2: Sort Tabs + Anonymous Filter + Card Feed
+## Section 2: SEO Content Block (NEW — between Hero and Feed)
 
-### Data Fetching (server-side, `experiences/page.js`)
+**This is a server-rendered static block. It must not be hidden, collapsed, or rendered client-side.**
 
-**Query 1 — Experiences** (unchanged from today):
+Purpose: gives Google indexable keyword-dense content that answers real search queries. Styled to feel like editorial context, not raw SEO spam.
+
+### Visual design
+- Heading: `ഇവിടെ എന്താണ് ലഭിക്കുക?` (14px, white/50, uppercase, section-label style)
+- 4 topic cards in a 2×2 grid (or horizontal scroll on mobile), each with:
+  - Icon (emoji)
+  - Malayalam topic title
+  - 1-line English description (for SEO, white/40, 12px)
+
+| Icon | Malayalam | English description |
+|------|-----------|---------------------|
+| 🏦 | പെൻഷൻ & GPF | Pension delays, GPF withdrawals, loan approvals |
+| 🚌 | സ്ഥലംമാറ്റം | Transfer requests, hardship quotas, wait times |
+| 📋 | സർവ്വീസ് ബുക്ക് | Service record corrections, retirement paperwork |
+| 🏥 | മെഡിക്കൽ & ലീവ് | Medical reimbursement, leave encashment, LTC |
+
+- Cards: bg `rgba(255,255,255,0.04)`, border `1px solid rgba(255,255,255,0.08)`, border-radius 16px, padding 16px
+
+### Below the 4 cards — static paragraph (server-rendered, English, for SEO)
+
+```html
+<p class="text-[13px] text-white/40 leading-relaxed mt-4 max-w-2xl">
+  Kerala government employees often face delays in pension processing, GPF withdrawals,
+  transfer approvals, and retirement documentation. This page collects real, first-hand
+  experiences shared by employees across departments — so you know what to expect
+  before you apply, appeal, or escalate.
+</p>
+```
+
+This paragraph targets queries like:
+- "Kerala govt pension delay experience"
+- "GPF withdrawal experience Kerala"
+- "transfer issues Kerala government employee"
+
+---
+
+## Section 3: Sort Tabs + Anonymous Filter + Card Feed
+
+### Data Fetching (server-side, `experiences/page.js`, revalidate 60)
+
+**Query 1 — Experiences:**
 ```
 /rest/v1/experiences?status=eq.published&select=id,title,body,author_name,department,is_anonymous,is_pinned,published_at,forum_thread_id&order=published_at.desc&limit=50
 ```
 
-**Query 2 — All-time reaction counts** (unchanged from today):
+**Query 2 — All-time reaction counts:**
 ```
 /rest/v1/experience_reactions?experience_id=in.(id1,...)&select=experience_id,type
 ```
-Used for `helpful_count` and `relatable_count` only. Subject to PostgREST's default 1,000-row cap — acknowledged as known limitation acceptable at current scale.
+Used for `helpful_count` and `relatable_count`. PostgREST 1,000-row cap acknowledged — accepted at current scale.
 
-**Query 3 — Recent reactions for trending** (new, separate query):
+**Query 3 — Recent reactions (7 days) for trending:**
 ```
 /rest/v1/experience_reactions?experience_id=in.(id1,...)&created_at=gte.{ISO_DATE_7D_AGO}&select=experience_id
 ```
-Where `ISO_DATE_7D_AGO = new Date(Date.now() - 7*24*60*60*1000).toISOString()`.
+Date-filtered — small dataset, safe from row cap.
 
-No `type` filter — counts all reactions together for trending. Date-filtered, stays well within the 1,000-row cap.
-
-**Server-side aggregation of Query 3** (in `page.js`, before passing to client):
+**Server-side enrichment** (in `page.js`):
 ```js
 const recentCounts = {};
 for (const r of recentReactions) {
@@ -107,41 +152,41 @@ const enriched = experiences.map(e => ({
   ...e,
   helpful_count: reactionCounts[e.id]?.helpful || 0,
   relatable_count: reactionCounts[e.id]?.relatable || 0,
-  recentReactions: recentCounts[e.id] || 0,   // ← required for Trending + Story of Week
+  recentReactions: recentCounts[e.id] || 0,
+  // trendingScore used for Trending sort:
+  trendingScore: (recentCounts[e.id] || 0) * 2 + ((reactionCounts[e.id]?.helpful || 0) + (reactionCounts[e.id]?.relatable || 0)),
 }));
 ```
 
-`ExperiencesFeed` receives `enriched` as a prop and performs all sorting client-side on this pre-computed array.
+`ExperiencesFeed` receives `enriched` as a prop. All sort/filter is client-side.
 
-**1,000-row cap acknowledgement**: Both Query 2 (all-time reactions across 50 stories) and the detail page's single-story reaction fetch are subject to PostgREST's default 1,000-row cap. On the detail page this means a single story with >1,000 reactions would show undercounted totals. This is accepted as a known limitation at current traffic levels for both pages.
+**1,000-row cap**: Both Query 2 and the detail page's single-story reaction fetch are subject to this cap. Accepted limitation for both pages at current scale.
 
-**Story of the Week caveat**: fetch is ordered by `published_at desc`, so the Story of the Week reflects the most-engaged story *among the newest 50*, not all-time. This is intentional and acceptable.
+**Story of the Week caveat**: covers newest 50 stories only (not all-time). Intentional — acknowledged.
 
 ### Sort Controls
-Two separate controls above the Story of the Week card:
 
 **Sort tabs** (left):
 ```
 🔥 Trending    ⭐ Top Rated    🕐 പുതിയത്
 ```
-- Active: `#30d158` bottom border 2px + white text. Default: `🕐 പുതിയത്`.
-- Client-side on fetched data.
+- Active: `#30d158` bottom border 2px + white. Default: `🕐 പുതിയത്`.
+- Client-side.
 
 **Anonymous filter toggle** (right, separate):
 ```
 [👤 അജ്ഞാതം മാത്രം]
 ```
-- Boolean toggle, default off.
-- Applied after sorting: `is_anonymous === true` filter on top of sorted list.
-- **Does not affect Story of the Week** — spotlight always shows regardless of toggle state.
+- Applied after sorting. Does not affect Story of the Week.
 
 ### Sort Definitions (client-side)
-- **Trending**: `recentReactions` desc, ties by `published_at` desc.
+- **Trending**: `trendingScore` desc (= `recentReactions * 2 + totalReactions`), ties by `published_at` desc.
+  - Hybrid formula keeps fresh posts visible while rewarding quality older posts.
 - **Top Rated**: `(helpful_count + relatable_count)` desc, ties by `published_at` desc.
-- **പുതിയത്**: `published_at` desc (default, matches server order).
+- **പുതിയത്**: `published_at` desc (default).
 
 ### Story of the Week Card
-Experience with highest `recentReactions` among fetched 50. Shown full-width **above** sort tabs. **Hidden entirely** if no experience has `recentReactions >= 1`.
+Experience with highest `trendingScore` among fetched 50. Full-width, **above** sort tabs. **Hidden entirely** if no experience has `recentReactions >= 1`.
 
 - Gold left border: `4px solid #c8960c`
 - Badge: `⭐ ഈ ആഴ്ചയിലെ കഥ` (10px, `#c8960c`, uppercase)
@@ -154,10 +199,14 @@ Experience with highest `recentReactions` among fetched 50. Shown full-width **a
 3 col desktop / 2 col tablet / 1 col mobile:
 
 - **🔥 badge**: if `recentReactions >= 5`
-- **Read time**: `Math.ceil(body.split(/\s+/).length / 200)` minutes, top-right (10px, white/40)
-- **WhatsApp hover icon**: visible on `group-hover`, bottom-right. Opens:
+- **✔ Reviewed badge**: all published experiences are admin-reviewed — show `✔ Reviewed` (10px, white/30) on every card, small, bottom area. Builds trust.
+- **Read time**: `Math.ceil(body.split(/\s+/).length / 200)` minutes (top-right, 10px, white/40)
+- **Time ago**: already present via `timeAgo()` — keep as is
+- **WhatsApp hover icon**: on `group-hover`, bottom-right:
   ```js
-  `https://wa.me/?text=${encodeURIComponent(`ഈ അനുഭവം നോക്കൂ: ${title} — ${process.env.NEXT_PUBLIC_SITE_URL}/experiences/${id}`)}`
+  `https://wa.me/?text=${encodeURIComponent(
+    `കേരള സർക്കാർ ജീവനക്കാരന്റെ അനുഭവം:\n\n"${title}"\n\n👉 ${process.env.NEXT_PUBLIC_SITE_URL}/experiences/${id}`
+  )}`
   ```
   `target="_blank" rel="noopener noreferrer"`
 
@@ -167,103 +216,102 @@ After every 6 cards (indices 5, 11, 17…):
 നിങ്ങൾക്കും ഒരു കഥ പറയാനുണ്ടോ?
 "Your experience could help a colleague."  →  [അനുഭവം പങ്കിടുക]
 ```
-- Links to `/experiences/submit`
+- → `/experiences/submit`
 - bg `rgba(48,209,88,0.06)`, border `1px solid rgba(48,209,88,0.15)`, border-radius 20px, padding 16px 20px
 
 ### Mobile Sticky Bottom Bar (listing page only)
-
-**Z-index**: Navbar uses `z-[1000]` and mobile menu uses `z-[999]`. Sticky bar uses `z-[50]` — safely below both.
-
-```css
-position: fixed;
-bottom: 0; left: 0; right: 0;
-z-index: 50;   /* below navbar z-1000, above page content */
-```
-
-- `md:hidden` (hidden tablet and above)
-- Background: `rgba(13,13,18,0.95)`, `backdrop-filter: blur(8px)`
+- `position: fixed; bottom: 0; z-index: 50` (Navbar is `z-[1000]` — safely below)
+- `md:hidden`
+- bg `rgba(13,13,18,0.95)`, `backdrop-filter: blur(8px)`
 - Border-top: `1px solid rgba(255,255,255,0.08)`
-- Padding: `12px 16px`, plus `paddingBottom: 'calc(12px + env(safe-area-inset-bottom))'` for iOS
+- Padding: `12px 16px` + `env(safe-area-inset-bottom)` for iOS
 - Full-width green button → `/experiences/submit`
-- `<main>` on the listing page gets `pb-20 md:pb-0` to prevent the sticky bar from overlapping the last card
+- `<main>` gets `pb-20 md:pb-0`
 
 ---
 
-## Section 3: Detail Page Improvements
+## Section 4: Detail Page Improvements
 
 ### Reading Metadata (below title, before body)
 ```
-📖 ~N min read  ·  N people found this helpful
+📖 ~N min read  ·  N people found this helpful  ·  ✔ Reviewed
 ```
 - Read time: `Math.ceil(body.split(/\s+/).length / 200)`
-- Helpful count: `helpful_count` from existing reactions fetch
+- Helpful count: from existing reactions fetch
+- ✔ Reviewed: static, all published experiences are admin-approved
 
 ### Pull Quote
-**Condition**: `body.length > 300`
+**Condition**: `[...body].length > 300` (codepoint count)
 
-**Algorithm** (grapheme-safe for Malayalam):
+**Algorithm** (grapheme-safe — use `[...str]` spread throughout, never raw `.length` or `.slice()`):
 
-Malayalam is multi-codepoint — raw `.length` and `.slice()` operate on UTF-16 code units and can split grapheme clusters. Use `[...str]` (spread to codepoint array) for all length checks and slicing.
-
-1. Split `body` on `।` (U+0964, Malayalam purna viram) — the primary sentence terminator
-2. Find the first segment where `[...s.trim()].length` is between 60 and 200 (codepoint count, not `.length`)
-3. If found, insert it after the first 150 codepoints of body: `[...body].slice(0, 150).join('')`
-4. If no segment in range is found, **skip entirely** — no fallback
+1. Split `body` on `।` (U+0964, primary Malayalam sentence terminator)
+2. Find the first segment where `[...s.trim()].length` is between 60 and 200
+3. If found: insert after the first 150 codepoints of body
+4. If no `।`-delimited segment found: **fallback** — use `[...body].slice(0, 120).join('')` as the pull quote text
+5. If body has fewer than 300 codepoints total: skip entirely
 
 ```js
-const segments = body.split('।');
-const quote = segments.find(s => {
-  const t = s.trim();
-  const len = [...t].length;   // codepoint-safe
-  return len >= 60 && len <= 200;
-});
+const bodyChars = [...body];
+if (bodyChars.length <= 300) return null;
 
-// Insertion point — codepoint-safe:
-const insertAfter = [...body].slice(0, 150).join('');
-const remainder = [...body].slice(150).join('');
-// Render: insertAfter + <PullQuote> + remainder (if quote found)
+const segments = body.split('।');
+let quote = segments.find(s => {
+  const len = [...s.trim()].length;
+  return len >= 60 && len <= 200;
+})?.trim();
+
+// Fallback: first 120 codepoints if no segment found
+if (!quote) {
+  quote = bodyChars.slice(0, 120).join('');
+}
+
+const insertAfter = bodyChars.slice(0, 150).join('');
+const remainder = bodyChars.slice(150).join('');
+// Render: insertAfter + <PullQuote text={quote} /> + remainder
 ```
 
 Rendered as:
 ```
-❝ [segment.trim()] ❞
+❝ [quote] ❞
 ```
 - Green left border: `3px solid #30d158`, bg `rgba(48,209,88,0.05)`
 - Font: 16px italic, white/85, `var(--font-noto-malayalam)`
 - Padding: 12px 16px, border-radius 8px, margin 20px 0
 
 ### Social Actions (below article)
-Existing `ExperienceReactions` component (👍 Helpful, ❤️ Relatable) stays unchanged.
+Existing `ExperienceReactions` (👍 Helpful, ❤️ Relatable) — unchanged.
 
-New `ExperienceShareActions` client component adds:
+New `ExperienceShareActions` (`'use client'`) adds:
 ```
 [📤 WhatsApp]   [🔗 Copy Link]
 ```
 
-**WhatsApp**:
+**WhatsApp** (improved CTR copy):
 ```js
-`https://wa.me/?text=${encodeURIComponent(`ഈ അനുഭവം നോക്കൂ: ${title} — ${process.env.NEXT_PUBLIC_SITE_URL}/experiences/${id}`)}`
+`https://wa.me/?text=${encodeURIComponent(
+  `കേരള സർക്കാർ ജീവനക്കാരന്റെ അനുഭവം:\n\n"${title}"\n\n👉 ${process.env.NEXT_PUBLIC_SITE_URL}/experiences/${id}`
+)}`
 ```
 `target="_blank" rel="noopener noreferrer"`
 
-**Copy Link**: `navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_SITE_URL}/experiences/${id}`)`. On success: button label → `Copied! ✓` for 1500ms then resets. On failure: silent (no error UI).
+**Copy Link**: `navigator.clipboard.writeText(...)`. On success: `Copied! ✓` for 1500ms then reset. On failure: silent.
 
 ### "Share Your Experience" CTA Block
-Between article card and related stories:
+Between article and related stories:
 ```
 ✍️  നിങ്ങൾക്കും ഒരു അനുഭവം ഉണ്ടോ?
 "ഈ ജീവനക്കാരൻ പങ്കിട്ടതുപോലെ, നിങ്ങളുടെ അനുഭവം മറ്റുള്ളവർക്ക് വഴികാട്ടിയാകും."
 [+ അനുഭവം പങ്കിടുക]
-Anonymous posting supported
-അഡ്മിൻ അവലോകനത്തിനു ശേഷം പ്രസിദ്ധീകരിക്കും
+Anonymous posting supported · അഡ്മിൻ അവലോകനത്തിനു ശേഷം പ്രസിദ്ധീകരിക്കും
 ```
 - bg `rgba(48,209,88,0.07)`, border `1px solid rgba(48,209,88,0.2)`, border-radius 24px, padding 28px 32px
 
 ### Related Stories
-- 3 stories from fetched 50 (no extra query), sorted by `helpful_count + relatable_count` desc, excluding current `id`
+- 3 stories from fetched 50 (no extra query), sorted by `trendingScore` desc, excluding current `id`
 - Label: `മറ്റ് അനുഭവങ്ങൾ`
-- Uses existing `ExperienceCard` component
-- Hide section entirely if no other stories exist
+- Uses existing `ExperienceCard`
+- Hide section if no other stories exist
 
 ---
 
@@ -272,30 +320,44 @@ Anonymous posting supported
 | Component | Type | Purpose |
 |---|---|---|
 | `ExperiencesHero` | Server | Hero strip layout, fetches stats |
-| `ExperiencesHeroStats` | Client (`'use client'`) | Count-up animation, receives counts as props |
+| `ExperiencesHeroStats` | Client | Count-up animation, receives counts as props |
+| `ExperiencesSeoBlock` | Server | Static SEO content block (topic cards + paragraph) |
 | `ExperiencesSortBar` | Client | Sort tabs + anonymous toggle |
 | `ExperiencesFeed` | Client | Card grid, Story of Week, inline CTAs, sticky bar |
 | `ExperienceShareActions` | Client | WhatsApp + Copy Link on detail page |
 | `ExperienceShareCta` | Server | "Share Your Experience" CTA block |
 
-`ExperiencesPage` (server): fetches data → passes to `ExperiencesHero` + `ExperiencesFeed` as props.
+`ExperiencesPage` (server): fetches data → Hero → SeoBlock → Feed (client, receives enriched as prop).
 
 ---
 
 ## Environment Variables
 
-`NEXT_PUBLIC_SITE_URL=https://keralaemployees.in` — added to `.env.local` and must be set in the deployment environment. All share URLs reference this variable — never hardcode the domain.
+`NEXT_PUBLIC_SITE_URL=https://keralaemployees.in` — added to `.env.local`. Must be set in deployment environment. Never hardcode the domain.
 
 ---
 
 ## Data Flow Summary
 
-| Query | Runs in | Revalidate | Used for |
+| Query | Where | Revalidate | Purpose |
 |---|---|---|---|
-| 50 experiences | Server, page.js | 60s | Everything |
+| 50 experiences | Server, page.js | 60s | Feed, sort, Story of Week |
 | All-time reactions | Server, page.js | 60s | helpful/relatable counts |
-| Recent reactions (7d) | Server, page.js | 60s | Trending, 🔥 badge, Story of Week |
-| Hero stats (3 counts) | Server, ExperiencesHero | 3600s | Hero strip stats |
+| Recent reactions (7d) | Server, page.js | 60s | trendingScore, 🔥 badge |
+| Hero stats (3 counts) | Server, ExperiencesHero | 3600s | Hero strip numbers |
+
+---
+
+## SEO Targets
+
+| Query | Type |
+|---|---|
+| "Kerala govt pension delay experience" | Long-tail, Malayalam intent |
+| "GPF withdrawal experience Kerala" | Long-tail |
+| "transfer issues Kerala government employee" | Long-tail |
+| "കേരള സർക്കാർ ജീവനക്കാർ അനുഭവം" | Malayalam search |
+
+These are low-competition, high-intent. The static SEO block + UGC titles together cover them.
 
 ---
 
@@ -303,7 +365,8 @@ Anonymous posting supported
 
 - Department filtering / color coding
 - Topic tags (deferred, needs new DB column)
-- Infinite scroll / pagination beyond 50 (known debt)
+- Infinite scroll / pagination beyond 50 (next phase — add `/experiences/page/2`)
 - User accounts / login
 - Editorial Story of the Week DB override
+- Reaction rate limiting beyond fingerprint (next phase)
 - PostgREST pagination for all-time reactions (acceptable at current scale)
