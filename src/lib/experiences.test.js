@@ -6,6 +6,7 @@ import {
   extractPullQuote,
   splitBodyForQuote,
   isNew,
+  whatsappUrl,
 } from './experiences.js';
 
 describe('trendingScore', () => {
@@ -80,5 +81,14 @@ describe('isNew', () => {
 
   it('returns false for null', () => {
     assert.ok(!isNew(null));
+  });
+});
+
+describe('whatsappUrl', () => {
+  it('generates a valid wa.me URL', () => {
+    const url = whatsappUrl('Test Title', 'test-123');
+    assert.ok(url.startsWith('https://wa.me/?text='), 'should start with wa.me');
+    assert.ok(url.includes(encodeURIComponent('Test Title')), 'should include encoded title');
+    assert.ok(url.includes('test-123'), 'should include experience id');
   });
 });
