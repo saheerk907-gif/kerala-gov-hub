@@ -1,5 +1,6 @@
 'use client';
 import { useState, useMemo, useEffect, useRef } from 'react';
+import AnimatedNumber from '@/components/AnimatedNumber';
 import {
   LineChart, Line, AreaChart, Area, BarChart, Bar,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
@@ -251,6 +252,14 @@ export default function NpsApsCalculator() {
     govPct, existingCorpus, npsRet, annRate, postDR, inf,
   }), [dob, joinYear, retAge, basic, currentDA, annualDA, incRate, govPct, existingCorpus, npsRet, annRate, postDR, inf]);
 
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = R === null;
+    if (wasNull && R !== null) setAnimKey(k => k + 1);
+  }, [R]);
+
   const retMonthName = MONTH_NAMES[parseInt(dob.split('-')[1]) - 1];
 
   const shareWhatsApp = () => {
@@ -353,7 +362,7 @@ export default function NpsApsCalculator() {
                 {ml ? 'APS (ഉറപ്പ് പെൻഷൻ)' : 'APS — Assured Pension'}
               </div>
               <div className="text-[38px] font-black text-[#30d158] leading-none mb-2">
-                <Anim value={pvOn ? R.apsPV : R.apsP} />
+                <AnimatedNumber value={pvOn ? R.apsPV : R.apsP} animKey={animKey} />
               </div>
               <div className="text-[11px] text-white/55 mb-3">
                 {(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} &nbsp;·&nbsp; /month
@@ -370,7 +379,7 @@ export default function NpsApsCalculator() {
                 {ml ? 'NPS (ദേശീയ പെൻഷൻ)' : 'NPS — National Pension'}
               </div>
               <div className="text-[38px] font-black text-[#2997ff] leading-none mb-2">
-                <Anim value={pvOn ? R.npsPV : R.npsP} />
+                <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
               </div>
               <div className="text-[11px] text-white/55 mb-3">
                 40% @ {annRate}% &nbsp;·&nbsp; + {fmt(pvOn ? R.lumpPV : R.lump)} {ml ? 'ഒറ്റത്തവണ' : 'lump sum'}
@@ -421,7 +430,7 @@ export default function NpsApsCalculator() {
             <div key={i} className="rounded-2xl p-4" style={CARD}>
               <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">{s.label}</div>
               <div className="text-[20px] font-black leading-none mb-1" style={{ color: s.color }}>
-                {s.text ? s.text : <Anim value={s.value} />}
+                {s.text ? s.text : <AnimatedNumber value={s.value} animKey={animKey} />}
               </div>
               {s.sub && <div className="text-[10px] text-white/50">{s.sub}</div>}
             </div>

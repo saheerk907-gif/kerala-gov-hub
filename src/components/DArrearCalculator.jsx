@@ -1,6 +1,7 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── DA G.O. Data ───────────────────────────────────────────────
 const GO_ORDERS = [
@@ -61,6 +62,13 @@ export default function DArrearCalculator() {
   const [payRows, setPayRows] = useState([]);
   const [result, setResult]   = useState(null);
   const [error, setError]     = useState('');
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = result === null;
+    if (wasNull && result !== null) setAnimKey(k => k + 1);
+  }, [result]);
 
   const handleDOJ = (doj) => {
     const newEmp = { ...emp, doj };
@@ -316,7 +324,7 @@ export default function DArrearCalculator() {
             <div className="sm:col-span-2">
               <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50 mb-2">Total DA Arrear Payable</div>
               <div className="text-[clamp(32px,6vw,52px)] font-[900] text-[#30d158] leading-none tracking-tight font-sans">
-                {inr(result.totalArrear)}
+                <AnimatedNumber value={result.totalArrear} animKey={animKey} />
               </div>
               <div className="text-[12px] text-white/60 mt-2">{mLabel(result.from)} → {mLabel(result.to)}</div>
             </div>
@@ -330,14 +338,16 @@ export default function DArrearCalculator() {
           {/* Summary cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { label: 'Initial Basic', val: inr(result.initialBasic), color: '#ff9f0a' },
-              { label: 'Total DA Due',  val: inr(result.totalDue),     color: '#30d158' },
-              { label: 'DA Already Paid', val: inr(result.totalPaid),  color: '#ff453a' },
-              { label: 'Net Arrear',    val: inr(result.totalArrear),  color: '#ff9f0a' },
+              { label: 'Initial Basic',   num: result.initialBasic, color: '#ff9f0a' },
+              { label: 'Total DA Due',    num: result.totalDue,     color: '#30d158' },
+              { label: 'DA Already Paid', num: result.totalPaid,    color: '#ff453a' },
+              { label: 'Net Arrear',      num: result.totalArrear,  color: '#ff9f0a' },
             ].map(s => (
               <div key={s.label} className="glass-card rounded-xl p-4">
                 <div className="text-[9px] font-black uppercase tracking-[0.15em] text-white/50 mb-2">{s.label}</div>
-                <div className="text-[15px] font-[900] font-sans" style={{ color: s.color }}>{s.val}</div>
+                <div className="text-[15px] font-[900] font-sans" style={{ color: s.color }}>
+                  <AnimatedNumber value={s.num} animKey={animKey} />
+                </div>
               </div>
             ))}
           </div>
