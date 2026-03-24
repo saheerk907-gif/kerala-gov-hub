@@ -119,25 +119,6 @@ function simulate(p) {
   };
 }
 
-// ─── Animated counter ─────────────────────────────────────────────────────────
-function Anim({ value }) {
-  const [d, setD] = useState(0);
-  const rafRef = useRef(null);
-  useEffect(() => {
-    const start = d;
-    const diff  = value - start;
-    const t0    = performance.now();
-    const run   = now => {
-      const prog = Math.min((now - t0) / 700, 1);
-      setD(Math.round(start + diff * (1 - Math.pow(1 - prog, 3))));
-      if (prog < 1) rafRef.current = requestAnimationFrame(run);
-    };
-    rafRef.current = requestAnimationFrame(run);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [value]);
-  return <span>{fmtF(d)}</span>;
-}
-
 // ─── DOB Selector ─────────────────────────────────────────────────────────────
 function DOBSelector({ value, onChange, label }) {
   const parts = value ? value.split('-') : ['1990', '06', '15'];
