@@ -1,6 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── Date helpers ────────────────────────────────────────────────────────────
 
@@ -211,8 +212,7 @@ const ACCENT   = '#64d2ff';
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
-function StatCard({ label, value, accent, bar, barUsed, barTotal, unit = 'days' }) {
-  const displayVal = useAnimatedCounter(value);
+function StatCard({ label, value, accent, bar, barUsed, barTotal, unit = 'days', animKey }) {
   return (
     <div className="flex flex-col gap-1.5 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
       <span className="text-[10px] uppercase tracking-wider text-white/55 font-semibold">{label}</span>
@@ -220,7 +220,7 @@ function StatCard({ label, value, accent, bar, barUsed, barTotal, unit = 'days' 
         className="text-2xl font-[900] tabular-nums leading-none"
         style={{ color: accent ? ACCENT : 'white' }}
       >
-        {displayVal}
+        <AnimatedNumber value={value} animKey={animKey} prefix="" />
         <span className="text-sm font-semibold text-white/50 ml-1">{unit}</span>
       </span>
       {bar && barTotal > 0 && (
@@ -283,6 +283,14 @@ export default function HPLCalculator() {
       isPermanent,
     });
   }, [joiningDate, lwaRanges, hplTaken, commutedTaken, clTaken, isPermanent]);
+
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = result === null;
+    if (wasNull && result !== null) setAnimKey(k => k + 1);
+  }, [result]);
 
   const checkResult = useMemo(() => {
     if (!result || !checkDays) return null;
@@ -517,10 +525,12 @@ export default function HPLCalculator() {
               label="Completed Years"
               value={result.completedYears}
               unit="years"
+              animKey={animKey}
             />
             <StatCard
               label="Total HPL Earned"
               value={result.totalHPLEarned}
+              animKey={animKey}
             />
             <StatCard
               label="HPL Balance"
@@ -529,11 +539,13 @@ export default function HPLCalculator() {
               bar
               barUsed={result.totalHPLEarned - result.hplDue}
               barTotal={result.totalHPLEarned}
+              animKey={animKey}
             />
             <StatCard
               label="Max Commuted Leave"
               value={result.maxCommutedAvailable}
               accent={result.commutedEligible}
+              animKey={animKey}
             />
             <StatCard
               label="CL Remaining"
@@ -541,6 +553,7 @@ export default function HPLCalculator() {
               bar
               barUsed={20 - result.clRemaining}
               barTotal={20}
+              animKey={animKey}
             />
           </div>
 

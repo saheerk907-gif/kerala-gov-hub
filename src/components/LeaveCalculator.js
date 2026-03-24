@@ -1,6 +1,7 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 /* ── KSR rounding: fraction ≥ 0.5 → ceil, else floor ── */
 function roundKSR(val) {
@@ -170,6 +171,14 @@ export default function LeaveCalculator() {
   const yearsDisplay = yearsOfService > 0
     ? `${Math.floor(yearsOfService)} yr${Math.floor(yearsOfService) !== 1 ? 's' : ''} ${Math.round((yearsOfService % 1) * 12)} mo`
     : '—';
+
+  const [animKey, setAnimKey] = useState(0);
+  const prevResultNull = useRef(true);
+  useEffect(() => {
+    const wasNull = prevResultNull.current;
+    prevResultNull.current = result === null;
+    if (wasNull && result !== null) setAnimKey(k => k + 1);
+  }, [result]);
 
   return (
     <div className="space-y-6">
@@ -345,14 +354,14 @@ export default function LeaveCalculator() {
             {fmtDate(joiningDate)} → {fmtDate(asOfDate)} · {dutyDays.toLocaleString('en-IN')} days
           </p>
 
-          <ResultRow label="EL Earned this period"   value={`${result.earned} days`} accent />
+          <ResultRow label="EL Earned this period"   value={<AnimatedNumber value={result.earned} animKey={animKey} prefix="" suffix=" days" />} accent />
           {result.cappedAt300 && (
-            <ResultRow label="EL Credited (300-day cap)" value={`${result.effectiveEarned} days`} small />
+            <ResultRow label="EL Credited (300-day cap)" value={<AnimatedNumber value={result.effectiveEarned} animKey={animKey} prefix="" suffix=" days" />} small />
           )}
-          <ResultRow label="Updated EL Balance"      value={`${result.newBalance} days`} />
+          <ResultRow label="Updated EL Balance"      value={<AnimatedNumber value={result.newBalance} animKey={animKey} prefix="" suffix=" days" />} />
           <ResultRow label="Max Accumulation Limit"  value="300 days" small />
-          <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={`${result.maxGrant} days`} small />
-          <ResultRow label="Admissible Grant Now"    value={`${result.canGrant} days`} accent />
+          <ResultRow label={`Max Grant at a Time${isLPR ? ' (LPR)' : ''}`} value={<AnimatedNumber value={result.maxGrant} animKey={animKey} prefix="" suffix=" days" />} small />
+          <ResultRow label="Admissible Grant Now"    value={<AnimatedNumber value={result.canGrant} animKey={animKey} prefix="" suffix=" days" />} accent />
 
           <p className="mt-3 text-[11px] text-white/50 leading-relaxed">{result.rateNote}</p>
 
