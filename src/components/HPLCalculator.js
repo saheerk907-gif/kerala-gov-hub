@@ -176,35 +176,6 @@ function checkLeave({ leaveType, desired, result }) {
   return null;
 }
 
-// ─── Animated counter hook ───────────────────────────────────────────────────
-
-/**
- * Returns a display value that counts from 0 to `target` over `duration` ms.
- * Re-triggers whenever `target` changes.
- */
-function useAnimatedCounter(target, duration = 800) {
-  const [display, setDisplay] = useState(0);
-  const rafRef = useRef(null);
-
-  useEffect(() => {
-    if (target === 0) { setDisplay(0); return; }
-    const start = performance.now();
-    const to    = target;
-
-    function frame(now) {
-      const elapsed  = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      setDisplay(Math.round(to * progress));
-      if (progress < 1) rafRef.current = requestAnimationFrame(frame);
-    }
-
-    rafRef.current = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [target, duration]);
-
-  return display;
-}
-
 // ─── Shared style constants (mirrors LeaveCalculator.js) ─────────────────────
 const inputCls = 'bg-white/[0.06] border border-white/10 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-[#64d2ff]/50 focus:bg-white/[0.09] transition-all w-full';
 const labelCls = 'text-xs text-white/60 font-medium mb-2 block';
