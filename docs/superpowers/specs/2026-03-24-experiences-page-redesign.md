@@ -76,6 +76,12 @@ Displayed as: `47 കഥകൾ · 210 പ്രതികരണങ്ങൾ · 60
 
 **Count-up animation**: `ExperiencesHeroStats` — `'use client'` component, receives counts as props from server parent `ExperiencesHero`. Uses `requestAnimationFrame`, 1.2s easeOut.
 
+**H1 tag** — the page `<h1>` must be the English string (Google reads this first):
+```
+Kerala Government Employee Experiences – Real Stories on Pension, GPF, Transfer & Service Issues
+```
+The Malayalam `അനുഭവങ്ങൾ` heading is a `<p>` or styled `<div>`, visually larger but not the semantic H1.
+
 CTA button: `+ അനുഭവം പങ്കിടുക →` → `/experiences/submit`
 Below button: `Anonymous posting supported` (white/40, 11px)
 
@@ -110,14 +116,13 @@ Purpose: gives Google indexable keyword-dense content that answers real search q
   Kerala government employees often face delays in pension processing, GPF withdrawals,
   transfer approvals, and retirement documentation. This page collects real, first-hand
   experiences shared by employees across departments — so you know what to expect
-  before you apply, appeal, or escalate.
+  before you apply, appeal, or escalate. Many employees search for real experiences
+  before applying for pension, GPF loans, or transfers — this page helps you understand
+  the actual process and delays involved.
 </p>
 ```
 
-This paragraph targets queries like:
-- "Kerala govt pension delay experience"
-- "GPF withdrawal experience Kerala"
-- "transfer issues Kerala government employee"
+Targets: "Kerala govt pension delay", "GPF withdrawal experience Kerala", "transfer delay Kerala govt", "before applying pension Kerala".
 
 ---
 
@@ -153,8 +158,14 @@ const enriched = experiences.map(e => ({
   helpful_count: reactionCounts[e.id]?.helpful || 0,
   relatable_count: reactionCounts[e.id]?.relatable || 0,
   recentReactions: recentCounts[e.id] || 0,
-  // trendingScore used for Trending sort:
-  trendingScore: (recentCounts[e.id] || 0) * 2 + ((reactionCounts[e.id]?.helpful || 0) + (reactionCounts[e.id]?.relatable || 0)),
+  // trendingScore with time decay — prevents old viral posts dominating forever:
+  // score = (recentReactions * 2 + totalReactions) / (hoursAge + 2)
+  trendingScore: (() => {
+    const recent = recentCounts[e.id] || 0;
+    const total = (reactionCounts[e.id]?.helpful || 0) + (reactionCounts[e.id]?.relatable || 0);
+    const hoursAge = (Date.now() - new Date(e.published_at).getTime()) / 3600000;
+    return (recent * 2 + total) / (hoursAge + 2);
+  })(),
 }));
 ```
 
@@ -199,7 +210,8 @@ Experience with highest `trendingScore` among fetched 50. Full-width, **above** 
 3 col desktop / 2 col tablet / 1 col mobile:
 
 - **🔥 badge**: if `recentReactions >= 5`
-- **✔ Reviewed badge**: all published experiences are admin-reviewed — show `✔ Reviewed` (10px, white/30) on every card, small, bottom area. Builds trust.
+- **🆕 New badge**: if `published_at` is within last 24 hours — show `NEW` badge (10px, green, uppercase). Boosts early engagement.
+- **✔ Reviewed badge**: all published experiences are admin-reviewed — show `✔ Reviewed by admin` (10px, white/30) on every card. Builds trust, especially for anonymous posts.
 - **Read time**: `Math.ceil(body.split(/\s+/).length / 200)` minutes (top-right, 10px, white/40)
 - **Time ago**: already present via `timeAgo()` — keep as is
 - **WhatsApp hover icon**: on `group-hover`, bottom-right:
