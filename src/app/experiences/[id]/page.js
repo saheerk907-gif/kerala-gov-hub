@@ -5,6 +5,15 @@ import Footer from '@/components/Footer';
 import ReadingProgress from '@/components/ReadingProgress';
 import ExperienceReactions from '@/components/ExperienceReactions';
 import ExperienceComments from '@/components/ExperienceComments';
+import ExperienceShareActions from '@/components/ExperienceShareActions';
+import ExperienceShareCta from '@/components/ExperienceShareCta';
+import ExperienceCard from '@/components/ExperienceCard';
+import {
+  readTime,
+  extractPullQuote,
+  splitBodyForQuote,
+  trendingScore as calcTrendingScore,
+} from '@/lib/experiences';
 
 export const revalidate = 60;
 
@@ -96,6 +105,27 @@ async function getForumThreadCommentCount(threadId) {
   }
 }
 
+// Fetch all published experiences for related stories (same query as listing page)
+async function getAllExperiences() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/experiences?status=eq.published&select=id,title,body,author_name,department,is_anonymous,is_pinned,published_at&order=published_at.desc&limit=50`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        next: { revalidate: 60 },
+      }
+    );
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }) {
   const experience = await getExperience(params.id);
   if (!experience) {
@@ -103,8 +133,31 @@ export async function generateMetadata({ params }) {
   }
   return {
     title: experience.title,
-    description: (experience.body || '').slice(0, 160),
+    description: ([...experience.body || '']).slice(0, 160).join(''),
   };
+}
+
+function PullQuote({ text }) {
+  return (
+    <div
+      className="my-5 px-4 py-3"
+      style={{
+        borderLeft: `3px solid ${GREEN}`,
+        background: 'rgba(48,209,88,0.05)',
+        borderRadius: 8,
+      }}
+    >
+      <p
+        className="text-[16px] italic leading-relaxed"
+        style={{
+          color: 'rgba(255,255,255,0.85)',
+          fontFamily: 'var(--font-noto-malayalam), sans-serif',
+        }}
+      >
+        ❝ {text} ❞
+      </p>
+    </div>
+  );
 }
 
 export default async function ExperienceDetailPage({ params }) {
@@ -132,10 +185,25 @@ export default async function ExperienceDetailPage({ params }) {
     );
   }
 
-  const [reactionCounts, commentCount] = await Promise.all([
+  const [reactionCounts, commentCount, allExperiences] = await Promise.all([
     getReactionCounts(id),
     getForumThreadCommentCount(experience.forum_thread_id),
+    getAllExperiences(),
   ]);
+
+  // Related stories: top 3 by trendingScore, excluding current id
+  const related = allExperiences
+    .filter((e) => e.id !== id)
+    .map((e) => ({
+      ...e,
+      helpful_count: 0,
+      relatable_count: 0,
+      recentReactions: 0,
+      trendingScore: calcTrendingScore(0, 0, e.published_at),
+      readTime: readTime(e.body),
+    }))
+    .sort((a, b) => new Date(b.published_at) - new Date(a.published_at))
+    .slice(0, 3);
 
   const displayAuthor = experience.is_anonymous ? 'Anonymous' : (experience.author_name || 'Anonymous');
   const displayDate = experience.published_at || experience.created_at;
@@ -143,6 +211,17 @@ export default async function ExperienceDetailPage({ params }) {
     ? 'rgba(255,255,255,0.15)'
     : getAvatarColor(experience.author_name || '');
   const avatarLetter = experience.is_anonymous ? '?' : (experience.author_name || '?').charAt(0).toUpperCase();
+
+  // Reading metadata
+  const rt = readTime(experience.body);
+
+  // Pull quote
+  const pullQuote = extractPullQuote(experience.body);
+  let bodyBefore = experience.body;
+  let bodyAfter = '';
+  if (pullQuote) {
+    [bodyBefore, bodyAfter] = splitBodyForQuote(experience.body);
+  }
 
   return (
     <div className="relative min-h-screen" style={{ background: 'var(--bg-primary)' }}>
@@ -169,11 +248,20 @@ export default async function ExperienceDetailPage({ params }) {
           {/* Header */}
           <div className="p-6 md:p-8 pb-0">
             <h1
-              className="text-[clamp(22px,3.5vw,32px)] font-[900] text-white leading-tight mb-6"
+              className="text-[clamp(22px,3.5vw,32px)] font-[900] text-white leading-tight mb-4"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
             >
               {experience.title}
             </h1>
+
+            {/* Reading metadata */}
+            <div className="flex items-center gap-2 flex-wrap text-[12px] text-white/40 mb-5">
+              <span>📖 ~{rt} min read</span>
+              <span>·</span>
+              <span>{reactionCounts.helpful} people found this helpful</span>
+              <span>·</span>
+              <span style={{ color: GREEN }}>✔ Reviewed</span>
+            </div>
 
             {/* Author row */}
             <div className="flex items-center gap-3 pb-6" style={{ borderBottom: '1px solid var(--border-xs)' }}>
@@ -209,33 +297,69 @@ export default async function ExperienceDetailPage({ params }) {
             </div>
           </div>
 
-          {/* Body */}
+          {/* Body — with optional pull quote */}
           <div className="px-6 md:px-8 py-6">
-            <p
-              className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap text-justify"
-              style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
-            >
-              {experience.body}
-            </p>
+            {pullQuote ? (
+              <>
+                <p
+                  className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap text-justify"
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                >
+                  {bodyBefore}
+                </p>
+                <PullQuote text={pullQuote} />
+                <p
+                  className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap text-justify"
+                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+                >
+                  {bodyAfter}
+                </p>
+              </>
+            ) : (
+              <p
+                className="text-[15px] text-white/80 leading-[1.8] whitespace-pre-wrap text-justify"
+                style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+              >
+                {experience.body}
+              </p>
+            )}
           </div>
 
-          {/* Footer: reactions */}
+          {/* Footer: reactions + share */}
           <div
-            className="px-6 md:px-8 py-5"
+            className="px-6 md:px-8 py-5 flex flex-col gap-4"
             style={{ borderTop: '1px solid var(--border-xs)' }}
           >
             <ExperienceReactions
               experienceId={id}
               initialCounts={reactionCounts}
             />
+            <ExperienceShareActions title={experience.title} id={id} />
           </div>
         </article>
+
+        {/* Share CTA */}
+        <ExperienceShareCta />
 
         {/* Comments */}
         <ExperienceComments threadId={experience.forum_thread_id || null} />
 
+        {/* Related Stories */}
+        {related.length > 0 && (
+          <div className="mt-10">
+            <div className="text-[10px] font-black uppercase tracking-widest mb-4 text-white/40">
+              മറ്റ് അനുഭവങ്ങൾ
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {related.map((exp) => (
+                <ExperienceCard key={exp.id} experience={exp} />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Back CTA */}
-        <div className="mt-6 text-center">
+        <div className="mt-8 text-center">
           <Link
             href="/experiences"
             className="inline-flex items-center gap-2 text-[13px] text-white/40 hover:text-white/70 transition-colors no-underline"
