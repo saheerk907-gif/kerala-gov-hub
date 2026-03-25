@@ -1,7 +1,5 @@
 'use client';
 
-const GREEN = '#30d158';
-
 const SORT_OPTIONS = [
   { value: 'trending', label: '🔥 Trending' },
   { value: 'top',      label: '⭐ Top Rated' },
@@ -19,12 +17,12 @@ export default function ExperiencesSortBar({ sortBy, setSortBy, anonOnly, setAno
             <button
               key={opt.value}
               onClick={() => setSortBy(opt.value)}
-              className="px-3 py-2 text-[12px] font-semibold rounded-xl transition-all cursor-pointer"
+              className="px-3 py-2 text-[12px] font-semibold transition-all cursor-pointer rounded-xl"
               style={{
-                background: active ? `${GREEN}18` : 'transparent',
-                color: active ? GREEN : 'rgba(255,255,255,0.45)',
-                border: active ? `1px solid ${GREEN}35` : '1px solid transparent',
-                borderBottom: active ? `2px solid ${GREEN}` : '2px solid transparent',
+                background: active ? 'rgba(48,209,88,0.1)' : 'transparent',
+                color: active ? 'var(--accent-green)' : 'var(--text-secondary)',
+                border: active ? '1px solid rgba(48,209,88,0.25)' : '1px solid transparent',
+                borderBottom: active ? '2px solid var(--accent-green)' : '2px solid transparent',
                 borderRadius: active ? '10px 10px 0 0' : '10px',
                 fontFamily: opt.value === 'new' ? 'var(--font-noto-malayalam), sans-serif' : undefined,
               }}
@@ -40,11 +38,9 @@ export default function ExperiencesSortBar({ sortBy, setSortBy, anonOnly, setAno
         onClick={() => setAnonOnly((v) => !v)}
         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all cursor-pointer"
         style={{
-          background: anonOnly ? 'rgba(255,255,255,0.1)' : 'transparent',
-          color: anonOnly ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.35)',
-          border: anonOnly
-            ? '1px solid rgba(255,255,255,0.2)'
-            : '1px solid rgba(255,255,255,0.1)',
+          background: anonOnly ? 'var(--surface-md)' : 'transparent',
+          color: anonOnly ? 'var(--text-primary)' : 'var(--text-faint)',
+          border: anonOnly ? '1px solid var(--border-md)' : '1px solid var(--border-sm)',
         }}
       >
         👤 അജ്ഞാതം മാത്രം

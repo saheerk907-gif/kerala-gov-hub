@@ -37,8 +37,8 @@ export default function ExperiencesSeoBlock() {
             key={t.ml}
             className="rounded-[16px] p-4"
             style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: 'var(--surface-xs)',
+              border: '1px solid var(--border-sm)',
             }}
           >
             <div className="text-2xl mb-2">{t.icon}</div>

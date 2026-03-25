@@ -470,6 +470,45 @@ img, video, svg { max-width: 100%; }
 [data-theme="light"] .cat-tab-more     { background: rgba(26,26,46,0.06) !important; color: rgba(26,26,46,0.60) !important; }
 
 /* ══════════════════════════════════════════════════════════
+   EXPERIENCES PAGE — LIGHT MODE OVERRIDES
+   ══════════════════════════════════════════════════════════ */
+
+/* Missing text-white opacity levels */
+[data-theme="light"] .text-white\/25    { color: rgba(26, 26, 46, 0.28) !important; }
+[data-theme="light"] .text-white\/20    { color: rgba(26, 26, 46, 0.22) !important; }
+[data-theme="light"] .text-white\/15    { color: rgba(26, 26, 46, 0.18) !important; }
+
+/* CTA button (used in Hero, Feed, cards) */
+.experiences-cta-btn {
+  background: rgba(48,209,88,0.12);
+  color: #16a34a;
+  border: 1px solid rgba(48,209,88,0.3);
+}
+[data-theme="light"] .experiences-cta-btn {
+  background: rgba(22,163,74,0.10) !important;
+  color: #15803d !important;
+  border: 1px solid rgba(22,163,74,0.25) !important;
+}
+
+/* Mobile sticky bar */
+.experiences-sticky-bar {
+  background: rgba(13,13,18,0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+[data-theme="light"] .experiences-sticky-bar {
+  background: rgba(245,240,232,0.97) !important;
+  border-top: 1px solid rgba(26,26,46,0.10) !important;
+}
+
+/* ExperienceCard — decorative quote mark adapts */
+[data-theme="light"] .text-white\/\[0\.08\] { color: rgba(26,26,46,0.08) !important; }
+
+/* Story of Week + inline CTA gold/green backgrounds already work in light —
+   they're rgba tints that look fine on cream. No overrides needed. */
+
+/* ══════════════════════════════════════════════════════════
    ADMIN STYLES (keep dark — admin is always dark mode)
    ══════════════════════════════════════════════════════════ */
 .admin-sidebar a.active {

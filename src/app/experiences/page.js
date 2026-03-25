@@ -114,7 +114,7 @@ export default async function ExperiencesPage() {
   });
 
   return (
-    <div className="relative min-h-screen" style={{ background: '#0d0d12' }}>
+    <div className="relative min-h-screen" style={{ background: 'var(--bg-primary)' }}>
       <Navbar />
 
       <main className="pt-20">

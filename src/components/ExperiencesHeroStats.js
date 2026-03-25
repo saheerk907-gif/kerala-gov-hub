@@ -1,8 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
-const GREEN = '#30d158';
-
 function useCountUp(target, duration = 1200) {
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -26,18 +24,18 @@ export default function ExperiencesHeroStats({ totalStories, totalReactions, ano
 
   return (
     <div className="flex items-center gap-4 flex-wrap">
-      <span className="text-[13px] font-semibold" style={{ color: GREEN }}>
+      <span className="text-[13px] font-semibold" style={{ color: 'var(--accent-green)' }}>
         {stories} കഥകൾ
       </span>
       <span className="text-white/20 text-sm">·</span>
-      <span className="text-[13px] font-semibold text-white/70">
+      <span className="text-[13px] font-semibold" style={{ color: 'var(--text-dim)' }}>
         {reactions} പ്രതികരണങ്ങൾ
       </span>
-      <span className="text-white/20 text-sm">·</span>
-      <span className="text-[13px] text-white/50">
+      <span className="text-sm" style={{ color: 'var(--text-ghost)' }}>·</span>
+      <span className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>
         {pct}% അജ്ഞാതം
       </span>
-      <span className="text-[10px] text-white/25 ml-1">· Updated hourly</span>
+      <span className="text-[10px] ml-1" style={{ color: 'var(--text-ghost)' }}>· Updated hourly</span>
     </div>
   );
 }

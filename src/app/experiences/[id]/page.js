@@ -150,7 +150,7 @@ function PullQuote({ text }) {
       <p
         className="text-[16px] italic leading-relaxed"
         style={{
-          color: 'rgba(255,255,255,0.85)',
+          color: 'var(--text-primary)',
           fontFamily: 'var(--font-noto-malayalam), sans-serif',
         }}
       >
@@ -208,7 +208,7 @@ export default async function ExperienceDetailPage({ params }) {
   const displayAuthor = experience.is_anonymous ? 'Anonymous' : (experience.author_name || 'Anonymous');
   const displayDate = experience.published_at || experience.created_at;
   const avatarBg = experience.is_anonymous
-    ? 'rgba(255,255,255,0.15)'
+    ? 'var(--surface-md)'
     : getAvatarColor(experience.author_name || '');
   const avatarLetter = experience.is_anonymous ? '?' : (experience.author_name || '?').charAt(0).toUpperCase();
 
@@ -260,7 +260,7 @@ export default async function ExperienceDetailPage({ params }) {
               <span>·</span>
               <span>{reactionCounts.helpful} people found this helpful</span>
               <span>·</span>
-              <span style={{ color: GREEN }}>✔ Reviewed</span>
+              <span style={{ color: 'var(--accent-green)' }}>✔ Reviewed</span>
             </div>
 
             {/* Author row */}
@@ -276,7 +276,7 @@ export default async function ExperienceDetailPage({ params }) {
                   justifyContent: 'center',
                   fontSize: 18,
                   fontWeight: 700,
-                  color: experience.is_anonymous ? 'rgba(255,255,255,0.6)' : '#fff',
+                  color: experience.is_anonymous ? 'var(--text-secondary)' : '#fff',
                   flexShrink: 0,
                 }}
               >

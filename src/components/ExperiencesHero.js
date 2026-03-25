@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import ExperiencesHeroStats from './ExperiencesHeroStats';
 
-const GREEN = '#30d158';
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -41,7 +40,7 @@ export default async function ExperiencesHero() {
         style={{
           position: 'absolute', top: '30%', left: '30%',
           width: 500, height: 300,
-          background: `radial-gradient(ellipse, ${GREEN}14 0%, transparent 70%)`,
+          background: 'radial-gradient(ellipse, rgba(48,209,88,0.08) 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
       />
@@ -51,7 +50,7 @@ export default async function ExperiencesHero() {
           position: 'absolute', top: -40, right: 0,
           fontFamily: 'Georgia, serif', fontSize: 300,
           lineHeight: 1, opacity: 0.04,
-          color: '#fff', userSelect: 'none', pointerEvents: 'none',
+          color: 'var(--text-primary)', userSelect: 'none', pointerEvents: 'none',
         }}
       >
         &ldquo;
@@ -61,7 +60,7 @@ export default async function ExperiencesHero() {
         {/* Label */}
         <div
           className="text-[10px] font-black uppercase tracking-[0.1em] mb-3"
-          style={{ color: GREEN }}
+          style={{ color: 'var(--accent-green)' }}
         >
           Community · Real Stories
         </div>
@@ -73,21 +72,21 @@ export default async function ExperiencesHero() {
 
         {/* Visual headline — Malayalam, large */}
         <p
-          className="text-[clamp(32px,5vw,52px)] font-[900] text-white tracking-[-0.02em] leading-tight mb-1"
-          style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}
+          className="text-[clamp(32px,5vw,52px)] font-[900] tracking-[-0.02em] leading-tight mb-1"
+          style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif', color: 'var(--text-primary)' }}
         >
           അനുഭവങ്ങൾ
         </p>
 
         {/* Visible English subtitle */}
-        <p className="text-[15px] text-white/60 mb-4">
+        <p className="text-[15px] mb-4" style={{ color: 'var(--text-secondary)' }}>
           What actually happens in Kerala Government service
         </p>
 
         {/* Purpose statement — Malayalam */}
         <p
-          className="text-[15px] text-white/70 leading-[1.8] max-w-[640px] mb-6"
-          style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif' }}
+          className="text-[15px] leading-[1.8] max-w-[640px] mb-6"
+          style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif', color: 'var(--text-dim)' }}
         >
           3 ദിവസത്തിനുള്ളിൽ GPF ലോൺ ലഭിച്ച കഥകൾ. ഒരു വർഷം കാത്തിരുന്ന
           സ്ഥലംമാറ്റം. ഒരു ഫോൺ കോളിൽ തീർന്ന റിട്ടയർമെന്റ് രേഖകൾ.
@@ -106,9 +105,9 @@ export default async function ExperiencesHero() {
               key={pill}
               className="text-[12px] px-3 py-1 rounded-full"
               style={{
-                background: 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: 'rgba(255,255,255,0.5)',
+                background: 'var(--surface-xs)',
+                border: '1px solid var(--border-sm)',
+                color: 'var(--text-secondary)',
                 fontFamily: 'var(--font-noto-malayalam), sans-serif',
               }}
             >
@@ -127,16 +126,11 @@ export default async function ExperiencesHero() {
           <div className="flex flex-col items-end gap-1">
             <Link
               href="/experiences/submit"
-              className="flex items-center gap-2 px-5 py-3 rounded-2xl text-[13px] font-bold no-underline transition-all"
-              style={{
-                background: `${GREEN}20`,
-                color: GREEN,
-                border: `1px solid ${GREEN}40`,
-              }}
+              className="flex items-center gap-2 px-5 py-3 rounded-2xl text-[13px] font-bold no-underline transition-all experiences-cta-btn"
             >
               + അനുഭവം പങ്കിടുക →
             </Link>
-            <span className="text-[11px] text-white/25">Anonymous posting supported</span>
+            <span className="text-[11px]" style={{ color: 'var(--text-ghost)' }}>Anonymous posting supported</span>
           </div>
         </div>
       </div>
