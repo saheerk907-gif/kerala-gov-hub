@@ -56,7 +56,7 @@ export default async function ExperiencesHero() {
         &ldquo;
       </div>
 
-      <div className="relative max-w-[1200px] mx-auto">
+      <div className="relative max-w-[1200px] mx-auto text-center">
         {/* Label */}
         <div
           className="text-[10px] font-black uppercase tracking-[0.1em] mb-3"
@@ -85,7 +85,7 @@ export default async function ExperiencesHero() {
 
         {/* Purpose statement — Malayalam */}
         <p
-          className="text-[15px] leading-[1.8] max-w-[640px] mb-6"
+          className="text-[15px] leading-[1.8] max-w-[640px] mx-auto mb-6"
           style={{ fontFamily: 'var(--font-noto-malayalam), sans-serif', color: 'var(--text-dim)' }}
         >
           3 ദിവസത്തിനുള്ളിൽ GPF ലോൺ ലഭിച്ച കഥകൾ. ഒരു വർഷം കാത്തിരുന്ന
@@ -95,7 +95,7 @@ export default async function ExperiencesHero() {
         </p>
 
         {/* Scope pills — decorative only */}
-        <div className="flex gap-2 flex-wrap mb-6" style={{ pointerEvents: 'none' }}>
+        <div className="flex gap-2 flex-wrap mb-6 justify-center" style={{ pointerEvents: 'none' }}>
           {[
             '📋 സേവന പ്രക്രിയകൾ',
             '🏦 ലോൺ & GPF',
@@ -117,13 +117,13 @@ export default async function ExperiencesHero() {
         </div>
 
         {/* Stats + CTA row */}
-        <div className="flex items-center justify-between flex-wrap gap-4">
+        <div className="flex items-center justify-center flex-wrap gap-4">
           <ExperiencesHeroStats
             totalStories={total}
             totalReactions={reactions}
             anonymousPct={pct}
           />
-          <div className="flex flex-col items-end gap-1">
+          <div className="flex flex-col items-center gap-1">
             <Link
               href="/experiences/submit"
               className="flex items-center gap-2 px-5 py-3 rounded-2xl text-[13px] font-bold no-underline transition-all experiences-cta-btn"
