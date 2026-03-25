@@ -63,6 +63,9 @@ const staticRoutes = [
   { url: '/departmental-tests?dept=judiciary', changeFrequency: 'monthly', priority: 0.65 },
   { url: '/departmental-tests?dept=police', changeFrequency: 'monthly', priority: 0.65 },
   { url: '/departmental-tests?dept=education', changeFrequency: 'monthly', priority: 0.65 },
+  // Experiences (UGC — high crawl frequency for new content)
+  { url: '/experiences', changeFrequency: 'daily', priority: 0.85 },
+  { url: '/experiences/submit', changeFrequency: 'yearly', priority: 0.5 },
 ];
 
 export default async function sitemap() {
@@ -123,6 +126,25 @@ export default async function sitemap() {
     // if fetch fails, sitemap still works with static routes
   }
 
+  // Fetch published experiences for dynamic routes
+  let experienceRoutes = [];
+  try {
+    const { data } = await supabase
+      .from('experiences')
+      .select('id, published_at')
+      .eq('status', 'published')
+      .order('published_at', { ascending: false });
+
+    if (data) {
+      experienceRoutes = data.map((item) => ({
+        url: `${BASE_URL}/experiences/${item.id}`,
+        lastModified: new Date(item.published_at || new Date()),
+        changeFrequency: 'monthly',
+        priority: 0.70,
+      }));
+    }
+  } catch {}
+
   const statics = staticRoutes.map((route) => ({
     url: `${BASE_URL}${route.url}`,
     lastModified: new Date(),
@@ -130,5 +152,5 @@ export default async function sitemap() {
     priority: route.priority,
   }));
 
-  return [...statics, ...actsRoutes, ...newsRoutes, ...articleRoutes];
+  return [...statics, ...actsRoutes, ...newsRoutes, ...articleRoutes, ...experienceRoutes];
 }

@@ -7,10 +7,23 @@ import { buildMetadata } from '@/lib/seo';
 export const revalidate = 60;
 
 export const metadata = buildMetadata({
-  title: 'GPF — General Provident Fund for Kerala Employees',
-  description: 'General Provident Fund (GPF) information for Kerala government employees — subscription rules, advance, withdrawal, and final settlement.',
+  title: 'GPF Kerala 2026 – Interest Rate, Advance, Withdrawal & Balance Calculator',
+  description: 'GPF (General Provident Fund) for Kerala government employees: current interest rate 7.1%, how to apply for advance, withdrawal rules, final settlement, and GPF balance check. All Kerala Treasury GPF rules explained.',
   path: '/gpf',
-  keywords: ['GPF Kerala', 'General Provident Fund Kerala', 'GPF advance withdrawal', 'GPF ജീവനക്കാർ'],
+  keywords: [
+    'GPF Kerala',
+    'GPF interest rate Kerala 2026',
+    'GPF advance Kerala government',
+    'GPF withdrawal rules Kerala',
+    'Kerala GPF balance check',
+    'General Provident Fund Kerala employees',
+    'GPF final settlement Kerala',
+    'GPF subscription rate Kerala',
+    'GPF ജീവനക്കാർ',
+    'GPF കേരള 2026',
+    'Kerala treasury GPF',
+    'GPF loan Kerala govt',
+  ],
 });
 
 export default async function GpfPage() {

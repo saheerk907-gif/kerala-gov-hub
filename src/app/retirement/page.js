@@ -1,6 +1,23 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import RetirementCalculator from '@/components/RetirementCalculator';
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata = buildMetadata({
+  title: 'Retirement Date & LPR Calculator – Kerala Government Employees 2026',
+  description: 'Calculate your exact retirement date, LPR (Leave Preparatory to Retirement) start date, and last working day as a Kerala government employee. Retirement age is 56 years. Supports teachers, gazetted, and non-gazetted employees.',
+  path: '/retirement',
+  keywords: [
+    'retirement date calculator Kerala',
+    'LPR calculator Kerala government',
+    'Kerala govt employee retirement age 56',
+    'last working day calculator Kerala',
+    'leave preparatory to retirement Kerala',
+    'retirement date Kerala teacher',
+    'superannuation date calculator Kerala',
+    'കേരള ജീവനക്കാർ റിട്ടയർമെന്റ്',
+  ],
+});
 
 const RETIREMENT_FAQS = [
   {
