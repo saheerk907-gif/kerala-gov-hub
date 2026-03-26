@@ -1,6 +1,7 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── DA Rate lookup by retirement date ───────────────────────────────────────
 const DA_TABLE_11TH = [
@@ -110,6 +111,8 @@ export default function DcrgCalculator() {
   const [serviceYears,  setServiceYears]  = useState(30);
   const [serviceMonths, setServiceMonths] = useState(0);
   const [retireType,    setRetireType]    = useState('retirement');
+  const [animKey, setAnimKey] = useState(0);
+  useEffect(() => { setAnimKey(1); }, []);
 
   const autoDA = useMemo(() => {
     if (!retireDate) return 35;
@@ -261,7 +264,7 @@ export default function DcrgCalculator() {
           ) : (
             <>
               <div className="text-[42px] font-[900] leading-none tracking-tight text-white mb-1">
-                {fmt(result.dcrg)}
+                <AnimatedNumber value={result.dcrg} animKey={animKey} />
               </div>
               {result.cappedAt20L && (
                 <div className="text-[11px] font-bold mt-1 text-[#ff9f0a]">
@@ -287,16 +290,16 @@ export default function DcrgCalculator() {
         <div className="mb-4">
           <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-3">Calculation Breakdown</div>
           <ResultRow label="Last Basic Pay"  value={fmt(basic)} />
-          <ResultRow label={`DA @ ${effectiveDA}%`} value={fmt(result.daAmt)} color="#ff9f0a" />
-          <ResultRow label="Last Emoluments (LE)" value={fmt(result.le)} color="#ff9f0a"
+          <ResultRow label={`DA @ ${effectiveDA}%`} value={<AnimatedNumber value={result.daAmt} animKey={animKey} />} color="#ff9f0a" />
+          <ResultRow label="Last Emoluments (LE)" value={<AnimatedNumber value={result.le} animKey={animKey} />} color="#ff9f0a"
             sub="Basic Pay + DA" />
           <ResultRow label="Qualifying Service" value={qualifyingDisplay}
             sub={`6m+1day rule applies${result.qualifyingYears === 33 ? ' · capped at 33 yrs' : ''}`} />
           <ResultRow label="Formula" value={`LE × ${result.qualifyingYears} ÷ 2`}
             sub={`= ${fmt(result.le)} × ${result.qualifyingYears} ÷ 2`} />
-          <ResultRow label="Retirement DCRG" value={fmt(result.retireDCRG)} color="#30d158" />
+          <ResultRow label="Retirement DCRG" value={<AnimatedNumber value={result.retireDCRG} animKey={animKey} />} color="#30d158" />
           {retireType === 'death' && (
-            <ResultRow label="Death Gratuity (applied)" value={fmt(result.deathDCRG)} color="#ff9f0a" big />
+            <ResultRow label="Death Gratuity (applied)" value={<AnimatedNumber value={result.deathDCRG} animKey={animKey} />} color="#ff9f0a" big />
           )}
         </div>
 
