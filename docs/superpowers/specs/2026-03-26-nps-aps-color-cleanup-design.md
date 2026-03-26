@@ -11,13 +11,15 @@ Everything else uses neutral white (`rgba(255,255,255,0.88)` for values, `rgba(2
 
 **Colors being removed:**
 - `#2997ff` (blue) — NPS accent color throughout
-- `#ff9f0a` (amber) — lump sum, tabs, warnings, table highlights
+- `#ff9f0a` (amber) — lump sum, tabs, table highlights
+- `#ffcc66` (amber-light) — amber warning notice text color
+- `#93c5fd` (light blue) — key-facts info notice text
 - `#bf5af2` (purple) — Service stat card
 
 **Colors untouched:**
 - `#25d366` — WhatsApp share button icon (brand color, not a UI accent)
 - `#86efac` — green-family text inside the APS insight notice (keep)
-- `#ff9f9f` — red-family text inside warning notices (keep)
+- `#ff9f9f` — red-family text in the existing red warning notice (kept as-is); also used as the replacement color for the amber notice in Section 4
 
 ---
 
@@ -59,13 +61,20 @@ className="... text-white/55"
 
 When NPS wins (currently blue), change to neutral white. APS banner already green — no change.
 
+Both background/border and the text color are controlled by ternary expressions on `R.apsP > R.npsP`. Only the NPS branch values (the `false` branches) are being changed:
+
 ```jsx
-// before (NPS win branch):
-style={{ background: 'rgba(41,151,255,0.07)', border: '1px solid rgba(41,151,255,0.2)' }}
-style={{ color: '#2997ff' }}
+// Line 377 — container style — before (NPS branch values):
+background: 'rgba(41,151,255,0.07)'
+border: `1px solid rgba(41,151,255,0.2)`
 // after:
-style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.12)' }}
-style={{ color: 'rgba(255,255,255,0.88)' }}
+background: 'rgba(255,255,255,0.04)'
+border: `1px solid rgba(255,255,255,0.12)`
+
+// Line 378 — text color — before (NPS branch value):
+color: R.apsP > R.npsP ? '#30d158' : '#2997ff'
+// after:
+color: R.apsP > R.npsP ? '#30d158' : 'rgba(255,255,255,0.88)'
 ```
 
 ### 3. Quick Stat Cards (~lines 406–409)
