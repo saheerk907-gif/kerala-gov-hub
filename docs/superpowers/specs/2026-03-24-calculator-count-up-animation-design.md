@@ -128,9 +128,7 @@ function MoneyCard({ label, amount, accent, note, ineligible, animKey }) {
 {fmtDate(commutation.restorationDate)}
 ```
 
-4. Do **not** remove `useAnimatedCounter` — `CountUnit` still uses it.
-
-5. Do **not** animate `CountUnit` (years/months/days countdown) or date strings.
+4. Do **not** remove `useAnimatedCounter` and do **not** animate `CountUnit` (years/months/days countdown) — `CountUnit` depends on `useAnimatedCounter` and animates on every value change, which is correct behaviour for a live countdown. Date strings (restoration date) are also excluded.
 
 ---
 
@@ -147,7 +145,19 @@ useEffect(() => { setAnimKey(1); }, []);
 ```
 This plays an entrance animation when the user first opens the calculator. Subsequent input changes update instantly.
 
-**Replacing result values — `ResultRow` accepts React nodes in its `value` prop** (it renders `{value}` directly in a `<span>`), so `<AnimatedNumber>` can be passed as the value.
+**Replacing result values — `ResultRow` accepts React nodes in its `value` prop.** The component renders `{value}` directly in a `<span>` (no stringification):
+```jsx
+// ResultRow (lines 733–740 in IncomeTaxCalculator.js):
+function ResultRow({ label, value, highlight, indent, className = '' }) {
+  return (
+    <div ...>
+      <span ...>{label}</span>
+      <span ...>{value}</span>   // ← value rendered as React node
+    </div>
+  );
+}
+```
+So `<AnimatedNumber>` can be passed as the value.
 
 Replace standard monetary values:
 ```jsx
