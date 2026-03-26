@@ -118,28 +118,19 @@ function MoneyCard({ label, amount, accent, note, ineligible, animKey }) {
 }
 ```
 
-3. Wrap commutation section values:
+3. Wrap the three commutation values. The fourth card shows `fmtDate(commutation.restorationDate)` — a date string — leave it unchanged:
 ```jsx
-// before
-₹{commutation.commutedMonthly.toLocaleString('en-IN')}
-// after
-<AnimatedNumber value={commutation.commutedMonthly} animKey={animKey} />
-```
-Same for `commutation.lumpSum` and `commutation.reducedPension`.
-
-4. Wrap commutation values (three of the four cards). The fourth card shows `fmtDate(commutation.restorationDate)` — a date string. Leave it unchanged:
-```jsx
-// Cards 1-3: animate
+// Animate these three:
 <AnimatedNumber value={commutation.commutedMonthly} animKey={animKey} />
 <AnimatedNumber value={commutation.lumpSum} animKey={animKey} />
 <AnimatedNumber value={commutation.reducedPension} animKey={animKey} />
-// Card 4: leave as-is (date string)
+// Leave unchanged (date string):
 {fmtDate(commutation.restorationDate)}
 ```
 
-5. Do **not** remove `useAnimatedCounter` — `CountUnit` still uses it.
+4. Do **not** remove `useAnimatedCounter` — `CountUnit` still uses it.
 
-6. Do **not** animate `CountUnit` (years/months/days countdown) or date strings.
+5. Do **not** animate `CountUnit` (years/months/days countdown) or date strings.
 
 ---
 
@@ -176,10 +167,20 @@ For deduction rows that display `- ${fmtR(x)}`, use `prefix="-₹"`:
 
 For the summary card array (lines ~1293–1296), the `value` field holds `fmtR(x)` strings — replace each with `<AnimatedNumber value={x} animKey={animKey} />`.
 
-For inline monetary spans (lines ~1363–1405), replace `fmtR(R.xxx)` with `<AnimatedNumber value={R.xxx} animKey={animKey} />`.
+**Inline spans in the Slab Breakdown section — animate these specifically:**
+- `R.rawTaxBase` (~line 1363)
+- `R.rebate87A` (~line 1368, displayed as `- ${fmtR(R.rebate87A)}` — use `prefix="-₹"`)
+- `R.taxAfterRebate` (~line 1376)
+- `R.surchargeAmt` (~line 1381)
+- `R.cess` (~line 1387)
+- `R.totalTax` (~lines 1390 and 1399)
+- `R.balanceTax` (~line 1401)
+- `R.monthlyTDS` (~line 1405)
+- Per-slab `row.tax` values in the slab breakdown table
 
 **Do NOT animate:**
-- Slab boundary values (`fmtR(row.from)`, `fmtR(row.to)`) — these are tax rule constants, not results
+- Slab boundary values (`fmtR(row.from)`, `fmtR(row.to)`) — tax rule constants, not results
+- `fmtR(n(tdsPaidAmount))` (~line 1400) — this is a user input value, not a computed result
 - `nilOrAmt(v)` hint strings embedded in `<span>` text
 - Hint text in input `subtitle` props (lines ~1064, 1097, 1117)
 - `monthsAlreadyDeducted` label text ("0 months")
@@ -194,9 +195,16 @@ useEffect(() => { setAnimKey(1); }, []);
 ```
 Plays entrance animation once when calculator loads. Subsequent input changes update instantly.
 
-**What to animate:** The three result cards (`result.lumpSumCorpus`, `result.annuityCorpus`, `result.monthlyPension`) and the two secondary stats (`result.totalInvested`, `result.totalGains`).
+**What to animate:** `ResultCard` accepts React nodes in its `value` prop (renders `{value}` directly in a `<div>`). Animate these standalone values:
+- `result.totalCorpus` — the hero number in the full-width card (inline `{fmtINR(result.totalCorpus)}`, not in a `ResultCard`)
+- `result.lumpSum` — in "Lump Sum Withdrawal" `ResultCard`
+- `result.annuityCorpus` — in "Annuity Corpus" `ResultCard`
+- `result.monthlyPension` — in "Estimated Monthly Pension" `ResultCard`
 
-**Do NOT animate:** `gainPct` — this is a percentage string (`toFixed(0) + '%'`) embedded in a subtitle template literal (`After X years · Invested: ... · Gains: ... (gainPct%)`). It is not a standalone numeric node and cannot be passed to `AnimatedNumber`. Leave this line unchanged.
+**Do NOT animate:**
+- `result.totalInvested` and `result.totalGains` — these appear embedded in the subtitle template literal on line ~328: `After {result.years} years · Invested: {fmtINR(result.totalInvested)} · Gains: {fmtINR(result.totalGains)} ({gainPct}%)`. Cannot extract from a mixed text node without restructuring.
+- `gainPct` — percentage string in the same template literal.
+- `result.years` — displayed as `${result.years} years` string in "Contribution Period" card.
 
 #### DcrgCalculator.jsx
 
@@ -206,10 +214,11 @@ const [animKey, setAnimKey] = useState(0);
 useEffect(() => { setAnimKey(1); }, []);
 ```
 
-**What to animate:** `result.dcrg` (the main DCRG amount), `result.daAmt`, `result.le` (last emoluments), `result.retireDCRG`, `result.deathDCRG`.
+**What to animate:** `result.dcrg` (main DCRG amount in the eligibility section), `result.daAmt`, `result.le` (Last Emoluments), `result.retireDCRG`, `result.deathDCRG`.
 
 **Do NOT animate:**
-- `qualifyingDisplay` — a composite string like `"30 yrs (rounded up from 29y 6m)"`. Not a number. The `ResultRow` with label "Qualifying Service" displays this string — leave it as-is.
+- `basic` (Last Basic Pay input) — this is a user input value, not a computed result. The `ResultRow label="Last Basic Pay"` renders `fmt(basic)` — leave it unchanged.
+- `qualifyingDisplay` — a composite string like `"30 yrs (rounded up from 29y 6m)"`. Not a number. Leave the `ResultRow label="Qualifying Service"` unchanged.
 - The "Formula" rows (e.g. `LE × 30 ÷ 2`) — template literal strings, not numbers.
 
 ---
@@ -237,7 +246,7 @@ useEffect(() => { setAnimKey(1); }, []);
 ---
 
 ## Files Changed
-1. `src/components/RetirementCalculator.js` — add animKey trigger, update MoneyCard, wrap commutation values
-2. `src/components/IncomeTaxCalculator.js` — add animKey trigger via canPrint, wrap result values
+1. `src/components/RetirementCalculator.js` — add animKey trigger (watches `calc`), update MoneyCard, wrap commutation values
+2. `src/components/IncomeTaxCalculator.js` — add mount-trigger animKey, wrap result values in ResultRow/inline spans
 3. `src/components/NpsCorpusCalculator.js` — add mount-trigger animKey, wrap result values
 4. `src/components/DcrgCalculator.jsx` — add mount-trigger animKey, wrap result values
