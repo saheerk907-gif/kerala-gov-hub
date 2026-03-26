@@ -99,7 +99,24 @@ useEffect(() => {
 }, [calc]);
 ```
 
-2. Add `animKey` prop to `MoneyCard`; replace `useAnimatedCounter` inside it with `<AnimatedNumber value={amount} animKey={animKey} />`.
+2. Add `animKey` prop to `MoneyCard`; replace `useAnimatedCounter` inside it with `<AnimatedNumber>` — but **only in the numeric branch** (the `else` path). The `ineligible` branch renders a string label, not a number — leave it unchanged:
+```jsx
+// MoneyCard — modified
+function MoneyCard({ label, amount, accent, note, ineligible, animKey }) {
+  // remove: const display = useAnimatedCounter(amount);
+  return (
+    ...
+    {ineligible ? (
+      <span className="text-xs text-amber-400 font-semibold leading-snug">{ineligible}</span>
+    ) : (
+      <span className="text-xl font-[900] tabular-nums leading-none" style={{ color: accent ? ACCENT : 'white' }}>
+        <AnimatedNumber value={amount} animKey={animKey} />
+      </span>
+    )}
+    ...
+  );
+}
+```
 
 3. Wrap commutation section values:
 ```jsx
@@ -110,9 +127,19 @@ useEffect(() => {
 ```
 Same for `commutation.lumpSum` and `commutation.reducedPension`.
 
-4. Do **not** remove `useAnimatedCounter` — `CountUnit` still uses it.
+4. Wrap commutation values (three of the four cards). The fourth card shows `fmtDate(commutation.restorationDate)` — a date string. Leave it unchanged:
+```jsx
+// Cards 1-3: animate
+<AnimatedNumber value={commutation.commutedMonthly} animKey={animKey} />
+<AnimatedNumber value={commutation.lumpSum} animKey={animKey} />
+<AnimatedNumber value={commutation.reducedPension} animKey={animKey} />
+// Card 4: leave as-is (date string)
+{fmtDate(commutation.restorationDate)}
+```
 
-5. Do **not** animate `CountUnit` (years/months/days countdown) or date strings (restoration date).
+5. Do **not** remove `useAnimatedCounter` — `CountUnit` still uses it.
+
+6. Do **not** animate `CountUnit` (years/months/days countdown) or date strings.
 
 ---
 
@@ -122,18 +149,41 @@ These use `useMemo` that always returns a valid object. No null guard exists. `a
 
 #### IncomeTaxCalculator.js
 
-Trigger via existing `canPrint` variable (`n(basic1) > 0 && R !== null`):
+`R` (the `useMemo` result) is almost never `null` — the result section `{R && (...)}` is visible from page load showing zero values. Use the mount-trigger pattern (same as NpsCorpusCalculator/DcrgCalculator):
 ```js
 const [animKey, setAnimKey] = useState(0);
-const prevCanPrint = useRef(false);
-useEffect(() => {
-  const was = prevCanPrint.current;
-  prevCanPrint.current = canPrint;
-  if (!was && canPrint) setAnimKey(k => k + 1);
-}, [canPrint]);
+useEffect(() => { setAnimKey(1); }, []);
+```
+This plays an entrance animation when the user first opens the calculator. Subsequent input changes update instantly.
+
+**Replacing result values — `ResultRow` accepts React nodes in its `value` prop** (it renders `{value}` directly in a `<span>`), so `<AnimatedNumber>` can be passed as the value.
+
+Replace standard monetary values:
+```jsx
+// before
+<ResultRow label="Annual Basic Pay" value={fmtR(R.annualBasic)} />
+// after
+<ResultRow label="Annual Basic Pay" value={<AnimatedNumber value={R.annualBasic} animKey={animKey} />} />
 ```
 
-Replace monetary result displays with `<AnimatedNumber value={x} animKey={animKey} />`.
+For deduction rows that display `- ${fmtR(x)}`, use `prefix="-₹"`:
+```jsx
+// before
+<ResultRow label="Standard Deduction u/s 16(ia)" value={`- ${fmtR(R.stdDed)}`} />
+// after
+<ResultRow label="Standard Deduction u/s 16(ia)" value={<AnimatedNumber value={R.stdDed} animKey={animKey} prefix="-₹" />} />
+```
+
+For the summary card array (lines ~1293–1296), the `value` field holds `fmtR(x)` strings — replace each with `<AnimatedNumber value={x} animKey={animKey} />`.
+
+For inline monetary spans (lines ~1363–1405), replace `fmtR(R.xxx)` with `<AnimatedNumber value={R.xxx} animKey={animKey} />`.
+
+**Do NOT animate:**
+- Slab boundary values (`fmtR(row.from)`, `fmtR(row.to)`) — these are tax rule constants, not results
+- `nilOrAmt(v)` hint strings embedded in `<span>` text
+- Hint text in input `subtitle` props (lines ~1064, 1097, 1117)
+- `monthsAlreadyDeducted` label text ("0 months")
+- Slab percentage displays ("@ 10%")
 
 #### NpsCorpusCalculator.js
 
@@ -144,6 +194,10 @@ useEffect(() => { setAnimKey(1); }, []);
 ```
 Plays entrance animation once when calculator loads. Subsequent input changes update instantly.
 
+**What to animate:** The three result cards (`result.lumpSumCorpus`, `result.annuityCorpus`, `result.monthlyPension`) and the two secondary stats (`result.totalInvested`, `result.totalGains`).
+
+**Do NOT animate:** `gainPct` — this is a percentage string (`toFixed(0) + '%'`) embedded in a subtitle template literal (`After X years · Invested: ... · Gains: ... (gainPct%)`). It is not a standalone numeric node and cannot be passed to `AnimatedNumber`. Leave this line unchanged.
+
 #### DcrgCalculator.jsx
 
 Same situation (`basic` starts at 30000). Same mount-trigger pattern:
@@ -151,6 +205,12 @@ Same situation (`basic` starts at 30000). Same mount-trigger pattern:
 const [animKey, setAnimKey] = useState(0);
 useEffect(() => { setAnimKey(1); }, []);
 ```
+
+**What to animate:** `result.dcrg` (the main DCRG amount), `result.daAmt`, `result.le` (last emoluments), `result.retireDCRG`, `result.deathDCRG`.
+
+**Do NOT animate:**
+- `qualifyingDisplay` — a composite string like `"30 yrs (rounded up from 29y 6m)"`. Not a number. The `ResultRow` with label "Qualifying Service" displays this string — leave it as-is.
+- The "Formula" rows (e.g. `LE × 30 ÷ 2`) — template literal strings, not numbers.
 
 ---
 
