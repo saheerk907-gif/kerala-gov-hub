@@ -1,5 +1,6 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
 const n = (v) => Number(v) || 0;
@@ -855,6 +856,9 @@ export default function IncomeTaxCalculator() {
 
   const canPrint = n(basic1) > 0 && R !== null;
 
+  const [animKey, setAnimKey] = useState(0);
+  useEffect(() => { setAnimKey(1); }, []);
+
   // 80C live total
   const c80Raw = n(gpfContrib) + n(sliPremium) + n(licPremium) + n(ppfContrib) +
     n(elssAmount) + n(nscAmount) + n(hlPrincipal) + n(tuitionFees) +
@@ -1290,10 +1294,10 @@ export default function IncomeTaxCalculator() {
           {/* Summary Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
             {[
-              { label: 'Gross Salary', value: fmtR(R.grossFromEmployer) },
-              { label: 'Taxable Income', value: fmtR(R.taxableIncome) },
-              { label: 'Total Tax', value: fmtR(R.totalTax), highlight: true },
-              { label: 'Monthly TDS', value: fmtR(R.monthlyTDS), highlight: true },
+              { label: 'Gross Salary', value: <AnimatedNumber value={R.grossFromEmployer} animKey={animKey} /> },
+              { label: 'Taxable Income', value: <AnimatedNumber value={R.taxableIncome} animKey={animKey} /> },
+              { label: 'Total Tax', value: <AnimatedNumber value={R.totalTax} animKey={animKey} />, highlight: true },
+              { label: 'Monthly TDS', value: <AnimatedNumber value={R.monthlyTDS} animKey={animKey} />, highlight: true },
             ].map(card => (
               <div
                 key={card.label}
@@ -1307,41 +1311,41 @@ export default function IncomeTaxCalculator() {
 
           {/* Detailed Breakdown */}
           <div className="space-y-1 divide-y divide-white/[0.05]">
-            <ResultRow label="Annual Basic Pay" value={fmtR(R.annualBasic)} />
-            <ResultRow label="Dearness Allowance" value={fmtR(R.annualDA)} />
-            <ResultRow label="HRA (Annual)" value={fmtR(R.annualHRA)} />
-            <ResultRow label="Other Allowances" value={fmtR(R.annualOther)} />
-            <ResultRow label="Arrears (Total)" value={fmtR(R.totalArrears)} />
-            <ResultRow label="Leave Surrender" value={fmtR(R.leaveSurrenderAmt)} />
-            <ResultRow label="Festival Allowance" value={fmtR(R.festivalAllowanceAmt)} />
-            <ResultRow label="Gross Salary from Employer" value={fmtR(R.grossFromEmployer)} highlight />
+            <ResultRow label="Annual Basic Pay" value={<AnimatedNumber value={R.annualBasic} animKey={animKey} />} />
+            <ResultRow label="Dearness Allowance" value={<AnimatedNumber value={R.annualDA} animKey={animKey} />} />
+            <ResultRow label="HRA (Annual)" value={<AnimatedNumber value={R.annualHRA} animKey={animKey} />} />
+            <ResultRow label="Other Allowances" value={<AnimatedNumber value={R.annualOther} animKey={animKey} />} />
+            <ResultRow label="Arrears (Total)" value={<AnimatedNumber value={R.totalArrears} animKey={animKey} />} />
+            <ResultRow label="Leave Surrender" value={<AnimatedNumber value={R.leaveSurrenderAmt} animKey={animKey} />} />
+            <ResultRow label="Festival Allowance" value={<AnimatedNumber value={R.festivalAllowanceAmt} animKey={animKey} />} />
+            <ResultRow label="Gross Salary from Employer" value={<AnimatedNumber value={R.grossFromEmployer} animKey={animKey} />} highlight />
             <div className="pt-2">
-              <ResultRow label={`Standard Deduction u/s 16(ia)`} value={`- ${fmtR(R.stdDed)}`} />
+              <ResultRow label={`Standard Deduction u/s 16(ia)`} value={<AnimatedNumber value={R.stdDed} animKey={animKey} prefix="-₹" />} />
               {regime === 'old' && R.hraExemptAmt > 0 && (
-                <ResultRow label="HRA Exemption u/s 10(13A)" value={`- ${fmtR(R.hraExemptAmt)}`} />
+                <ResultRow label="HRA Exemption u/s 10(13A)" value={<AnimatedNumber value={R.hraExemptAmt} animKey={animKey} prefix="-₹" />} />
               )}
               {regime === 'old' && R.profTaxDed > 0 && (
-                <ResultRow label="Professional Tax u/s 16(iii)" value={`- ${fmtR(R.profTaxDed)}`} />
+                <ResultRow label="Professional Tax u/s 16(iii)" value={<AnimatedNumber value={R.profTaxDed} animKey={animKey} prefix="-₹" />} />
               )}
             </div>
-            <ResultRow label="Net Salary Income" value={fmtR(R.netSalaryIncome)} highlight />
-            <ResultRow label="Other Income" value={fmtR(R.otherIncomeTotal)} />
-            <ResultRow label="Gross Total Income" value={fmtR(R.grossTotalIncome)} highlight />
+            <ResultRow label="Net Salary Income" value={<AnimatedNumber value={R.netSalaryIncome} animKey={animKey} />} highlight />
+            <ResultRow label="Other Income" value={<AnimatedNumber value={R.otherIncomeTotal} animKey={animKey} />} />
+            <ResultRow label="Gross Total Income" value={<AnimatedNumber value={R.grossTotalIncome} animKey={animKey} />} highlight />
             {R.totalChapterVIA > 0 && (
               <>
-                {regime === 'old' && R.hlInterestDed > 0 && <ResultRow label="Sec 24(b) Housing Loan Interest" value={`- ${fmtR(R.hlInterestDed)}`} />}
-                {regime === 'old' && R.c80Total > 0 && <ResultRow label="Section 80C (capped)" value={`- ${fmtR(R.c80Total)}`} />}
-                {regime === 'old' && R.npsAddDed > 0 && <ResultRow label="Sec 80CCD(1B) Additional NPS" value={`- ${fmtR(R.npsAddDed)}`} />}
-                {R.empNPSDed > 0 && <ResultRow label="Sec 80CCD(2) Employer NPS" value={`- ${fmtR(R.empNPSDed)}`} />}
-                {regime === 'old' && R.d80Total > 0 && <ResultRow label="Section 80D Mediclaim" value={`- ${fmtR(R.d80Total)}`} />}
-                {regime === 'old' && R.hlInterest80EEADed > 0 && <ResultRow label="Sec 80EEA HL Interest" value={`- ${fmtR(R.hlInterest80EEADed)}`} />}
-                {regime === 'old' && R.eduLoanDed > 0 && <ResultRow label="Sec 80E Education Loan" value={`- ${fmtR(R.eduLoanDed)}`} />}
-                {regime === 'old' && R.donationDed > 0 && <ResultRow label="Sec 80G Donations (50%)" value={`- ${fmtR(R.donationDed)}`} />}
-                {regime === 'old' && R.savingsDed > 0 && <ResultRow label="Sec 80TTA/TTB Savings Interest" value={`- ${fmtR(R.savingsDed)}`} />}
-                <ResultRow label="Total Deductions" value={`- ${fmtR(R.totalChapterVIA)}`} highlight />
+                {regime === 'old' && R.hlInterestDed > 0 && <ResultRow label="Sec 24(b) Housing Loan Interest" value={<AnimatedNumber value={R.hlInterestDed} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.c80Total > 0 && <ResultRow label="Section 80C (capped)" value={<AnimatedNumber value={R.c80Total} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.npsAddDed > 0 && <ResultRow label="Sec 80CCD(1B) Additional NPS" value={<AnimatedNumber value={R.npsAddDed} animKey={animKey} prefix="-₹" />} />}
+                {R.empNPSDed > 0 && <ResultRow label="Sec 80CCD(2) Employer NPS" value={<AnimatedNumber value={R.empNPSDed} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.d80Total > 0 && <ResultRow label="Section 80D Mediclaim" value={<AnimatedNumber value={R.d80Total} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.hlInterest80EEADed > 0 && <ResultRow label="Sec 80EEA HL Interest" value={<AnimatedNumber value={R.hlInterest80EEADed} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.eduLoanDed > 0 && <ResultRow label="Sec 80E Education Loan" value={<AnimatedNumber value={R.eduLoanDed} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.donationDed > 0 && <ResultRow label="Sec 80G Donations (50%)" value={<AnimatedNumber value={R.donationDed} animKey={animKey} prefix="-₹" />} />}
+                {regime === 'old' && R.savingsDed > 0 && <ResultRow label="Sec 80TTA/TTB Savings Interest" value={<AnimatedNumber value={R.savingsDed} animKey={animKey} prefix="-₹" />} />}
+                <ResultRow label="Total Deductions" value={<AnimatedNumber value={R.totalChapterVIA} animKey={animKey} prefix="-₹" />} highlight />
               </>
             )}
-            <ResultRow label="NET TAXABLE INCOME" value={fmtR(R.taxableIncome)} highlight />
+            <ResultRow label="NET TAXABLE INCOME" value={<AnimatedNumber value={R.taxableIncome} animKey={animKey} />} highlight />
           </div>
 
           {/* Slab Breakdown */}
@@ -1354,18 +1358,18 @@ export default function IncomeTaxCalculator() {
                     {fmtR(row.from)} – {row.to === Infinity ? 'Above' : fmtR(row.to)} @ {row.rate}%
                   </span>
                   <span className="text-white font-mono">
-                    {row.tax === 0 ? <span className="text-white/50">NIL</span> : fmtR(row.tax)}
+                    {row.tax === 0 ? <span className="text-white/50">NIL</span> : <AnimatedNumber value={row.tax} animKey={animKey} />}
                   </span>
                 </div>
               ))}
               <div className="flex justify-between items-center py-1.5 border-t border-white/10 text-sm font-semibold mt-1">
                 <span className="text-white">Tax on Total Income</span>
-                <span className="text-white font-mono">{fmtR(R.rawTaxBase)}</span>
+                <span className="text-white font-mono"><AnimatedNumber value={R.rawTaxBase} animKey={animKey} /></span>
               </div>
               {R.rebate87A > 0 && (
                 <div className="flex justify-between items-center py-1 text-sm">
                   <span className="text-green-400">Less: Rebate u/s 87A</span>
-                  <span className="text-green-400 font-mono">- {fmtR(R.rebate87A)}</span>
+                  <span className="text-green-400 font-mono"><AnimatedNumber value={R.rebate87A} animKey={animKey} prefix="-₹" /></span>
                 </div>
               )}
               {R.rebateNote && (
@@ -1373,21 +1377,21 @@ export default function IncomeTaxCalculator() {
               )}
               <div className="flex justify-between items-center py-1 text-sm">
                 <span className="text-white/60">Tax after Rebate</span>
-                <span className="text-white font-mono">{fmtR(R.taxAfterRebate)}</span>
+                <span className="text-white font-mono"><AnimatedNumber value={R.taxAfterRebate} animKey={animKey} /></span>
               </div>
               {R.surchargeAmt > 0 && (
                 <div className="flex justify-between items-center py-1 text-sm">
                   <span className="text-white/60">Surcharge @ {R.surchargeRate}%</span>
-                  <span className="text-white font-mono">{fmtR(R.surchargeAmt)}</span>
+                  <span className="text-white font-mono"><AnimatedNumber value={R.surchargeAmt} animKey={animKey} /></span>
                 </div>
               )}
               <div className="flex justify-between items-center py-1 text-sm">
                 <span className="text-white/60">Health & Education Cess @ 4%</span>
-                <span className="text-white font-mono">{fmtR(R.cess)}</span>
+                <span className="text-white font-mono"><AnimatedNumber value={R.cess} animKey={animKey} /></span>
               </div>
               <div className="flex justify-between items-center py-2 border-t border-[#ff9f0a]/30 mt-1">
                 <span className="text-[#ff9f0a] font-bold">Total Tax Payable</span>
-                <span className="text-[#ff9f0a] font-bold font-mono text-base">{fmtR(R.totalTax)}</span>
+                <span className="text-[#ff9f0a] font-bold font-mono text-base"><AnimatedNumber value={R.totalTax} animKey={animKey} /></span>
               </div>
             </div>
           </div>
@@ -1396,13 +1400,13 @@ export default function IncomeTaxCalculator() {
           <div className="mt-6">
             <h4 className="text-sm font-semibold text-[#ff9f0a] mb-3">Monthly TDS Schedule</h4>
             <div className="space-y-1 bg-white/[0.03] rounded-xl p-4">
-              <ResultRow label="(A) Total Tax Payable" value={fmtR(R.totalTax)} />
+              <ResultRow label="(A) Total Tax Payable" value={<AnimatedNumber value={R.totalTax} animKey={animKey} />} />
               <ResultRow label={`(B) TDS Already Deducted (${tdsDropdownOptions.find(o => o.value === monthsAlreadyDeducted)?.label || '0 months'})`} value={`- ${fmtR(n(tdsPaidAmount))}`} />
-              <ResultRow label="Balance Tax (A − B)" value={fmtR(R.balanceTax)} highlight />
+              <ResultRow label="Balance Tax (A − B)" value={<AnimatedNumber value={R.balanceTax} animKey={animKey} />} highlight />
               <ResultRow label={`Balance Months (${R.remainingMonths} months)`} value="" />
               <div className="flex justify-between items-center py-2 border-t border-[#ff9f0a]/30 mt-1">
                 <span className="text-[#ff9f0a] font-bold">Monthly TDS Required</span>
-                <span className="text-[#ff9f0a] font-bold font-mono text-base">{fmtR(R.monthlyTDS)}</span>
+                <span className="text-[#ff9f0a] font-bold font-mono text-base"><AnimatedNumber value={R.monthlyTDS} animKey={animKey} /></span>
               </div>
             </div>
           </div>
