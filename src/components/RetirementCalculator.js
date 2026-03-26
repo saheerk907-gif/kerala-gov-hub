@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -151,9 +152,7 @@ function DateRow({ label, value, sub, accent }) {
   );
 }
 
-function MoneyCard({ label, amount, accent, note, ineligible }) {
-  const display = useAnimatedCounter(amount);
-  const fmt = (v) => '₹' + v.toLocaleString('en-IN');
+function MoneyCard({ label, amount, accent, note, ineligible, animKey }) {
   return (
     <div className="flex flex-col gap-1.5 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
       <span className="text-[10px] uppercase tracking-wider text-white/55 font-semibold">{label}</span>
@@ -161,7 +160,7 @@ function MoneyCard({ label, amount, accent, note, ineligible }) {
         <span className="text-xs text-amber-400 font-semibold leading-snug">{ineligible}</span>
       ) : (
         <span className="text-xl font-[900] tabular-nums leading-none" style={{ color: accent ? ACCENT : 'white' }}>
-          {fmt(display)}
+          <AnimatedNumber value={amount} animKey={animKey} />
         </span>
       )}
       {note && <span className="text-[10px] text-white/45 leading-relaxed">{note}</span>}
@@ -305,6 +304,8 @@ export default function RetirementCalculator() {
   const [daPercent, setDaPercent] = useState('');
   const [elBalance, setElBalance] = useState('');
   const [commutePct, setCommutePct] = useState(33);
+  const [animKey, setAnimKey] = useState(0);
+  const prevCalcNull = useRef(true);
 
   const ready = dob && doj;
 
@@ -327,6 +328,12 @@ export default function RetirementCalculator() {
     if (!calc || calc.isNPS || !calc.financials) return null;
     return calcCommutation(calc.financials.monthlyPension, calc.retirementDate, commutePct);
   }, [calc, commutePct]);
+
+  useEffect(() => {
+    const wasNull = prevCalcNull.current;
+    prevCalcNull.current = calc === null;
+    if (wasNull && calc !== null) setAnimKey(k => k + 1);
+  }, [calc]);
 
   return (
     <div className="space-y-6">
@@ -466,7 +473,7 @@ export default function RetirementCalculator() {
               {calc.isNPS ? (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                    <MoneyCard label="Leave Encashment (estimate)" amount={calc.financials.leaveEncashment} accent />
+                    <MoneyCard label="Leave Encashment (estimate)" amount={calc.financials.leaveEncashment} accent animKey={animKey} />
                   </div>
                   <div className="rounded-xl px-4 py-3 bg-[#64d2ff]/10 border border-[#64d2ff]/20">
                     <p className="text-xs text-[#64d2ff] font-semibold mb-1">NPS Subscriber — Pension &amp; DCRG not applicable</p>
@@ -484,17 +491,20 @@ export default function RetirementCalculator() {
                       amount={calc.financials.monthlyPension}
                       accent
                       note={calc.financials.pensionFloored ? 'Minimum pension applies (₹11,500)' : '50% of last month emoluments'}
+                      animKey={animKey}
                     />
                     <MoneyCard
                       label="DCRG (estimate)"
                       amount={calc.financials.dcrg}
                       ineligible={!calc.financials.dcrgEligible ? 'Not eligible — minimum 5 years qualifying service required' : null}
                       note={calc.financials.dcrgCapped ? 'Capped at ₹17,00,000' : `${calc.qualifyingYears} qualifying years × emoluments`}
+                      animKey={animKey}
                     />
                     <MoneyCard
                       label="Leave Encashment (estimate)"
                       amount={calc.financials.leaveEncashment}
                       note={`${calc.elDays} EL days × (emoluments ÷ 30)`}
+                      animKey={animKey}
                     />
                   </div>
 
@@ -532,21 +542,21 @@ export default function RetirementCalculator() {
                         <div className="flex flex-col gap-1 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
                           <span className="text-[9px] uppercase tracking-wider text-white/50 font-semibold">Commuted Monthly</span>
                           <span className="text-base font-[900] tabular-nums" style={{ color: '#ff9f0a' }}>
-                            ₹{commutation.commutedMonthly.toLocaleString('en-IN')}
+                            <AnimatedNumber value={commutation.commutedMonthly} animKey={animKey} />
                           </span>
                           <span className="text-[9px] text-white/35">deducted from pension</span>
                         </div>
                         <div className="flex flex-col gap-1 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
                           <span className="text-[9px] uppercase tracking-wider text-white/50 font-semibold">Lump Sum Received</span>
                           <span className="text-base font-[900] tabular-nums" style={{ color: ACCENT }}>
-                            ₹{commutation.lumpSum.toLocaleString('en-IN')}
+                            <AnimatedNumber value={commutation.lumpSum} animKey={animKey} />
                           </span>
                           <span className="text-[9px] text-white/35">commuted × 11.10 × 12</span>
                         </div>
                         <div className="flex flex-col gap-1 rounded-xl p-3 bg-white/[0.04] border border-white/[0.07]">
                           <span className="text-[9px] uppercase tracking-wider text-white/50 font-semibold">Reduced Pension</span>
                           <span className="text-base font-[900] tabular-nums text-white">
-                            ₹{commutation.reducedPension.toLocaleString('en-IN')}
+                            <AnimatedNumber value={commutation.reducedPension} animKey={animKey} />
                           </span>
                           <span className="text-[9px] text-white/35">per month after commutation</span>
                         </div>
