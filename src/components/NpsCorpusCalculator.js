@@ -1,6 +1,7 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SectionHeader from '@/components/SectionHeader';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 const GOLD = '#ff9f0a';
 
@@ -163,6 +164,8 @@ export default function NpsCorpusCalculator() {
   const [roi,            setRoi]            = useState(10);
   const [annuityRatio,   setAnnuityRatio]   = useState(40);
   const [annuityRate,    setAnnuityRate]    = useState(6);
+  const [animKey, setAnimKey] = useState(0);
+  useEffect(() => { setAnimKey(1); }, []);
 
   const result = useMemo(() => {
     const years = Math.max(retirementAge - currentAge, 1);
@@ -322,7 +325,7 @@ export default function NpsCorpusCalculator() {
               Total NPS Corpus at Retirement
             </div>
             <div className="text-[clamp(32px,6vw,52px)] font-black" style={{ color: GOLD }}>
-              {fmtINR(result.totalCorpus)}
+              <AnimatedNumber value={result.totalCorpus} animKey={animKey} />
             </div>
             <div className="text-xs text-white/45 mt-1">
               After {result.years} years · Invested: {fmtINR(result.totalInvested)} · Gains: {fmtINR(result.totalGains)} ({gainPct}%)
@@ -331,13 +334,13 @@ export default function NpsCorpusCalculator() {
 
           <ResultCard icon="💰" label="Lump Sum Withdrawal"
             sublabel={`${100 - annuityRatio}% of corpus — tax-free`}
-            value={fmtINR(result.lumpSum)} />
+            value={<AnimatedNumber value={result.lumpSum} animKey={animKey} />} />
           <ResultCard icon="📈" label="Annuity Corpus"
             sublabel={`${annuityRatio}% used to buy pension`}
-            value={fmtINR(result.annuityCorpus)} />
+            value={<AnimatedNumber value={result.annuityCorpus} animKey={animKey} />} />
           <ResultCard icon="🏦" label="Estimated Monthly Pension"
             sublabel={`At ${annuityRate}% annuity rate`}
-            value={fmtINR(result.monthlyPension)} highlight />
+            value={<AnimatedNumber value={result.monthlyPension} animKey={animKey} />} highlight />
           <ResultCard icon="📅" label="Contribution Period"
             sublabel="Years of NPS contributions"
             value={`${result.years} years`} />
