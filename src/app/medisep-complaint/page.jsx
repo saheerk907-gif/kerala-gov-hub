@@ -1,20 +1,13 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'MEDISEP Complaint — How to File a Grievance',
-  description:
-    'How to file a MEDISEP complaint or grievance for Kerala government employees — online portal, helpline, email, escalation process, and resolution timeline.',
-  keywords:
-    'MEDISEP complaint, MEDISEP grievance, MEDISEP appeal, MEDISEP claim rejected, MEDISEP helpline 1800-425-1530, Kerala employee complaint',
-  alternates: { canonical: 'https://keralaemployees.in/medisep-complaint' },
-  openGraph: {
-    title: 'MEDISEP Complaint — Complete Grievance Filing Guide',
-    description: 'How to file MEDISEP complaint online, by phone, or by email for Kerala government employees.',
-    url: 'https://keralaemployees.in/medisep-complaint',
-    type: 'article',
-  },
-};
+export const metadata = buildMetadata({
+  title: 'MEDISEP Complaint — Kerala Govt Health Insurance Grievance',
+  description: 'File a MEDISEP complaint or grievance — claim rejection, hospital billing issues, cashless denial and escalation process for Kerala government employees.',
+  path: '/medisep-complaint',
+  keywords: ['MEDISEP complaint Kerala', 'MEDISEP grievance', 'MEDISEP claim rejection', 'Kerala health insurance complaint'],
+});
 
 const faqJsonLd = {
   '@context': 'https://schema.org',

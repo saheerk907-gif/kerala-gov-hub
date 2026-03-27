@@ -2,10 +2,15 @@
 import { Suspense } from 'react';
 import ForumPage from '@/components/forum/ForumPage';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
 export const metadata = {
-  title: 'ചർച്ചാ വേദി | Kerala Employees',
-  description: 'കേരള സർക്കാർ ജീവനക്കാരുടെ ചർച്ചാ വേദി — NPS, Pension, Leave, Service Matters',
+  ...buildMetadata({
+    title: 'ചർച്ചാ വേദി — Kerala Government Employees Forum',
+    description: 'Kerala government employee discussion forum — NPS, Pension, Leave, Service Matters. Ask questions and share experiences with fellow employees.',
+    path: '/forum',
+    keywords: ['Kerala government employees forum', 'NPS discussion Kerala', 'pension discussion', 'leave rules discussion', 'service matters Kerala'],
+  }),
   robots: { index: false },
 };
 

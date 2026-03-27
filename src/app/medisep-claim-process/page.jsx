@@ -1,20 +1,13 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'MEDISEP Claim Process — Cashless & Reimbursement Guide',
-  description:
-    'Complete step-by-step guide to MEDISEP claim process for Kerala government employees — cashless treatment, reimbursement claim, required documents, time limits, and common mistakes to avoid.',
-  keywords:
-    'MEDISEP claim process, MEDISEP cashless treatment, MEDISEP reimbursement, MEDISEP pre-authorization, MEDISEP claim documents, Kerala employee health claim',
-  alternates: { canonical: 'https://keralaemployees.in/medisep-claim-process' },
-  openGraph: {
-    title: 'MEDISEP Claim Process — Complete Guide for Kerala Employees',
-    description: 'Step-by-step guide for MEDISEP cashless and reimbursement claims.',
-    url: 'https://keralaemployees.in/medisep-claim-process',
-    type: 'article',
-  },
-};
+export const metadata = buildMetadata({
+  title: 'MEDISEP Claim Process — Kerala Govt Employee Insurance',
+  description: 'Step-by-step MEDISEP claim process — cashless hospitalisation, reimbursement claims, required documents and timelines for Kerala government employees.',
+  path: '/medisep-claim-process',
+  keywords: ['MEDISEP claim process Kerala', 'MEDISEP cashless claim', 'MEDISEP reimbursement', 'MEDISEP hospitalisation Kerala'],
+});
 
 const faqJsonLd = {
   '@context': 'https://schema.org',

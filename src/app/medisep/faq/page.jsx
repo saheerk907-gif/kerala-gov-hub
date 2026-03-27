@@ -1,30 +1,13 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'MEDISEP FAQ Malayalam | MEDISEP സംശയങ്ങൾക്ക് ഉത്തരം | Kerala Employees',
-  description:
-    'MEDISEP login, card download, claim process, reimbursement, helpline number, hospitals list — കേരള ജീവനക്കാർക്കും പെൻഷണർമാർക്കുമുള്ള 20 പ്രധാന MEDISEP ചോദ്യങ്ങൾക്ക് ഉത്തരം.',
-  keywords: [
-    'MEDISEP FAQ Malayalam',
-    'MEDISEP login',
-    'MEDISEP card download',
-    'MEDISEP claim process',
-    'MEDISEP helpline number',
-    'MEDISEP reimbursement',
-    'MEDISEP hospitals list',
-    'MEDISEP premium',
-    'Kerala government employee health insurance',
-    'മെഡിസെപ്',
-  ],
-  alternates: { canonical: 'https://keralaemployees.in/medisep/faq' },
-  openGraph: {
-    title: 'MEDISEP FAQ | 20 പ്രധാന ചോദ്യങ്ങൾക്ക് ഉത്തരം',
-    description: 'MEDISEP login, claim, reimbursement, hospitals, helpline — കേരള ജീവനക്കാർക്കുള്ള complete guide.',
-    url: 'https://keralaemployees.in/medisep/faq',
-    type: 'article',
-  },
-};
+export const metadata = buildMetadata({
+  title: 'MEDISEP FAQ Malayalam — 20 Questions Answered',
+  description: 'MEDISEP login, card download, claim process, reimbursement, helpline, hospitals list — answers to 20 common MEDISEP questions for Kerala government employees.',
+  path: '/medisep/faq',
+  keywords: ['MEDISEP FAQ Malayalam', 'MEDISEP login', 'MEDISEP card download', 'MEDISEP claim process', 'MEDISEP helpline number', 'MEDISEP reimbursement', 'Kerala government employee health insurance'],
+});
 
 const SECTIONS = [
   {

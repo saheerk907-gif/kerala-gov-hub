@@ -1,21 +1,13 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം | Kerala Pension Calculation Guide',
-  description:
-    'കേരള സർവീസ് റൂൾസ് (KSR) Part III പ്രകാരം ഒരു സർക്കാർ ജീവനക്കാരന്റെ പെൻഷൻ എങ്ങനെ കണക്കാക്കാം — ശരാശരി വേതനം, യോഗ്യമായ സേവനം, അർദ്ധവർഷ യൂണിറ്റുകൾ, ഫോർമുല, ഉദാഹരണം.',
-  keywords:
-    'Kerala pension calculation Malayalam, KSR pension formula, ശരാശരി വേതനം, qualifying service half year units, pension calculation step by step Kerala, Kerala government pension guide',
-  alternates: { canonical: 'https://keralaemployees.in/pension-calculation' },
-  openGraph: {
-    title: 'പെൻഷൻ കണക്കുകൂട്ടൽ — ഘട്ടം ഘട്ടമായുള്ള മാർഗ്ഗനിർദ്ദേശം',
-    description:
-      'Kerala Service Rules Part III — Average Emoluments, Qualifying Service, Half-year Units, Pension Formula. Complete step-by-step guide in Malayalam.',
-    url: 'https://keralaemployees.in/pension-calculation',
-    type: 'article',
-  },
-};
+export const metadata = buildMetadata({
+  title: 'Pension Calculation Guide — Kerala Government Employees',
+  description: 'Step-by-step Kerala pension calculation guide — average emoluments, qualifying service, half-year units, pension formula. KSR Part III explained in Malayalam.',
+  path: '/pension-calculation',
+  keywords: ['Kerala pension calculation Malayalam', 'KSR pension formula', 'qualifying service Kerala pension', 'pension calculation step by step Kerala', 'Kerala government pension guide'],
+});
 
 const faqJsonLd = {
   '@context': 'https://schema.org',
