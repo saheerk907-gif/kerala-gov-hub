@@ -37,7 +37,7 @@ export default function ForumSection() {
   }, []);
 
   return (
-    <section className="relative py-7 md:py-10 px-4 md:px-6">
+    <section id="community" className="relative py-7 md:py-10 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto border-t border-white/[0.06] pt-7 md:pt-10">
 
         {/* Header */}
