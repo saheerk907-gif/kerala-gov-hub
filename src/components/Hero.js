@@ -105,13 +105,10 @@ export default function Hero() {
         {/* Headings */}
         <div className="flex flex-col items-center gap-2 md:gap-3 mb-4 md:mb-5">
           <h1
-            className="font-malayalam font-bold leading-[1.05] tracking-tight"
+            className="font-malayalam font-bold leading-[1.05] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
             style={{
               fontSize: 'clamp(36px, 7vw, 84px)',
-              background: titleGrad,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              backgroundImage: titleGrad,
               filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
             }}
           >
