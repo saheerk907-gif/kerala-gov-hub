@@ -23,11 +23,12 @@ const BASE_URL = 'https://keralaemployees.in';
 export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Kerala Government Employees Portal – KSR Rules, MEDISEP, Pension, GOs & Calculators',
+    default: 'Kerala Employees Portal – Salary, DA, Pension Updates', // 54 chars
     template: '%s | Kerala Employees',
   },
   description:
-    'കേരള സർക്കാർ ജീവനക്കാർക്കുള്ള സമഗ്ര പോർട്ടൽ. KSR ചട്ടങ്ങൾ, MEDISEP, പെൻഷൻ വിവരങ്ങൾ, സർക്കാർ ഉത്തരവുകൾ, ശമ്പള കണക്കുകൂട്ടൽ — എല്ലാം ഒരിടത്ത്. Kerala Service Rules, pension calculator, GPF, departmental tests & government orders.',
+    'Latest Kerala govt employee updates: DA arrears, pension rules, MEDISEP, salary tools & calculators. Simple, accurate, updated.',
+  // Keep description under 160 chars — do not exceed
   keywords:
     'Kerala government employees, കേരള സർക്കാർ ജീവനക്കാർ, MEDISEP, Kerala pension calculator, KSR rules, Kerala service rules, GPF, NPS, APS, PRC calculator, government orders Kerala, departmental tests Kerala, pension forms Kerala, DCRG calculator',
   authors: [{ name: 'Kerala Employees', url: BASE_URL }],
@@ -35,21 +36,26 @@ export const metadata = {
   publisher: 'Kerala Employees',
   robots: { index: true, follow: true },
   themeColor: '#121416',
+  alternates: { canonical: BASE_URL },
+  icons: {
+    icon: '/logo.webp',
+    apple: '/logo.webp',
+  },
   openGraph: {
     type: 'website',
     locale: 'ml_IN',
     url: BASE_URL,
     siteName: 'Kerala Employees',
-    title: 'Kerala Government Employees Portal – KSR, MEDISEP, Pension & Calculators',
+    title: 'Kerala Employees Portal – Salary, DA, Pension Updates',
     description:
-      'കേരള സർക്കാർ ജീവനക്കാർക്കുള്ള സമഗ്ര പോർട്ടൽ. KSR ചട്ടങ്ങൾ, MEDISEP, പെൻഷൻ, സർക്കാർ ഉത്തരവുകൾ, ശമ്പള കണക്കുകൂട്ടൽ.',
+      'Latest Kerala govt employee updates: DA arrears, pension rules, MEDISEP, salary tools & calculators.',
     images: [{ url: `${BASE_URL}/og-image.png`, width: 1200, height: 630, alt: 'Kerala Government Employees Portal' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kerala Government Employees Portal – KSR, MEDISEP, Pension & Calculators',
+    title: 'Kerala Employees Portal – Salary, DA, Pension Updates',
     description:
-      'KSR ചട്ടങ്ങൾ, MEDISEP, പെൻഷൻ കാൽക്കുലേറ്റർ, സർക്കാർ ഉത്തരവുകൾ — കേരള ജീവനക്കാർക്കുള്ള സമഗ്ര പോർട്ടൽ.',
+      'DA arrears, pension rules, MEDISEP, salary tools & calculators for Kerala government employees.',
     images: [`${BASE_URL}/og-image.png`],
   },
 };
