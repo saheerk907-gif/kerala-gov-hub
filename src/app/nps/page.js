@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import NpsQueryForm from '@/components/NpsQueryForm';
 import NpsGovOrders from '@/components/NpsGovOrders';
 import Link from 'next/link';
+import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
@@ -369,6 +370,15 @@ export default async function NpsPage() {
             </p>
             <NpsQueryForm />
           </section>
+
+          <RelatedLinks
+            heading="Related"
+            links={[
+              { href: '/nps-aps', label: 'APS pension option' },
+              { href: '/retirement', label: 'Retirement date calculator' },
+              { href: '/nps/calculator', label: 'NPS corpus calculator' },
+            ]}
+          />
 
           <div className="pt-4 border-t border-white/[0.06]">
             <a href="/"

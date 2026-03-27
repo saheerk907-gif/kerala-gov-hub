@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
@@ -104,6 +105,15 @@ export default async function MedisepPage() {
               <p>Content coming soon.</p>
             </div>
           )}
+
+          <RelatedLinks
+            heading="Related Pages"
+            links={[
+              { href: '/medisep-claim-process', label: 'MEDISEP claim process' },
+              { href: '/medisep-complaint', label: 'File a MEDISEP complaint' },
+              { href: '/orders', label: 'MEDISEP government orders' },
+            ]}
+          />
 
           <div className="mt-16 pt-8 border-t border-white/[0.06]">
             <a href="/" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold no-underline transition-all"

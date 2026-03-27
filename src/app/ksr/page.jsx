@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import KsrGovOrders from '@/components/KsrGovOrders';
 import KsrQueryForm from '@/components/KsrQueryForm';
 import Link from 'next/link';
+import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
 export const revalidate = 60;
@@ -364,6 +365,15 @@ export default async function KsrPage() {
             </p>
             <KsrQueryForm />
           </section>
+
+          <RelatedLinks
+            heading="Related"
+            links={[
+              { href: '/departmental-tests', label: 'Departmental test eligibility' },
+              { href: '/leave', label: 'Leave rules (KSR Part I)' },
+              { href: '/forms', label: 'KSR service forms' },
+            ]}
+          />
 
           <div className="pt-4 border-t border-white/[0.06]">
             <a href="/"
