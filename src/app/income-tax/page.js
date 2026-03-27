@@ -167,7 +167,7 @@ export default function IncomeTaxPage() {
             heading="Related Tools"
             links={[
               { href: '/da-arrear', label: 'DA arrear calculator' },
-              { href: '/pension', label: 'Pension income calculator' },
+              { href: '/pension', label: 'Pension calculator' },
               { href: '/nps', label: 'NPS contribution details' },
             ]}
           />

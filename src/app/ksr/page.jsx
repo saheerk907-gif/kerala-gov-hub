@@ -370,7 +370,7 @@ export default async function KsrPage() {
             heading="Related"
             links={[
               { href: '/departmental-tests', label: 'Departmental test eligibility' },
-              { href: '/leave', label: 'Leave rules (KSR Part I)' },
+              { href: '/leave', label: 'Leave rules (KSR Part II)' },
               { href: '/forms', label: 'KSR service forms' },
             ]}
           />
