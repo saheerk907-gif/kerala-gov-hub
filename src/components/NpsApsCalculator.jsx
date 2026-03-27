@@ -355,18 +355,18 @@ export default function NpsApsCalculator() {
             </div>
 
             {/* NPS */}
-            <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(41,151,255,0.05)', border: '1px solid rgba(41,151,255,0.15)' }}>
-              <div className="text-[9px] font-black uppercase tracking-widest text-[#2997ff]/60 mb-3">
+            <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.09)' }}>
+              <div className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3">
                 {ml ? 'NPS (ദേശീയ പെൻഷൻ)' : 'NPS — National Pension'}
               </div>
-              <div className="text-[38px] font-black text-[#2997ff] leading-none mb-2">
+              <div className="text-[38px] font-black text-white/90 leading-none mb-2">
                 <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
               </div>
               <div className="text-[11px] text-white/55 mb-3">
                 40% @ {annRate}% &nbsp;·&nbsp; + {fmt(pvOn ? R.lumpPV : R.lump)} {ml ? 'ഒറ്റത്തവണ' : 'lump sum'}
               </div>
               <div className="flex gap-2 justify-center flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-[#2997ff]" style={{ background: 'rgba(41,151,255,0.12)', border: '1px solid rgba(41,151,255,0.2)' }}>60% {ml ? 'ഒറ്റത്തവണ' : 'Lump Sum'}</span>
+                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-white/55" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>60% {ml ? 'ഒറ്റത്തവണ' : 'Lump Sum'}</span>
                 <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-[#ff453a]" style={{ background: 'rgba(255,69,58,0.12)', border: '1px solid rgba(255,69,58,0.2)' }}>⚠ {ml ? 'DR ഇല്ല' : 'No DR'}</span>
               </div>
             </div>
@@ -374,8 +374,8 @@ export default function NpsApsCalculator() {
 
           {/* Winner banner */}
           <div className="rounded-xl px-5 py-3 text-center mb-4"
-            style={{ background: R.apsP > R.npsP ? 'rgba(48,209,88,0.07)' : 'rgba(41,151,255,0.07)', border: `1px solid ${R.apsP > R.npsP ? 'rgba(48,209,88,0.2)' : 'rgba(41,151,255,0.2)'}` }}>
-            <div className="text-[14px] font-black" style={{ color: R.apsP > R.npsP ? '#30d158' : '#2997ff' }}>
+            style={{ background: R.apsP > R.npsP ? 'rgba(48,209,88,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${R.apsP > R.npsP ? 'rgba(48,209,88,0.2)' : 'rgba(255,255,255,0.12)'}` }}>
+            <div className="text-[14px] font-black" style={{ color: R.apsP > R.npsP ? '#30d158' : 'rgba(255,255,255,0.88)' }}>
               {R.apsP > R.npsP ? '🛡️ APS' : '📊 NPS'} {ml ? 'കൂടുതൽ' : 'pays'} {fmtF(Math.abs(R.apsP - R.npsP))}/{ml ? 'മാസം' : 'month'} {ml ? 'നൽകുന്നു' : 'more'}
             </div>
             {R.brk && R.apsP > R.npsP && (
@@ -403,10 +403,10 @@ export default function NpsApsCalculator() {
         {/* ── Quick stats ───────────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {[
-            { label: ml ? 'NPS കോർപ്പസ്' : 'NPS Corpus',    value: pvOn ? Math.round(R.fC * R.rIA) : R.fC,    sub: `${fmt(R.totC)} contrib`,    color: '#2997ff' },
-            { label: ml ? 'ഒറ്റത്തവണ (60%)' : 'Lump Sum (60%)', value: pvOn ? R.lumpPV : R.lump,            sub: ml ? 'വിരമിക്കലിൽ'  : 'At retirement', color: '#ff9f0a' },
+            { label: ml ? 'NPS കോർപ്പസ്' : 'NPS Corpus',    value: pvOn ? Math.round(R.fC * R.rIA) : R.fC,    sub: `${fmt(R.totC)} contrib`,    color: 'rgba(255,255,255,0.88)' },
+            { label: ml ? 'ഒറ്റത്തവണ (60%)' : 'Lump Sum (60%)', value: pvOn ? R.lumpPV : R.lump,            sub: ml ? 'വിരമിക്കലിൽ'  : 'At retirement', color: 'rgba(255,255,255,0.88)' },
             { label: ml ? 'അവസാന ഗ്രോസ്' : 'Last Gross Pay', value: R.lG,                                   sub: `Basic ${fmtF(R.lB)}`,                color: '#30d158' },
-            { label: ml ? 'സേവനം' : 'Service',                value: null, text: `${R.serviceYears} yrs`,    sub: `→ ${retMonthName} ${R.retYear}`, color: '#bf5af2' },
+            { label: ml ? 'സേവനം' : 'Service',                value: null, text: `${R.serviceYears} yrs`,    sub: `→ ${retMonthName} ${R.retYear}`, color: 'rgba(255,255,255,0.88)' },
           ].map((s, i) => (
             <div key={i} className="rounded-2xl p-4" style={CARD}>
               <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">{s.label}</div>
@@ -423,7 +423,7 @@ export default function NpsApsCalculator() {
           <div className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2" style={{ background: 'rgba(255,69,58,0.07)', border: '1px solid rgba(255,69,58,0.2)', color: '#ff9f9f' }}>
             🚫 <span><strong>{ml ? 'DCRG ഇല്ല:' : 'No DCRG:'}</strong> {ml ? 'APS അല്ലെങ്കിൽ NPS-ൽ കേരള സർക്കാർ ജീവനക്കാർക്ക് DCRG ലഭിക്കില്ല.' : 'Kerala government employees do NOT receive DCRG under APS or NPS.'}</span>
           </div>
-          <div className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2" style={{ background: 'rgba(255,159,10,0.07)', border: '1px solid rgba(255,159,10,0.2)', color: '#ffcc66' }}>
+          <div className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2" style={{ background: 'rgba(255,69,58,0.07)', border: '1px solid rgba(255,69,58,0.2)', color: '#ff9f9f' }}>
             ⚠️ <span><strong>G.O.(P) No.33/2026/F.N (28.02.2026):</strong> {ml ? 'APS-ൽ ഒറ്റത്തവണ തുക ഉണ്ടാകില്ലെന്ന് G.O. സൂചിപ്പിക്കുന്നു.' : 'Latest G.O. on APS does not mention any lump sum.'}</span>
           </div>
         </div>
@@ -434,8 +434,8 @@ export default function NpsApsCalculator() {
             <button key={t.id} onClick={() => setTab(t.id)}
               className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold whitespace-nowrap transition-all"
               style={{
-                background: tab === t.id ? '#ff9f0a' : 'var(--surface-xs)',
-                border: tab === t.id ? '1px solid #ff9f0a' : '1px solid var(--surface-sm)',
+                background: tab === t.id ? '#30d158' : 'var(--surface-xs)',
+                border: tab === t.id ? '1px solid #30d158' : '1px solid var(--surface-sm)',
                 color: tab === t.id ? '#000' : 'var(--text-faint)',
                 cursor: 'pointer',
               }}>
@@ -457,7 +457,7 @@ export default function NpsApsCalculator() {
                       { name: ml ? `സർക്കാർ ${govPct}%` : `Govt ${govPct}%`, value: R.govC },
                       { name: ml ? 'Returns'    : 'Returns',        value: R.totR },
                     ]} cx="50%" cy="50%" innerRadius={52} outerRadius={80} paddingAngle={4} dataKey="value">
-                      {['#2997ff','#30d158','#ff9f0a'].map((c, i) => <Cell key={i} fill={c} />)}
+                      {['rgba(255,255,255,0.55)','#30d158','rgba(255,255,255,0.25)'].map((c, i) => <Cell key={i} fill={c} />)}
                     </Pie>
                     <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
                     <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
@@ -473,7 +473,7 @@ export default function NpsApsCalculator() {
                       { name: ml ? 'ഒറ്റത്തവണ 60%' : 'Lump 60%',    value: R.lump },
                       { name: ml ? 'Annuity 40%' : 'Annuity 40%', value: R.annCorp },
                     ]} cx="50%" cy="50%" innerRadius={52} outerRadius={80} paddingAngle={4} dataKey="value">
-                      {['#ff9f0a','#2997ff'].map((c, i) => <Cell key={i} fill={c} />)}
+                      {['#30d158','rgba(255,255,255,0.35)'].map((c, i) => <Cell key={i} fill={c} />)}
                     </Pie>
                     <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
                     <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
@@ -487,8 +487,8 @@ export default function NpsApsCalculator() {
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {R.data.filter(d => d.isRev).map(d => (
                   <div key={d.year} className="rounded-xl p-3 flex-shrink-0 min-w-[150px]"
-                    style={{ background: 'var(--surface-xs)', border: '1px solid rgba(255,159,10,0.2)' }}>
-                    <div className="text-[10px] font-black text-[#ff9f0a] mb-1">{d.revLabel}</div>
+                    style={{ background: 'var(--surface-xs)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div className="text-[10px] font-black text-white/55 mb-1">{d.revLabel}</div>
                     <div className="text-[11px] text-white/50">Basic: {fmtF(d.basic)}</div>
                     <div className="text-[11px] text-white/55">DA: {d.daPct}%</div>
                   </div>
@@ -505,7 +505,7 @@ export default function NpsApsCalculator() {
                   { type: 'warn', text: ml ? `APS ${postDR}%/yr DR-ൊടൊപ്പം വളരുന്നു. NPS annuity ഉറച്ചതാണ് — വർഷങ്ങൾ പോകുംതോറും വ്യത്യാസം കൂടും.` : `APS pension grows with DR (${postDR}%/yr) after retirement. NPS annuity is fixed — gap widens over time.` },
                   { type: 'info', text: ml ? '12th Pay Rev (ജൂൺ 2026): Basic×1.38, DA resets to 4%. അടുത്ത revisions ഓരോ 5 വർഷവും.' : '12th Pay Rev (Jun 2026): Basic×1.38, DA resets to 4%. Next revisions every 5 years.' },
                 ].map((n, i) => {
-                  const cols = { ok: ['rgba(48,209,88,0.07)','rgba(48,209,88,0.2)','#86efac'], info: ['rgba(41,151,255,0.07)','rgba(41,151,255,0.2)','#93c5fd'], warn: ['rgba(255,159,10,0.07)','rgba(255,159,10,0.2)','#fcd34d'] }[n.type];
+                  const cols = { ok: ['rgba(48,209,88,0.07)','rgba(48,209,88,0.2)','#86efac'], info: ['rgba(255,255,255,0.04)','rgba(255,255,255,0.12)','rgba(255,255,255,0.65)'], warn: ['rgba(255,69,58,0.07)','rgba(255,69,58,0.2)','#ff9f9f'] }[n.type];
                   const icons = { ok: '✅', info: 'ℹ️', warn: '⚠️' };
                   return (
                     <div key={i} className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2"
@@ -533,7 +533,7 @@ export default function NpsApsCalculator() {
                   <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
                   <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Area type="monotone" dataKey={pvOn ? 'annSalPV' : 'annSal'} name={ml ? 'വാർഷിക ശമ്പളം' : 'Annual Salary'} fill="rgba(41,151,255,0.08)" stroke="#2997ff" strokeWidth={2} />
+                  <Area type="monotone" dataKey={pvOn ? 'annSalPV' : 'annSal'} name={ml ? 'വാർഷിക ശമ്പളം' : 'Annual Salary'} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
                   <Line type="monotone" dataKey="basic" name={ml ? 'Basic Pay' : 'Basic Pay'} stroke="#30d158" strokeWidth={1.5} dot={false} />
                   {R.data.filter(d => d.isRev).map(d => <ReferenceLine key={d.year} x={d.year} stroke="var(--surface-sm)" strokeDasharray="3 3" />)}
                 </ComposedChart>
@@ -548,8 +548,8 @@ export default function NpsApsCalculator() {
                 <AreaChart data={R.data}>
                   <defs>
                     <linearGradient id="corpG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#2997ff" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#2997ff" stopOpacity={0} />
+                      <stop offset="5%"  stopColor="rgba(255,255,255,0.5)" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="rgba(255,255,255,0.5)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
@@ -557,7 +557,7 @@ export default function NpsApsCalculator() {
                   <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
                   <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Area type="monotone" dataKey={pvOn ? 'corpusPV' : 'corpus'} name="NPS Corpus" fill="url(#corpG)" stroke="#2997ff" strokeWidth={2} />
+                  <Area type="monotone" dataKey={pvOn ? 'corpusPV' : 'corpus'} name="NPS Corpus" fill="url(#corpG)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
                   <Area type="monotone" dataKey="totC" name={ml ? 'സംഭാവനകൾ' : 'Contributions'} fill="rgba(48,209,88,0.06)" stroke="#30d158" strokeWidth={1.5} />
                 </AreaChart>
               </ResponsiveContainer>
@@ -580,7 +580,7 @@ export default function NpsApsCalculator() {
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
                   <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                   <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke="#30d158" strokeWidth={2.5} dot={false} />
-                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke="#2997ff" strokeWidth={2.5} dot={false} strokeDasharray="6 3" />
+                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke="rgba(255,255,255,0.55)" strokeWidth={2.5} dot={false} strokeDasharray="6 3" />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -597,8 +597,8 @@ export default function NpsApsCalculator() {
                       <stop offset="95%" stopColor="#30d158" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="npsG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#2997ff" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#2997ff" stopOpacity={0} />
+                      <stop offset="5%"  stopColor="rgba(255,255,255,0.5)" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="rgba(255,255,255,0.5)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
@@ -607,7 +607,7 @@ export default function NpsApsCalculator() {
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
                   <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
                   <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG)" stroke="#30d158" strokeWidth={2} />
-                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke="#2997ff" strokeWidth={2} />
+                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -651,17 +651,17 @@ export default function NpsApsCalculator() {
                 <tbody>
                   {R.data.map((r, i) => (
                     <tr key={i} className="border-b transition-colors hover:bg-white/[0.02]"
-                      style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(255,159,10,0.05)' : 'transparent' }}>
+                      style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
                       <td className="px-4 py-2.5 font-bold text-white/70">
-                        {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-[#ff9f0a] font-black">REV</span>}
+                        {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-white/40 font-black">REV</span>}
                       </td>
                       <td className="px-4 py-2.5 text-white/60">{fmtF(r.basic)}</td>
-                      <td className="px-4 py-2.5 text-[#ff9f0a]/70">{r.daPct}%</td>
+                      <td className="px-4 py-2.5 text-white/50">{r.daPct}%</td>
                       <td className="px-4 py-2.5 text-white/70 font-semibold">{fmtF(r.gross)}</td>
                       <td className="px-4 py-2.5 text-[#ff453a]/70">{fmtF(r.nE)}</td>
-                      <td className="px-4 py-2.5 text-[#ff9f0a]/70">{fmtF(r.nG)}</td>
+                      <td className="px-4 py-2.5 text-white/50">{fmtF(r.nG)}</td>
                       <td className="px-4 py-2.5 text-[#30d158]/80 font-semibold">{fmtF(r.mC)}</td>
-                      <td className="px-4 py-2.5 text-[#ff9f0a] font-bold">{fmt(r.corpus)}</td>
+                      <td className="px-4 py-2.5 text-white/70 font-bold">{fmt(r.corpus)}</td>
                       {pvOn && <td className="px-4 py-2.5 text-white/55">{fmt(r.corpusPV)}</td>}
                     </tr>
                   ))}
@@ -670,9 +670,9 @@ export default function NpsApsCalculator() {
                   <tr style={{ borderTop: '2px solid var(--surface-sm)' }}>
                     <td colSpan={4} className="px-4 py-3 font-bold text-white/60 text-[10px]">TOTALS →</td>
                     <td className="px-4 py-3 font-bold text-[#ff453a]">{fmt(R.empC)}</td>
-                    <td className="px-4 py-3 font-bold text-[#ff9f0a]">{fmt(R.govC)}</td>
+                    <td className="px-4 py-3 font-bold text-white/60">{fmt(R.govC)}</td>
                     <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.totC)}</td>
-                    <td className="px-4 py-3 font-black text-[#ff9f0a]">{fmt(R.fC)}</td>
+                    <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.fC)}</td>
                     {pvOn && <td className="px-4 py-3 font-bold text-white/55">{fmt(Math.round(R.fC * R.rIA))}</td>}
                   </tr>
                 </tfoot>
