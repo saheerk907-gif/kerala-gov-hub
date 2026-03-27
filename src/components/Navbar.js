@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
 import SearchModal from '@/components/SearchModal';
 
@@ -194,11 +195,14 @@ export default function Navbar() {
 
           {/* Brand */}
           <a href="/" className="flex items-center gap-2 no-underline group min-w-0 shrink">
-            <picture className="flex-shrink-0">
-              <source srcSet="/logo.webp" type="image/webp" />
-              <img src="/logo.png" alt="Kerala Gov Logo" width={36} height={36}
-                className="w-7 h-7 md:w-9 md:h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all" />
-            </picture>
+            <Image
+              src="/logo.webp"
+              alt="Kerala Gov Logo"
+              width={36}
+              height={36}
+              className="w-7 h-7 md:w-9 md:h-9 rounded-full object-cover ring-1 ring-[#c8960c]/40 shadow-[0_0_14px_rgba(200,150,12,0.2)] group-hover:ring-[#c8960c]/70 transition-all flex-shrink-0"
+              priority
+            />
             <div className="flex flex-col leading-tight min-w-0">
               <span className="text-[12px] sm:text-[14px] font-bold transition-colors truncate bg-clip-text text-transparent" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", backgroundImage: 'linear-gradient(135deg, #c8960c, #f5d060, #c8960c)' }}>
                 കേരള സർക്കാർ ജീവനക്കാർ
