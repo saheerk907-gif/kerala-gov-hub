@@ -25,7 +25,7 @@ export default function Hero() {
   const gold      = isLight ? '#b45309'               : '#f5d060';
   const goldDim   = isLight ? 'rgba(180,83,9,0.65)'   : 'rgba(245,208,96,0.60)';
   const textPri   = isLight ? 'rgba(15,23,42,0.92)'   : 'rgba(255,255,255,0.92)';
-  const textSub   = isLight ? 'rgba(15,23,42,0.50)'   : 'rgba(255,255,255,0.44)';
+  const textSub   = isLight ? 'rgba(15,23,42,0.68)'   : 'rgba(255,255,255,0.72)';
   const border    = isLight ? 'rgba(0,0,0,0.08)'      : 'rgba(255,255,255,0.08)';
   const surface   = isLight ? 'rgba(0,0,0,0.04)'      : 'rgba(255,255,255,0.04)';
   const titleGrad = isLight
