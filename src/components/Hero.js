@@ -106,37 +106,18 @@ export default function Hero() {
         </p>
 
         {/* Malayalam H1 + H2 — do not change */}
-        <div className="flex flex-col items-center gap-1.5 mb-3">
-          <h1
-            className="font-malayalam text-[clamp(38px,8vw,96px)] font-bold leading-[1.05] tracking-tight"
-            style={{
-              background: titleGrad,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              filter: isLight ? 'none' : 'drop-shadow(0 0 10px rgba(200,150,12,0.32))',
-            }}
-          >
-            കേരള സർക്കാർ
-          </h1>
-          {/* thin rule */}
-          <div className="w-12 h-[1.5px] rounded-full" style={{
-            background: isLight
-              ? 'linear-gradient(90deg,transparent,rgba(29,78,216,0.50),transparent)'
-              : 'linear-gradient(90deg,transparent,rgba(200,150,12,0.80),transparent)',
-          }} />
-          <h2
-            className="font-malayalam text-[clamp(20px,4.2vw,54px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
-            style={{
-              backgroundImage: isLight
-                ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
-                : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
-              filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.35))',
-            }}
-          >
-            ജീവനക്കാരുടെ വിജ്ഞാനകോശം
-          </h2>
-        </div>
+        <h1
+          className="font-malayalam text-[clamp(32px,7.5vw,92px)] font-bold leading-[1.05] tracking-tight mb-3 whitespace-nowrap"
+          style={{
+            background: titleGrad,
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+          }}
+        >
+          കേരള സർക്കാർ ജീവനക്കാർ
+        </h1>
 
         {/* English sub-label + description */}
         <p
