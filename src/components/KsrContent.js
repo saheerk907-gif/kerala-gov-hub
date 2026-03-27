@@ -8,7 +8,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
         .ksr-content {
           line-height: 1.9;
           color: #e5e5e7;
-          font-family: var(--font-noto-malayalam), Georgia, serif;
+          font-family: var(--font-ibm-plex-mono), var(--font-noto-malayalam), monospace;
         }
 
         /* Headings */
@@ -19,7 +19,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
           margin: 2.5rem 0 1rem;
           padding-bottom: 0.5rem;
           border-bottom: 1px solid var(--surface-xs);
-          font-family: var(--font-noto-malayalam), sans-serif;
+          font-family: var(--font-ibm-plex-mono), var(--font-noto-malayalam), monospace;
         }
         .ksr-content h2:first-child { margin-top: 0; }
 
@@ -30,7 +30,7 @@ export default function KsrContent({ html, accentColor = '#2997ff' }) {
           margin: 2rem 0 0.6rem;
           padding-left: 12px;
           border-left: 3px solid ${accentColor};
-          font-family: var(--font-noto-malayalam), sans-serif;
+          font-family: var(--font-ibm-plex-mono), var(--font-noto-malayalam), monospace;
         }
 
         /* Paragraphs */

@@ -128,7 +128,7 @@ export default async function GpfPage() {
         </div>
 
         <style dangerouslySetInnerHTML={{ __html: `
-          .scheme-content { font-family: Georgia, serif; line-height: 1.8; color: #e5e5e7; }
+          .scheme-content { font-family: var(--font-ibm-plex-mono), var(--font-noto-malayalam), monospace; line-height: 1.8; color: #e5e5e7; }
           .scheme-content h3 { font-size: 1.1rem; font-weight: 700; color: #30d158; margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid #30d158; }
           .scheme-content p { margin-bottom: 1.25rem; color: #aeaeb2; font-size: 0.95rem; }
           .scheme-content b, .scheme-content strong { color: white; font-weight: 700; }

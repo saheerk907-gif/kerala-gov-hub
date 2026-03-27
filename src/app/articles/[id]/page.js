@@ -174,7 +174,7 @@ export default async function ArticleDetailPage({ params }) {
           [data-theme="light"] .article-hero { background: linear-gradient(135deg, #f8f4ee 0%, #f5f0e8 80%, #ede8df 100%); }
 
           /* ── Article body ── */
-          .article-content { font-family: var(--font-noto-malayalam), Georgia, serif; line-height: 1.9; color: var(--text-secondary); font-size: 1rem; }
+          .article-content { font-family: var(--font-ibm-plex-mono), var(--font-noto-malayalam), monospace; line-height: 1.9; color: var(--text-secondary); font-size: 1rem; }
           .article-content h2 { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 2.5rem 0 1rem; text-align: justify; }
           .article-content h3 { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 2rem 0 0.75rem; padding-left: 12px; border-left: 3px solid var(--accent-blue); text-align: justify; }
           .article-content p { margin-bottom: 1.25rem; }
