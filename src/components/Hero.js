@@ -108,7 +108,7 @@ export default function Hero() {
         {/* Malayalam H1 + H2 — do not change */}
         <div className="flex flex-col items-center gap-1.5 mb-3">
           <h1
-            className="font-malayalam text-[clamp(28px,6.5vw,72px)] font-bold leading-[1.05] tracking-tight"
+            className="font-malayalam text-[clamp(42px,8.5vw,108px)] font-bold leading-[1.05] tracking-tight"
             style={{
               background: titleGrad,
               WebkitBackgroundClip: 'text',
@@ -126,7 +126,7 @@ export default function Hero() {
               : 'linear-gradient(90deg,transparent,rgba(200,150,12,0.80),transparent)',
           }} />
           <h2
-            className="font-malayalam text-[clamp(17px,3.8vw,46px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
+            className="font-malayalam text-[clamp(24px,5.2vw,64px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
               backgroundImage: isLight
                 ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
