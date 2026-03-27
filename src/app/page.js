@@ -35,17 +35,9 @@ export default async function HomePage() {
       {/* 2. Live breaking news ticker */}
       <AnnouncementBanner />
 
-      {/* Trending Article */}
-      <TrendingArticle />
-
       {/* 3. Tools & Calculators — first thing users see */}
       <ScrollReveal direction="up" delay={0}>
         <ToolsSection />
-      </ScrollReveal>
-
-      {/* Employee Experiences */}
-      <ScrollReveal direction="up" delay={100}>
-        <ExperiencesSection />
       </ScrollReveal>
 
       {/* 4 & 5. Orders + News — side by side */}
@@ -62,9 +54,17 @@ export default async function HomePage() {
         </div>
       </div>
 
+      {/* Trending Article */}
+      <TrendingArticle />
+
       {/* 5b. Articles */}
       <ScrollReveal direction="up" delay={100}>
         <ArticlesSection />
+      </ScrollReveal>
+
+      {/* Employee Experiences */}
+      <ScrollReveal direction="up" delay={100}>
+        <ExperiencesSection />
       </ScrollReveal>
 
       {/* 6. Forum — recent discussions */}
