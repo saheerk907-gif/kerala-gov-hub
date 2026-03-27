@@ -6,7 +6,7 @@ import { buildMetadata } from '@/lib/seo';
 
 export const metadata = {
   ...buildMetadata({
-    title: 'ചർച്ചാ വേദി — Kerala Government Employees Forum',
+    title: 'ചർച്ചാ വേദി — Kerala Govt Employees Discussion Forum',
     description: 'Kerala government employee discussion forum — NPS, Pension, Leave, Service Matters. Ask questions and share experiences with fellow employees.',
     path: '/forum',
     keywords: ['Kerala government employees forum', 'NPS discussion Kerala', 'pension discussion', 'leave rules discussion', 'service matters Kerala'],

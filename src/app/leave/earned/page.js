@@ -4,7 +4,7 @@ import LeaveCalculator from '@/components/LeaveCalculator';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
-  title: 'Earned Leave Rules — Kerala Government Employees',
+  title: 'Kerala Govt Earned Leave Rules | KSR Part I Guides',
   description: 'Kerala government employee earned leave rules — accumulation limit, encashment, leave at credit calculation, EL surrender. KSR provisions explained.',
   path: '/leave/earned',
   keywords: ['earned leave Kerala', 'EL rules Kerala government', 'leave encashment Kerala', 'KSR earned leave', 'leave at credit Kerala'],
