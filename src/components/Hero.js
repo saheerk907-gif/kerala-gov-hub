@@ -50,8 +50,8 @@ export default function Hero() {
             fill
             priority
             fetchPriority="high"
-            className="object-cover object-[center_65%] opacity-[0.13]"
-            style={{ filter: 'grayscale(45%) brightness(0.70) contrast(1.1)' }}
+            className="object-cover object-[center_65%] opacity-[0.32]"
+            style={{ filter: 'grayscale(20%) brightness(0.75) contrast(1.1)' }}
             sizes="100vw"
           />
           {/* horizontal vignette */}
@@ -106,9 +106,9 @@ export default function Hero() {
         </p>
 
         {/* Malayalam H1 + H2 — do not change */}
-        <div className="flex flex-col items-center gap-1 mb-2">
+        <div className="flex flex-col items-center gap-1.5 mb-3">
           <h1
-            className="font-malayalam text-[clamp(32px,7vw,84px)] font-bold leading-[1.05] tracking-tight"
+            className="font-malayalam text-[clamp(38px,8vw,96px)] font-bold leading-[1.05] tracking-tight"
             style={{
               background: titleGrad,
               WebkitBackgroundClip: 'text',
@@ -126,7 +126,7 @@ export default function Hero() {
               : 'linear-gradient(90deg,transparent,rgba(200,150,12,0.80),transparent)',
           }} />
           <h2
-            className="font-malayalam text-[clamp(17px,3.6vw,46px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
+            className="font-malayalam text-[clamp(20px,4.2vw,54px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
               backgroundImage: isLight
                 ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
@@ -138,12 +138,19 @@ export default function Hero() {
           </h2>
         </div>
 
-        {/* English sub-label */}
+        {/* English sub-label + description */}
         <p
-          className="text-[11px] font-semibold tracking-wide uppercase mb-4"
+          className="text-[11px] font-semibold tracking-wide uppercase mb-1.5"
           style={{ color: textSub }}
         >
           Your complete resource hub
+        </p>
+        <p
+          className="text-[clamp(11px,1.3vw,13px)] leading-relaxed mb-4 max-w-[420px] px-2"
+          style={{ color: textSub }}
+        >
+          Salary calculators, pension tools, MEDISEP, service rules, pay scales
+          and government orders — all in one place, always free.
         </p>
 
         {/* CTAs */}
