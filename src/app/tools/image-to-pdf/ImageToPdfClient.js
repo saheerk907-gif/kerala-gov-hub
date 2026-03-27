@@ -137,7 +137,7 @@ export default function ImageToPdfClient() {
                 background: 'rgba(255,255,255,0.05)', borderRadius: 10, padding: '8px 12px',
                 border: '1px solid rgba(255,255,255,0.08)',
               }}>
-                <img src={img.previewUrl} alt="" style={{
+                <img src={img.previewUrl} alt={`Image ${idx + 1} preview for PDF conversion`} style={{
                   width: 40, height: 40, objectFit: 'cover', borderRadius: 6, flexShrink: 0,
                 }} />
                 <span style={{ flex: 1, fontSize: 12, color: 'rgba(255,255,255,0.75)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

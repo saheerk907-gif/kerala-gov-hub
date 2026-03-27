@@ -359,7 +359,7 @@ export default function AdminArticles() {
               <div key={a.id}
                 className="flex items-start gap-4 p-4 bg-[#111] border border-white/[0.06] rounded-2xl hover:border-white/10 transition-all">
                 {a.image_url && (
-                  <img src={a.image_url} alt="" className="w-20 h-14 object-cover rounded-lg flex-shrink-0" />
+                  <img src={a.image_url} alt={`${a.title_ml || a.title_en || 'Article'} thumbnail`} className="w-20 h-14 object-cover rounded-lg flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">

@@ -93,7 +93,7 @@ export default async function GpfPage() {
                     className="group block p-6 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
                     style={{ background: 'rgba(48,209,88,0.04)', border: '1px solid rgba(48,209,88,0.12)' }}>
                     {post.image_url && (
-                      <img src={post.image_url} alt="" className="w-full h-48 object-cover rounded-xl mb-4" />
+                      <img src={post.image_url} alt={`${post.title_ml || post.title_en || 'GPF article'} article thumbnail`} className="w-full h-48 object-cover rounded-xl mb-4" />
                     )}
                     <div className="text-xs text-[#30d158] font-bold uppercase tracking-widest mb-2">
                       {new Date(post.created_at).toLocaleDateString('ml-IN', { year: 'numeric', month: 'long', day: 'numeric' })}

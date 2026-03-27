@@ -318,7 +318,7 @@ export default async function KsrPage() {
                     className="group block p-6 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
                     style={{ background: `${BLUE}05`, border: `1px solid ${BLUE}15` }}>
                     {post.image_url && (
-                      <img src={post.image_url} alt="" className="w-full h-44 object-cover rounded-xl mb-4" />
+                      <img src={post.image_url} alt={`${post.title_ml || post.title_en || 'KSR article'} article thumbnail`} className="w-full h-44 object-cover rounded-xl mb-4" />
                     )}
                     <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: BLUE }}>
                       {new Date(post.created_at).toLocaleDateString('ml-IN', {
