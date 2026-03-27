@@ -9,7 +9,7 @@ module.exports = {
       },
       fontFamily: {
         malayalam: ['var(--font-noto-malayalam)', '"Noto Sans Malayalam"', 'sans-serif'],
-        sans: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', 'sans-serif'],
+        sans: ['var(--font-ibm-plex-mono)', '"IBM Plex Mono"', 'monospace'],
       },
     },
   },

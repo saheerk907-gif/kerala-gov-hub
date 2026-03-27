@@ -1,14 +1,14 @@
 import './globals.css';
-import { Plus_Jakarta_Sans, Noto_Sans_Malayalam } from 'next/font/google';
+import { IBM_Plex_Mono, Noto_Sans_Malayalam } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
 
-const plusJakarta = Plus_Jakarta_Sans({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-plus-jakarta',
-  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-ibm-plex-mono',
+  weight: ['300', '400', '500', '600', '700'],
 });
 
 const notoMalayalam = Noto_Sans_Malayalam({
@@ -62,7 +62,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ml" className={`${plusJakarta.variable} ${notoMalayalam.variable}`}>
+    <html lang="ml" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
