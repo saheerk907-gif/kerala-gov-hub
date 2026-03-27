@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -45,9 +46,14 @@ function FeaturedCard({ article }) {
         style={{ minHeight: '380px', background: '#0a0a0a', border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
-            <img src={article.image_url} alt={article.title_ml}
+            <Image
+              src={article.image_url}
+              alt={article.title_ml}
+              fill
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-              style={{ opacity: 0.35 }} />
+              style={{ opacity: 0.35 }}
+              loading="lazy"
+            />
             <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 40%, transparent 100%)' }} />
           </>
         ) : (
@@ -100,9 +106,14 @@ function ArticleCard({ article }) {
 
         {article.image_url ? (
           <>
-            <img src={article.image_url} alt={article.title_ml}
+            <Image
+              src={article.image_url}
+              alt={article.title_ml}
+              fill
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-              style={{ opacity: 0.35 }} />
+              style={{ opacity: 0.35 }}
+              loading="lazy"
+            />
             <div className="article-card-overlay absolute inset-0" style={{ background: 'linear-gradient(to top, #000 45%, transparent 100%)' }} />
           </>
         ) : (
