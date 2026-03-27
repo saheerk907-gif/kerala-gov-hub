@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const pdfTools = [
@@ -241,6 +241,21 @@ function ToolCard({ t }) {
 
 export default function ToolsSection() {
   const [expanded, setExpanded] = useState(false);
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const check = () =>
+      setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  const gold = isLight ? '#b45309' : '#f5d060';
+  const titleGrad = isLight
+    ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
+    : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
   return (
     <section id="tools" className="relative py-5 md:py-8 px-4 md:px-6">
@@ -249,7 +264,14 @@ export default function ToolsSection() {
         {/* Header */}
         <div className="mb-6">
           <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] text-white/40 mb-2">Tools & Calculators</div>
-          <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+          <h2
+            className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
+            style={{
+              fontSize: 'clamp(22px, 3vw, 40px)',
+              backgroundImage: titleGrad,
+              filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+            }}
+          >
             ടൂളുകൾ
           </h2>
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
