@@ -1,13 +1,14 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LeaveCalculator from '@/components/LeaveCalculator';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Earned Leave Calculator — Kerala Service Rules (KSR) | Kerala Government Employees',
-  description:
-    'Calculate Earned Leave (EL) for Kerala government employees as per KSR Part I. Supports permanent, temporary, vacation department and limited-period officers. Includes KSR FAQ on Maternity Leave, Casual Leave, Half-Pay Leave, Subsistence Allowance, and more.',
-  alternates: { canonical: 'https://keralaemployees.in/leave/earned' },
-};
+export const metadata = buildMetadata({
+  title: 'Earned Leave Rules — Kerala Government Employees',
+  description: 'Kerala government employee earned leave rules — accumulation limit, encashment, leave at credit calculation, EL surrender. KSR provisions explained.',
+  path: '/leave/earned',
+  keywords: ['earned leave Kerala', 'EL rules Kerala government', 'leave encashment Kerala', 'KSR earned leave', 'leave at credit Kerala'],
+});
 
 export default function EarnedLeavePage() {
   return (

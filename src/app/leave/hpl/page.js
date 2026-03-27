@@ -1,13 +1,14 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import HPLCalculator from '@/components/HPLCalculator';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'HPL & Commuted Leave Calculator — Kerala Service Rules (KSR) | Kerala Government Employees',
-  description:
-    'Calculate Half-Pay Leave (HPL) and Commuted Leave for Kerala government employees as per KSR Part I. Includes a "Can I take X days?" eligibility checker, LWA exclusion, and KSR leave rules reference.',
-  alternates: { canonical: 'https://keralaemployees.in/leave/hpl' },
-};
+export const metadata = buildMetadata({
+  title: 'Half Pay Leave Rules — Kerala Government Employees',
+  description: 'Kerala government employee HPL rules — half pay leave accumulation, commutation to earned leave, medical grounds, LPR. KSR Part I provisions.',
+  path: '/leave/hpl',
+  keywords: ['HPL half pay leave Kerala', 'half pay leave rules Kerala', 'HPL commutation Kerala', 'KSR HPL provisions'],
+});
 
 export default function HPLPage() {
   return (

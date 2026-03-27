@@ -1,13 +1,14 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import { buildMetadata } from '@/lib/seo';
 
-export const metadata = {
-  title: 'Leave Calculator — Kerala Service Rules (KSR) | Kerala Government Employees',
-  description:
-    'Calculate Earned Leave (EL), Half-Pay Leave (HPL) and Commuted Leave for Kerala government employees as per KSR Part I.',
-  alternates: { canonical: 'https://keralaemployees.in/leave' },
-};
+export const metadata = buildMetadata({
+  title: 'Leave Rules — Kerala Government Employees | KSR',
+  description: 'Kerala government employee leave rules — earned leave, HPL, casual leave, maternity leave, study leave. KSR Part I leave provisions explained clearly.',
+  path: '/leave',
+  keywords: ['Kerala leave rules', 'Kerala government leave', 'KSR leave rules', 'earned leave Kerala', 'HPL half pay leave Kerala'],
+});
 
 const CARDS = [
   {
