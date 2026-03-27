@@ -1,11 +1,14 @@
 import dynamic from 'next/dynamic';
+import { buildMetadata } from '@/lib/seo';
 
 const ImageToPdfClient = dynamic(() => import('./ImageToPdfClient'), { ssr: false });
 
-export const metadata = {
-  title: 'Image to PDF — Kerala Gov Employee Hub',
-  description: 'Convert JPG, PNG and other images to a PDF — free, browser-only, files never leave your device.',
-};
+export const metadata = buildMetadata({
+  title: 'Image to PDF — Convert Images to PDF Free',
+  description: 'Convert JPG and PNG images to PDF online for free. Browser-based, no upload required. Useful for Kerala government document submission.',
+  path: '/tools/image-to-pdf',
+  keywords: ['image to PDF converter', 'JPG to PDF online free', 'convert image PDF browser'],
+});
 
 export default function ImageToPdfPage() {
   return <ImageToPdfClient />;
