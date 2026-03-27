@@ -23,7 +23,7 @@ const BASE_URL = 'https://keralaemployees.in';
 export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Kerala Employees Portal – Salary, DA, Pension Updates', // 54 chars
+    default: 'Kerala Employees Portal – Salary, DA, Pension Updates', // 53 chars
     template: '%s | Kerala Employees',
   },
   description:
