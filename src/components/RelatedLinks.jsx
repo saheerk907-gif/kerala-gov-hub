@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 /**
@@ -11,7 +12,7 @@ export default function RelatedLinks({ links, heading = 'Related Tools' }) {
   if (!links || links.length === 0) return null;
 
   return (
-    <section className="mt-10 border-t border-white/10 pt-6">
+    <section className="mt-10 border-t border-white/[0.06] pt-6" aria-label={heading}>
       <h2 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-3">
         {heading}
       </h2>
