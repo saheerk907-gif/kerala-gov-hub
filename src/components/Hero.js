@@ -29,7 +29,7 @@ export default function Hero() {
   const border    = isLight ? 'rgba(0,0,0,0.08)'      : 'rgba(255,255,255,0.08)';
   const surface   = isLight ? 'rgba(0,0,0,0.04)'      : 'rgba(255,255,255,0.04)';
   const titleGrad = isLight
-    ? 'linear-gradient(135deg,#1e3a5f,#1d4ed8)'
+    ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
     : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
   return (
@@ -122,7 +122,7 @@ export default function Hero() {
             style={{
               fontSize: 'clamp(22px, 4vw, 52px)',
               backgroundImage: isLight
-                ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
+                ? 'linear-gradient(135deg,#92400e,#c2410c,#92400e)'
                 : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
               filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.30))',
             }}
