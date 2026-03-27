@@ -22,9 +22,9 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      aria-label="Toggle light/dark mode"
-      title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
-      className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-md md:rounded-lg transition-all duration-200 cursor-pointer flex-shrink-0"
+      aria-label={`Switch to ${isLight ? 'dark' : 'light'} mode`}
+      title={isLight ? 'Switch to Dark Mode (Night)' : 'Switch to Light Mode (Day)'}
+      className="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-md md:rounded-lg transition-all duration-200 cursor-pointer flex-shrink-0 relative group"
       style={isLight ? {
         background: 'rgba(0,0,0,0.07)',
         color: '#374151',
@@ -54,6 +54,13 @@ export default function ThemeToggle() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
       )}
+      {/* Tooltip */}
+      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 whitespace-nowrap">
+        <div className="bg-black/80 text-white text-[11px] font-semibold px-2.5 py-1.5 rounded-md backdrop-blur-sm">
+          {isLight ? '🌙 Dark Mode' : '☀️ Light Mode'}
+        </div>
+        <div className="absolute top-full left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-black/80 rotate-45" />
+      </div>
     </button>
   );
 }
