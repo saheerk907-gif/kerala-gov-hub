@@ -31,7 +31,7 @@ export default function AdminLogin() {
         <div className="text-center mb-8">
           <img
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Coat_of_arms_of_Kerala.svg/180px-Coat_of_arms_of_Kerala.svg.png"
-            alt="Kerala" className="w-16 h-16 rounded-full bg-white p-1 object-contain mx-auto mb-4"
+            alt="Kerala Coat of Arms — State Emblem" className="w-16 h-16 rounded-full bg-white p-1 object-contain mx-auto mb-4"
           />
           <h1 className="text-xl font-bold mb-1">അഡ്മിൻ ലോഗിൻ</h1>
           <p className="text-sm text-[#6e6e73]">Kerala Gov Employee Hub</p>

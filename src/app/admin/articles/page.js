@@ -299,7 +299,7 @@ export default function AdminArticles() {
             {/* Preview */}
             {form.image_url && (
               <div className="mt-3 relative inline-block">
-                <img src={form.image_url} alt="preview" className="h-28 rounded-xl object-cover" />
+                <img src={form.image_url} alt="Article image preview" className="h-28 rounded-xl object-cover" />
                 <button onClick={() => setForm(f => ({ ...f, image_url: '' }))}
                   className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#ff453a] text-white text-xs flex items-center justify-center border-none cursor-pointer font-bold">
                   ×
