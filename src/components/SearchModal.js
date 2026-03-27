@@ -100,10 +100,15 @@ async function searchSupabase(q) {
       .then(r => r.json()).then(d => (Array.isArray(d) ? d : []).map(x => ({
         label: x.title_ml || x.title_en || 'News', sub: x.title_en || '', href: '/news', category: 'News',
       }))).catch(() => []),
-    // Government orders
-    fetch(`${SUPABASE_URL}/rest/v1/government_orders?title=ilike.${enc}&select=id,title,order_number&order=date.desc&limit=4`, { headers: h })
+    // Government orders — search title_ml, title_en AND go_number
+    fetch(`${SUPABASE_URL}/rest/v1/government_orders?or=(title_ml.ilike.${enc},title_en.ilike.${enc},go_number.ilike.${enc})&is_published=eq.true&select=id,title_ml,title_en,go_number,go_date,pdf_url,category&order=go_date.desc&limit=8`, { headers: h })
       .then(r => r.json()).then(d => (Array.isArray(d) ? d : []).map(x => ({
-        label: x.title, sub: x.order_number || '', href: '#orders', category: 'Orders',
+        label: x.go_number ? `${x.go_number}` : (x.title_ml || x.title_en || 'Order'),
+        sub: x.title_ml || x.title_en || '',
+        href: x.pdf_url && !x.pdf_url.includes('finance.kerala.gov.in') ? x.pdf_url : '/orders',
+        category: 'Govt Orders',
+        external: !!(x.pdf_url && !x.pdf_url.includes('finance.kerala.gov.in')),
+        goDate: x.go_date || '',
       }))).catch(() => []),
     // Schemes
     fetch(`${SUPABASE_URL}/rest/v1/schemes?or=(title_ml.ilike.${enc},title_en.ilike.${enc})&select=id,title_ml,title_en,slug&limit=4`, { headers: h })
@@ -154,14 +159,14 @@ export default function SearchModal({ open, onClose }) {
   // Debounced Supabase search
   useEffect(() => {
     const q = query.trim();
-    if (q.length < 2) { setLiveResults([]); return; }
+    if (q.length < 1) { setLiveResults([]); return; }
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       const r = await searchSupabase(q);
       setLiveResults(r);
       setLoading(false);
-    }, 320);
+    }, 250);
     return () => clearTimeout(debounceRef.current);
   }, [query]);
 
@@ -358,14 +363,21 @@ export default function SearchModal({ open, onClose }) {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-[13px] font-semibold text-white/80 truncate">{item.label}</span>
-                            {item.external && (
+                            {item.external && category === 'Govt Orders' && (
+                              <span className="text-[8px] font-bold uppercase px-1.5 py-0.5 rounded flex-shrink-0"
+                                style={{ background: 'rgba(255,99,99,0.15)', color: '#ff6b6b' }}>PDF</span>
+                            )}
+                            {item.external && category !== 'Govt Orders' && (
                               <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor"
                                 strokeWidth="1.5" strokeLinecap="round" className="opacity-25 flex-shrink-0">
                                 <path d="M1 9L9 1M9 1H4M9 1V6" />
                               </svg>
                             )}
                           </div>
-                          {item.sub && <div className="text-[11px] text-white/50 truncate mt-0.5">{item.sub}</div>}
+                          <div className="flex items-center gap-2 mt-0.5">
+                            {item.sub && <span className="text-[11px] text-white/50 truncate">{item.sub}</span>}
+                            {item.goDate && <span className="text-[10px] text-white/30 flex-shrink-0">{item.goDate}</span>}
+                          </div>
                         </div>
                         <span
                           className="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded flex-shrink-0"
