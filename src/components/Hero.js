@@ -35,7 +35,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative min-h-[52vh] md:min-h-[58vh] flex flex-col items-center justify-center text-center px-5 pt-[56px] md:pt-[72px] lg:pt-[96px] pb-12 overflow-hidden"
+      className="relative flex flex-col items-center justify-center text-center px-5 pt-[52px] md:pt-[64px] pb-8 md:pb-10 overflow-hidden"
       style={isLight ? {
         background: 'radial-gradient(ellipse 80% 55% at 50% 0%,rgba(200,150,12,0.10) 0%,transparent 60%),#f5f0e8',
       } : undefined}
@@ -75,7 +75,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-xl mx-auto flex flex-col items-center">
 
         {/* Logo */}
-        <div className="relative mb-5">
+        <div className="relative mb-3">
           {!isLight && (
             <div className="absolute inset-0 rounded-full bg-black/40 blur-[22px] scale-110 translate-y-2 pointer-events-none" />
           )}
@@ -85,7 +85,7 @@ export default function Hero() {
             width={88}
             height={88}
             priority
-            className="relative z-10 w-[68px] h-[68px] md:w-[84px] md:h-[84px] rounded-full object-cover"
+            className="relative z-10 w-[56px] h-[56px] md:w-[72px] md:h-[72px] rounded-full object-cover"
             style={isLight
               ? { boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }
               : {
@@ -99,16 +99,16 @@ export default function Hero() {
 
         {/* Eyebrow */}
         <p
-          className="text-[9px] font-black uppercase tracking-[0.28em] mb-3"
+          className="text-[9px] font-black uppercase tracking-[0.28em] mb-2"
           style={{ color: goldDim }}
         >
           Kerala Government Employees Portal
         </p>
 
         {/* Malayalam H1 + H2 — do not change */}
-        <div className="flex flex-col items-center gap-1.5 mb-3">
+        <div className="flex flex-col items-center gap-1 mb-2">
           <h1
-            className="font-malayalam text-[clamp(42px,8.5vw,108px)] font-bold leading-[1.05] tracking-tight"
+            className="font-malayalam text-[clamp(32px,7vw,84px)] font-bold leading-[1.05] tracking-tight"
             style={{
               background: titleGrad,
               WebkitBackgroundClip: 'text',
@@ -126,7 +126,7 @@ export default function Hero() {
               : 'linear-gradient(90deg,transparent,rgba(200,150,12,0.80),transparent)',
           }} />
           <h2
-            className="font-malayalam text-[clamp(24px,5.2vw,64px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
+            className="font-malayalam text-[clamp(17px,3.6vw,46px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
               backgroundImage: isLight
                 ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
@@ -140,26 +140,17 @@ export default function Hero() {
 
         {/* English sub-label */}
         <p
-          className="text-[clamp(11px,1.4vw,13px)] font-semibold tracking-wide uppercase mb-3"
+          className="text-[11px] font-semibold tracking-wide uppercase mb-4"
           style={{ color: textSub }}
         >
           Your complete resource hub
         </p>
 
-        {/* Description */}
-        <p
-          className="text-[clamp(11.5px,1.4vw,13.5px)] leading-relaxed mb-7 max-w-[440px]"
-          style={{ color: textSub }}
-        >
-          Salary calculators, pension tools, MEDISEP, service rules, pay scales
-          and government orders — all in one place, always free.
-        </p>
-
         {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-5">
           <Link
             href="#tools"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-[13px] font-bold no-underline transition-all duration-200 hover:opacity-90 active:scale-95"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-[12px] font-bold no-underline transition-all duration-200 hover:opacity-90 active:scale-95"
             style={{
               background: '#2997ff',
               color: '#fff',
@@ -174,7 +165,7 @@ export default function Hero() {
 
           <Link
             href="#orders"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-[13px] font-bold no-underline transition-all duration-200 hover:bg-white/10 active:scale-95"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-[12px] font-bold no-underline transition-all duration-200 hover:bg-white/10 active:scale-95"
             style={{ background: surface, color: textPri, border: `1px solid ${border}` }}
           >
             Latest Orders
@@ -189,11 +180,11 @@ export default function Hero() {
           {STATS.map((s, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center px-5 py-3"
+              className="flex flex-col items-center justify-center px-4 py-2.5"
               style={{ borderRight: i < STATS.length - 1 ? `1px solid ${border}` : 'none' }}
             >
               <span
-                className="text-[17px] md:text-[19px] font-black tracking-tight leading-none"
+                className="text-[15px] md:text-[17px] font-black tracking-tight leading-none"
                 style={{ color: gold }}
               >
                 {s.value}
