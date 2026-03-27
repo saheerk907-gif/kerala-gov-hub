@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import PensionCalculator from '@/components/PensionCalculator';
+import RelatedLinks from '@/components/RelatedLinks';
 
 const PENSION_FAQS = [
   {
@@ -148,6 +149,15 @@ export default function PensionPage() {
             ))}
           </div>
         </section>
+
+        <RelatedLinks
+          heading="Related Calculators"
+          links={[
+            { href: '/retirement', label: 'Retirement date & countdown' },
+            { href: '/dcrg', label: 'DCRG gratuity calculator' },
+            { href: '/da-arrear', label: 'DA arrear calculator' },
+          ]}
+        />
 
       </div>
     </div>

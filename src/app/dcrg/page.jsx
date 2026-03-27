@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import DcrgCalculator from '@/components/DcrgCalculator';
+import RelatedLinks from '@/components/RelatedLinks';
 
 const DCRG_FAQS = [
   {
@@ -152,6 +153,15 @@ export default function DCRGPage() {
             ))}
           </div>
         </section>
+
+        <RelatedLinks
+          heading="Related Calculators"
+          links={[
+            { href: '/pension', label: 'Full pension calculator' },
+            { href: '/retirement', label: 'Retirement date calculator' },
+            { href: '/da-arrear', label: 'DA arrear calculator' },
+          ]}
+        />
 
       </div>
     </div>

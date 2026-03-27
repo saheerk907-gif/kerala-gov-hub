@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import DArrearCalculator from '@/components/DArrearCalculator';
+import RelatedLinks from '@/components/RelatedLinks';
 
 const DA_FAQS = [
   {
@@ -188,6 +189,15 @@ export default function DArrearPage() {
             ))}
           </div>
         </section>
+
+        <RelatedLinks
+          heading="Related Calculators"
+          links={[
+            { href: '/pension', label: 'Kerala pension calculator' },
+            { href: '/income-tax', label: 'Income tax relief — Section 89(1)' },
+            { href: '/retirement', label: 'Retirement date calculator' },
+          ]}
+        />
 
       </div>
     </div>

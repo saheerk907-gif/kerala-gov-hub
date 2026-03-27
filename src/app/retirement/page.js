@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import RelatedLinks from '@/components/RelatedLinks';
 import RetirementCalculator from '@/components/RetirementCalculator';
 import { buildMetadata } from '@/lib/seo';
 
@@ -126,6 +127,14 @@ export default function RetirementPage() {
               ))}
             </div>
           </section>
+          <RelatedLinks
+            heading="Related Tools"
+            links={[
+              { href: '/pension', label: 'Pension amount calculator' },
+              { href: '/nps', label: 'NPS corpus calculator' },
+              { href: '/dcrg', label: 'DCRG gratuity amount' },
+            ]}
+          />
         </div>
       </main>
       <Footer />

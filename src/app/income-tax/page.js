@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import IncomeTaxCalculator from '@/components/IncomeTaxCalculator';
 import IncomeTaxFAQ from '@/components/IncomeTaxFAQ';
+import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
 export const metadata = buildMetadata({
@@ -162,6 +163,14 @@ export default function IncomeTaxPage() {
           </div>
           <IncomeTaxCalculator />
           <IncomeTaxFAQ />
+          <RelatedLinks
+            heading="Related Tools"
+            links={[
+              { href: '/da-arrear', label: 'DA arrear calculator' },
+              { href: '/pension', label: 'Pension income calculator' },
+              { href: '/nps', label: 'NPS contribution details' },
+            ]}
+          />
         </div>
       </main>
       <Footer />
