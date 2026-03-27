@@ -106,25 +106,30 @@ export default function Hero() {
         </p>
 
         {/* Malayalam H1 + H2 — do not change */}
-        <div className="flex flex-col items-center gap-2 mb-3">
+        <div className="flex flex-col items-center gap-1.5 mb-3">
           <h1
-            className="font-malayalam text-[clamp(40px,9vw,110px)] font-black leading-[1.0] tracking-tight"
+            className="font-malayalam text-[clamp(30px,5.5vw,64px)] font-bold leading-[1.05] tracking-tight"
             style={{
               background: titleGrad,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
-              filter: isLight ? 'none' : 'drop-shadow(0 0 14px rgba(200,150,12,0.38))',
+              filter: isLight ? 'none' : 'drop-shadow(0 0 10px rgba(200,150,12,0.32))',
             }}
           >
             കേരള സർക്കാർ
           </h1>
-          <p
-            className="font-malayalam text-[clamp(13px,2.2vw,22px)] font-medium leading-snug"
-            style={{ color: isLight ? 'rgba(15,23,42,0.55)' : 'rgba(255,255,255,0.50)' }}
+          <h2
+            className="font-malayalam text-[clamp(18px,3.5vw,44px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
+            style={{
+              backgroundImage: isLight
+                ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
+                : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
+              filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.35))',
+            }}
           >
             ജീവനക്കാരുടെ വിജ്ഞാനകോശം
-          </p>
+          </h2>
         </div>
 
         {/* English sub-label + description */}
