@@ -18,8 +18,8 @@ export default function QuickLinksSection({ links }) {
   if (!links?.length) return null;
 
   return (
-    <section id="links" className="relative py-7 md:py-10 px-4 md:px-6">
-      <div className="max-w-[1200px] mx-auto border-t border-white/[0.06] pt-7 md:pt-10">
+    <section id="links" className="relative py-5 md:py-10 px-4 md:px-6">
+      <div className="max-w-[1200px] mx-auto border-t border-white/[0.06] pt-5 md:pt-10">
 
         {/* Header */}
         <div className="mb-6">

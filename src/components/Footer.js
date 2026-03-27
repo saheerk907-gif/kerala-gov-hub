@@ -1,12 +1,12 @@
 'use client';
 export default function Footer() {
   return (
-    <footer className="relative py-14 px-4 md:px-6 border-t border-white/[0.06]">
+    <footer className="relative py-8 md:py-14 px-4 md:px-6 border-t border-white/[0.06]">
       <div className="max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-10 border-b border-white/[0.06]">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10 pb-8 md:pb-10 border-b border-white/[0.06]">
 
           {/* Brand */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <picture>
                 <source srcSet="/logo.webp" type="image/webp" />
@@ -70,7 +70,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-6 text-[11px] text-white/45 gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-5 md:pt-6 text-[11px] text-white/45 gap-2 sm:gap-3">
           <span>© 2026 Kerala Gov Employee Hub</span>
           <div className="flex items-center gap-4 flex-wrap justify-center">
             <a href="/about" className="hover:text-white/55 transition-colors no-underline">About</a>

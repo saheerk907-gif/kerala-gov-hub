@@ -42,7 +42,7 @@ export default async function HomePage() {
 
       {/* 4 & 5. Orders + News — side by side */}
       <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
           <ScrollReveal direction="up" delay={100}>
             <OrdersSection orders={orders} />
           </ScrollReveal>
