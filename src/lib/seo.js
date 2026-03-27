@@ -1,3 +1,4 @@
+// RULE: title 50–60 chars | description 120–160 chars | ALWAYS use buildMetadata() — never export raw metadata
 /**
  * Reusable SEO metadata builder for keralaemployees.in
  * Usage: export const metadata = buildMetadata({ title, description, path, image })
