@@ -1,12 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Optimize images: WebP format, responsive sizing, lazy loading
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.supabase.co' },
       { protocol: 'https', hostname: 'upload.wikimedia.org' },
       { protocol: 'https', hostname: '**' }, // external news article images
     ],
+    formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
+
+  // Enable gzip compression
+  compress: true,
 
   async redirects() {
     return [
@@ -25,6 +32,35 @@ const nextConfig = {
 
   async headers() {
     return [
+      // Immutable assets (hashed filenames) — cache for 1 year
+      {
+        source: '/(_next/static|public)/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // Images — cache for 30 days
+      {
+        source: '/:path(.*\\.(jpg|jpeg|png|gif|webp|svg|ico)$)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=2592000, must-revalidate' },
+        ],
+      },
+      // Fonts — cache for 1 year
+      {
+        source: '/:path(.*\\.(ttf|otf|woff|woff2)$)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      // HTML pages — don't cache (always fresh)
+      {
+        source: '/:path(.*\\.html)$',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=3600, must-revalidate' },
+        ],
+      },
+      // Security + compression headers
       {
         source: '/(.*)',
         headers: [

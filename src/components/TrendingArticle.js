@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -32,8 +33,14 @@ export default function TrendingArticle() {
           <div className="flex md:hidden items-center gap-3 px-3 py-3">
             {/* Left: image */}
             {article.image_url ? (
-              <img src={article.image_url} alt={article.title_ml}
-                className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+              <Image
+                src={article.image_url}
+                alt={article.title_ml}
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                loading="lazy"
+              />
             ) : (
               <div className="w-10 h-10 rounded-lg flex-shrink-0 flex items-center justify-center"
                 style={{ background: 'rgba(200,150,12,0.15)' }}>
@@ -66,8 +73,14 @@ export default function TrendingArticle() {
             </div>
             <div className="w-px h-6 bg-white/10 flex-shrink-0" />
             {article.image_url && (
-              <img src={article.image_url} alt={article.title_ml}
-                className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+              <Image
+                src={article.image_url}
+                alt={article.title_ml}
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-lg object-cover flex-shrink-0"
+                loading="lazy"
+              />
             )}
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-white/90 truncate group-hover:text-white transition-colors"
