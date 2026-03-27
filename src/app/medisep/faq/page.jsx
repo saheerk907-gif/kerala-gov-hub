@@ -6,7 +6,8 @@ export const metadata = buildMetadata({
   title: 'MEDISEP FAQ Malayalam — 20 Questions Answered',
   description: 'MEDISEP login, card download, claim process, reimbursement, helpline, hospitals list — answers to 20 common MEDISEP questions for Kerala government employees.',
   path: '/medisep/faq',
-  keywords: ['MEDISEP FAQ Malayalam', 'MEDISEP login', 'MEDISEP card download', 'MEDISEP claim process', 'MEDISEP helpline number', 'MEDISEP reimbursement', 'Kerala government employee health insurance'],
+  keywords: ['MEDISEP FAQ Malayalam', 'MEDISEP login', 'MEDISEP card download', 'MEDISEP claim process', 'MEDISEP helpline number', 'MEDISEP reimbursement', 'Kerala government employee health insurance', 'മെഡിസെപ്'],
+  type: 'article',
 });
 
 const SECTIONS = [

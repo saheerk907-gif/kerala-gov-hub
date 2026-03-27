@@ -6,7 +6,8 @@ export const metadata = buildMetadata({
   title: 'MEDISEP Complaint — Kerala Govt Health Insurance Grievance',
   description: 'File a MEDISEP complaint or grievance — claim rejection, hospital billing issues, cashless denial and escalation process for Kerala government employees.',
   path: '/medisep-complaint',
-  keywords: ['MEDISEP complaint Kerala', 'MEDISEP grievance', 'MEDISEP claim rejection', 'Kerala health insurance complaint'],
+  keywords: ['MEDISEP complaint Kerala', 'MEDISEP grievance', 'MEDISEP claim rejection', 'Kerala health insurance complaint', 'MEDISEP helpline 1800-425-1530'],
+  type: 'article',
 });
 
 const faqJsonLd = {

@@ -7,6 +7,7 @@ export const metadata = buildMetadata({
   description: 'Step-by-step MEDISEP claim process — cashless hospitalisation, reimbursement claims, required documents and timelines for Kerala government employees.',
   path: '/medisep-claim-process',
   keywords: ['MEDISEP claim process Kerala', 'MEDISEP cashless claim', 'MEDISEP reimbursement', 'MEDISEP hospitalisation Kerala'],
+  type: 'article',
 });
 
 const faqJsonLd = {

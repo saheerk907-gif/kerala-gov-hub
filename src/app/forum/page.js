@@ -11,7 +11,8 @@ export const metadata = {
     path: '/forum',
     keywords: ['Kerala government employees forum', 'NPS discussion Kerala', 'pension discussion', 'leave rules discussion', 'service matters Kerala'],
   }),
-  robots: { index: false },
+  // Override: forum is noindex — spread replaces the entire robots key from buildMetadata
+  robots: { index: false, follow: false },
 };
 
 export default function Page() {

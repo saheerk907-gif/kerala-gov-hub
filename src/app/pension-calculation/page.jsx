@@ -7,6 +7,7 @@ export const metadata = buildMetadata({
   description: 'Step-by-step Kerala pension calculation guide — average emoluments, qualifying service, half-year units, pension formula. KSR Part III explained in Malayalam.',
   path: '/pension-calculation',
   keywords: ['Kerala pension calculation Malayalam', 'KSR pension formula', 'qualifying service Kerala pension', 'pension calculation step by step Kerala', 'Kerala government pension guide'],
+  type: 'article',
 });
 
 const faqJsonLd = {
