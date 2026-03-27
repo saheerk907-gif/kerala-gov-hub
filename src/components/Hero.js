@@ -10,17 +10,6 @@ const STATS = [
   { value: '100%',   label: 'Free Always' },
 ];
 
-const QUICK_ACCESS = [
-  { icon: '💰', label: 'Salary',  labelMl: 'ശമ്പളം',       href: '/prc',                  color: '#2997ff' },
-  { icon: '📄', label: 'Orders',  labelMl: 'ഉത്തരവുകൾ',    href: '#orders',               color: '#ff9f0a' },
-  { icon: '📰', label: 'News',    labelMl: 'വാർത്ത',        href: '#news',                 color: '#ff453a' },
-  { icon: '🧮', label: 'Tools',   labelMl: 'ടൂളുകൾ',       href: '#tools',                color: '#64d2ff' },
-  { icon: '📋', label: 'Schemes', labelMl: 'പദ്ധതികൾ',      href: '#services',             color: '#30d158' },
-  { icon: '🎓', label: 'Tests',   labelMl: 'ടെസ്റ്റ്',       href: '/departmental-tests',   color: '#bf5af2' },
-  { icon: '💬', label: 'Forum',   labelMl: 'ഫോറം',          href: '/forum',                color: '#5e5ce6' },
-  { icon: '📑', label: 'Forms',   labelMl: 'ഫോമുകൾ',       href: '/forms',                color: '#ff6b6b' },
-];
-
 export default function Hero() {
   const [isLight, setIsLight] = useState(false);
 
@@ -148,7 +137,7 @@ export default function Hero() {
         {/* Search bar */}
         <button
           onClick={openSearch}
-          className="group flex items-center gap-3 w-full max-w-[480px] rounded-2xl px-4 py-3 md:py-3.5 mb-5 md:mb-6 transition-all duration-200 cursor-text hover:scale-[1.01]"
+          className="group flex items-center gap-3 w-full max-w-[480px] rounded-2xl px-4 py-3 md:py-3.5 mb-6 md:mb-8 transition-all duration-200 cursor-text hover:scale-[1.01]"
           style={{
             background: isLight ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.06)',
             border: `1px solid ${isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.10)'}`,
@@ -172,39 +161,6 @@ export default function Hero() {
             Ctrl K
           </kbd>
         </button>
-
-        {/* Quick Access Grid */}
-        <div className="w-full max-w-[520px] mb-5 md:mb-6">
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: textMuted }}>
-            Quick Access
-          </p>
-          <div className="grid grid-cols-4 gap-2 md:gap-2.5">
-            {QUICK_ACCESS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="quick-access-card group flex flex-col items-center gap-1.5 py-3 md:py-3.5 rounded-2xl no-underline transition-all duration-200 hover:-translate-y-0.5"
-                style={{
-                  background: surfaceMd,
-                  border: `1px solid ${border}`,
-                }}
-              >
-                <span
-                  className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl text-[20px] md:text-[22px] transition-transform duration-200 group-hover:scale-110"
-                  style={{ background: item.color + '18' }}
-                >
-                  {item.icon}
-                </span>
-                <span className="text-[10px] md:text-[11px] font-bold leading-none" style={{ color: textPri }}>
-                  {item.label}
-                </span>
-                <span className="text-[8px] font-semibold leading-none font-malayalam" style={{ color: textMuted }}>
-                  {item.labelMl}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
 
         {/* Stats bar */}
         <div className="flex items-stretch rounded-2xl overflow-hidden"
