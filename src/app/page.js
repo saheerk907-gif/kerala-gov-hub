@@ -14,6 +14,7 @@ import SchemesSection from '@/components/SchemesSection';
 import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
+import MobileBottomNav from '@/components/MobileBottomNav';
 
 export const revalidate = 3600;
 
@@ -27,7 +28,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="relative min-h-screen bg-aurora overflow-x-hidden">
+    <div className="relative min-h-screen bg-aurora overflow-x-hidden pb-14 md:pb-0">
 
       {/* 1. Hero — compact */}
       <Hero />
@@ -96,6 +97,9 @@ export default async function HomePage() {
       <ScrollReveal direction="fade" delay={0}>
         <Footer />
       </ScrollReveal>
+
+      {/* Mobile sticky bottom nav */}
+      <MobileBottomNav />
     </div>
   );
 }
