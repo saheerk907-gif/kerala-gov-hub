@@ -105,27 +105,46 @@ export default function Hero() {
           Kerala Government Employees Portal
         </p>
 
-        {/* Malayalam H1 */}
-        <h1
-          className="font-malayalam text-[clamp(28px,6.5vw,68px)] font-bold leading-[1.05] tracking-tight mb-2"
-          style={{
-            background: titleGrad,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            filter: isLight ? 'none' : 'drop-shadow(0 0 10px rgba(200,150,12,0.32))',
-          }}
-        >
-          കേരള ജീവനക്കാർ
-        </h1>
+        {/* Malayalam H1 + H2 — do not change */}
+        <div className="flex flex-col items-center gap-1.5 mb-3">
+          <h1
+            className="font-malayalam text-[clamp(28px,6.5vw,72px)] font-bold leading-[1.05] tracking-tight"
+            style={{
+              background: titleGrad,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              filter: isLight ? 'none' : 'drop-shadow(0 0 10px rgba(200,150,12,0.32))',
+            }}
+          >
+            കേരള സർക്കാർ
+          </h1>
+          {/* thin rule */}
+          <div className="w-12 h-[1.5px] rounded-full" style={{
+            background: isLight
+              ? 'linear-gradient(90deg,transparent,rgba(29,78,216,0.50),transparent)'
+              : 'linear-gradient(90deg,transparent,rgba(200,150,12,0.80),transparent)',
+          }} />
+          <h2
+            className="font-malayalam text-[clamp(17px,3.8vw,46px)] font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
+            style={{
+              backgroundImage: isLight
+                ? 'linear-gradient(135deg,#1e40af,#3b82f6,#1e40af)'
+                : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
+              filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.35))',
+            }}
+          >
+            ജീവനക്കാരുടെ വിജ്ഞാനകോശം
+          </h2>
+        </div>
 
-        {/* English H2 */}
-        <h2
-          className="text-[clamp(13px,2vw,20px)] font-semibold tracking-tight mb-3"
-          style={{ color: textPri }}
+        {/* English sub-label */}
+        <p
+          className="text-[clamp(11px,1.4vw,13px)] font-semibold tracking-wide uppercase mb-3"
+          style={{ color: textSub }}
         >
           Your complete resource hub
-        </h2>
+        </p>
 
         {/* Description */}
         <p
