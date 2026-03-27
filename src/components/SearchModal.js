@@ -58,8 +58,22 @@ const STATIC_INDEX = [
   { label: 'Kerala.gov.in',             sub: 'Official Government Portal',       href: 'https://www.kerala.gov.in',         category: 'Portals',    external: true },
 ];
 
-const POPULAR_HREFS = ['/income-tax', '/leave', '/da-arrear', '/gpf', '/pension', '/departmental-tests', '/forms', '/medisep', '/nps-aps', '/prc'];
-const POPULAR = STATIC_INDEX.filter(i => POPULAR_HREFS.includes(i.href));
+/* Category display order + icons */
+const CATEGORY_ORDER = [
+  { key: 'Tools',       icon: '🧮', desc: 'Calculators & utilities' },
+  { key: 'Govt Orders', icon: '📄', desc: 'Government orders' },
+  { key: 'Schemes',     icon: '📋', desc: 'Schemes & rules' },
+  { key: 'Dept Tests',  icon: '🧠', desc: 'Departmental exams' },
+  { key: 'Forms',       icon: '📝', desc: 'Downloadable forms' },
+  { key: 'Articles',    icon: '📰', desc: 'Guides & news' },
+  { key: 'Portals',     icon: '🔗', desc: 'External portals' },
+];
+
+/* Group static index by category in display order */
+const GROUPED_INDEX = CATEGORY_ORDER.map(cat => ({
+  ...cat,
+  items: STATIC_INDEX.filter(i => i.category === cat.key),
+})).filter(g => g.items.length > 0);
 
 const CATEGORY_COLORS = {
   'Tools':       '#2997ff',
@@ -122,7 +136,7 @@ export default function SearchModal({ open, onClose }) {
   const debounceRef = useRef(null);
 
   const allResults = [...staticResults, ...liveResults];
-  const displayItems = query.trim() ? allResults : POPULAR;
+  const hasQuery = query.trim().length > 0;
 
   // Static filter
   useEffect(() => {
@@ -133,7 +147,7 @@ export default function SearchModal({ open, onClose }) {
         i.label.toLowerCase().includes(q) ||
         i.sub.toLowerCase().includes(q) ||
         i.category.toLowerCase().includes(q)
-      ).slice(0, 8)
+      ).slice(0, 20)
     );
   }, [query]);
 
@@ -169,13 +183,16 @@ export default function SearchModal({ open, onClose }) {
     listRef.current?.querySelector('[data-active="true"]')?.scrollIntoView({ block: 'nearest' });
   }, [activeIdx]);
 
+  /* Flat list for keyboard nav: either search results or all static items */
+  const flatItems = hasQuery ? allResults : STATIC_INDEX;
+
   const handleKey = useCallback((e) => {
     if (!open) return;
     if (e.key === 'Escape') { onClose(); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, displayItems.length - 1)); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActiveIdx(i => Math.min(i + 1, flatItems.length - 1)); }
     if (e.key === 'ArrowUp')   { e.preventDefault(); setActiveIdx(i => Math.max(i - 1, 0)); }
-    if (e.key === 'Enter') { e.preventDefault(); const item = displayItems[activeIdx]; if (item) navigate(item); }
-  }, [open, displayItems, activeIdx, onClose]);
+    if (e.key === 'Enter') { e.preventDefault(); const item = flatItems[activeIdx]; if (item) navigate(item); }
+  }, [open, flatItems, activeIdx, onClose]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKey);
@@ -196,21 +213,26 @@ export default function SearchModal({ open, onClose }) {
 
   if (!open) return null;
 
-  // Group by category
-  const groups = displayItems.reduce((acc, item, idx) => {
-    if (!acc[item.category]) acc[item.category] = [];
-    acc[item.category].push({ ...item, _idx: idx });
-    return acc;
-  }, {});
+  /* ── Build grouped data for search results ── */
+  const searchGroups = hasQuery
+    ? allResults.reduce((acc, item, idx) => {
+        if (!acc[item.category]) acc[item.category] = [];
+        acc[item.category].push({ ...item, _idx: idx });
+        return acc;
+      }, {})
+    : {};
+
+  /* ── Flat index counter for browse mode keyboard nav ── */
+  let browseIdx = 0;
 
   return (
     <div
-      className="fixed inset-0 z-[2000] flex items-start justify-center pt-[8vh] px-4"
+      className="fixed inset-0 z-[2000] flex items-start justify-center pt-[6vh] px-4"
       style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)' }}
       onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="w-full max-w-[580px] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.8)]"
+        className="w-full max-w-[620px] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.8)]"
         style={{ background: 'var(--nav-dropdown-bg)', border: '1px solid var(--nav-dropdown-border)' }}
       >
         {/* Input */}
@@ -239,34 +261,88 @@ export default function SearchModal({ open, onClose }) {
           <kbd className="hidden sm:flex items-center text-[10px] text-white/40 border border-white/10 rounded px-1.5 py-0.5 font-mono">ESC</kbd>
         </div>
 
-        {/* Results */}
-        <div ref={listRef} className="max-h-[420px] overflow-y-auto">
-          {/* No query: show popular */}
-          {!query.trim() && (
-            <div className="px-4 pt-3 pb-1">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/45">Popular</span>
-            </div>
+        {/* Results / Browse */}
+        <div ref={listRef} className="max-h-[60vh] overflow-y-auto overscroll-contain">
+
+          {/* ══════ BROWSE MODE: Show ALL items grouped by category ══════ */}
+          {!hasQuery && (
+            <>
+              <div className="px-4 pt-3 pb-1.5">
+                <span className="text-[9px] font-black uppercase tracking-[0.22em] text-white/40">
+                  Browse everything · {STATIC_INDEX.length} items
+                </span>
+              </div>
+              {GROUPED_INDEX.map(group => {
+                const color = CATEGORY_COLORS[group.key] || '#ffffff';
+                return (
+                  <div key={group.key} className="mb-1">
+                    {/* Category header */}
+                    <div className="flex items-center gap-2 px-4 pt-2.5 pb-1">
+                      <span className="text-[13px]">{group.icon}</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color }}>
+                        {group.key}
+                      </span>
+                      <span className="text-[9px] text-white/30 ml-0.5">{group.desc}</span>
+                      <div className="flex-1 h-px" style={{ background: color + '15' }} />
+                      <span className="text-[9px] text-white/25">{group.items.length}</span>
+                    </div>
+                    {/* Items */}
+                    <div className="px-1.5 pb-0.5">
+                      {group.items.map(item => {
+                        const thisIdx = browseIdx++;
+                        const isActive = thisIdx === activeIdx;
+                        return (
+                          <button
+                            key={`${item.category}-${item.label}`}
+                            data-active={isActive}
+                            onMouseEnter={() => setActiveIdx(thisIdx)}
+                            onClick={() => navigate(item)}
+                            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left cursor-pointer border-none transition-all duration-100"
+                            style={{ background: isActive ? 'var(--surface-xs)' : 'transparent' }}
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[13px] font-semibold text-white/80 truncate">{item.label}</span>
+                                {item.external && (
+                                  <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="currentColor"
+                                    strokeWidth="1.5" strokeLinecap="round" className="opacity-25 flex-shrink-0">
+                                    <path d="M1 9L9 1M9 1H4M9 1V6" />
+                                  </svg>
+                                )}
+                              </div>
+                              {item.sub && <div className="text-[11px] text-white/45 truncate mt-0.5">{item.sub}</div>}
+                            </div>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                              className="flex-shrink-0 opacity-20">
+                              <polyline points="9 18 15 12 9 6" />
+                            </svg>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
           )}
 
-          {/* No results */}
-          {query.trim() && allResults.length === 0 && !loading && (
+          {/* ══════ SEARCH MODE: Filtered results ══════ */}
+          {hasQuery && allResults.length === 0 && !loading && (
             <div className="py-12 text-center text-white/45 text-sm">
               <div className="text-3xl mb-3">🔍</div>
               No results for &ldquo;{query}&rdquo;
             </div>
           )}
 
-          {/* Grouped results */}
-          {Object.entries(groups).map(([category, items]) => {
+          {hasQuery && Object.entries(searchGroups).map(([category, items]) => {
             const color = CATEGORY_COLORS[category] || '#ffffff';
             return (
               <div key={category}>
-                {query.trim() && (
-                  <div className="flex items-center gap-2 px-4 py-1.5">
-                    <span className="text-[9px] font-black uppercase tracking-[0.18em]" style={{ color: color + '70' }}>{category}</span>
-                    <div className="flex-1 h-px" style={{ background: color + '12' }} />
-                  </div>
-                )}
+                <div className="flex items-center gap-2 px-4 py-1.5">
+                  <span className="text-[9px] font-black uppercase tracking-[0.18em]" style={{ color: color + '90' }}>{category}</span>
+                  <div className="flex-1 h-px" style={{ background: color + '15' }} />
+                </div>
                 <div className="px-1.5 pb-1">
                   {items.map((item) => {
                     const isActive = item._idx === activeIdx;
@@ -317,8 +393,11 @@ export default function SearchModal({ open, onClose }) {
           <span className="flex items-center gap-1">
             <kbd className="border border-white/10 rounded px-1 py-0.5 font-mono">Esc</kbd> close
           </span>
-          {allResults.length > 0 && (
+          {hasQuery && allResults.length > 0 && (
             <span className="ml-auto">{allResults.length} results</span>
+          )}
+          {!hasQuery && (
+            <span className="ml-auto">Type to filter</span>
           )}
         </div>
       </div>
