@@ -220,6 +220,35 @@ img, video, svg { max-width: 100%; }
 }
 
 /* ══════════════════════════════════════════════════════════
+   SECTION GROUP DIVIDERS
+   ══════════════════════════════════════════════════════════ */
+.section-group-label {
+  color: var(--text-muted);
+}
+.section-group-line {
+  background: linear-gradient(90deg, var(--glass-border) 0%, transparent 100%);
+}
+
+/* ══════════════════════════════════════════════════════════
+   QUICK ACCESS CARDS (Hero)
+   ══════════════════════════════════════════════════════════ */
+.quick-access-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.quick-access-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+[data-theme="light"] .quick-access-card {
+  background: rgba(255,255,255,0.65);
+  border-color: rgba(0,0,0,0.08);
+}
+[data-theme="light"] .quick-access-card:hover {
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* ══════════════════════════════════════════════════════════
    GLOW LINE
    ══════════════════════════════════════════════════════════ */
 .glow-top::before {

@@ -18,6 +18,20 @@ import MobileBottomNav from '@/components/MobileBottomNav';
 
 export const revalidate = 3600;
 
+function SectionDivider({ label, icon }) {
+  return (
+    <div className="max-w-[1200px] mx-auto px-4 md:px-6 mt-12 md:mt-16 mb-4 md:mb-5">
+      <div className="flex items-center gap-3">
+        <span className="text-[13px] md:text-[14px]">{icon}</span>
+        <span className="section-group-label text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em]">
+          {label}
+        </span>
+        <div className="flex-1 h-px section-group-line" />
+      </div>
+    </div>
+  );
+}
+
 export default async function HomePage() {
   const [schemes, orders, quickLinks, stats, news] = await Promise.all([
     getSchemes(),
@@ -30,18 +44,20 @@ export default async function HomePage() {
   return (
     <div className="relative min-h-screen bg-aurora overflow-x-hidden pb-14 md:pb-0">
 
-      {/* 1. Hero — compact */}
+      {/* Hero with search + quick access */}
       <Hero />
 
-      {/* 2. Live breaking news ticker */}
+      {/* Live breaking news ticker */}
       <AnnouncementBanner />
 
-      {/* 3. Tools & Calculators — first thing users see */}
+      {/* ━━ GROUP: Tools & Calculators ━━ */}
       <ScrollReveal direction="up" delay={0}>
         <ToolsSection />
       </ScrollReveal>
 
-      {/* 4 & 5. Orders + News — side by side */}
+      {/* ━━ GROUP: Latest Updates ━━ */}
+      <SectionDivider label="Latest Updates" icon="📢" />
+
       <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
           <ScrollReveal direction="up" delay={100}>
@@ -55,45 +71,46 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Trending Article */}
       <TrendingArticle />
 
-      {/* 5b. Articles */}
       <ScrollReveal direction="up" delay={100}>
         <ArticlesSection />
       </ScrollReveal>
 
-      {/* Employee Experiences */}
+      {/* ━━ GROUP: Community ━━ */}
+      <SectionDivider label="Community" icon="👥" />
+
       <ScrollReveal direction="up" delay={100}>
         <ExperiencesSection />
       </ScrollReveal>
 
-      {/* 6. Forum — recent discussions */}
       <ScrollReveal direction="up" delay={100}>
         <ForumSection />
       </ScrollReveal>
 
-      {/* 7. Audio Classes */}
+      {/* ━━ GROUP: Learning ━━ */}
+      <SectionDivider label="Learning" icon="📚" />
+
       <ScrollReveal direction="up" delay={100}>
         <AudioClassesSection />
       </ScrollReveal>
 
-      {/* 7. Departmental Tests */}
       <ScrollReveal direction="up" delay={100}>
         <DepartmentalTestsSection />
       </ScrollReveal>
 
-      {/* 7. Schemes */}
+      {/* ━━ GROUP: Reference ━━ */}
+      <SectionDivider label="Reference" icon="📎" />
+
       <ScrollReveal direction="up" delay={100}>
         <SchemesSection schemes={schemes} />
       </ScrollReveal>
 
-      {/* 8. Quick Links — portals users need daily */}
       <ScrollReveal direction="up" delay={100}>
         <QuickLinksSection links={quickLinks} />
       </ScrollReveal>
 
-      {/* 9. Footer */}
+      {/* Footer */}
       <ScrollReveal direction="fade" delay={0}>
         <Footer />
       </ScrollReveal>

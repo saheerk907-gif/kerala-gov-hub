@@ -160,8 +160,13 @@ export default function Navbar() {
         setSearchOpen(true);
       }
     };
+    const openHandler = () => setSearchOpen(true);
     window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
+    window.addEventListener('open-search', openHandler);
+    return () => {
+      window.removeEventListener('keydown', handler);
+      window.removeEventListener('open-search', openHandler);
+    };
   }, []);
 
   function handleNavClick(href) {

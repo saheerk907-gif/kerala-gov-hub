@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const SECTIONS = [
-  { id: 'tools',              label: 'Tools',         labelMl: 'ടൂളുകൾ',          icon: '🧮' },
-  { id: 'orders',             label: 'GOs',           labelMl: 'ഉത്തരവുകൾ',        icon: '📄' },
-  { id: 'news',               label: 'News',          labelMl: 'വാർത്ത',            icon: '📰' },
-  { id: 'services',           label: 'Schemes',       labelMl: 'പദ്ധതികൾ',          icon: '📋' },
-  { id: 'departmental-tests', label: 'Tests',         labelMl: 'ടെസ്റ്റ്',           icon: '🧠' },
-  { id: 'links',              label: 'Portals',       labelMl: 'പോർട്ടലുകൾ',        icon: '🔗' },
+  { id: 'tools',              label: 'Tools',       labelMl: 'ടൂളുകൾ',          icon: '🧮' },
+  { id: 'orders',             label: 'GOs',         labelMl: 'ഉത്തരവുകൾ',        icon: '📄' },
+  { id: 'news',               label: 'News',        labelMl: 'വാർത്ത',            icon: '📰' },
+  { id: 'community',          label: 'Community',   labelMl: 'കമ്മ്യൂണിറ്റി',       icon: '👥' },
+  { id: 'audio-classes',      label: 'Audio',       labelMl: 'ഓഡിയോ',            icon: '🎧' },
+  { id: 'departmental-tests', label: 'Tests',       labelMl: 'ടെസ്റ്റ്',           icon: '🧠' },
+  { id: 'services',           label: 'Schemes',     labelMl: 'പദ്ധതികൾ',          icon: '📋' },
+  { id: 'links',              label: 'Portals',     labelMl: 'പോർട്ടലുകൾ',        icon: '🔗' },
 ];
 
 export default function SectionNav() {
@@ -19,7 +21,6 @@ export default function SectionNav() {
     const onScroll = () => {
       setVisible(window.scrollY > 300);
 
-      // Find which section is in view
       for (const s of [...SECTIONS].reverse()) {
         const el = document.getElementById(s.id);
         if (el && el.getBoundingClientRect().top <= 120) {
@@ -56,7 +57,7 @@ export default function SectionNav() {
             <button
               key={s.id}
               onClick={() => scrollTo(s.id)}
-              className={`section-nav-btn flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-[12px] font-bold whitespace-nowrap cursor-pointer transition-all flex-shrink-0 border`}
+              className={`section-nav-btn flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] md:text-[12px] font-bold whitespace-nowrap cursor-pointer transition-all flex-shrink-0 border`}
               style={{
                 background: active === s.id ? 'rgba(41,151,255,0.12)' : 'transparent',
                 color: active === s.id ? '#2997ff' : 'var(--text-dim)',
@@ -74,7 +75,7 @@ export default function SectionNav() {
 
           {/* Quick links to dedicated pages */}
           <Link href="/departmental-tests"
-            className="section-nav-quiz flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap no-underline flex-shrink-0 transition-all"
+            className="section-nav-quiz flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold whitespace-nowrap no-underline flex-shrink-0 transition-all"
             style={{ color: 'var(--text-ghost)', background: 'transparent' }}
             onMouseEnter={e => { e.currentTarget.style.color = '#2997ff'; e.currentTarget.style.background = 'rgba(41,151,255,0.10)'; }}
             onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-ghost)'; e.currentTarget.style.background = 'transparent'; }}>

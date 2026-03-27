@@ -10,6 +10,17 @@ const STATS = [
   { value: '100%',   label: 'Free Always' },
 ];
 
+const QUICK_ACCESS = [
+  { icon: '💰', label: 'Salary',  labelMl: 'ശമ്പളം',       href: '/prc',                  color: '#2997ff' },
+  { icon: '📄', label: 'Orders',  labelMl: 'ഉത്തരവുകൾ',    href: '#orders',               color: '#ff9f0a' },
+  { icon: '📰', label: 'News',    labelMl: 'വാർത്ത',        href: '#news',                 color: '#ff453a' },
+  { icon: '🧮', label: 'Tools',   labelMl: 'ടൂളുകൾ',       href: '#tools',                color: '#64d2ff' },
+  { icon: '📋', label: 'Schemes', labelMl: 'പദ്ധതികൾ',      href: '#services',             color: '#30d158' },
+  { icon: '🎓', label: 'Tests',   labelMl: 'ടെസ്റ്റ്',       href: '/departmental-tests',   color: '#bf5af2' },
+  { icon: '💬', label: 'Forum',   labelMl: 'ഫോറം',          href: '/forum',                color: '#5e5ce6' },
+  { icon: '📑', label: 'Forms',   labelMl: 'ഫോമുകൾ',       href: '/forms',                color: '#ff6b6b' },
+];
+
 export default function Hero() {
   const [isLight, setIsLight] = useState(false);
 
@@ -26,25 +37,31 @@ export default function Hero() {
   const goldDim   = isLight ? 'rgba(180,83,9,0.65)'   : 'rgba(245,208,96,0.60)';
   const textPri   = isLight ? 'rgba(15,23,42,0.92)'   : 'rgba(255,255,255,0.92)';
   const textSub   = isLight ? 'rgba(15,23,42,0.68)'   : 'rgba(255,255,255,0.72)';
+  const textMuted = isLight ? 'rgba(15,23,42,0.45)'   : 'rgba(255,255,255,0.40)';
   const border    = isLight ? 'rgba(0,0,0,0.08)'      : 'rgba(255,255,255,0.08)';
   const surface   = isLight ? 'rgba(0,0,0,0.04)'      : 'rgba(255,255,255,0.04)';
+  const surfaceMd = isLight ? 'rgba(0,0,0,0.06)'      : 'rgba(255,255,255,0.06)';
   const titleGrad = isLight
     ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
     : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
+  function openSearch() {
+    window.dispatchEvent(new CustomEvent('open-search'));
+  }
+
   return (
     <section
-      className="relative flex flex-col items-center justify-center text-center overflow-hidden
-                 min-h-[60vh] md:min-h-[70vh]
+      className="hero-section relative flex flex-col items-center justify-center text-center overflow-hidden
+                 min-h-[58vh] md:min-h-[65vh]
                  px-4 md:px-8
                  pt-[56px] md:pt-[72px]
-                 pb-10 md:pb-14"
+                 pb-6 md:pb-10"
       style={isLight ? {
         background: 'radial-gradient(ellipse 80% 55% at 50% 0%,rgba(200,150,12,0.10) 0%,transparent 60%),#f5f0e8',
       } : undefined}
     >
 
-      {/* ── Background: Secretariat (dark only) ── */}
+      {/* Background: Secretariat (dark only) */}
       {!isLight && (
         <div className="absolute inset-0 z-0 pointer-events-none">
           <Image
@@ -64,17 +81,17 @@ export default function Hero() {
         </div>
       )}
 
-      {/* ── Ambient glow ── */}
+      {/* Ambient glow */}
       {!isLight && (
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] rounded-full blur-[130px] pointer-events-none opacity-60"
           style={{ background: 'radial-gradient(ellipse,rgba(200,150,12,0.18) 0%,transparent 70%)' }} />
       )}
 
-      {/* ── Content ── */}
+      {/* Content */}
       <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
 
         {/* Logo */}
-        <div className="relative mb-4 md:mb-5">
+        <div className="relative mb-3 md:mb-4">
           {!isLight && (
             <div className="absolute inset-0 rounded-full bg-black/40 blur-[24px] scale-110 translate-y-2 pointer-events-none" />
           )}
@@ -84,7 +101,7 @@ export default function Hero() {
             width={100}
             height={100}
             priority
-            className="relative z-10 w-[64px] h-[64px] md:w-[88px] md:h-[88px] lg:w-[100px] lg:h-[100px] rounded-full object-cover"
+            className="relative z-10 w-[56px] h-[56px] md:w-[76px] md:h-[76px] lg:w-[88px] lg:h-[88px] rounded-full object-cover"
             style={isLight
               ? { boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }
               : {
@@ -97,17 +114,17 @@ export default function Hero() {
         </div>
 
         {/* Eyebrow */}
-        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.28em] mb-3 md:mb-4"
+        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.28em] mb-2 md:mb-3"
           style={{ color: goldDim }}>
           Kerala Government Employees Portal
         </p>
 
-        {/* Headings */}
-        <div className="flex flex-col items-center gap-2 md:gap-3 mb-4 md:mb-5">
+        {/* Headings — more compact */}
+        <div className="flex flex-col items-center gap-1 md:gap-2 mb-3 md:mb-4">
           <h1
             className="font-malayalam font-bold leading-[1.05] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
             style={{
-              fontSize: 'clamp(36px, 7vw, 84px)',
+              fontSize: 'clamp(32px, 6vw, 72px)',
               backgroundImage: titleGrad,
               filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
             }}
@@ -117,7 +134,7 @@ export default function Hero() {
           <h2
             className="font-malayalam font-bold leading-[1.15] tracking-tight animate-shimmer bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
-              fontSize: 'clamp(22px, 4vw, 52px)',
+              fontSize: 'clamp(20px, 3.5vw, 46px)',
               backgroundImage: isLight
                 ? 'linear-gradient(135deg,#92400e,#c2410c,#92400e)'
                 : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
@@ -128,40 +145,65 @@ export default function Hero() {
           </h2>
         </div>
 
-        {/* English label */}
-        <p className="text-[11px] md:text-[12px] font-semibold tracking-widest uppercase mb-2"
-          style={{ color: textSub }}>
-          Your complete resource hub
-        </p>
-
-        {/* Description */}
-        <p className="leading-relaxed mb-6 md:mb-8 max-w-[480px] px-2"
-          style={{ fontSize: 'clamp(12px, 1.4vw, 14px)', color: textSub }}>
-          Salary calculators, pension tools, MEDISEP, service rules, pay scales
-          and government orders — all in one place, always free.
-        </p>
-
-        {/* CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 mb-6 md:mb-8">
-          <Link
-            href="#tools"
-            className="inline-flex items-center gap-2 rounded-full font-bold no-underline transition-all duration-200 hover:opacity-90 active:scale-95
-                       px-5 py-2 text-[12px] md:px-7 md:py-3 md:text-[14px]"
-            style={{ background: '#2997ff', color: '#fff', boxShadow: '0 4px 24px rgba(41,151,255,0.30)' }}
+        {/* Search bar */}
+        <button
+          onClick={openSearch}
+          className="group flex items-center gap-3 w-full max-w-[480px] rounded-2xl px-4 py-3 md:py-3.5 mb-5 md:mb-6 transition-all duration-200 cursor-text hover:scale-[1.01]"
+          style={{
+            background: isLight ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.06)',
+            border: `1px solid ${isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.10)'}`,
+            backdropFilter: 'blur(16px)',
+            boxShadow: isLight
+              ? '0 2px 12px rgba(0,0,0,0.06)'
+              : '0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06)',
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <span className="flex-1 text-left text-[13px] md:text-[14px]" style={{ color: textMuted }}>
+            Search tools, orders, schemes...
+          </span>
+          <kbd
+            className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg"
+            style={{ background: surface, color: textMuted, border: `1px solid ${border}` }}
           >
-            Explore Tools
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M1.5 6h9M7 2.5l3.5 3.5L7 9.5" />
-            </svg>
-          </Link>
-          <Link
-            href="#orders"
-            className="inline-flex items-center gap-2 rounded-full font-bold no-underline transition-all duration-200 hover:bg-white/10 active:scale-95
-                       px-5 py-2 text-[12px] md:px-7 md:py-3 md:text-[14px]"
-            style={{ background: surface, color: textPri, border: `1px solid ${border}` }}
-          >
-            Latest Orders
-          </Link>
+            Ctrl K
+          </kbd>
+        </button>
+
+        {/* Quick Access Grid */}
+        <div className="w-full max-w-[520px] mb-5 md:mb-6">
+          <p className="text-[9px] font-black uppercase tracking-[0.3em] mb-3" style={{ color: textMuted }}>
+            Quick Access
+          </p>
+          <div className="grid grid-cols-4 gap-2 md:gap-2.5">
+            {QUICK_ACCESS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="quick-access-card group flex flex-col items-center gap-1.5 py-3 md:py-3.5 rounded-2xl no-underline transition-all duration-200 hover:-translate-y-0.5"
+                style={{
+                  background: surfaceMd,
+                  border: `1px solid ${border}`,
+                }}
+              >
+                <span
+                  className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-xl text-[20px] md:text-[22px] transition-transform duration-200 group-hover:scale-110"
+                  style={{ background: item.color + '18' }}
+                >
+                  {item.icon}
+                </span>
+                <span className="text-[10px] md:text-[11px] font-bold leading-none" style={{ color: textPri }}>
+                  {item.label}
+                </span>
+                <span className="text-[8px] font-semibold leading-none font-malayalam" style={{ color: textMuted }}>
+                  {item.labelMl}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Stats bar */}
@@ -170,14 +212,14 @@ export default function Hero() {
           {STATS.map((s, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center px-4 py-3 md:px-7 md:py-4"
+              className="flex flex-col items-center justify-center px-4 py-2.5 md:px-6 md:py-3"
               style={{ borderRight: i < STATS.length - 1 ? `1px solid ${border}` : 'none' }}
             >
               <span className="font-black tracking-tight leading-none"
-                style={{ fontSize: 'clamp(15px, 2vw, 20px)', color: gold }}>
+                style={{ fontSize: 'clamp(13px, 1.8vw, 18px)', color: gold }}>
                 {s.value}
               </span>
-              <span className="text-[9px] md:text-[10px] font-medium uppercase tracking-wider mt-1"
+              <span className="text-[8px] md:text-[9px] font-medium uppercase tracking-wider mt-0.5"
                 style={{ color: textSub }}>
                 {s.label}
               </span>
