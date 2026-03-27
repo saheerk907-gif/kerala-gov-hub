@@ -248,7 +248,7 @@ export default function ToolsSection() {
 
         {/* Header */}
         <div className="mb-6">
-          <div className="section-label mb-2">Tools & Calculators</div>
+          <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] text-white/40 mb-2">Tools & Calculators</div>
           <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             ടൂളുകൾ
           </h2>
