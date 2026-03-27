@@ -20,12 +20,15 @@ try {
 
 // Root layout is allowed to export raw metadata (global default, not a page)
 // Admin is excluded (not a public page)
-const allowed = ['src/app/layout.js', 'src/app/admin/layout.js'];
+// Exact paths (as returned by grep relative to cwd) that are allowed to bypass buildMetadata
+const allowed = new Set(['src/app/layout.js', 'src/app/admin/layout.js']);
 
 const violations = [];
+let checkedCount = 0;
 
 for (const file of files) {
-  if (allowed.some(a => file.endsWith(a))) continue;
+  if (allowed.has(file)) continue;
+  checkedCount++;
 
   const content = readFileSync(file, 'utf8');
   if (!content.includes('buildMetadata')) {
@@ -40,4 +43,4 @@ if (violations.length > 0) {
   process.exit(1);
 }
 
-console.log(`✓ SEO check passed — ${files.length} pages checked, all use buildMetadata.`);
+console.log(`✓ SEO check passed — ${checkedCount} pages checked, ${allowed.size} excluded (root/admin).`);
