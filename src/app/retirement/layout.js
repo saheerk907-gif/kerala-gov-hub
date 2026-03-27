@@ -1,11 +1,11 @@
-export const metadata = {
-  title: 'Retirement Calculator — Kerala Government Employees | Countdown, Pension, DCRG',
-  description:
-    'Calculate your retirement date, countdown, LPR start date, monthly pension, DCRG and leave encashment. Supports both traditional pension (pre-2013) and NPS subscribers.',
-  alternates: { canonical: 'https://keralaemployees.in/retirement' },
-  keywords:
-    'retirement calculator Kerala, Kerala government retirement date, pension calculator Kerala, DCRG calculator, LPR leave preparatory to retirement, NPS retirement Kerala',
-};
+import { buildMetadata } from '@/lib/seo';
+
+export const metadata = buildMetadata({
+  title: 'Retirement Calculator — Kerala Government Employees',
+  description: 'Calculate your retirement date, countdown, LPR start date, monthly pension, DCRG and leave encashment. Supports traditional pension (pre-2013) and NPS subscribers.',
+  path: '/retirement',
+  keywords: ['retirement calculator Kerala', 'Kerala government retirement date', 'pension calculator Kerala', 'DCRG calculator', 'LPR leave preparatory to retirement', 'NPS retirement Kerala'],
+});
 
 const softwareAppJsonLd = {
   '@context': 'https://schema.org',
