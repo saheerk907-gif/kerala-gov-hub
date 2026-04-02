@@ -2,6 +2,7 @@ import './globals.css';
 import { IBM_Plex_Mono, Noto_Sans_Malayalam } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import GoogleAnalytics from '@/components/GoogleAnalytics';
+import ScrollToTop from '@/components/ScrollToTop';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -78,6 +79,7 @@ export default function RootLayout({ children }) {
         <GoogleAnalytics />
         <Navbar />
         <main>{children}</main>
+        <ScrollToTop />
       </body>
     </html>
   );

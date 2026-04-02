@@ -574,3 +574,60 @@ img, video, svg { max-width: 100%; }
 .act-content .ql-align-center { text-align: center; }
 .act-content .ql-align-right  { text-align: right; }
 .act-content .ql-align-justify{ text-align: justify; }
+
+/* ══════════════════════════════════════════════════════════
+   KEYBOARD ACCESSIBILITY — focus-visible rings
+   ══════════════════════════════════════════════════════════ */
+:focus-visible {
+  outline: 2px solid #2997ff;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* Override for rounded elements */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #2997ff;
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   INPUT / SELECT improvements
+   ══════════════════════════════════════════════════════════ */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover,
+select:hover,
+textarea:hover {
+  border-color: rgba(41,151,255,0.4) !important;
+}
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(41,151,255,0.7) !important;
+  box-shadow: 0 0 0 3px rgba(41,151,255,0.12) !important;
+  outline: none;
+}
+
+/* ══════════════════════════════════════════════════════════
+   PAGE TRANSITION — subtle fade-in
+   ══════════════════════════════════════════════════════════ */
+main {
+  animation: page-fade-in 0.25s ease-out both;
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   PRINT STYLES
+   ══════════════════════════════════════════════════════════ */
+@media print {
+  nav, footer, .fixed, [aria-label="Scroll to top"] { display: none !important; }
+  body { background: white !important; color: black !important; }
+  a { color: inherit; text-decoration: underline; }
+}

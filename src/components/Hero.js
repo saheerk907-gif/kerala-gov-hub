@@ -183,6 +183,31 @@ export default function Hero() {
           ))}
         </div>
 
+        {/* Quick-access links */}
+        <div className="flex flex-wrap justify-center gap-2 mt-5">
+          {[
+            { label: 'Pension', href: '/pension' },
+            { label: 'Pay Revision', href: '/prc' },
+            { label: 'Leave', href: '/leave' },
+            { label: 'Forms', href: '/forms' },
+            { label: 'Govt Orders', href: '/orders' },
+            { label: 'Income Tax', href: '/income-tax' },
+          ].map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="px-3 py-1.5 rounded-full text-[11px] font-semibold no-underline transition-all duration-200 hover:scale-105 hover:brightness-110"
+              style={{
+                background: surfaceMd,
+                color: textSub,
+                border: `1px solid ${border}`,
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
       </div>
     </section>
   );
