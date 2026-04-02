@@ -231,11 +231,7 @@ function ToolCard({ t }) {
       <div className="text-[8px] font-semibold uppercase tracking-wider leading-tight text-white/70 mb-1.5">
         {t.subtitle}
       </div>
-      {t.desc && (
-        <p className="text-[10px] leading-relaxed text-white/50 line-clamp-2 mt-auto">
-          {t.desc}
-        </p>
-      )}
+
       <div
         className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
         style={{ background: `linear-gradient(90deg, transparent, ${t.color}70, transparent)` }}
