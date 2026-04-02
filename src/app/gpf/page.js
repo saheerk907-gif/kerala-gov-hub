@@ -27,10 +27,10 @@ export const metadata = buildMetadata({
 });
 
 export default async function GpfPage() {
-  const [{ data }, { data: articles }] = await Promise.all([
+  const [{ data }, { data: articles }] = supabase ? await Promise.all([
     supabase.from('schemes').select('*').eq('slug', 'gpf').single(),
     supabase.from('news').select('*').eq('category', 'gpf').order('created_at', { ascending: false }),
-  ]);
+  ]) : [{ data: null }, { data: [] }];
 
   const scheme = data || {};
   const posts = articles || [];

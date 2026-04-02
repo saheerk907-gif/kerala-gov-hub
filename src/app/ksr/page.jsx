@@ -64,10 +64,10 @@ const faqJsonLd = {
 };
 
 export default async function KsrPage() {
-  const [{ data }, { data: articles }] = await Promise.all([
+  const [{ data }, { data: articles }] = supabase ? await Promise.all([
     supabase.from('schemes').select('*').eq('slug', 'ksr').single(),
     supabase.from('news').select('*').eq('category', 'ksr').order('created_at', { ascending: false }),
-  ]);
+  ]) : [{ data: null }, { data: [] }];
 
   const scheme = data || {};
   const posts = articles || [];

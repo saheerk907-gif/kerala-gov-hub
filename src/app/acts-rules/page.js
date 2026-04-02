@@ -6,11 +6,13 @@ import Footer from '@/components/Footer';
 export const revalidate = 3600;
 
 export default async function ActsRulesPage() {
-  const { data: acts } = await supabase
-    .from('acts_rules')
-    .select('id, title, title_ml, slug, category, summary, pdf_url, official_url, act_number, year, tags, is_published')
-    .eq('is_published', true)
-    .order('year', { ascending: false });
+  const { data: acts } = supabase
+    ? await supabase
+        .from('acts_rules')
+        .select('id, title, title_ml, slug, category, summary, pdf_url, official_url, act_number, year, tags, is_published')
+        .eq('is_published', true)
+        .order('year', { ascending: false })
+    : { data: [] };
 
   return (
     <>

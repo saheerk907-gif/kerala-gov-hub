@@ -76,6 +76,15 @@ function TestsPageInner() {
             ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റുകൾ
           </h1>
           <p className="text-[14px] text-white/70">Kerala PSC — 30 departments, 64+ tests, syllabus & quiz</p>
+          <div className="mt-4 rounded-2xl p-4 md:p-5"
+            style={{ background: 'rgba(41,151,255,0.04)', border: '1px solid rgba(41,151,255,0.10)' }}>
+            <p className="text-[13px] text-white/60 leading-relaxed mb-2">
+              Departmental Tests are mandatory qualifying examinations for Kerala State Government employees conducted by the Kerala Public Service Commission (PSC). These tests are required for confirmation in service, promotion, and departmental advancement. Tests cover subjects including Kerala Service Rules (KSR), Manual of Office Procedure (MOP), Kerala Financial Code (KFC), Account Code, and department-specific regulations.
+            </p>
+            <p className="text-[12px] text-white/50 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              കേരള PSC നടത്തുന്ന ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റുകൾ — KSR, MOP, KFC, Account Code, Revenue, Treasury, Excise, Police, Forest, Education, Health, Agriculture തുടങ്ങി 30 വകുപ്പുകളിലായി 64+ ടെസ്റ്റുകൾ. Syllabus, Paper-wise Quiz, Exam Pattern — ഇവ ഇവിടെ ലഭ്യമാണ്.
+            </p>
+          </div>
         </div>
 
         {/* Search */}

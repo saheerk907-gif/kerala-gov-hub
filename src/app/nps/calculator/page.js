@@ -29,6 +29,19 @@ export default function NpsCalculatorPage() {
             <span className="text-[#ff9f0a]">NPS Corpus Calculator</span>
           </div>
 
+          <div className="mb-8">
+            <div className="text-[10px] font-black uppercase tracking-widest text-[#ff9f0a] mb-2">National Pension System · Kerala Government</div>
+            <h1 className="text-[clamp(24px,4vw,40px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white">
+              NPS Corpus Calculator — Kerala Government Employees
+            </h1>
+            <p className="text-[14px] text-white/65 leading-relaxed mb-2">
+              Estimate your National Pension System (NPS) retirement corpus and projected monthly pension. Kerala government employees under NPS contribute 10% of Basic Pay + DA per month, with an equal government contribution of 14%. Enter your current pay, age, and expected annual returns to project your total corpus at age 60. At retirement, 60% can be withdrawn as lump sum (tax-free) and 40% must be used to buy an annuity for monthly pension.
+            </p>
+            <p className="text-[13px] text-white/50 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              NPS-ൽ നിങ്ങളുടെ വിരമിക്കൽ Corpus, Lump Sum തുക, പ്രതിമാസ പെൻഷൻ എന്നിവ കണക്കാക്കുക. PFRDA മാർഗനിർദ്ദേശങ്ങൾ അനുസരിച്ചുള്ള കണക്കുകൂട്ടൽ.
+            </p>
+          </div>
+
           <NpsCorpusCalculator />
 
           {/* NPS vs APS teaser */}

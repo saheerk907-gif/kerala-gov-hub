@@ -15,10 +15,10 @@ export const metadata = buildMetadata({
 });
 
 export default async function MedisepPage() {
-  const [{ data }, { data: articles }] = await Promise.all([
+  const [{ data }, { data: articles }] = supabase ? await Promise.all([
     supabase.from('schemes').select('*').eq('slug', 'medisep').single(),
     supabase.from('news').select('*').eq('category', 'medisep').order('created_at', { ascending: false }),
-  ]);
+  ]) : [{ data: null }, { data: [] }];
 
   const scheme = data || {};
   const posts = articles || [];

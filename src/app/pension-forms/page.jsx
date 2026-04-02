@@ -99,6 +99,23 @@ export default function PensionFormsPage() {
           </p>
         </div>
 
+        {/* Descriptive intro */}
+        <div className="mb-8 rounded-2xl p-5 md:p-6"
+          style={{ background: 'rgba(41,151,255,0.04)', border: '1px solid rgba(41,151,255,0.10)' }}>
+          <p className="text-[13px] text-white/65 leading-relaxed mb-3">
+            This page provides all 24 official pension forms from <strong className="text-white/80">PRISM</strong> (Pension and Retirement Information System Management), the official pension portal of the Finance Department, Government of Kerala (prism.kerala.gov.in). Forms cover pension application, family pension, gratuity, commutation, nomination, indemnity bonds, and special pension categories.
+          </p>
+          <p className="text-[13px] text-white/60 leading-relaxed mb-3">
+            <strong className="text-white/80">Pension application forms</strong> include Form 2 (Application for Pension/Gratuity), Form 6 (Family Pension application), and Form 11 (Formal Application for Pension/Commutation).{' '}
+            <strong className="text-white/80">Commutation forms</strong> include Form A (Commutation on Medical Examination), Form B, Form C (Statement for commutation), Form D (Commutation without Medical Examination), and Form E (Restoration of commuted pension).{' '}
+            <strong className="text-white/80">Nomination forms</strong> include Forms 4B, 4D (Gratuity nomination), Forms 5, 5A, 6A (Family Pension), and Forms 15, 16, 17 (Arrears of Pension nomination).
+          </p>
+          <p className="text-[13px] text-white/55 leading-relaxed"
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            കേരള സർക്കാർ ജീവനക്കാരുടെ പെൻഷൻ, ഗ്രാറ്റ്വിറ്റി, ഫാമിലി പെൻഷൻ, Commutation എന്നിവയ്ക്കുള്ള എല്ലാ ഔദ്യോഗിക ഫോമുകളും PRISM-ൽ നിന്ന് ഇവിടെ ഡൗൺലോഡ് ചെയ്യാം.
+          </p>
+        </div>
+
         {/* Search + Filter */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <input

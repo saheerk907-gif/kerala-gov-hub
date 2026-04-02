@@ -25,6 +25,19 @@ export default function EarnedLeavePage() {
             <span>›</span>
             <span className="text-[#ff9f0a]">Earned Leave</span>
           </div>
+
+          <div className="mb-8">
+            <h1 className="text-[clamp(24px,4vw,40px)] font-[900] tracking-[-0.03em] leading-tight mb-3 text-white">
+              Earned Leave Calculator — Kerala Government Employees
+            </h1>
+            <p className="text-[14px] text-white/65 leading-relaxed mb-2">
+              Calculate your Earned Leave (EL) balance, surrender value, and encashment amount as per Kerala Service Rules (KSR) Part I. Earned Leave accrues at 1/11th of duty days, subject to a maximum accumulation of 300 days. EL can be surrendered for cash payment (encashment) at the time of retirement or availed as leave with full pay during service.
+            </p>
+            <p className="text-[13px] text-white/50 leading-relaxed" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+              KSR Part I അനുസരിച്ചുള്ള Earned Leave ബാലൻസ്, Encashment തുക, Leave Surrender ആനുകൂല്യം — ഇവ കണക്കാക്കാൻ ഈ കാൽക്കുലേറ്റർ ഉപയോഗിക്കുക.
+            </p>
+          </div>
+
           <LeaveCalculator />
         </div>
       </main>

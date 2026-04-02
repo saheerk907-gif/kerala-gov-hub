@@ -29,11 +29,9 @@ const TOPICS = [
 ];
 
 export default async function KsrPart1Page() {
-  const { data } = await supabase
-    .from('schemes')
-    .select('*')
-    .eq('slug', 'ksr-part-1')
-    .single();
+  const { data } = supabase
+    ? await supabase.from('schemes').select('*').eq('slug', 'ksr-part-1').single()
+    : { data: null };
 
   const scheme = data || {};
 

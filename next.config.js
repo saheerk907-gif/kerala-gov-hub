@@ -39,25 +39,11 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
-      // Images — cache for 30 days
+      // Images in public folder — cache for 30 days
       {
-        source: '/:path(.*\\.(jpg|jpeg|png|gif|webp|svg|ico)$)',
+        source: '/images/:path*',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=2592000, must-revalidate' },
-        ],
-      },
-      // Fonts — cache for 1 year
-      {
-        source: '/:path(.*\\.(ttf|otf|woff|woff2)$)',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-        ],
-      },
-      // HTML pages — don't cache (always fresh)
-      {
-        source: '/:path(.*\\.html)$',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=3600, must-revalidate' },
         ],
       },
       // Security + compression headers

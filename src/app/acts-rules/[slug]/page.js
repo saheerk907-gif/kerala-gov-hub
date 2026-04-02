@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 export const revalidate = 86400;
 
 export async function generateStaticParams() {
+  if (!supabase) return [];
   const { data } = await supabase
     .from('acts_rules')
     .select('slug')
@@ -16,6 +17,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
+  if (!supabase) return {};
   const { data: act } = await supabase
     .from('acts_rules')
     .select('title, title_ml, summary, slug, year, act_number, tags')

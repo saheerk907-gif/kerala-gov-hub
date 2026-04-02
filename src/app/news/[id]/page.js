@@ -10,6 +10,7 @@ export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { id } = params;
+  if (!supabase) return { title: 'വാർത്ത | Kerala Employees' };
   const { data: item } = await supabase.from('news').select('title_ml,title_en,summary_ml,image_url,created_at').eq('id', id).single();
   if (!item) return { title: 'വാർത്ത | Kerala Employees' };
   const title = item.title_en || item.title_ml;
@@ -111,11 +112,9 @@ async function fetchArticleContent(url) {
 export default async function NewsDetailPage({ params }) {
   const { id } = params;
 
-  const { data: item, error } = await supabase
-    .from('news')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const { data: item, error } = supabase
+    ? await supabase.from('news').select('*').eq('id', id).single()
+    : { data: null, error: true };
 
   if (error || !item) {
     return (

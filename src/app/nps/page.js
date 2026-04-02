@@ -70,7 +70,7 @@ const faqJsonLd = {
 
 export default async function NpsPage() {
   const [schemeResult, documents, articles] = await Promise.all([
-    supabase.from('schemes').select('*').eq('slug', 'nps').single(),
+    supabase ? supabase.from('schemes').select('*').eq('slug', 'nps').single() : Promise.resolve({ data: null }),
     getNpsDocuments(),
     getNpsArticles(),
   ]);
