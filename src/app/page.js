@@ -15,6 +15,7 @@ import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import MobileBottomNav from '@/components/MobileBottomNav';
+import FeatureCarousel from '@/components/FeatureCarousel';
 
 export const revalidate = 3600;
 
@@ -46,6 +47,9 @@ export default async function HomePage() {
 
       {/* Hero with search + quick access */}
       <Hero />
+
+      {/* Feature cards carousel */}
+      <FeatureCarousel />
 
       {/* Live breaking news ticker */}
       <AnnouncementBanner />
