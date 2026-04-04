@@ -233,6 +233,27 @@ export default function ToolsSection() {
             </div>
           </div>
 
+          {/* More Tools box */}
+          <Link
+            href="/tools"
+            className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5 group flex flex-col items-center justify-center text-center no-underline transition-all hover:bg-white/[0.08]"
+            style={{ border: '1px solid rgba(255,255,255,0.08)', minHeight: '200px' }}
+          >
+            <div className="text-4xl mb-3">🔧</div>
+            <h3 className="text-[14px] md:text-[15px] font-bold text-white/90 group-hover:text-white transition-colors mb-2">
+              More Tools
+            </h3>
+            <p className="text-[11px] text-white/60 group-hover:text-white/70 transition-colors">
+              Explore all our useful tools & calculators
+            </p>
+            <div className="mt-3 flex items-center gap-1 text-[12px] font-bold text-[#2997ff]">
+              View all
+              <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="group-hover:translate-x-0.5 transition-transform">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </Link>
+
         </div>
       </div>
     </section>
