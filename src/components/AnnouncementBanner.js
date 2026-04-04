@@ -45,29 +45,37 @@ export default function AnnouncementBanner() {
 
   return (
     <div
-      className="relative overflow-hidden border-b"
-      style={{ background: 'var(--nav-bg-scrolled)', borderColor: 'var(--nav-border)' }}
+      className="relative overflow-hidden border-y"
+      style={{ background: '#fff', borderColor: '#e5e7eb' }}
     >
       <div className="flex items-center h-10">
 
-        {/* BREAKING label */}
+        {/* NEWS | LIVE label */}
         <div
           className="flex items-center gap-2 px-4 h-full flex-shrink-0 border-r"
-          style={{ background: 'rgba(41,151,255,0.85)', borderColor: 'var(--surface-sm)' }}
+          style={{ background: '#fff', borderColor: '#e5e7eb' }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-          <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white whitespace-nowrap">
-            Live
+          <span className="text-[10px] font-black uppercase tracking-[0.18em] text-gray-700 whitespace-nowrap">
+            NEWS
           </span>
+          <div
+            className="flex items-center gap-1 px-2 py-0.5 rounded"
+            style={{ background: '#ef4444' }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white whitespace-nowrap">
+              LIVE
+            </span>
+          </div>
         </div>
 
         {/* Scrolling ticker */}
         <div className="flex-1 overflow-hidden relative">
           {/* Fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to right, var(--bg-primary), transparent)' }} />
+            style={{ background: 'linear-gradient(to right, #fff, transparent)' }} />
           <div className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, var(--bg-primary), transparent)' }} />
+            style={{ background: 'linear-gradient(to left, #fff, transparent)' }} />
 
           <div className="flex items-center gap-0 ticker-track whitespace-nowrap">
             {repeated.map((item, i) => (
@@ -75,17 +83,17 @@ export default function AnnouncementBanner() {
                 className="inline-flex items-center gap-2 px-5 no-underline group flex-shrink-0">
                 <span
                   className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded flex-shrink-0"
-                  style={{ background: item.color + '25', color: item.color, border: `1px solid ${item.color}30` }}>
+                  style={{ background: item.color + '18', color: item.color, border: `1px solid ${item.color}30` }}>
                   {item.label}
                 </span>
-                <span className="text-[11px] font-medium text-white/55 group-hover:text-white/85 transition-colors"
-                  style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+                <span className="text-[11px] font-medium transition-colors"
+                  style={{ color: '#444', fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {item.text}
                 </span>
                 {item.sub && (
-                  <span className="text-[10px] text-white/45 font-sans flex-shrink-0">{item.sub}</span>
+                  <span className="text-[10px] font-sans flex-shrink-0" style={{ color: '#888' }}>{item.sub}</span>
                 )}
-                <span className="text-white/10 mx-1 flex-shrink-0">◆</span>
+                <span className="mx-1 flex-shrink-0" style={{ color: '#ccc' }}>◆</span>
               </a>
             ))}
           </div>
@@ -93,8 +101,8 @@ export default function AnnouncementBanner() {
 
         {/* Dismiss */}
         <button onClick={() => setDismissed(true)}
-          className="flex-shrink-0 px-3 h-full text-white/40 hover:text-white/60 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
-          style={{ borderColor: 'var(--surface-xs)' }}>
+          className="flex-shrink-0 px-3 h-full transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
+          style={{ color: '#aaa', borderColor: '#e5e7eb' }}>
           ×
         </button>
       </div>

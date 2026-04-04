@@ -42,7 +42,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="relative min-h-screen bg-aurora overflow-x-hidden pb-14 md:pb-0">
+    <div className="relative min-h-screen overflow-x-hidden pb-14 md:pb-0" style={{ background: '#fff' }}>
 
       {/* Hero with search + quick access */}
       <Hero />
