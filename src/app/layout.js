@@ -63,7 +63,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ml" data-theme="light" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
+    <html lang="ml" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script
@@ -75,7 +75,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="font-sans bg-white text-gray-900 antialiased overflow-x-hidden min-h-screen">
+      <body className="font-sans bg-[#121416] text-white antialiased overflow-x-hidden min-h-screen">
         <GoogleAnalytics />
         <Navbar />
         <main>{children}</main>
