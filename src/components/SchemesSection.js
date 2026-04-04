@@ -25,6 +25,7 @@ export default function SchemesSection({ schemes }) {
   return (
     <section id="services" className="relative py-5 md:py-10 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
         <div className="mb-6">
@@ -48,7 +49,7 @@ export default function SchemesSection({ schemes }) {
               <Link
                 key={scheme.id}
                 href={pageUrl}
-                className="glass-card group relative flex items-center gap-3 px-4 py-3 rounded-[16px] no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] overflow-hidden"
+                className="group relative flex items-center gap-3 px-4 py-3 rounded-[14px] no-underline transition-all duration-200 hover:bg-white/[0.06] overflow-hidden"
               >
                 {/* Glow blob */}
                 <div
@@ -94,6 +95,7 @@ export default function SchemesSection({ schemes }) {
             );
           })}
         </div>
+      </div>
       </div>
     </section>
   );

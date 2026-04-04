@@ -129,6 +129,7 @@ export default function ArticlesSection() {
 
   return (
     <section className="py-5 md:py-8 px-4 md:px-6 max-w-[1200px] mx-auto">
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
       {/* Header — matches other sections */}
       <div className="mb-5">
@@ -167,6 +168,7 @@ export default function ArticlesSection() {
         </Link>
       </div>
 
+      </div>
     </section>
   );
 }

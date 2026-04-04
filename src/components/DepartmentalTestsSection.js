@@ -9,6 +9,7 @@ export default function DepartmentalTestsSection() {
   return (
     <section id="departmental-tests" className="relative py-7 md:py-10 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
         <div className="flex items-end justify-between mb-6 gap-4">
@@ -78,6 +79,7 @@ export default function DepartmentalTestsSection() {
           })}
         </div>
 
+      </div>
       </div>
     </section>
   );

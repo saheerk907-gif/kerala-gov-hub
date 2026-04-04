@@ -38,7 +38,8 @@ export default function ForumSection() {
 
   return (
     <section id="community" className="relative py-7 md:py-10 px-4 md:px-6">
-      <div className="max-w-[1200px] mx-auto border-t border-white/[0.06] pt-7 md:pt-10">
+      <div className="max-w-[1200px] mx-auto">
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
         <div className="flex items-end justify-between mb-6">
@@ -81,14 +82,14 @@ export default function ForumSection() {
             </Link>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             {threads.map(thread => {
               const cat = CATEGORY_LABELS[thread.category] || CATEGORY_LABELS.general;
               return (
                 <Link
                   key={thread.id}
                   href={`/forum/${thread.id}`}
-                  className="glass-card group flex items-center gap-3 px-4 py-3.5 rounded-2xl no-underline transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+                  className="group flex items-center gap-3 px-4 py-3.5 rounded-[14px] no-underline transition-all duration-200 hover:bg-white/[0.06]"
                 >
                   {/* Category dot */}
                   <div
@@ -146,6 +147,7 @@ export default function ForumSection() {
           </div>
         )}
 
+      </div>
       </div>
     </section>
   );
