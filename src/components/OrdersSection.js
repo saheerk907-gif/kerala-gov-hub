@@ -25,12 +25,12 @@ export default function OrdersSection({ orders }) {
   };
 
   return (
-    <section id="orders" className="relative py-5 md:py-8 flex flex-col h-full">
-      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7 flex flex-col h-full" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+    <section id="orders" className="relative py-2 md:py-3 flex flex-col h-full">
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5 flex flex-col h-full" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
-        <div className="mb-5">
-          <div className="section-label mb-2">Latest Updates</div>
+        <div className="mb-3">
+          <div className="section-label mb-1">Latest Updates</div>
           <h2 className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
             സർക്കാർ ഉത്തരവുകൾ
           </h2>

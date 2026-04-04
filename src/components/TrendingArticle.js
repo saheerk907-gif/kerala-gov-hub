@@ -24,7 +24,7 @@ export default function TrendingArticle() {
   const summary = article.summary_ml ? article.summary_ml.replace(/<[^>]+>/g, '').slice(0, 80) : null;
 
   return (
-    <div className="px-4 md:px-6 max-w-[1200px] mx-auto mt-2 mb-3 md:mt-4 md:mb-6">
+    <div className="px-4 md:px-6 max-w-[1200px] mx-auto mt-2 mb-2 md:mt-2 md:mb-3">
       <Link href={`/articles/${article.id}`} className="no-underline group block">
         <div className="relative rounded-xl md:rounded-2xl overflow-hidden transition-all duration-300 active:scale-[0.99]"
           style={{ background: 'linear-gradient(135deg, rgba(200,150,12,0.10) 0%, rgba(245,208,96,0.04) 100%)', border: '1px solid rgba(200,150,12,0.28)' }}>

@@ -7,14 +7,14 @@ export default function DepartmentalTestsSection() {
   TESTS.forEach(t => { countByDept[t.dept] = (countByDept[t.dept] || 0) + 1; });
 
   return (
-    <section id="departmental-tests" className="relative py-7 md:py-10 px-4 md:px-6">
+    <section id="departmental-tests" className="relative py-3 md:py-4 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
-      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-6 gap-4">
+        <div className="flex items-end justify-between mb-3 gap-4">
           <div>
-            <div className="section-label mb-2">Exam Prep</div>
+            <div className="section-label mb-1">Exam Prep</div>
             <h2
               className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight"
               style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}

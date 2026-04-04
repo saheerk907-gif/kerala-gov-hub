@@ -259,7 +259,7 @@ export default function ToolsSection() {
     : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
   return (
-    <section id="tools" className="relative py-5 md:py-8 px-4 md:px-6">
+    <section id="tools" className="relative py-3 md:py-4 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Section header */}
@@ -281,7 +281,7 @@ export default function ToolsSection() {
         <div className="flex flex-col gap-5">
 
           {/* PDF Tools box */}
-          <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+          <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
             <div className="mb-4 flex items-center gap-3">
               <span className="text-[11px] font-black uppercase tracking-widest text-white/50">PDF Tools</span>
               <div className="flex-1 h-px bg-white/[0.07]" />

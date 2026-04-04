@@ -18,13 +18,13 @@ export default function QuickLinksSection({ links }) {
   if (!links?.length) return null;
 
   return (
-    <section id="links" className="relative py-5 md:py-10 px-4 md:px-6">
+    <section id="links" className="relative py-3 md:py-4 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
-      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
         {/* Header */}
-        <div className="mb-6">
-          <div className="section-label mb-2">Quick Access</div>
+        <div className="mb-3">
+          <div className="section-label mb-1">Quick Access</div>
           <h2
             className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white leading-tight"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}

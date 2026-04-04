@@ -20,7 +20,7 @@ export const revalidate = 3600;
 
 function SectionDivider({ label, icon }) {
   return (
-    <div className="max-w-[1200px] mx-auto px-4 md:px-6 mt-12 md:mt-16 mb-4 md:mb-5">
+    <div className="max-w-[1200px] mx-auto px-4 md:px-6 mt-6 md:mt-8 mb-3">
       <div className="flex items-center gap-3">
         <span className="text-[13px] md:text-[14px]">{icon}</span>
         <span className="section-group-label text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em]">
