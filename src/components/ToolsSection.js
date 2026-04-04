@@ -67,6 +67,30 @@ export default function ToolsSection() {
           </h2>
         </div>
 
+        {/* Trending tools — compact chips */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <span className="text-[9px] font-black uppercase tracking-widest text-white/35 self-center mr-1">Trending:</span>
+          {[
+            { label: 'PDF Editor', href: '/tools/pdf-editor', icon: '📝' },
+            { label: 'PDF Merger', href: '/tools/pdf-merger', icon: '🗂️' },
+            { label: 'PDF Splitter', href: '/tools/pdf-splitter', icon: '✂️' },
+            { label: 'NPS vs APS', href: '/nps-aps', icon: '📊' },
+            { label: 'DA Arrear', href: '/da-arrear', icon: '💸' },
+            { label: 'Leave Calc', href: '/leave', icon: '📅' },
+            { label: 'Holiday List', href: '/tools/holiday-list-2026', icon: '🗓️' },
+          ].map(t => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold no-underline transition-all hover:bg-white/[0.10]"
+              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.09)' }}
+            >
+              <span className="text-[12px]">{t.icon}</span>
+              {t.label}
+            </Link>
+          ))}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {CATEGORIES.map((cat) => (
             <Link
