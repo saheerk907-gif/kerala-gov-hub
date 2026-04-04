@@ -261,10 +261,9 @@ export default function ToolsSection() {
   return (
     <section id="tools" className="relative py-5 md:py-8 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
-      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
 
-        {/* Header */}
-        <div className="mb-6">
+        {/* Section header */}
+        <div className="mb-5">
           <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.25em] text-white/40 mb-2">Tools & Calculators</div>
           <h2
             className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
@@ -279,53 +278,60 @@ export default function ToolsSection() {
           <div className="h-[2px] w-10 bg-gradient-to-r from-[#2997ff] to-transparent mt-2 rounded-full" />
         </div>
 
-        {/* PDF Tools sub-section */}
-        <div className="mb-3 flex items-center gap-3">
-          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">PDF Tools</span>
-          <div className="flex-1 h-px bg-white/[0.07]" />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          {pdfTools.map((t) => (
-            <ToolCard key={t.href} t={t} />
-          ))}
-        </div>
+        <div className="flex flex-col gap-5">
 
-        {/* Utilities sub-section */}
-        <div className="mb-3 flex items-center gap-3">
-          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">Utilities</span>
-          <div className="flex-1 h-px bg-white/[0.07]" />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          {utilityTools.map((t) => (
-            <ToolCard key={t.href} t={t} />
-          ))}
-        </div>
-
-        {/* Calculators sub-section */}
-        <div className="mb-3 flex items-center gap-3">
-          <span className="text-[11px] font-black uppercase tracking-widest text-white/40">Calculators & Guides</span>
-          <div className="flex-1 h-px bg-white/[0.07]" />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {tools.map((t, idx) => (
-            <div key={t.title} className={idx >= MOBILE_VISIBLE && !expanded ? 'md:block hidden' : 'block'}>
-              <ToolCard t={t} />
+          {/* PDF Tools box */}
+          <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="text-[11px] font-black uppercase tracking-widest text-white/50">PDF Tools</span>
+              <div className="flex-1 h-px bg-white/[0.07]" />
             </div>
-          ))}
-        </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {pdfTools.map((t) => (
+                <ToolCard key={t.href} t={t} />
+              ))}
+            </div>
+          </div>
 
-        {/* Show more / less — mobile only */}
-        <div className="md:hidden mt-4 flex justify-center">
-          <button
-            onClick={() => setExpanded(v => !v)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
-            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
-          >
-            {expanded ? 'Show less ↑' : `Show all ${tools.length} tools ↓`}
-          </button>
-        </div>
+          {/* Utilities box */}
+          <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="text-[11px] font-black uppercase tracking-widest text-white/50">Utilities</span>
+              <div className="flex-1 h-px bg-white/[0.07]" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {utilityTools.map((t) => (
+                <ToolCard key={t.href} t={t} />
+              ))}
+            </div>
+          </div>
 
-      </div>
+          {/* Calculators & Guides box */}
+          <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-5 md:p-7" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="mb-4 flex items-center gap-3">
+              <span className="text-[11px] font-black uppercase tracking-widest text-white/50">Calculators & Guides</span>
+              <div className="flex-1 h-px bg-white/[0.07]" />
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {tools.map((t, idx) => (
+                <div key={t.title} className={idx >= MOBILE_VISIBLE && !expanded ? 'md:block hidden' : 'block'}>
+                  <ToolCard t={t} />
+                </div>
+              ))}
+            </div>
+            {/* Show more / less — mobile only */}
+            <div className="md:hidden mt-4 flex justify-center">
+              <button
+                onClick={() => setExpanded(v => !v)}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+                style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.20)' }}
+              >
+                {expanded ? 'Show less ↑' : `Show all ${tools.length} tools ↓`}
+              </button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );
