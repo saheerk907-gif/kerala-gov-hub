@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ExperienceCard from './ExperienceCard';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -91,12 +92,30 @@ export default function ExperiencesSection() {
       {/* Header */}
       <div className="mb-3">
         <div className="section-label mb-1">Community</div>
-        <h2
-          className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
-          style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
-        >
-          അനുഭവങ്ങൾ പങ്കിടുക
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2
+            className="text-[clamp(22px,3vw,32px)] font-[900] tracking-[-0.02em] text-white"
+            style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
+          >
+            അനുഭവങ്ങൾ പങ്കിടുക
+          </h2>
+          {/* Contributor avatars */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex -space-x-2">
+              <div className="w-9 h-9 rounded-full border-2 overflow-hidden flex-shrink-0" style={{ borderColor: 'rgba(48,209,88,0.5)' }}>
+                <Image src="/images/employee1.jpg" alt="Kerala Govt Employee" width={36} height={36} className="w-full h-full object-cover object-top" />
+              </div>
+              <div className="w-9 h-9 rounded-full border-2 overflow-hidden flex-shrink-0" style={{ borderColor: 'rgba(48,209,88,0.5)' }}>
+                <Image src="/images/employee2.jpg" alt="Kerala Govt Employee" width={36} height={36} className="w-full h-full object-cover object-top" />
+              </div>
+              <div className="w-9 h-9 rounded-full border-2 flex items-center justify-center text-[10px] font-bold text-white/70 flex-shrink-0"
+                style={{ background: 'rgba(255,255,255,0.08)', borderColor: 'rgba(48,209,88,0.5)' }}>
+                +48
+              </div>
+            </div>
+            <span className="text-[10px] text-white/45 hidden sm:block">sharing experiences</span>
+          </div>
+        </div>
         <div
           className="h-[2px] w-10 mt-2 rounded-full"
           style={{ background: `linear-gradient(to right, ${GREEN}, transparent)` }}
