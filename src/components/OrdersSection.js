@@ -67,59 +67,56 @@ export default function OrdersSection({ orders }) {
             </div>
           ) : currentOrders.map((o) => {
             const isDirectPdf = o.pdf_url && !o.pdf_url.includes('finance.kerala.gov.in');
-            return isDirectPdf ? (
+            const accentColor = o.is_pinned ? '#ff9f0a' : '#2997ff';
+          return isDirectPdf ? (
             <a key={o.id} href={o.pdf_url} target="_blank" rel="noopener noreferrer" download className="block no-underline group">
-              <div className={`relative flex items-center gap-3 p-3 md:p-4 rounded-[14px] transition-all duration-200 hover:bg-white/[0.06] mb-1.5 md:mb-2 ${o.is_pinned ? 'bg-[#ff9f0a]/[0.06]' : ''}`}>
-                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={o.is_pinned ? { background: 'rgba(255,159,10,0.20)', border: '1px solid rgba(255,159,10,0.35)' } : { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <div className={`relative flex items-center gap-3 px-4 py-3 rounded-[14px] transition-all duration-200 hover:bg-white/[0.06] mb-1.5 overflow-hidden ${o.is_pinned ? 'bg-[#ff9f0a]/[0.04]' : ''}`}>
+                {/* Glow blob */}
+                <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                  style={{ background: accentColor + '30' }} />
+                <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105" style={o.is_pinned ? { background: 'rgba(255,159,10,0.20)', border: '1px solid rgba(255,159,10,0.35)' } : { background: 'rgba(41,151,255,0.12)', border: '1px solid rgba(41,151,255,0.22)' }}>
                   {o.is_pinned ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 2L8 8H3l4 4-1.5 7L12 16l6.5 3L17 12l4-4h-5L12 2z"/>
-                    </svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff9f0a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L8 8H3l4 4-1.5 7L12 16l6.5 3L17 12l4-4h-5L12 2z"/></svg>
                   ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2997ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                      <polyline points="14 2 14 8 20 8"/>
-                      <line x1="16" y1="13" x2="8" y2="13"/>
-                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
                     </svg>
                   )}
                 </div>
                 <div className="flex-grow min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-white/[0.08] text-white/65'}`}>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-[#2997ff]/20 text-[#2997ff]'}`}>
                       {o.is_pinned ? 'PINNED' : (o.go_number?.split('/')[0] || 'GO')}
                     </span>
-                    <span className="text-[10px] text-white/70">{formatDate(o.go_date)}</span>
+                    <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
                   </div>
                   <h3 className="text-[12px] md:text-[13px] font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                     {o.title_ml}
                   </h3>
                 </div>
-                <svg className="w-4 h-4 text-white/35 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 text-white/30 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                 </svg>
+                {/* Bottom accent */}
+                <div className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  style={{ background: `linear-gradient(90deg, transparent, ${accentColor}70, transparent)` }} />
               </div>
             </a>
           ) : (
-            <div key={o.id} className="relative flex items-center gap-3 p-3 md:p-4 rounded-[14px] mb-1.5 md:mb-2 opacity-50 cursor-not-allowed">
-              <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+            <div key={o.id} className="relative flex items-center gap-3 px-4 py-3 rounded-[14px] mb-1.5 opacity-40 cursor-not-allowed overflow-hidden">
+              <div className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-faint)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                  <line x1="16" y1="13" x2="8" y2="13"/>
-                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
                 </svg>
               </div>
               <div className="flex-grow min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.08] text-white/65">
-                    {o.go_number?.split('/')[0] || 'GO'}
-                  </span>
-                  <span className="text-[10px] text-white/65">{formatDate(o.go_date)}</span>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.08] text-white/65">{o.go_number?.split('/')[0] || 'GO'}</span>
+                  <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
                 </div>
-                <h3 className="text-[13px] font-bold leading-snug text-white/60 line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
-                  {o.title_ml}
-                </h3>
+                <h3 className="text-[13px] font-bold leading-snug text-white/60 line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{o.title_ml}</h3>
               </div>
             </div>
           );

@@ -90,13 +90,20 @@ export default function ForumSection() {
                 <Link
                   key={thread.id}
                   href={`/forum/${thread.id}`}
-                  className="group flex items-center gap-3 px-4 py-3.5 rounded-[14px] no-underline transition-all duration-200 hover:bg-white/[0.06]"
+                  className="group relative flex items-center gap-3 px-4 py-3.5 rounded-[14px] no-underline transition-all duration-200 hover:bg-white/[0.06] overflow-hidden"
                 >
-                  {/* Category dot */}
+                  {/* Glow blob */}
+                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                    style={{ background: cat.color + '30' }} />
+                  {/* Category icon box */}
                   <div
-                    className="flex-shrink-0 w-2 h-2 rounded-full"
-                    style={{ background: cat.color }}
-                  />
+                    className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105"
+                    style={{ background: cat.color + '18', border: `1px solid ${cat.color}35` }}
+                  >
+                    <svg width="14" height="14" fill="none" stroke={cat.color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                  </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
@@ -133,6 +140,9 @@ export default function ForumSection() {
                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                   </svg>
+                  {/* Bottom accent */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    style={{ background: `linear-gradient(90deg, transparent, ${cat.color}70, transparent)` }} />
                 </Link>
               );
             })}

@@ -97,12 +97,15 @@ export default function AudioPlayer({ limit }) {
                 <button
                   key={ep.id}
                   onClick={() => playEpisode(ep)}
-                  className={`glass-card glow-top w-full text-left flex items-center gap-3 p-3 md:p-4 rounded-[16px] md:rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group ${isActive ? 'audio-ep-active' : ''}`}
+                  className={`glass-card glow-top w-full text-left relative flex items-center gap-3 p-3 md:p-4 rounded-[16px] md:rounded-[20px] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] group overflow-hidden ${isActive ? 'audio-ep-active' : ''}`}
                   style={isActive ? { borderColor: 'var(--text-ghost)' } : {}}
                 >
+                  {/* Glow blob */}
+                  <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                    style={{ background: isActive ? 'rgba(41,151,255,0.35)' : 'rgba(100,210,255,0.25)' }} />
                   {/* Play/pause icon */}
                   <div
-                    className="audio-icon-box flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all"
+                    className="audio-icon-box flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-all group-hover:scale-105"
                     style={isActive
                       ? { background: 'var(--surface-md)', color: 'var(--text-primary)' }
                       : { background: 'var(--surface-xs)', color: 'var(--text-dim)' }}
@@ -135,9 +138,12 @@ export default function AudioPlayer({ limit }) {
                     )}
                   </div>
 
-                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/65 flex-shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white/40 group-hover:text-white/65 group-hover:translate-x-0.5 flex-shrink-0 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"/>
                   </svg>
+                  {/* Bottom accent */}
+                  <div className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    style={{ background: 'linear-gradient(90deg, transparent, rgba(100,210,255,0.7), transparent)' }} />
                 </button>
               );
             })}

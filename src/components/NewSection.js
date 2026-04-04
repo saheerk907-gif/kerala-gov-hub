@@ -56,8 +56,11 @@ export default function NewsSection() {
             <div>
               {(expanded ? news : news.slice(0, 3)).map((item, index) => (
                 <Link key={item.id} href={`/news/${item.id}`} className="block no-underline group">
-                  <div className={`relative flex items-center gap-3 p-3 md:p-4 rounded-[14px] transition-all duration-200 hover:bg-white/[0.06] mb-1.5 md:mb-2 ${index === 0 ? 'bg-[#2997ff]/[0.06]' : ''}`}>
-                    <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={index === 0 ? { background: 'rgba(41,151,255,0.20)', border: '1px solid rgba(41,151,255,0.35)' } : { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  <div className={`relative flex items-center gap-3 p-3 md:p-4 rounded-[14px] transition-all duration-200 hover:bg-white/[0.06] mb-1.5 md:mb-2 overflow-hidden ${index === 0 ? 'bg-[#2997ff]/[0.06]' : ''}`}>
+                    {/* Glow blob */}
+                    <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full blur-[30px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                      style={{ background: 'rgba(41,151,255,0.3)' }} />
+                    <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105" style={index === 0 ? { background: 'rgba(41,151,255,0.20)', border: '1px solid rgba(41,151,255,0.35)' } : { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
                       {index === 0 ? (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2997ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -83,6 +86,9 @@ export default function NewsSection() {
                     <svg className="w-4 h-4 text-white/35 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
                     </svg>
+                    {/* Bottom accent */}
+                    <div className="absolute bottom-0 left-0 right-0 h-[1.5px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      style={{ background: 'linear-gradient(90deg, transparent, rgba(41,151,255,0.7), transparent)' }} />
                   </div>
                 </Link>
               ))}
