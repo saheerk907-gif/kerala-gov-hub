@@ -11,7 +11,7 @@ const GREEN = '#30d158';
 function SkeletonCard({ large = false }) {
   return (
     <div
-      className={`rounded-[20px] skeleton-shimmer ${large ? 'min-h-[220px] md:min-h-[280px]' : 'min-h-[160px] md:min-h-[200px]'}`}
+      className={`rounded-[20px] skeleton-shimmer ${large ? 'min-h-[140px] md:min-h-[180px]' : 'min-h-[100px] md:min-h-[140px]'}`}
     />
   );
 }

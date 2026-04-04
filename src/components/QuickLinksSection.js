@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-const MOBILE_VISIBLE = 5;
+const MOBILE_VISIBLE = 4;
 
 const COLOR_MAP = {
   blue:   { text: '#2997ff', bg: 'rgba(41,151,255,0.12)',  border: 'rgba(41,151,255,0.22)' },
@@ -39,7 +39,7 @@ export default function QuickLinksSection({ links }) {
           {links.map((l, idx) => {
             const c = COLOR_MAP[l.color] || COLOR_MAP.blue;
             return (
-              <div key={l.id} className={idx >= MOBILE_VISIBLE && !expanded ? 'sm:block hidden' : 'block'}>
+              <div key={l.id} className={idx >= MOBILE_VISIBLE && !expanded ? 'hidden' : 'block'}>
               <a
                 key={l.id}
                 href={l.url}
@@ -97,15 +97,15 @@ export default function QuickLinksSection({ links }) {
           })}
         </div>
 
-        {/* Expand / collapse — mobile only */}
+        {/* Expand / collapse */}
         {links.length > MOBILE_VISIBLE && (
-          <div className="sm:hidden mt-3 flex justify-center">
+          <div className="mt-3">
             <button
               onClick={() => setExpanded(v => !v)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full text-[12px] font-bold transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
               style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
             >
-              {expanded ? 'Show less ↑' : `Show all ${links.length} portals ↓`}
+              {expanded ? 'Show Less ↑' : `Show All ${links.length} Portals ↓`}
             </button>
           </div>
         )}

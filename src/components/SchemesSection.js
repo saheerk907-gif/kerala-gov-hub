@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 
 const COLORS = {
@@ -11,6 +12,7 @@ const COLORS = {
 };
 
 export default function SchemesSection({ schemes }) {
+  const [expanded, setExpanded] = useState(false);
   if (!schemes?.length) return null;
 
   // KSR sub-rules belong inside /ksr — exclude from homepage Resources
@@ -41,7 +43,7 @@ export default function SchemesSection({ schemes }) {
 
         {/* Compact 2-col grid of rows */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-          {filtered.map(scheme => {
+          {(expanded ? filtered : filtered.slice(0, 4)).map(scheme => {
             const c = COLORS[scheme.color] || COLORS.blue;
             const pageUrl = `/${scheme.title_en ? scheme.title_en.toLowerCase().replace(/\s+/g, '-') : 'details'}`;
 
@@ -95,6 +97,16 @@ export default function SchemesSection({ schemes }) {
             );
           })}
         </div>
+
+        {filtered.length > 4 && (
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
+            style={{ background: 'rgba(255,159,10,0.08)', color: '#ff9f0a', border: '1px solid rgba(255,159,10,0.22)' }}
+          >
+            {expanded ? 'Show Less ↑' : 'Read More ↓'}
+          </button>
+        )}
       </div>
       </div>
     </section>

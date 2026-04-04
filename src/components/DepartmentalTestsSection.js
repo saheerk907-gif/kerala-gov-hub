@@ -1,10 +1,15 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import { DEPTS, TESTS } from '@/lib/testsData';
 
+const VISIBLE = 8;
+
 export default function DepartmentalTestsSection() {
+  const [expanded, setExpanded] = useState(false);
   const countByDept = {};
   TESTS.forEach(t => { countByDept[t.dept] = (countByDept[t.dept] || 0) + 1; });
+  const visibleDepts = expanded ? DEPTS : DEPTS.slice(0, VISIBLE);
 
   return (
     <section id="departmental-tests" className="relative py-3 md:py-4 px-4 md:px-6">
@@ -36,7 +41,7 @@ export default function DepartmentalTestsSection() {
 
         {/* Compact department grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
-          {DEPTS.map((d) => {
+          {visibleDepts.map((d) => {
             const count = countByDept[d.id] || 0;
             return (
               <div key={d.id}>
@@ -78,6 +83,16 @@ export default function DepartmentalTestsSection() {
             );
           })}
         </div>
+
+        {DEPTS.length > VISIBLE && (
+          <button
+            onClick={() => setExpanded(v => !v)}
+            className="w-full mt-3 flex items-center justify-center gap-2 py-2.5 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
+            style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
+          >
+            {expanded ? 'Show Less ↑' : `Show All ${DEPTS.length} Departments ↓`}
+          </button>
+        )}
 
       </div>
       </div>

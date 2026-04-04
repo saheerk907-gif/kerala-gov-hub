@@ -24,6 +24,7 @@ function timeAgo(dateStr) {
 export default function ForumSection() {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     fetch(
@@ -83,7 +84,7 @@ export default function ForumSection() {
           </div>
         ) : (
           <div className="flex flex-col gap-1.5">
-            {threads.map(thread => {
+            {(expanded ? threads : threads.slice(0, 3)).map(thread => {
               const cat = CATEGORY_LABELS[thread.category] || CATEGORY_LABELS.general;
               return (
                 <Link
@@ -135,6 +136,17 @@ export default function ForumSection() {
                 </Link>
               );
             })}
+
+            {/* Read More */}
+            {threads.length > 3 && (
+              <button
+                onClick={() => setExpanded(v => !v)}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none mt-1"
+                style={{ background: 'rgba(41,151,255,0.08)', color: '#2997ff', border: '1px solid rgba(41,151,255,0.22)' }}
+              >
+                {expanded ? 'Show Less ↑' : 'Read More ↓'}
+              </button>
+            )}
 
             {/* CTA */}
             <Link

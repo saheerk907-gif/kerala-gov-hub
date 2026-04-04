@@ -19,7 +19,7 @@ function FeaturedCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block col-span-2">
-      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[200px] md:min-h-[320px]"
+      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[140px] md:min-h-[180px]"
         style={{ border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
@@ -31,7 +31,7 @@ function FeaturedCard({ article }) {
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
         )}
-        <div className="relative z-10 flex flex-col justify-end h-full p-5 md:p-7 min-h-[200px] md:min-h-[320px]">
+        <div className="relative z-10 flex flex-col justify-end h-full p-4 min-h-[140px] md:min-h-[180px]">
           <div className="flex items-center gap-2 mb-3">
             <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
@@ -66,7 +66,7 @@ function SmallCard({ article }) {
   const color = CAT_COLORS[article.category] || '#2997ff';
   return (
     <Link href={`/articles/${article.id}`} className="no-underline group block">
-      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[160px] md:min-h-[280px]"
+      <div className="glass-card relative rounded-[20px] overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] min-h-[140px] md:min-h-[180px]"
         style={{ border: `1px solid ${color}25` }}>
         {article.image_url ? (
           <>
@@ -78,7 +78,7 @@ function SmallCard({ article }) {
         ) : (
           <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse 80% 60% at 30% 50%, ${color}15, transparent)` }} />
         )}
-        <div className="relative z-10 flex flex-col justify-end h-full p-4 md:p-5 min-h-[160px] md:min-h-[280px]">
+        <div className="relative z-10 flex flex-col justify-end h-full p-3 min-h-[140px] md:min-h-[180px]">
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest"
               style={{ background: `${color}25`, color, border: `1px solid ${color}40` }}>
@@ -143,13 +143,13 @@ export default function ArticlesSection() {
 
       {/* Grid */}
       {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="col-span-2 h-[200px] md:h-[320px] rounded-[20px] skeleton-shimmer" />
-          <div className="h-[160px] md:h-[280px] rounded-[20px] skeleton-shimmer" />
-          <div className="hidden md:block h-[280px] rounded-[20px] skeleton-shimmer" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="col-span-2 h-[140px] md:h-[180px] rounded-[20px] skeleton-shimmer" />
+          <div className="h-[120px] md:h-[180px] rounded-[20px] skeleton-shimmer" />
+          <div className="hidden md:block h-[180px] rounded-[20px] skeleton-shimmer" />
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {articles[0] && <FeaturedCard article={articles[0]} />}
           {articles[1] && <div className="hidden md:block"><SmallCard article={articles[1]} /></div>}
           {articles[2] && <div className="hidden md:block"><SmallCard article={articles[2]} /></div>}
