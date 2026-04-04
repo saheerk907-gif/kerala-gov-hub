@@ -18,7 +18,7 @@ export default function OrdersSection({ orders }) {
       )
     : orders;
 
-  const currentOrders = expanded ? filtered : filtered.slice(0, 5);
+  const currentOrders = expanded ? filtered : filtered.slice(0, 3);
 
   const handleSearch = (val) => {
     setQuery(val);
@@ -130,7 +130,7 @@ export default function OrdersSection({ orders }) {
         <div className="h-px bg-white/[0.07] my-3" />
 
         {/* Read More */}
-        {filtered.length > 5 && (
+        {filtered.length > 3 && (
           <div className="mb-2">
             <button
               onClick={() => setExpanded(v => !v)}

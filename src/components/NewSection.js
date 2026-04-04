@@ -54,7 +54,7 @@ export default function NewsSection() {
             </div>
           ) : news.length > 0 ? (
             <div>
-              {(expanded ? news : news.slice(0, 5)).map((item, index) => (
+              {(expanded ? news : news.slice(0, 3)).map((item, index) => (
                 <Link key={item.id} href={`/news/${item.id}`} className="block no-underline group">
                   <div className={`relative flex items-center gap-3 p-3 md:p-4 rounded-[14px] transition-all duration-200 hover:bg-white/[0.06] mb-1.5 md:mb-2 ${index === 0 ? 'bg-[#2997ff]/[0.06]' : ''}`}>
                     <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl flex items-center justify-center" style={index === 0 ? { background: 'rgba(41,151,255,0.20)', border: '1px solid rgba(41,151,255,0.35)' } : { background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)' }}>
@@ -98,7 +98,7 @@ export default function NewsSection() {
         <div className="h-px bg-white/[0.07] my-3" />
 
         {/* Read More */}
-        {!loading && news.length > 5 && (
+        {!loading && news.length > 3 && (
           <div className="mb-2">
             <button
               onClick={() => setExpanded(v => !v)}
