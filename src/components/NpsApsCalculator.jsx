@@ -199,6 +199,12 @@ function JoinYearSelector({ value, onChange, label }) {
 }
 
 const CARD = { background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' };
+
+const PRESETS = [
+  { label: 'New Joiner', labelMl: 'പുതിയ ജോയിൻ', emoji: '🌱', dob: '1998-06-15', joinYear: 2022, basic: 18000, currentDA: 35 },
+  { label: 'Mid-career',  labelMl: 'മധ്യ കരിയർ',  emoji: '📊', dob: '1985-06-15', joinYear: 2015, basic: 46000, currentDA: 35 },
+  { label: 'Senior',      labelMl: 'സീനിയർ',      emoji: '🏛️', dob: '1975-06-15', joinYear: 2013, basic: 78000, currentDA: 35 },
+];
 const TT_STYLE = { background: 'var(--nav-dropdown-bg)', border: '1px solid var(--nav-dropdown-border)', borderRadius: 12, color: 'var(--text-primary)', fontSize: 12 };
 
 const WaIcon = () => (
@@ -227,6 +233,13 @@ export default function NpsApsCalculator() {
   const [lang,           setLang]           = useState('en');
 
   const ml = lang === 'ml';
+
+  const applyPreset = (pr) => {
+    setDob(pr.dob);
+    setJoinYear(pr.joinYear);
+    setBasic(pr.basic);
+    setCurrentDA(pr.currentDA);
+  };
 
   const R = useMemo(() => simulate({
     dob, joinYear, retAge, basic, currentDA, annualDA, incRate,
@@ -279,8 +292,20 @@ export default function NpsApsCalculator() {
 
       {/* ── Inputs ─────────────────────────────────────────────────────────── */}
       <div className="rounded-2xl p-6 mb-6" style={CARD}>
-        <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-5">
-          {ml ? 'നിങ്ങളുടെ വിവരങ്ങൾ' : 'Your Service Details'}
+        <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
+          <div className="text-[11px] font-black uppercase tracking-widest text-white/50">
+            {ml ? 'നിങ്ങളുടെ വിവരങ്ങൾ' : 'Your Service Details'}
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <span className="text-[10px] text-white/35 self-center font-semibold">{ml ? 'ഉദാഹരണം:' : 'Try:'}</span>
+            {PRESETS.map(pr => (
+              <button key={pr.label} onClick={() => applyPreset(pr)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all hover:scale-105 active:scale-95"
+                style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: 'var(--text-dim)', cursor: 'pointer' }}>
+                {pr.emoji} {ml ? pr.labelMl : pr.label}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
           <DOBSelector value={dob} onChange={setDob} label={ml ? 'ജനന തീയതി' : 'Date of Birth'} />
@@ -300,7 +325,18 @@ export default function NpsApsCalculator() {
             {ml ? 'വിപുലമായ ക്രമീകരണങ്ങൾ' : 'Advanced Settings'}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <GlassInput label={ml ? 'NPS റിട്ടേൺ' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={0} max={18} step={0.5} suffix="%" help="Historical: 9–12%" />
+            <div className="flex flex-col gap-1.5">
+              <GlassInput label={ml ? 'NPS റിട്ടേൺ' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={0} max={18} step={0.5} suffix="%" help="Historical: 9–12%" />
+              <div className="flex gap-1.5 flex-wrap">
+                {[6, 8, 10, 12].map(v => (
+                  <button key={v} onClick={() => setNpsRet(v)}
+                    className="px-2 py-0.5 rounded-full text-[10px] font-bold transition-all"
+                    style={{ background: npsRet === v ? 'rgba(41,151,255,0.2)' : 'var(--surface-xs)', border: `1px solid ${npsRet === v ? '#2997ff' : 'var(--surface-sm)'}`, color: npsRet === v ? '#2997ff' : 'var(--text-ghost)', cursor: 'pointer' }}>
+                    {v}%
+                  </button>
+                ))}
+              </div>
+            </div>
             <GlassInput label={ml ? 'വാർഷിക നിരക്ക്' : 'Annuity Rate'} value={annRate} onChange={setAnnRate} min={0} max={10} step={0.5} suffix="%" />
             <GlassInput label={ml ? 'വിരമിക്കൽ DR' : 'Post-Retire DR'} value={postDR} onChange={setPostDR} min={0} max={10} step={0.5} suffix="%" help="APS grows yearly" />
             <GlassInput label={ml ? 'പണപ്പെരുപ്പം' : 'Inflation'} value={inf} onChange={setInf} min={0} max={15} step={0.5} suffix="%" help="For present value" />
@@ -385,6 +421,30 @@ export default function NpsApsCalculator() {
             )}
           </div>
 
+          {/* Visual bar comparison */}
+          {(() => {
+            const maxP = Math.max(R.apsP, R.npsP, 1);
+            return (
+              <div className="mb-4 px-1">
+                <div className="text-[9px] font-black uppercase tracking-widest text-white/35 mb-2.5">{ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension Comparison'}</div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="text-[10px] font-black text-[#30d158] w-8">APS</span>
+                  <div className="flex-1 h-2.5 rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                    <div style={{ width: `${(R.apsP / maxP) * 100}%`, background: '#30d158', transition: 'width 0.7s cubic-bezier(.4,0,.2,1)' }} className="h-full rounded-full" />
+                  </div>
+                  <span className="text-[11px] font-bold text-white/75 w-24 text-right">{fmtF(pvOn ? R.apsPV : R.apsP)}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black text-white/45 w-8">NPS</span>
+                  <div className="flex-1 h-2.5 rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
+                    <div style={{ width: `${(R.npsP / maxP) * 100}%`, background: 'rgba(255,255,255,0.45)', transition: 'width 0.7s cubic-bezier(.4,0,.2,1)' }} className="h-full rounded-full" />
+                  </div>
+                  <span className="text-[11px] font-bold text-white/75 w-24 text-right">{fmtF(pvOn ? R.npsPV : R.npsP)}</span>
+                </div>
+              </div>
+            );
+          })()}
+
           {/* PV toggle */}
           <button onClick={() => setPvOn(v => !v)}
             className="flex items-center gap-2 text-[12px] font-semibold transition-colors mx-auto"
@@ -417,6 +477,48 @@ export default function NpsApsCalculator() {
             </div>
           ))}
         </div>
+
+        {/* Verdict card */}
+        {(() => {
+          const apsBetter = R.apsP > R.npsP;
+          const lumpYears = R.brk;
+          const diff = Math.abs(R.apsP - R.npsP);
+          let verdictLines = [];
+          if (apsBetter) {
+            verdictLines = ml ? [
+              `✅ APS ${fmtF(diff)}/മാസം കൂടുതൽ നൽകുന്നു — ഉറപ്പ്, DR-indexed.`,
+              lumpYears ? `⏳ NPS-ന്റെ ${fmt(R.lump)} lump sum ഏകദേശം ${lumpYears} വർഷത്തിൽ APS-ൽ തിരിച്ചടക്കാം.` : null,
+              `🛡️ APS ഉറപ്പ് ആണ്; market risk ഇല്ല.`,
+            ] : [
+              `✅ APS pays ${fmtF(diff)}/month more — guaranteed & DR-indexed. It grows every year.`,
+              lumpYears ? `⏳ APS recovers the NPS lump sum (${fmt(R.lump)}) through higher pension in ~${lumpYears} years.` : null,
+              `🛡️ If you prefer certainty over market risk, APS is the safer choice here.`,
+            ];
+          } else {
+            const npsAdv = diff;
+            verdictLines = ml ? [
+              `📈 NPS ${fmtF(npsAdv)}/മാസം കൂടുതൽ + ${fmt(R.lump)} tax-free lump sum.`,
+              `⚠️ NPS annuity fixed; APS DR-indexed ആയതിനാൽ വർഷങ്ങൾ കഴിഞ്ഞ് APS മുന്നിലാകാം.`,
+              `💡 NPS return ${npsRet}%+ ആണെങ്കിൽ NPS നല്ലതാണ്. Return കുറഞ്ഞാൽ APS ഭദ്രം.`,
+            ] : [
+              `📈 NPS gives ${fmtF(npsAdv)}/month more + a ${fmt(R.lump)} tax-free lump sum at retirement.`,
+              `⚠️ NPS annuity is fixed; APS grows with DR — the gap may close or reverse over time.`,
+              `💡 NPS makes sense if you expect ${npsRet}%+ returns. Try lower return scenarios to see your risk.`,
+            ];
+          }
+          return (
+            <div className="rounded-2xl p-5 mb-6" style={{ background: apsBetter ? 'rgba(48,209,88,0.05)' : 'rgba(41,151,255,0.05)', border: `1px solid ${apsBetter ? 'rgba(48,209,88,0.18)' : 'rgba(41,151,255,0.18)'}` }}>
+              <div className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: apsBetter ? '#30d158' : '#2997ff' }}>
+                {ml ? 'ഇതിന്റെ അർത്ഥം' : 'What this means for you'}
+              </div>
+              <div className="flex flex-col gap-2">
+                {verdictLines.filter(Boolean).map((line, i) => (
+                  <div key={i} className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)', fontFamily: ml ? 'var(--font-noto-malayalam), sans-serif' : 'inherit' }}>{line}</div>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Notices */}
         <div className="flex flex-col gap-2 mb-6">
