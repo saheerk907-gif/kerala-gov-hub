@@ -141,20 +141,21 @@ function DOBSelector({ value, onChange, label }) {
 
   const daysInMonth = new Date(Number(yr), Number(mo), 0).getDate();
   const inp = 'w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none';
-  const bg = { background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' };
+  const bg = { background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' };
+  const optStyle = { background: '#1c1c1e', color: '#fff' };
 
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <div className="grid grid-cols-3 gap-1.5">
         <select value={mo} onChange={sel(setMo, 'mo')} className={inp} style={bg}>
-          {['01','02','03','04','05','06','07','08','09','10','11','12'].map((m,i) => <option key={m} value={m}>{['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][i]}</option>)}
+          {['01','02','03','04','05','06','07','08','09','10','11','12'].map((m,i) => <option key={m} value={m} style={optStyle}>{['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][i]}</option>)}
         </select>
         <select value={dy} onChange={sel(setDy, 'dy')} className={inp} style={bg}>
-          {Array.from({length: daysInMonth},(_,i)=>String(i+1).padStart(2,'0')).map(d=><option key={d} value={d}>{d}</option>)}
+          {Array.from({length: daysInMonth},(_,i)=>String(i+1).padStart(2,'0')).map(d=><option key={d} value={d} style={optStyle}>{d}</option>)}
         </select>
         <select value={yr} onChange={sel(setYr, 'yr')} className={inp} style={bg}>
-          {Array.from({length:46},(_,i)=>String(1960+i)).map(y=><option key={y} value={y}>{y}</option>)}
+          {Array.from({length:46},(_,i)=>String(1960+i)).map(y=><option key={y} value={y} style={optStyle}>{y}</option>)}
         </select>
       </div>
     </div>
@@ -209,9 +210,9 @@ function JoinYearSelector({ value, onChange, label }) {
       <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
       <select value={value} onChange={e => onChange(Number(e.target.value))}
         className="w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none"
-        style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
+        style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' }}>
         {Array.from({ length: 42 }, (_, i) => 2004 + i).map(y => (
-          <option key={y} value={y}>{y}</option>
+          <option key={y} value={y} style={{ background: '#1c1c1e', color: '#fff' }}>{y}</option>
         ))}
       </select>
       <div className="text-[10px] text-white/45">NPS applicable from 2004</div>
