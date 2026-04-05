@@ -162,21 +162,42 @@ function DOBSelector({ value, onChange, label }) {
 }
 
 // ─── Input ────────────────────────────────────────────────────────────────────
-function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }) {
+function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help, icon }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-1.5">
+        {icon && <span>{icon}</span>}{label}
+      </label>
       <div className="relative">
         <input
           type="number" value={value === 0 ? '' : value} placeholder="0"
           min={min} max={max} step={step}
           onChange={e => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
-          className="w-full rounded-xl px-3 py-2.5 text-white text-sm font-semibold outline-none"
-          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
+          className="w-full rounded-xl px-3 py-3 text-white text-[15px] font-bold outline-none transition-all focus:ring-2 focus:ring-white/20"
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
         />
-        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-[11px] font-bold">{suffix}</span>}
+        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 text-[12px] font-bold">{suffix}</span>}
       </div>
-      {help && <div className="text-[10px] text-white/45">{help}</div>}
+      {help && <div className="text-[10px] text-white/40 leading-relaxed">{help}</div>}
+    </div>
+  );
+}
+
+// ─── Slider Input ─────────────────────────────────────────────────────────────
+function SliderInput({ label, value, onChange, min, max, step = 1, suffix, help, icon, color = '#30d158' }) {
+  const pct = ((value - min) / (max - min)) * 100;
+  return (
+    <div className="flex flex-col gap-1.5">
+      <label className="text-[11px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-1.5">
+        {icon && <span>{icon}</span>}{label}
+        <span className="ml-auto font-black text-[13px]" style={{ color }}>{value}{suffix}</span>
+      </label>
+      <input type="range" min={min} max={max} step={step} value={value}
+        onChange={e => onChange(Number(e.target.value))}
+        className="w-full h-2 rounded-full appearance-none cursor-pointer"
+        style={{ background: `linear-gradient(to right, ${color} ${pct}%, rgba(255,255,255,0.1) ${pct}%)`, outline: 'none' }}
+      />
+      {help && <div className="text-[10px] text-white/40">{help}</div>}
     </div>
   );
 }
@@ -231,6 +252,7 @@ export default function NpsApsCalculator() {
   const [tab,            setTab]            = useState('compare');
   const [pvOn,           setPvOn]           = useState(false);
   const [lang,           setLang]           = useState('en');
+  const [showAdv,        setShowAdv]        = useState(false);
 
   const ml = lang === 'ml';
 
@@ -275,84 +297,130 @@ export default function NpsApsCalculator() {
   return (
     <div>
       {/* Controls bar */}
-      <div className="flex justify-end gap-2 flex-wrap mb-6">
-        <button onClick={() => setLang(ml ? 'en' : 'ml')}
-          className="px-4 py-2 rounded-full text-[12px] font-bold transition-all"
-          style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: 'var(--text-dim)' }}>
-          {ml ? 'English' : 'മലയാളം'}
-        </button>
-        {R && (
-          <button onClick={shareWhatsApp}
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-[12px] font-bold transition-all"
-            style={{ background: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)', color: '#25d366' }}>
-            <WaIcon /> {ml ? 'ഷെയർ' : 'Share'}
+      <div className="flex justify-between items-center gap-2 flex-wrap mb-5">
+        <div className="flex gap-2 flex-wrap">
+          {PRESETS.map(pr => (
+            <button key={pr.label} onClick={() => applyPreset(pr)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold transition-all hover:scale-105 active:scale-95"
+              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.65)', cursor: 'pointer' }}>
+              {pr.emoji} {ml ? pr.labelMl : pr.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => setLang(ml ? 'en' : 'ml')}
+            className="px-3 py-2 rounded-xl text-[11px] font-bold transition-all"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.55)' }}>
+            {ml ? 'EN' : 'മല'}
           </button>
-        )}
+          {R && (
+            <button onClick={shareWhatsApp}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold"
+              style={{ background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.25)', color: '#25d366' }}>
+              <WaIcon /> {ml ? 'ഷെയർ' : 'Share'}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Inputs ─────────────────────────────────────────────────────────── */}
-      <div className="rounded-2xl p-6 mb-6" style={CARD}>
-        <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
-          <div className="text-[11px] font-black uppercase tracking-widest text-white/50">
-            {ml ? 'നിങ്ങളുടെ വിവരങ്ങൾ' : 'Your Service Details'}
+      <div className="rounded-2xl overflow-hidden mb-6" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
+
+        {/* Section 1 — Profile */}
+        <div className="px-6 pt-6 pb-5">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black text-black" style={{ background: '#30d158' }}>1</div>
+            <div className="text-[13px] font-black text-white/80">{ml ? 'നിങ്ങളുടെ പ്രൊഫൈൽ' : 'Your Profile'}</div>
           </div>
-          <div className="flex gap-2 flex-wrap">
-            <span className="text-[10px] text-white/35 self-center font-semibold">{ml ? 'ഉദാഹരണം:' : 'Try:'}</span>
-            {PRESETS.map(pr => (
-              <button key={pr.label} onClick={() => applyPreset(pr)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold transition-all hover:scale-105 active:scale-95"
-                style={{ background: 'var(--surface-xs)', border: '1px solid var(--surface-md)', color: 'var(--text-dim)', cursor: 'pointer' }}>
-                {pr.emoji} {ml ? pr.labelMl : pr.label}
-              </button>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <DOBSelector value={dob} onChange={setDob} label={ml ? 'ജനന തീയതി' : 'Date of Birth'} />
+            <JoinYearSelector value={joinYear} onChange={setJoinYear} label={ml ? 'ചേർന്ന വർഷം' : 'Year of Joining'} />
+            <GlassInput label={ml ? 'വിരമിക്കൽ പ്രായം' : 'Retirement Age'} value={retAge} onChange={setRetAge} min={56} max={62} icon="🎯" help="Kerala CPS: 60 yrs" />
           </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-5">
-          <DOBSelector value={dob} onChange={setDob} label={ml ? 'ജനന തീയതി' : 'Date of Birth'} />
-          <JoinYearSelector value={joinYear} onChange={setJoinYear} label={ml ? 'സർവീസ് ചേർന്ന വർഷം' : 'Year of Joining'} />
-          <GlassInput label={ml ? 'വിരമിക്കൽ പ്രായം' : 'Retirement Age'} value={retAge} onChange={setRetAge} min={56} max={62} help="Kerala CPS: 60 yrs" />
-          <GlassInput label={ml ? 'അടിസ്ഥാന ശമ്പളം' : 'Current Basic Pay'} value={basic} onChange={setBasic} min={0} max={500000} suffix="₹" help={ml ? 'നിലവിലെ Basic Pay' : 'Your current basic pay'} />
-          <GlassInput label={ml ? 'DA %' : 'Current DA %'} value={currentDA} onChange={setCurrentDA} min={0} max={100} suffix="%" help="~35% as of 2026" />
-          <GlassInput label={ml ? 'വാർഷിക DA വർദ്ധന' : 'Annual DA Increase'} value={annualDA} onChange={setAnnualDA} min={0} max={12} suffix="%/yr" help="~6%/yr (3%×2)" />
-          <GlassInput label={ml ? 'ഇൻക്രിമെന്റ്' : 'Annual Increment'} value={incRate} onChange={setIncRate} min={0} max={10} step={0.5} suffix="%/yr" />
-          <GlassInput label={ml ? 'സർക്കാർ NPS %' : 'Govt NPS %'} value={govPct} onChange={setGovPct} min={0} max={14} suffix="%" help="Default 10%, max 14%" />
-          <GlassInput label={ml ? 'നിലവിലെ NPS കോർപ്പസ്' : 'Existing NPS Corpus'} value={existingCorpus} onChange={setExistingCorpus} min={0} suffix="₹" help={ml ? 'NPS-ൽ ഉള്ള തുക (ഇല്ലെങ്കിൽ 0)' : 'Current NPS balance (0 if none)'} />
         </div>
 
-        {/* Advanced */}
-        <div className="pt-4 border-t border-white/[0.06]">
-          <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-            {ml ? 'വിപുലമായ ക്രമീകരണങ്ങൾ' : 'Advanced Settings'}
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+
+        {/* Section 2 — Pay Details */}
+        <div className="px-6 pt-5 pb-5">
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black text-black" style={{ background: '#2997ff' }}>2</div>
+            <div className="text-[13px] font-black text-white/80">{ml ? 'ശമ്പള വിവരങ്ങൾ' : 'Pay Details'}</div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="flex flex-col gap-1.5">
-              <GlassInput label={ml ? 'NPS റിട്ടേൺ' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={0} max={18} step={0.5} suffix="%" help="Historical: 9–12%" />
-              <div className="flex gap-1.5 flex-wrap">
-                {[6, 8, 10, 12].map(v => (
-                  <button key={v} onClick={() => setNpsRet(v)}
-                    className="px-2 py-0.5 rounded-full text-[10px] font-bold transition-all"
-                    style={{ background: npsRet === v ? 'rgba(41,151,255,0.2)' : 'var(--surface-xs)', border: `1px solid ${npsRet === v ? '#2997ff' : 'var(--surface-sm)'}`, color: npsRet === v ? '#2997ff' : 'var(--text-ghost)', cursor: 'pointer' }}>
-                    {v}%
-                  </button>
-                ))}
-              </div>
-            </div>
-            <GlassInput label={ml ? 'വാർഷിക നിരക്ക്' : 'Annuity Rate'} value={annRate} onChange={setAnnRate} min={0} max={10} step={0.5} suffix="%" />
-            <GlassInput label={ml ? 'വിരമിക്കൽ DR' : 'Post-Retire DR'} value={postDR} onChange={setPostDR} min={0} max={10} step={0.5} suffix="%" help="APS grows yearly" />
-            <GlassInput label={ml ? 'പണപ്പെരുപ്പം' : 'Inflation'} value={inf} onChange={setInf} min={0} max={15} step={0.5} suffix="%" help="For present value" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <GlassInput label={ml ? 'Basic Pay' : 'Current Basic Pay'} value={basic} onChange={setBasic} min={0} max={500000} suffix="₹" icon="💰" help={ml ? 'നിലവിലെ Basic Pay' : 'Your current basic pay'} />
+            <SliderInput label={ml ? 'DA %' : 'Current DA %'} value={currentDA} onChange={setCurrentDA} min={0} max={100} suffix="%" icon="📊" help="~35% as of 2026" color="#2997ff" />
+            <SliderInput label={ml ? 'വാർഷിക DA' : 'Annual DA Increase'} value={annualDA} onChange={setAnnualDA} min={0} max={12} suffix="%/yr" icon="📈" help="~6%/yr (3%×2)" color="#2997ff" />
+            <GlassInput label={ml ? 'ഇൻക്രിമെന്റ്' : 'Annual Increment'} value={incRate} onChange={setIncRate} min={0} max={10} step={0.5} suffix="%/yr" icon="⬆️" />
+            <GlassInput label={ml ? 'Govt NPS %' : 'Govt NPS %'} value={govPct} onChange={setGovPct} min={0} max={14} suffix="%" icon="🏛️" help="Default 10%, max 14%" />
+            <GlassInput label={ml ? 'നിലവിലെ Corpus' : 'Existing NPS Corpus'} value={existingCorpus} onChange={setExistingCorpus} min={0} suffix="₹" icon="🏦" help={ml ? 'ഇല്ലെങ്കിൽ 0' : 'Current NPS balance (0 if none)'} />
           </div>
         </div>
+
+        <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+
+        {/* Advanced toggle */}
+        <div className="px-6 py-3">
+          <button onClick={() => setShowAdv(v => !v)}
+            className="flex items-center gap-2 text-[11px] font-bold transition-all w-full"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: showAdv ? '#ff9f0a' : 'rgba(255,255,255,0.4)' }}>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+              <path d="M6 2a4 4 0 100 8A4 4 0 006 2zm0 1.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zm0 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/>
+            </svg>
+            {ml ? 'വിപുലമായ ക്രമീകരണങ്ങൾ' : 'Advanced Settings'}
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ transition: 'transform 0.2s', transform: showAdv ? 'rotate(180deg)' : 'none', marginLeft: 'auto' }}>
+              <path d="M2 3.5l3 3 3-3"/>
+            </svg>
+          </button>
+        </div>
+
+        {showAdv && (
+          <div className="px-6 pb-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="flex flex-col gap-2">
+                <SliderInput label={ml ? 'NPS Return' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={4} max={16} step={0.5} suffix="%" color="#ff9f0a" help="Historical: 9–12%" />
+                <div className="flex gap-1.5 flex-wrap">
+                  {[6, 8, 10, 12].map(v => (
+                    <button key={v} onClick={() => setNpsRet(v)}
+                      className="px-2.5 py-1 rounded-lg text-[10px] font-black transition-all"
+                      style={{ background: npsRet === v ? 'rgba(255,159,10,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${npsRet === v ? '#ff9f0a' : 'rgba(255,255,255,0.1)'}`, color: npsRet === v ? '#ff9f0a' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
+                      {v}%
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <GlassInput label={ml ? 'Annuity Rate' : 'Annuity Rate'} value={annRate} onChange={setAnnRate} min={0} max={10} step={0.5} suffix="%" />
+              <GlassInput label={ml ? 'Post-Retire DR' : 'Post-Retire DR'} value={postDR} onChange={setPostDR} min={0} max={10} step={0.5} suffix="%" help="APS grows yearly" />
+              <GlassInput label={ml ? 'Inflation' : 'Inflation'} value={inf} onChange={setInf} min={0} max={15} step={0.5} suffix="%" help="For present value" />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Empty state */}
       {!R && (
-        <div className="rounded-2xl p-12 text-center" style={CARD}>
-          <div className="text-4xl mb-4">👆</div>
-          <div className="text-[15px] font-bold text-white/60 mb-2">
-            {ml ? 'വിവരങ്ങൾ നൽകുക' : 'Fill in your details above'}
+        <div className="rounded-2xl p-8" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+          <div className="text-center mb-8">
+            <div className="text-3xl mb-3">🔍</div>
+            <div className="text-[15px] font-black text-white/70 mb-1">
+              {ml ? 'Basic Pay നൽകി ഫലം കാണുക' : 'Enter your Basic Pay to see results'}
+            </div>
+            <div className="text-[12px] text-white/40">
+              {ml ? 'മുകളിൽ ഉദാഹരണ profile ക്ലിക്ക് ചെയ്യാം' : 'Or click a quick profile above to try instantly'}
+            </div>
           </div>
-          <div className="text-[12px] text-white/50">
-            {ml ? 'Basic Pay, DA%, ചേർന്ന വർഷം നൽകിയാൽ ഫലം ലഭിക്കും' : 'Enter Basic Pay, DA% and joining year to see your pension comparison'}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { icon: '🛡️', title: 'APS Pension', desc: ml ? 'അവസാന Basic-ന്റെ 50% ഉറപ്പ്' : 'Guaranteed 50% of last basic pay', color: '#30d158' },
+              { icon: '📈', title: 'NPS Corpus', desc: ml ? 'Market-linked corpus + 60% lump sum' : 'Market-linked corpus + 60% tax-free lump', color: '#2997ff' },
+              { icon: '⚖️', title: ml ? 'താരതമ്യം' : 'Comparison', desc: ml ? 'ഏത് scheme നിങ്ങൾക്ക് നല്ലത്?' : 'Which scheme wins for your profile?', color: '#ff9f0a' },
+            ].map((c, i) => (
+              <div key={i} className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+                <div className="text-2xl mb-2">{c.icon}</div>
+                <div className="text-[12px] font-black mb-1" style={{ color: c.color }}>{c.title}</div>
+                <div className="text-[11px] text-white/45 leading-relaxed">{c.desc}</div>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -360,104 +428,113 @@ export default function NpsApsCalculator() {
       {R && (<>
 
         {/* ── Face-off ──────────────────────────────────────────────────────── */}
-        <div className="rounded-2xl p-6 mb-6" style={CARD}>
-          <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-            {ml ? 'മാസ പെൻഷൻ താരതമ്യം' : 'Monthly Pension Face-Off'}
-          </div>
-
-          <div className="text-[12px] text-white/60 mb-5 flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse inline-block" />
-            {ml ? 'വിരമിക്കൽ:' : 'Retirement:'} <strong className="text-white">{retMonthName} {R.retYear}</strong>
-            &nbsp;·&nbsp;{R.serviceYears} {ml ? 'വർഷം' : 'yrs service'}
-            &nbsp;·&nbsp;{ml ? 'Last Basic:' : 'Last Basic:'} <strong className="text-white">{fmtF(R.lB)}</strong>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-            {/* APS */}
-            <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(48,209,88,0.05)', border: '1px solid rgba(48,209,88,0.15)' }}>
-              <div className="text-[9px] font-black uppercase tracking-widest text-[#30d158]/60 mb-3">
-                {ml ? 'APS (ഉറപ്പ് പെൻഷൻ)' : 'APS — Assured Pension'}
-              </div>
-              <div className="text-[38px] font-black text-[#30d158] leading-none mb-2">
-                <AnimatedNumber value={pvOn ? R.apsPV : R.apsP} animKey={animKey} />
-              </div>
-              <div className="text-[11px] text-white/55 mb-3">
-                {(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} &nbsp;·&nbsp; /month
-              </div>
-              <div className="flex gap-2 justify-center flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-[#30d158]" style={{ background: 'rgba(48,209,88,0.12)', border: '1px solid rgba(48,209,88,0.2)' }}>✓ {ml ? 'ഉറപ്പ്' : 'Guaranteed'}</span>
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-[#30d158]" style={{ background: 'rgba(48,209,88,0.12)', border: '1px solid rgba(48,209,88,0.2)' }}>✓ DR {ml ? 'ഇൻഡക്സ്ഡ്' : 'Indexed'}</span>
+        <div className="mb-6">
+          {/* Header row */}
+          <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
+            <div>
+              <div className="text-[11px] font-black uppercase tracking-widest text-white/40 mb-0.5">{ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension Face-Off'}</div>
+              <div className="text-[12px] text-white/60 flex items-center gap-2 flex-wrap">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse inline-block" />
+                <strong className="text-white">{retMonthName} {R.retYear}</strong>
+                <span className="text-white/35">·</span>
+                <span>{R.serviceYears} {ml ? 'വർഷം' : 'yrs'}</span>
+                <span className="text-white/35">·</span>
+                <span>{ml ? 'Last Basic' : 'Last Basic'}: <strong className="text-white">{fmtF(R.lB)}</strong></span>
               </div>
             </div>
-
-            {/* NPS */}
-            <div className="rounded-2xl p-5 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.09)' }}>
-              <div className="text-[9px] font-black uppercase tracking-widest text-white/40 mb-3">
-                {ml ? 'NPS (ദേശീയ പെൻഷൻ)' : 'NPS — National Pension'}
-              </div>
-              <div className="text-[38px] font-black text-white/90 leading-none mb-2">
-                <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
-              </div>
-              <div className="text-[11px] text-white/55 mb-3">
-                40% @ {annRate}% &nbsp;·&nbsp; + {fmt(pvOn ? R.lumpPV : R.lump)} {ml ? 'ഒറ്റത്തവണ' : 'lump sum'}
-              </div>
-              <div className="flex gap-2 justify-center flex-wrap">
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-white/55" style={{ background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.12)' }}>60% {ml ? 'ഒറ്റത്തവണ' : 'Lump Sum'}</span>
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black text-[#ff453a]" style={{ background: 'rgba(255,69,58,0.12)', border: '1px solid rgba(255,69,58,0.2)' }}>⚠ {ml ? 'DR ഇല്ല' : 'No DR'}</span>
-              </div>
-            </div>
+            <button onClick={() => setPvOn(v => !v)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all"
+              style={{ background: pvOn ? 'rgba(48,209,88,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${pvOn ? 'rgba(48,209,88,0.3)' : 'rgba(255,255,255,0.1)'}`, color: pvOn ? '#30d158' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
+              <span className="w-7 h-3.5 rounded-full relative flex-shrink-0" style={{ background: pvOn ? 'rgba(48,209,88,0.4)' : 'rgba(255,255,255,0.1)' }}>
+                <span className="absolute top-0.5 w-2.5 h-2.5 rounded-full transition-all" style={{ background: pvOn ? '#30d158' : 'rgba(255,255,255,0.4)', left: pvOn ? '15px' : '2px' }} />
+              </span>
+              📉 {pvOn ? (ml ? 'ഇന്നത്തെ ₹' : "Today's ₹") : (ml ? 'Present Value' : 'Present Value')}
+            </button>
           </div>
 
-          {/* Winner banner */}
-          <div className="rounded-xl px-5 py-3 text-center mb-4"
-            style={{ background: R.apsP > R.npsP ? 'rgba(48,209,88,0.07)' : 'rgba(255,255,255,0.04)', border: `1px solid ${R.apsP > R.npsP ? 'rgba(48,209,88,0.2)' : 'rgba(255,255,255,0.12)'}` }}>
-            <div className="text-[14px] font-black" style={{ color: R.apsP > R.npsP ? '#30d158' : 'rgba(255,255,255,0.88)' }}>
-              {R.apsP > R.npsP ? '🛡️ APS' : '📊 NPS'} {ml ? 'കൂടുതൽ' : 'pays'} {fmtF(Math.abs(R.apsP - R.npsP))}/{ml ? 'മാസം' : 'month'} {ml ? 'നൽകുന്നു' : 'more'}
-            </div>
-            {R.brk && R.apsP > R.npsP && (
-              <div className="text-[11px] text-white/55 mt-1">
-                APS {ml ? 'ഒറ്റത്തവണ തുക' : 'recovers'} {fmt(R.lump)} {ml ? 'ഏകദേശം' : 'lump sum in ~'}<strong className="text-white">{R.brk} {ml ? 'വർഷം' : 'yrs'}</strong>
-              </div>
-            )}
-          </div>
-
-          {/* Visual bar comparison */}
+          {/* APS vs NPS cards */}
           {(() => {
-            const maxP = Math.max(R.apsP, R.npsP, 1);
+            const apsWins = R.apsP >= R.npsP;
+            const winnerStyle = { boxShadow: apsWins ? '0 0 40px rgba(48,209,88,0.12)' : '0 0 40px rgba(41,151,255,0.12)' };
             return (
-              <div className="mb-4 px-1">
-                <div className="text-[9px] font-black uppercase tracking-widest text-white/35 mb-2.5">{ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension Comparison'}</div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-[10px] font-black text-[#30d158] w-8">APS</span>
-                  <div className="flex-1 h-2.5 rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
-                    <div style={{ width: `${(R.apsP / maxP) * 100}%`, background: '#30d158', transition: 'width 0.7s cubic-bezier(.4,0,.2,1)' }} className="h-full rounded-full" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                {/* APS card */}
+                <div className="rounded-2xl p-6 relative overflow-hidden transition-all"
+                  style={{ background: apsWins ? 'rgba(48,209,88,0.07)' : 'rgba(255,255,255,0.03)', border: `2px solid ${apsWins ? 'rgba(48,209,88,0.4)' : 'rgba(255,255,255,0.07)'}`, ...(apsWins ? winnerStyle : {}) }}>
+                  {apsWins && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black" style={{ background: '#30d158', color: '#000' }}>
+                      ✓ {ml ? 'ജേതാവ്' : 'WINNER'}
+                    </div>
+                  )}
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.35)' }}>
+                    🛡️ {ml ? 'APS — ഉറപ്പ് പെൻഷൻ' : 'APS — Assured Pension'}
                   </div>
-                  <span className="text-[11px] font-bold text-white/75 w-24 text-right">{fmtF(pvOn ? R.apsPV : R.apsP)}</span>
+                  <div className={`font-black leading-none mb-1 ${apsWins ? 'text-[44px]' : 'text-[36px]'}`} style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
+                    <AnimatedNumber value={pvOn ? R.apsPV : R.apsP} animKey={animKey} />
+                  </div>
+                  <div className="text-[11px] text-white/45 mb-4">{(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} · /month</div>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ Guaranteed</span>
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ DR Indexed</span>
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ No Market Risk</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-black text-white/45 w-8">NPS</span>
-                  <div className="flex-1 h-2.5 rounded-full" style={{ background: 'rgba(255,255,255,0.07)' }}>
-                    <div style={{ width: `${(R.npsP / maxP) * 100}%`, background: 'rgba(255,255,255,0.45)', transition: 'width 0.7s cubic-bezier(.4,0,.2,1)' }} className="h-full rounded-full" />
+
+                {/* NPS card */}
+                <div className="rounded-2xl p-6 relative overflow-hidden transition-all"
+                  style={{ background: !apsWins ? 'rgba(41,151,255,0.07)' : 'rgba(255,255,255,0.03)', border: `2px solid ${!apsWins ? 'rgba(41,151,255,0.4)' : 'rgba(255,255,255,0.07)'}`, ...(!apsWins ? winnerStyle : {}) }}>
+                  {!apsWins && (
+                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black" style={{ background: '#2997ff', color: '#fff' }}>
+                      ✓ {ml ? 'ജേതാവ്' : 'WINNER'}
+                    </div>
+                  )}
+                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.35)' }}>
+                    📈 {ml ? 'NPS — ദേശീയ പെൻഷൻ' : 'NPS — National Pension'}
                   </div>
-                  <span className="text-[11px] font-bold text-white/75 w-24 text-right">{fmtF(pvOn ? R.npsPV : R.npsP)}</span>
+                  <div className={`font-black leading-none mb-1 ${!apsWins ? 'text-[44px]' : 'text-[36px]'}`} style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.6)' }}>
+                    <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
+                  </div>
+                  <div className="text-[11px] text-white/45 mb-1">40% corpus @ {annRate}% · /month</div>
+                  <div className="text-[13px] font-black mb-3" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.55)' }}>
+                    + {fmt(pvOn ? R.lumpPV : R.lump)} <span className="text-[10px] font-semibold text-white/40">{ml ? 'lump sum (60%)' : 'lump sum (60%)'}</span>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}>60% Tax-Free Lump</span>
+                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(255,69,58,0.1)', color: '#ff6b6b' }}>⚠ No DR Growth</span>
+                  </div>
                 </div>
               </div>
             );
           })()}
 
-          {/* PV toggle */}
-          <button onClick={() => setPvOn(v => !v)}
-            className="flex items-center gap-2 text-[12px] font-semibold transition-colors mx-auto"
-            style={{ color: pvOn ? '#30d158' : 'var(--text-ghost)', background: 'none', border: 'none', cursor: 'pointer' }}>
-            <span className="w-8 h-4 rounded-full flex items-center"
-              style={{ background: pvOn ? 'rgba(48,209,88,0.3)' : 'var(--surface-xs)', border: '1px solid var(--surface-sm)' }}>
-              <span className="w-3 h-3 rounded-full ml-[2px] transition-transform"
-                style={{ background: pvOn ? '#30d158' : 'var(--text-ghost)', transform: pvOn ? 'translateX(16px)' : 'none' }} />
-            </span>
-            {pvOn
-              ? `📉 ${ml ? 'ഇന്നത്തെ മൂല്യം' : "Today's Value"} (${inf}% inflation) — ON`
-              : `📉 ${ml ? 'ഇന്നത്തെ മൂല്യം കാണുക' : "Show in Today's Value"}`}
-          </button>
+          {/* Pension bars */}
+          {(() => {
+            const maxP = Math.max(R.apsP, R.npsP, 1);
+            const apsWins = R.apsP >= R.npsP;
+            return (
+              <div className="rounded-2xl p-4 mb-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-[10px] font-black w-10 text-right" style={{ color: '#30d158' }}>APS</span>
+                  <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div style={{ width: `${(R.apsP / maxP) * 100}%`, background: apsWins ? '#30d158' : 'rgba(48,209,88,0.5)', transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
+                  </div>
+                  <span className="text-[11px] font-bold w-24 text-right" style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.55)' }}>{fmtF(pvOn ? R.apsPV : R.apsP)}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-black w-10 text-right" style={{ color: '#2997ff' }}>NPS</span>
+                  <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div style={{ width: `${(R.npsP / maxP) * 100}%`, background: !apsWins ? '#2997ff' : 'rgba(41,151,255,0.5)', transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
+                  </div>
+                  <span className="text-[11px] font-bold w-24 text-right" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.55)' }}>{fmtF(pvOn ? R.npsPV : R.npsP)}</span>
+                </div>
+                {R.brk && R.apsP > R.npsP && (
+                  <div className="mt-3 pt-3 text-[11px] text-white/50 flex items-center gap-1.5" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                    ⏳ APS {ml ? 'ഏകദേശം' : 'recovers'} {fmt(R.lump)} NPS lump {ml ? 'ഏകദേശം' : 'in ~'}<strong className="text-white">{R.brk} {ml ? 'വർഷം' : 'yrs'}</strong>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
         </div>
 
         {/* ── Quick stats ───────────────────────────────────────────────────── */}
@@ -531,17 +608,17 @@ export default function NpsApsCalculator() {
         </div>
 
         {/* ── Tabs ─────────────────────────────────────────────────────────── */}
-        <div className="flex gap-1.5 mb-5 overflow-x-auto pb-1">
+        <div className="rounded-xl p-1 flex gap-1 mb-5 overflow-x-auto" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-bold whitespace-nowrap transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-bold whitespace-nowrap transition-all flex-1 justify-center"
               style={{
-                background: tab === t.id ? '#30d158' : 'var(--surface-xs)',
-                border: tab === t.id ? '1px solid #30d158' : '1px solid var(--surface-sm)',
-                color: tab === t.id ? '#000' : 'var(--text-faint)',
+                background: tab === t.id ? 'rgba(255,255,255,0.1)' : 'transparent',
+                border: tab === t.id ? '1px solid rgba(255,255,255,0.15)' : '1px solid transparent',
+                color: tab === t.id ? '#fff' : 'rgba(255,255,255,0.4)',
                 cursor: 'pointer',
               }}>
-              {t.icon} {t.label}
+              <span>{t.icon}</span> <span>{t.label}</span>
             </button>
           ))}
         </div>
