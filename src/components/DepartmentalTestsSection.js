@@ -23,9 +23,9 @@ export default function DepartmentalTestsSection() {
         }}>
           {/* Cinematic photo card */}
           <div className="relative overflow-hidden" style={{
-            backgroundImage: "url('/images/govtoffic.jpg')",
-            backgroundSize: 'auto 110%',
-            backgroundPosition: 'right 45%',
+            backgroundImage: "url('/images/dept-bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
             borderRadius: 26,
             minHeight: 380,
           }}>
