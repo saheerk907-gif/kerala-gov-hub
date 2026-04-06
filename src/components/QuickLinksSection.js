@@ -28,9 +28,9 @@ export default function QuickLinksSection({ links }) {
         }}>
           {/* Cinematic photo card */}
           <div className="relative overflow-hidden" style={{
-            backgroundImage:"url('/images/quicklinks-bg.jpg')",
-            backgroundSize:'180%',
-            backgroundPosition:'right 62%',
+            backgroundImage:"url('/images/govtoffic.jpg')",
+            backgroundSize:'cover',
+            backgroundPosition:'center 85%',
             borderRadius:26,
             minHeight:360,
           }}>

@@ -36,9 +36,9 @@ export default function OrdersSection({ orders }) {
         <div className="relative overflow-hidden flex flex-col"
           style={{
             background: BG,
-            backgroundImage: "url('/images/orders-bg.jpg')",
+            backgroundImage: "url('/images/govtoffic.jpg')",
             backgroundSize: 'cover',
-            backgroundPosition: 'center right',
+            backgroundPosition: 'center 40%',
             borderRadius: 26, padding: '16px 20px', flex: 1,
           }}>
           {/* Left-to-right fade (keeps content readable) */}

@@ -33,9 +33,9 @@ export default function SchemesSection({ schemes }) {
         }}>
           {/* Cinematic photo card */}
           <div className="relative overflow-hidden" style={{
-            backgroundImage:"url('/images/resources-bg.jpg')",
+            backgroundImage:"url('/images/govtoffic.jpg')",
             backgroundSize:'cover',
-            backgroundPosition:'center left',
+            backgroundPosition:'center 70%',
             borderRadius:26,
             minHeight:360,
           }}>

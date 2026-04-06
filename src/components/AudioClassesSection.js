@@ -15,9 +15,9 @@ export default function AudioClassesSection() {
         }}>
           {/* Cinematic photo card */}
           <div className="relative overflow-hidden" style={{
-            backgroundImage: "url('/images/audio-bg.jpg')",
-            backgroundSize: '160%',
-            backgroundPosition: 'center 68%',
+            backgroundImage: "url('/images/govtoffic.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center 35%',
             borderRadius: 26,
             minHeight: 340,
           }}>
