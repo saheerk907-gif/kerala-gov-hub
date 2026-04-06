@@ -26,6 +26,11 @@ const fmt  = v => { if (v>=1e7) return `₹${(v/1e7).toFixed(2)} Cr`; if (v>=1e5
 const fmtF = v => new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(v);
 const pv   = (fv, r, y) => y <= 0 ? fv : fv / Math.pow(1 + r / 100, y);
 
+// ─── Colors ──────────────────────────────────────────────────────────────────
+const APS_COLOR = '#f59e0b';  // amber
+const NPS_COLOR = '#3b82f6';  // blue
+const FONT = `'Inter', system-ui, -apple-system, sans-serif`;
+
 // ─── Core simulation ──────────────────────────────────────────────────────────
 function simulate(p) {
   const birthYear  = parseInt(p.dob.split('-')[0]);
@@ -99,7 +104,7 @@ function simulate(p) {
       year: y, label: y === 0 ? 'Retire' : `+${y}yr`,
       apsP: curA, npsP: curN,
       apsPV: Math.round(curA * pIA), npsPV: Math.round(curN * pIA),
-      cA, cN, cAP, cNP, adv: cA - cN,
+      cA, cN, cAP, cNP, diff: cA - cN,
     });
   }
 
@@ -140,16 +145,16 @@ function DOBSelector({ value, onChange, label }) {
   };
 
   const daysInMonth = new Date(Number(yr), Number(mo), 0).getDate();
-  const inp = 'w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none';
-  const bg = { background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' };
+  const inp = 'w-full px-3 py-3 rounded-xl text-white text-[14px] font-medium outline-none appearance-none';
+  const bg = { background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark', fontFamily: FONT };
   const optStyle = { background: '#1c1c1e', color: '#fff' };
 
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
+    <div className="flex flex-col gap-2">
+      <label className="text-[12px] font-semibold tracking-wide text-white/70" style={{ fontFamily: FONT }}>{label}</label>
       <div className="grid grid-cols-3 gap-1.5">
         <select value={mo} onChange={sel(setMo, 'mo')} className={inp} style={bg}>
-          {['01','02','03','04','05','06','07','08','09','10','11','12'].map((m,i) => <option key={m} value={m} style={optStyle}>{['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][i]}</option>)}
+          {['01','02','03','04','05','06','07','08','09','10','11','12'].map((m,i) => <option key={m} value={m} style={optStyle}>{MONTH_NAMES[i]}</option>)}
         </select>
         <select value={dy} onChange={sel(setDy, 'dy')} className={inp} style={bg}>
           {Array.from({length: daysInMonth},(_,i)=>String(i+1).padStart(2,'0')).map(d=><option key={d} value={d} style={optStyle}>{d}</option>)}
@@ -163,42 +168,40 @@ function DOBSelector({ value, onChange, label }) {
 }
 
 // ─── Input ────────────────────────────────────────────────────────────────────
-function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help, icon }) {
+function GlassInput({ label, value, onChange, min, max, step = 1, suffix, help }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-1.5">
-        {icon && <span>{icon}</span>}{label}
-      </label>
+    <div className="flex flex-col gap-2">
+      <label className="text-[12px] font-semibold tracking-wide text-white/70" style={{ fontFamily: FONT }}>{label}</label>
       <div className="relative">
         <input
           type="number" value={value === 0 ? '' : value} placeholder="0"
           min={min} max={max} step={step}
           onChange={e => onChange(e.target.value === '' ? 0 : Number(e.target.value))}
-          className="w-full rounded-xl px-3 py-3 text-white text-[15px] font-bold outline-none transition-all focus:ring-2 focus:ring-white/20"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', paddingRight: suffix ? '2.5rem' : '0.75rem' }}
+          className="w-full rounded-xl px-3 py-3 text-white text-[14px] font-medium outline-none transition-all focus:ring-2 focus:ring-white/20"
+          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', paddingRight: suffix ? '2.5rem' : '0.75rem', fontFamily: FONT }}
         />
-        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 text-[12px] font-bold">{suffix}</span>}
+        {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 text-[13px] font-medium">{suffix}</span>}
       </div>
-      {help && <div className="text-[10px] text-white/40 leading-relaxed">{help}</div>}
+      {help && <div className="text-[11px] text-white/45 leading-relaxed" style={{ fontFamily: FONT }}>{help}</div>}
     </div>
   );
 }
 
 // ─── Slider Input ─────────────────────────────────────────────────────────────
-function SliderInput({ label, value, onChange, min, max, step = 1, suffix, help, icon, color = '#30d158' }) {
+function SliderInput({ label, value, onChange, min, max, step = 1, suffix, help, color = '#f59e0b' }) {
   const pct = ((value - min) / (max - min)) * 100;
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/55 flex items-center gap-1.5">
-        {icon && <span>{icon}</span>}{label}
-        <span className="ml-auto font-black text-[13px]" style={{ color }}>{value}{suffix}</span>
+    <div className="flex flex-col gap-2">
+      <label className="text-[12px] font-semibold tracking-wide text-white/70 flex items-center gap-1.5" style={{ fontFamily: FONT }}>
+        {label}
+        <span className="ml-auto font-bold text-[14px]" style={{ color }}>{value}{suffix}</span>
       </label>
       <input type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
         className="w-full h-2 rounded-full appearance-none cursor-pointer"
         style={{ background: `linear-gradient(to right, ${color} ${pct}%, rgba(255,255,255,0.1) ${pct}%)`, outline: 'none' }}
       />
-      {help && <div className="text-[10px] text-white/40">{help}</div>}
+      {help && <div className="text-[11px] text-white/45" style={{ fontFamily: FONT }}>{help}</div>}
     </div>
   );
 }
@@ -206,28 +209,28 @@ function SliderInput({ label, value, onChange, min, max, step = 1, suffix, help,
 // ─── Join year selector ───────────────────────────────────────────────────────
 function JoinYearSelector({ value, onChange, label }) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <label className="text-[11px] font-bold uppercase tracking-widest text-white/60">{label}</label>
+    <div className="flex flex-col gap-2">
+      <label className="text-[12px] font-semibold tracking-wide text-white/70" style={{ fontFamily: FONT }}>{label}</label>
       <select value={value} onChange={e => onChange(Number(e.target.value))}
-        className="w-full px-3 py-2.5 rounded-xl text-white text-sm font-semibold outline-none appearance-none"
-        style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.1)', colorScheme: 'dark' }}>
+        className="w-full px-3 py-3 rounded-xl text-white text-[14px] font-medium outline-none appearance-none"
+        style={{ background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.12)', colorScheme: 'dark', fontFamily: FONT }}>
         {Array.from({ length: 42 }, (_, i) => 2004 + i).map(y => (
           <option key={y} value={y} style={{ background: '#1c1c1e', color: '#fff' }}>{y}</option>
         ))}
       </select>
-      <div className="text-[10px] text-white/45">NPS applicable from 2004</div>
+      <div className="text-[11px] text-white/45" style={{ fontFamily: FONT }}>NPS applicable from 2004</div>
     </div>
   );
 }
 
-const CARD = { background: 'var(--surface-xs)', border: '1px solid var(--surface-sm)' };
+const CARD = { background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' };
 
 const PRESETS = [
-  { label: 'New Joiner', labelMl: 'പുതിയ ജോയിൻ', emoji: '🌱', dob: '1998-06-15', joinYear: 2022, basic: 18000, currentDA: 35 },
-  { label: 'Mid-career',  labelMl: 'മധ്യ കരിയർ',  emoji: '📊', dob: '1985-06-15', joinYear: 2015, basic: 46000, currentDA: 35 },
-  { label: 'Senior',      labelMl: 'സീനിയർ',      emoji: '🏛️', dob: '1975-06-15', joinYear: 2013, basic: 78000, currentDA: 35 },
+  { label: 'New Joiner', labelMl: 'പുതിയ ജോയിൻ', dob: '1998-06-15', joinYear: 2022, basic: 18000, currentDA: 35 },
+  { label: 'Mid-career',  labelMl: 'മധ്യ കരിയർ',  dob: '1985-06-15', joinYear: 2015, basic: 46000, currentDA: 35 },
+  { label: 'Senior',      labelMl: 'സീനിയർ',      dob: '1975-06-15', joinYear: 2013, basic: 78000, currentDA: 35 },
 ];
-const TT_STYLE = { background: 'var(--nav-dropdown-bg)', border: '1px solid var(--nav-dropdown-border)', borderRadius: 12, color: 'var(--text-primary)', fontSize: 12 };
+const TT_STYLE = { background: '#1c1c1e', border: '1px solid rgba(255,255,255,0.15)', borderRadius: 10, color: '#fff', fontSize: 12, fontFamily: FONT };
 
 const WaIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="#25d366">
@@ -281,62 +284,61 @@ export default function NpsApsCalculator() {
 
   const shareWhatsApp = () => {
     if (!R) return;
-    const winner = R.apsP > R.npsP ? 'APS' : 'NPS';
     const msg = ml
-      ? `🏛️ എന്റെ പെൻഷൻ കണക്ക്\n\n📊 സേവനം: ${R.serviceYears} വർഷം\n🗓️ വിരമിക്കൽ: ${retMonthName} ${R.retYear}\n\n🛡️ APS: ${fmtF(R.apsP)}/മാസം\n📈 NPS: ${fmtF(R.npsP)}/മാസം\n🏦 Corpus: ${fmt(R.fC)}\n\n✅ ${winner} ബെസ്റ്റ്\nkeralaemployees.in`
-      : `🏛️ My Pension Comparison\n\n📊 Service: ${R.serviceYears} yrs · Retire: ${retMonthName} ${R.retYear}\n\n🛡️ APS: ${fmtF(R.apsP)}/mo\n📈 NPS: ${fmtF(R.npsP)}/mo (+ ${fmt(R.lump)} lump)\n🏦 NPS Corpus: ${fmt(R.fC)}\n\n✅ ${winner} wins\nkeralaemployees.in`;
+      ? `🏛️ എന്റെ പെൻഷൻ കണക്ക്\n\n📊 സേവനം: ${R.serviceYears} വർഷം\n🗓️ വിരമിക്കൽ: ${retMonthName} ${R.retYear}\n\nAPS: ${fmtF(R.apsP)}/മാസം\nNPS: ${fmtF(R.npsP)}/മാസം\n🏦 Corpus: ${fmt(R.fC)}\n\nkeralaemployees.in`
+      : `🏛️ My Pension Comparison\n\n📊 Service: ${R.serviceYears} yrs · Retire: ${retMonthName} ${R.retYear}\n\nAPS: ${fmtF(R.apsP)}/mo\nNPS: ${fmtF(R.npsP)}/mo (+ ${fmt(R.lump)} lump)\n🏦 NPS Corpus: ${fmt(R.fC)}\n\nkeralaemployees.in`;
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   const TABS = [
-    { id: 'compare',  label: ml ? 'താരതമ്യം' : 'Compare',    icon: '⚖️' },
-    { id: 'growth',   label: ml ? 'വളർച്ച'   : 'Growth',     icon: '📈' },
-    { id: 'pension',  label: ml ? 'ശേഷം'     : 'Post-Retire', icon: '🏖️' },
-    { id: 'table',    label: ml ? 'പട്ടിക'   : 'Table',      icon: '📋' },
+    { id: 'compare',  label: ml ? 'താരതമ്യം' : 'Compare' },
+    { id: 'growth',   label: ml ? 'വളർച്ച'   : 'Growth' },
+    { id: 'pension',  label: ml ? 'ശേഷം'     : 'Post-Retire' },
+    { id: 'table',    label: ml ? 'പട്ടിക'   : 'Table' },
   ];
 
   return (
-    <div>
+    <div style={{ fontFamily: FONT }}>
       {/* Controls bar */}
       <div className="flex justify-between items-center gap-2 flex-wrap mb-5">
         <div className="flex gap-2 flex-wrap">
           {PRESETS.map(pr => (
             <button key={pr.label} onClick={() => applyPreset(pr)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold transition-all hover:scale-105 active:scale-95"
-              style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.65)', cursor: 'pointer' }}>
-              {pr.emoji} {ml ? pr.labelMl : pr.label}
+              className="px-3.5 py-2 rounded-lg text-[12px] font-medium transition-all hover:bg-white/10 active:scale-95"
+              style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)', cursor: 'pointer', fontFamily: FONT }}>
+              {ml ? pr.labelMl : pr.label}
             </button>
           ))}
         </div>
         <div className="flex gap-2">
           <button onClick={() => setLang(ml ? 'en' : 'ml')}
-            className="px-3 py-2 rounded-xl text-[11px] font-bold transition-all"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.55)' }}>
+            className="px-3 py-2 rounded-lg text-[12px] font-medium transition-all"
+            style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.6)', fontFamily: FONT }}>
             {ml ? 'EN' : 'മല'}
           </button>
           {R && (
             <button onClick={shareWhatsApp}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-[11px] font-bold"
-              style={{ background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.25)', color: '#25d366' }}>
-              <WaIcon /> {ml ? 'ഷെയർ' : 'Share'}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-medium"
+              style={{ background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.25)', color: '#25d366', fontFamily: FONT }}>
+              <WaIcon /> {ml ? 'Share' : 'Share'}
             </button>
           )}
         </div>
       </div>
 
       {/* ── Inputs ─────────────────────────────────────────────────────────── */}
-      <div className="rounded-2xl overflow-hidden mb-6" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
+      <div className="rounded-2xl overflow-hidden mb-6" style={{ border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)' }}>
 
         {/* Section 1 — Profile */}
         <div className="px-6 pt-6 pb-5">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black text-black" style={{ background: '#30d158' }}>1</div>
-            <div className="text-[13px] font-black text-white/80">{ml ? 'നിങ്ങളുടെ പ്രൊഫൈൽ' : 'Your Profile'}</div>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[12px] font-bold" style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)' }}>1</div>
+            <div className="text-[14px] font-semibold text-white/85">{ml ? 'നിങ്ങളുടെ പ്രൊഫൈൽ' : 'Your Profile'}</div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <DOBSelector value={dob} onChange={setDob} label={ml ? 'ജനന തീയതി' : 'Date of Birth'} />
             <JoinYearSelector value={joinYear} onChange={setJoinYear} label={ml ? 'ചേർന്ന വർഷം' : 'Year of Joining'} />
-            <GlassInput label={ml ? 'വിരമിക്കൽ പ്രായം' : 'Retirement Age'} value={retAge} onChange={setRetAge} min={56} max={62} icon="🎯" help="Kerala CPS: 60 yrs" />
+            <GlassInput label={ml ? 'വിരമിക്കൽ പ്രായം' : 'Retirement Age'} value={retAge} onChange={setRetAge} min={56} max={62} help="Kerala CPS: 60 yrs" />
           </div>
         </div>
 
@@ -345,16 +347,16 @@ export default function NpsApsCalculator() {
         {/* Section 2 — Pay Details */}
         <div className="px-6 pt-5 pb-5">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-black text-black" style={{ background: '#2997ff' }}>2</div>
-            <div className="text-[13px] font-black text-white/80">{ml ? 'ശമ്പള വിവരങ്ങൾ' : 'Pay Details'}</div>
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[12px] font-bold" style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)' }}>2</div>
+            <div className="text-[14px] font-semibold text-white/85">{ml ? 'ശമ്പള വിവരങ്ങൾ' : 'Pay Details'}</div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <GlassInput label={ml ? 'Basic Pay' : 'Current Basic Pay'} value={basic} onChange={setBasic} min={0} max={500000} suffix="₹" icon="💰" help={ml ? 'നിലവിലെ Basic Pay' : 'Your current basic pay'} />
-            <SliderInput label={ml ? 'DA %' : 'Current DA %'} value={currentDA} onChange={setCurrentDA} min={0} max={100} suffix="%" icon="📊" help="~35% as of 2026" color="#2997ff" />
-            <SliderInput label={ml ? 'വാർഷിക DA' : 'Annual DA Increase'} value={annualDA} onChange={setAnnualDA} min={0} max={12} suffix="%/yr" icon="📈" help="~6%/yr (3%×2)" color="#2997ff" />
-            <GlassInput label={ml ? 'ഇൻക്രിമെന്റ്' : 'Annual Increment'} value={incRate} onChange={setIncRate} min={0} max={10} step={0.5} suffix="%/yr" icon="⬆️" />
-            <GlassInput label={ml ? 'Govt NPS %' : 'Govt NPS %'} value={govPct} onChange={setGovPct} min={0} max={14} suffix="%" icon="🏛️" help="Default 10%, max 14%" />
-            <GlassInput label={ml ? 'നിലവിലെ Corpus' : 'Existing NPS Corpus'} value={existingCorpus} onChange={setExistingCorpus} min={0} suffix="₹" icon="🏦" help={ml ? 'ഇല്ലെങ്കിൽ 0' : 'Current NPS balance (0 if none)'} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <GlassInput label={ml ? 'Basic Pay' : 'Current Basic Pay'} value={basic} onChange={setBasic} min={0} max={500000} suffix="₹" help={ml ? 'നിലവിലെ Basic Pay' : 'Your current basic pay'} />
+            <SliderInput label={ml ? 'DA %' : 'Current DA %'} value={currentDA} onChange={setCurrentDA} min={0} max={100} suffix="%" help="~35% as of 2026" color="rgba(255,255,255,0.6)" />
+            <SliderInput label={ml ? 'വാർഷിക DA' : 'Annual DA Increase'} value={annualDA} onChange={setAnnualDA} min={0} max={12} suffix="%/yr" help="~6%/yr (3%x2)" color="rgba(255,255,255,0.6)" />
+            <GlassInput label={ml ? 'ഇൻക്രിമെന്റ്' : 'Annual Increment'} value={incRate} onChange={setIncRate} min={0} max={10} step={0.5} suffix="%/yr" />
+            <GlassInput label={ml ? 'Govt NPS %' : 'Govt NPS %'} value={govPct} onChange={setGovPct} min={0} max={14} suffix="%" help="Default 10%, max 14%" />
+            <GlassInput label={ml ? 'നിലവിലെ Corpus' : 'Existing NPS Corpus'} value={existingCorpus} onChange={setExistingCorpus} min={0} suffix="₹" help={ml ? 'ഇല്ലെങ്കിൽ 0' : 'Current NPS balance (0 if none)'} />
           </div>
         </div>
 
@@ -363,12 +365,9 @@ export default function NpsApsCalculator() {
         {/* Advanced toggle */}
         <div className="px-6 py-3">
           <button onClick={() => setShowAdv(v => !v)}
-            className="flex items-center gap-2 text-[11px] font-bold transition-all w-full"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: showAdv ? '#ff9f0a' : 'rgba(255,255,255,0.4)' }}>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-              <path d="M6 2a4 4 0 100 8A4 4 0 006 2zm0 1.5a2.5 2.5 0 110 5 2.5 2.5 0 010-5zm0 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/>
-            </svg>
-            {ml ? 'വിപുലമായ ക്രമീകരണങ്ങൾ' : 'Advanced Settings'}
+            className="flex items-center gap-2 text-[12px] font-medium transition-all w-full"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', color: showAdv ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.4)', fontFamily: FONT }}>
+            Advanced Settings
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" style={{ transition: 'transform 0.2s', transform: showAdv ? 'rotate(180deg)' : 'none', marginLeft: 'auto' }}>
               <path d="M2 3.5l3 3 3-3"/>
             </svg>
@@ -377,14 +376,14 @@ export default function NpsApsCalculator() {
 
         {showAdv && (
           <div className="px-6 pb-6">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
               <div className="flex flex-col gap-2">
-                <SliderInput label={ml ? 'NPS Return' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={4} max={16} step={0.5} suffix="%" color="#ff9f0a" help="Historical: 9–12%" />
+                <SliderInput label={ml ? 'NPS Return' : 'NPS Return'} value={npsRet} onChange={setNpsRet} min={4} max={16} step={0.5} suffix="%" color={NPS_COLOR} help="Historical: 9-12%" />
                 <div className="flex gap-1.5 flex-wrap">
                   {[6, 8, 10, 12].map(v => (
                     <button key={v} onClick={() => setNpsRet(v)}
-                      className="px-2.5 py-1 rounded-lg text-[10px] font-black transition-all"
-                      style={{ background: npsRet === v ? 'rgba(255,159,10,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${npsRet === v ? '#ff9f0a' : 'rgba(255,255,255,0.1)'}`, color: npsRet === v ? '#ff9f0a' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
+                      className="px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all"
+                      style={{ background: npsRet === v ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.05)', border: `1px solid ${npsRet === v ? NPS_COLOR : 'rgba(255,255,255,0.1)'}`, color: npsRet === v ? NPS_COLOR : 'rgba(255,255,255,0.45)', cursor: 'pointer', fontFamily: FONT }}>
                       {v}%
                     </button>
                   ))}
@@ -400,139 +399,116 @@ export default function NpsApsCalculator() {
 
       {/* Empty state */}
       {!R && (
-        <div className="rounded-2xl p-8" style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)' }}>
+        <div className="rounded-2xl p-8" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}>
           <div className="text-center mb-8">
-            <div className="text-3xl mb-3">🔍</div>
-            <div className="text-[15px] font-black text-white/70 mb-1">
+            <div className="text-[16px] font-semibold text-white/70 mb-2">
               {ml ? 'Basic Pay നൽകി ഫലം കാണുക' : 'Enter your Basic Pay to see results'}
             </div>
-            <div className="text-[12px] text-white/40">
+            <div className="text-[13px] text-white/45">
               {ml ? 'മുകളിൽ ഉദാഹരണ profile ക്ലിക്ക് ചെയ്യാം' : 'Or click a quick profile above to try instantly'}
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { icon: '🛡️', title: 'APS Pension', desc: ml ? 'അവസാന Basic-ന്റെ 50% ഉറപ്പ്' : 'Guaranteed 50% of last basic pay', color: '#30d158' },
-              { icon: '📈', title: 'NPS Corpus', desc: ml ? 'Market-linked corpus + 60% lump sum' : 'Market-linked corpus + 60% tax-free lump', color: '#2997ff' },
-              { icon: '⚖️', title: ml ? 'താരതമ്യം' : 'Comparison', desc: ml ? 'ഏത് scheme നിങ്ങൾക്ക് നല്ലത്?' : 'Which scheme wins for your profile?', color: '#ff9f0a' },
-            ].map((c, i) => (
-              <div key={i} className="rounded-xl p-4 text-center" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-                <div className="text-2xl mb-2">{c.icon}</div>
-                <div className="text-[12px] font-black mb-1" style={{ color: c.color }}>{c.title}</div>
-                <div className="text-[11px] text-white/45 leading-relaxed">{c.desc}</div>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="rounded-xl p-5" style={{ background: `rgba(245,158,11,0.06)`, border: `1px solid rgba(245,158,11,0.15)` }}>
+              <div className="text-[14px] font-semibold mb-1" style={{ color: APS_COLOR }}>APS - Assured Pension</div>
+              <div className="text-[13px] text-white/55 leading-relaxed">{ml ? 'അവസാന Basic-ന്റെ 50% ഉറപ്പ് പെൻഷൻ. DR-indexed.' : 'Guaranteed 50% of last basic pay as pension. Grows with Dearness Relief.'}</div>
+            </div>
+            <div className="rounded-xl p-5" style={{ background: `rgba(59,130,246,0.06)`, border: `1px solid rgba(59,130,246,0.15)` }}>
+              <div className="text-[14px] font-semibold mb-1" style={{ color: NPS_COLOR }}>NPS - National Pension</div>
+              <div className="text-[13px] text-white/55 leading-relaxed">{ml ? 'Market-linked corpus. 60% tax-free lump sum + annuity pension.' : 'Market-linked corpus. 60% tax-free lump sum at retirement + monthly annuity.'}</div>
+            </div>
           </div>
         </div>
       )}
 
       {R && (<>
 
-        {/* ── Face-off ──────────────────────────────────────────────────────── */}
+        {/* ── Face-off — neutral, equal treatment ──────────────────────────── */}
         <div className="mb-6">
           {/* Header row */}
           <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
             <div>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/40 mb-0.5">{ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension Face-Off'}</div>
-              <div className="text-[12px] text-white/60 flex items-center gap-2 flex-wrap">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#30d158] animate-pulse inline-block" />
-                <strong className="text-white">{retMonthName} {R.retYear}</strong>
-                <span className="text-white/35">·</span>
-                <span>{R.serviceYears} {ml ? 'വർഷം' : 'yrs'}</span>
-                <span className="text-white/35">·</span>
-                <span>{ml ? 'Last Basic' : 'Last Basic'}: <strong className="text-white">{fmtF(R.lB)}</strong></span>
+              <div className="text-[13px] font-semibold text-white/50 mb-0.5">{ml ? 'മാസ പെൻഷൻ താരതമ്യം' : 'Monthly Pension Comparison'}</div>
+              <div className="text-[13px] text-white/70 flex items-center gap-2 flex-wrap">
+                <span>{ml ? 'വിരമിക്കൽ' : 'Retire'}: <strong className="text-white">{retMonthName} {R.retYear}</strong></span>
+                <span className="text-white/30">|</span>
+                <span>{R.serviceYears} {ml ? 'വർഷം' : 'yrs service'}</span>
+                <span className="text-white/30">|</span>
+                <span>Last Basic: <strong className="text-white">{fmtF(R.lB)}</strong></span>
               </div>
             </div>
             <button onClick={() => setPvOn(v => !v)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all"
-              style={{ background: pvOn ? 'rgba(48,209,88,0.12)' : 'rgba(255,255,255,0.05)', border: `1px solid ${pvOn ? 'rgba(48,209,88,0.3)' : 'rgba(255,255,255,0.1)'}`, color: pvOn ? '#30d158' : 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
-              <span className="w-7 h-3.5 rounded-full relative flex-shrink-0" style={{ background: pvOn ? 'rgba(48,209,88,0.4)' : 'rgba(255,255,255,0.1)' }}>
-                <span className="absolute top-0.5 w-2.5 h-2.5 rounded-full transition-all" style={{ background: pvOn ? '#30d158' : 'rgba(255,255,255,0.4)', left: pvOn ? '15px' : '2px' }} />
-              </span>
-              📉 {pvOn ? (ml ? 'ഇന്നത്തെ ₹' : "Today's ₹") : (ml ? 'Present Value' : 'Present Value')}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all"
+              style={{ background: pvOn ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.12)`, color: pvOn ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.45)', cursor: 'pointer', fontFamily: FONT }}>
+              {pvOn ? `Today's ₹ (${inf}% inflation)` : 'Show Present Value'}
             </button>
           </div>
 
-          {/* APS vs NPS cards */}
-          {(() => {
-            const apsWins = R.apsP >= R.npsP;
-            const winnerStyle = { boxShadow: apsWins ? '0 0 40px rgba(48,209,88,0.12)' : '0 0 40px rgba(41,151,255,0.12)' };
-            return (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {/* APS card */}
-                <div className="rounded-2xl p-6 relative overflow-hidden transition-all"
-                  style={{ background: apsWins ? 'rgba(48,209,88,0.07)' : 'rgba(255,255,255,0.03)', border: `2px solid ${apsWins ? 'rgba(48,209,88,0.4)' : 'rgba(255,255,255,0.07)'}`, ...(apsWins ? winnerStyle : {}) }}>
-                  {apsWins && (
-                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black" style={{ background: '#30d158', color: '#000' }}>
-                      ✓ {ml ? 'ജേതാവ്' : 'WINNER'}
-                    </div>
-                  )}
-                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.35)' }}>
-                    🛡️ {ml ? 'APS — ഉറപ്പ് പെൻഷൻ' : 'APS — Assured Pension'}
-                  </div>
-                  <div className={`font-black leading-none mb-1 ${apsWins ? 'text-[44px]' : 'text-[36px]'}`} style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.6)' }}>
-                    <AnimatedNumber value={pvOn ? R.apsPV : R.apsP} animKey={animKey} />
-                  </div>
-                  <div className="text-[11px] text-white/45 mb-4">{(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} · /month</div>
-                  <div className="flex gap-2 flex-wrap">
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ Guaranteed</span>
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ DR Indexed</span>
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(48,209,88,0.12)', color: '#30d158' }}>✓ No Market Risk</span>
-                  </div>
-                </div>
-
-                {/* NPS card */}
-                <div className="rounded-2xl p-6 relative overflow-hidden transition-all"
-                  style={{ background: !apsWins ? 'rgba(41,151,255,0.07)' : 'rgba(255,255,255,0.03)', border: `2px solid ${!apsWins ? 'rgba(41,151,255,0.4)' : 'rgba(255,255,255,0.07)'}`, ...(!apsWins ? winnerStyle : {}) }}>
-                  {!apsWins && (
-                    <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[9px] font-black" style={{ background: '#2997ff', color: '#fff' }}>
-                      ✓ {ml ? 'ജേതാവ്' : 'WINNER'}
-                    </div>
-                  )}
-                  <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.35)' }}>
-                    📈 {ml ? 'NPS — ദേശീയ പെൻഷൻ' : 'NPS — National Pension'}
-                  </div>
-                  <div className={`font-black leading-none mb-1 ${!apsWins ? 'text-[44px]' : 'text-[36px]'}`} style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.6)' }}>
-                    <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
-                  </div>
-                  <div className="text-[11px] text-white/45 mb-1">40% corpus @ {annRate}% · /month</div>
-                  <div className="text-[13px] font-black mb-3" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.55)' }}>
-                    + {fmt(pvOn ? R.lumpPV : R.lump)} <span className="text-[10px] font-semibold text-white/40">{ml ? 'lump sum (60%)' : 'lump sum (60%)'}</span>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(41,151,255,0.12)', color: '#2997ff' }}>60% Tax-Free Lump</span>
-                    <span className="px-2 py-0.5 rounded-md text-[9px] font-black" style={{ background: 'rgba(255,69,58,0.1)', color: '#ff6b6b' }}>⚠ No DR Growth</span>
-                  </div>
-                </div>
+          {/* APS and NPS cards — equal styling */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            {/* APS card */}
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)' }}>
+              <div className="text-[12px] font-semibold uppercase tracking-wide mb-2" style={{ color: APS_COLOR }}>
+                APS — Assured Pension
               </div>
-            );
-          })()}
+              <div className="text-[40px] font-bold leading-none mb-2" style={{ color: APS_COLOR }}>
+                <AnimatedNumber value={pvOn ? R.apsPV : R.apsP} animKey={animKey} />
+              </div>
+              <div className="text-[13px] text-white/50 mb-4">{(R.apsFac * 100).toFixed(0)}% of {fmtF(R.lB)} per month</div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium" style={{ background: 'rgba(245,158,11,0.1)', color: APS_COLOR }}>Guaranteed</span>
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium" style={{ background: 'rgba(245,158,11,0.1)', color: APS_COLOR }}>DR Indexed</span>
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium" style={{ background: 'rgba(245,158,11,0.1)', color: APS_COLOR }}>No Market Risk</span>
+              </div>
+            </div>
 
-          {/* Pension bars */}
+            {/* NPS card */}
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.18)' }}>
+              <div className="text-[12px] font-semibold uppercase tracking-wide mb-2" style={{ color: NPS_COLOR }}>
+                NPS — National Pension
+              </div>
+              <div className="text-[40px] font-bold leading-none mb-2" style={{ color: NPS_COLOR }}>
+                <AnimatedNumber value={pvOn ? R.npsPV : R.npsP} animKey={animKey} />
+              </div>
+              <div className="text-[13px] text-white/50 mb-1">40% corpus @ {annRate}% annuity per month</div>
+              <div className="text-[14px] font-semibold mb-3" style={{ color: NPS_COLOR }}>
+                + {fmt(pvOn ? R.lumpPV : R.lump)} <span className="text-[11px] font-medium text-white/45">lump sum (60%)</span>
+              </div>
+              <div className="flex gap-2 flex-wrap">
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium" style={{ background: 'rgba(59,130,246,0.1)', color: NPS_COLOR }}>60% Tax-Free Lump</span>
+                <span className="px-2.5 py-1 rounded-md text-[11px] font-medium" style={{ background: 'rgba(59,130,246,0.1)', color: NPS_COLOR }}>Market-Linked</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Pension bars — equal treatment */}
           {(() => {
             const maxP = Math.max(R.apsP, R.npsP, 1);
-            const apsWins = R.apsP >= R.npsP;
+            const diff = Math.abs(R.apsP - R.npsP);
             return (
-              <div className="rounded-2xl p-4 mb-4" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              <div className="rounded-2xl p-5" style={CARD}>
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[10px] font-black w-10 text-right" style={{ color: '#30d158' }}>APS</span>
-                  <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                    <div style={{ width: `${(R.apsP / maxP) * 100}%`, background: apsWins ? '#30d158' : 'rgba(48,209,88,0.5)', transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
+                  <span className="text-[11px] font-semibold w-10 text-right" style={{ color: APS_COLOR }}>APS</span>
+                  <div className="flex-1 h-3.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div style={{ width: `${(R.apsP / maxP) * 100}%`, background: APS_COLOR, transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
                   </div>
-                  <span className="text-[11px] font-bold w-24 text-right" style={{ color: apsWins ? '#30d158' : 'rgba(255,255,255,0.55)' }}>{fmtF(pvOn ? R.apsPV : R.apsP)}</span>
+                  <span className="text-[12px] font-semibold w-28 text-right" style={{ color: APS_COLOR }}>{fmtF(pvOn ? R.apsPV : R.apsP)}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-black w-10 text-right" style={{ color: '#2997ff' }}>NPS</span>
-                  <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
-                    <div style={{ width: `${(R.npsP / maxP) * 100}%`, background: !apsWins ? '#2997ff' : 'rgba(41,151,255,0.5)', transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
+                  <span className="text-[11px] font-semibold w-10 text-right" style={{ color: NPS_COLOR }}>NPS</span>
+                  <div className="flex-1 h-3.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                    <div style={{ width: `${(R.npsP / maxP) * 100}%`, background: NPS_COLOR, transition: 'width 0.8s cubic-bezier(.4,0,.2,1)', height: '100%', borderRadius: 9999 }} />
                   </div>
-                  <span className="text-[11px] font-bold w-24 text-right" style={{ color: !apsWins ? '#2997ff' : 'rgba(255,255,255,0.55)' }}>{fmtF(pvOn ? R.npsPV : R.npsP)}</span>
+                  <span className="text-[12px] font-semibold w-28 text-right" style={{ color: NPS_COLOR }}>{fmtF(pvOn ? R.npsPV : R.npsP)}</span>
                 </div>
-                {R.brk && R.apsP > R.npsP && (
-                  <div className="mt-3 pt-3 text-[11px] text-white/50 flex items-center gap-1.5" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-                    ⏳ APS {ml ? 'ഏകദേശം' : 'recovers'} {fmt(R.lump)} NPS lump {ml ? 'ഏകദേശം' : 'in ~'}<strong className="text-white">{R.brk} {ml ? 'വർഷം' : 'yrs'}</strong>
-                  </div>
-                )}
+                <div className="mt-3 pt-3 text-[12px] text-white/60" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+                  {ml ? 'വ്യത്യാസം' : 'Difference'}: <strong className="text-white">{fmtF(diff)}</strong>/{ml ? 'മാസം' : 'month'}
+                  {R.brk && R.apsP > R.npsP && (
+                    <span className="ml-3 text-white/45">
+                      | APS {ml ? 'ഏകദേശം' : 'recovers lump sum in ~'}<strong className="text-white">{R.brk} {ml ? 'വർഷം' : 'yrs'}</strong>
+                    </span>
+                  )}
+                </div>
               </div>
             );
           })()}
@@ -541,85 +517,54 @@ export default function NpsApsCalculator() {
         {/* ── Quick stats ───────────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {[
-            { label: ml ? 'NPS കോർപ്പസ്' : 'NPS Corpus',    value: pvOn ? Math.round(R.fC * R.rIA) : R.fC,    sub: `${fmt(R.totC)} contrib`,    color: 'rgba(255,255,255,0.88)' },
-            { label: ml ? 'ഒറ്റത്തവണ (60%)' : 'Lump Sum (60%)', value: pvOn ? R.lumpPV : R.lump,            sub: ml ? 'വിരമിക്കലിൽ'  : 'At retirement', color: 'rgba(255,255,255,0.88)' },
-            { label: ml ? 'അവസാന ഗ്രോസ്' : 'Last Gross Pay', value: R.lG,                                   sub: `Basic ${fmtF(R.lB)}`,                color: '#30d158' },
-            { label: ml ? 'സേവനം' : 'Service',                value: null, text: `${R.serviceYears} yrs`,    sub: `→ ${retMonthName} ${R.retYear}`, color: 'rgba(255,255,255,0.88)' },
+            { label: ml ? 'NPS Corpus' : 'NPS Corpus',    value: pvOn ? Math.round(R.fC * R.rIA) : R.fC, sub: `${fmt(R.totC)} contrib` },
+            { label: ml ? 'Lump Sum (60%)' : 'Lump Sum (60%)', value: pvOn ? R.lumpPV : R.lump, sub: ml ? 'At retirement' : 'At retirement' },
+            { label: ml ? 'Last Gross' : 'Last Gross Pay', value: R.lG, sub: `Basic ${fmtF(R.lB)}` },
+            { label: ml ? 'Service' : 'Service', value: null, text: `${R.serviceYears} yrs`, sub: `${retMonthName} ${R.retYear}` },
           ].map((s, i) => (
-            <div key={i} className="rounded-2xl p-4" style={CARD}>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-2">{s.label}</div>
-              <div className="text-[20px] font-black leading-none mb-1" style={{ color: s.color }}>
+            <div key={i} className="rounded-xl p-4" style={CARD}>
+              <div className="text-[11px] font-medium text-white/50 mb-2">{s.label}</div>
+              <div className="text-[20px] font-bold leading-none mb-1 text-white/90">
                 {s.text ? s.text : <AnimatedNumber value={s.value} animKey={animKey} />}
               </div>
-              {s.sub && <div className="text-[10px] text-white/50">{s.sub}</div>}
+              {s.sub && <div className="text-[11px] text-white/45">{s.sub}</div>}
             </div>
           ))}
         </div>
 
-        {/* Verdict card */}
-        {(() => {
-          const apsBetter = R.apsP > R.npsP;
-          const lumpYears = R.brk;
-          const diff = Math.abs(R.apsP - R.npsP);
-          let verdictLines = [];
-          if (apsBetter) {
-            verdictLines = ml ? [
-              `✅ APS ${fmtF(diff)}/മാസം കൂടുതൽ നൽകുന്നു — ഉറപ്പ്, DR-indexed.`,
-              lumpYears ? `⏳ NPS-ന്റെ ${fmt(R.lump)} lump sum ഏകദേശം ${lumpYears} വർഷത്തിൽ APS-ൽ തിരിച്ചടക്കാം.` : null,
-              `🛡️ APS ഉറപ്പ് ആണ്; market risk ഇല്ല.`,
-            ] : [
-              `✅ APS pays ${fmtF(diff)}/month more — guaranteed & DR-indexed. It grows every year.`,
-              lumpYears ? `⏳ APS recovers the NPS lump sum (${fmt(R.lump)}) through higher pension in ~${lumpYears} years.` : null,
-              `🛡️ If you prefer certainty over market risk, APS is the safer choice here.`,
-            ];
-          } else {
-            const npsAdv = diff;
-            verdictLines = ml ? [
-              `📈 NPS ${fmtF(npsAdv)}/മാസം കൂടുതൽ + ${fmt(R.lump)} tax-free lump sum.`,
-              `⚠️ NPS annuity fixed; APS DR-indexed ആയതിനാൽ വർഷങ്ങൾ കഴിഞ്ഞ് APS മുന്നിലാകാം.`,
-              `💡 NPS return ${npsRet}%+ ആണെങ്കിൽ NPS നല്ലതാണ്. Return കുറഞ്ഞാൽ APS ഭദ്രം.`,
-            ] : [
-              `📈 NPS gives ${fmtF(npsAdv)}/month more + a ${fmt(R.lump)} tax-free lump sum at retirement.`,
-              `⚠️ NPS annuity is fixed; APS grows with DR — the gap may close or reverse over time.`,
-              `💡 NPS makes sense if you expect ${npsRet}%+ returns. Try lower return scenarios to see your risk.`,
-            ];
-          }
-          return (
-            <div className="rounded-2xl p-5 mb-6" style={{ background: apsBetter ? 'rgba(48,209,88,0.05)' : 'rgba(41,151,255,0.05)', border: `1px solid ${apsBetter ? 'rgba(48,209,88,0.18)' : 'rgba(41,151,255,0.18)'}` }}>
-              <div className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: apsBetter ? '#30d158' : '#2997ff' }}>
-                {ml ? 'ഇതിന്റെ അർത്ഥം' : 'What this means for you'}
-              </div>
-              <div className="flex flex-col gap-2">
-                {verdictLines.filter(Boolean).map((line, i) => (
-                  <div key={i} className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.75)', fontFamily: ml ? 'var(--font-noto-malayalam), sans-serif' : 'inherit' }}>{line}</div>
-                ))}
-              </div>
+        {/* Key notes — neutral */}
+        <div className="rounded-2xl p-5 mb-6" style={CARD}>
+          <div className="text-[12px] font-semibold text-white/55 mb-3">{ml ? 'പ്രധാന വിവരങ്ങൾ' : 'Key Notes'}</div>
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[13px] text-white/65 leading-relaxed flex gap-2">
+              <span style={{ color: APS_COLOR }}>APS:</span>
+              <span>{ml ? `${(R.apsFac * 100).toFixed(0)}% of last basic. Guaranteed pension with DR growth (${postDR}%/yr).` : `${(R.apsFac * 100).toFixed(0)}% of last basic. Guaranteed pension with DR growth (${postDR}%/yr after retirement).`}</span>
             </div>
-          );
-        })()}
-
-        {/* Notices */}
-        <div className="flex flex-col gap-2 mb-6">
-          <div className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2" style={{ background: 'rgba(255,69,58,0.07)', border: '1px solid rgba(255,69,58,0.2)', color: '#ff9f9f' }}>
-            🚫 <span><strong>{ml ? 'DCRG ഇല്ല:' : 'No DCRG:'}</strong> {ml ? 'APS അല്ലെങ്കിൽ NPS-ൽ കേരള സർക്കാർ ജീവനക്കാർക്ക് DCRG ലഭിക്കില്ല.' : 'Kerala government employees do NOT receive DCRG under APS or NPS.'}</span>
-          </div>
-          <div className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2" style={{ background: 'rgba(255,69,58,0.07)', border: '1px solid rgba(255,69,58,0.2)', color: '#ff9f9f' }}>
-            ⚠️ <span><strong>G.O.(P) No.33/2026/F.N (28.02.2026):</strong> {ml ? 'APS-ൽ ഒറ്റത്തവണ തുക ഉണ്ടാകില്ലെന്ന് G.O. സൂചിപ്പിക്കുന്നു.' : 'Latest G.O. on APS does not mention any lump sum.'}</span>
+            <div className="text-[13px] text-white/65 leading-relaxed flex gap-2">
+              <span style={{ color: NPS_COLOR }}>NPS:</span>
+              <span>{ml ? `${fmt(R.lump)} lump sum (tax-free) + ${fmtF(R.npsP)}/mo annuity. Annuity is fixed — no DR.` : `${fmt(R.lump)} lump sum (tax-free) + ${fmtF(R.npsP)}/mo annuity. Annuity is fixed — no DR.`}</span>
+            </div>
+            <div className="text-[13px] text-white/50 leading-relaxed" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: 8 }}>
+              {ml ? 'G.O.(P) No.33/2026/F.N: APS-ൽ lump sum ഇല്ല. NPS-ൽ DCRG ഇല്ല.' : 'G.O.(P) No.33/2026/F.N: APS does not include a lump sum. Neither scheme provides DCRG.'}
+            </div>
           </div>
         </div>
 
-        {/* ── Tabs ─────────────────────────────────────────────────────────── */}
-        <div className="rounded-xl p-1 flex gap-1 mb-5 overflow-x-auto" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}>
+        {/* ── Tabs — underline style ───────────────────────────────────────── */}
+        <div className="flex gap-0 mb-5 overflow-x-auto" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           {TABS.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] font-bold whitespace-nowrap transition-all flex-1 justify-center"
+              className="px-5 py-3 text-[13px] font-semibold whitespace-nowrap transition-all relative"
               style={{
-                background: tab === t.id ? 'rgba(255,255,255,0.1)' : 'transparent',
-                border: tab === t.id ? '1px solid rgba(255,255,255,0.15)' : '1px solid transparent',
-                color: tab === t.id ? '#fff' : 'rgba(255,255,255,0.4)',
+                background: 'none',
+                border: 'none',
+                borderBottom: tab === t.id ? '2px solid rgba(255,255,255,0.8)' : '2px solid transparent',
+                color: tab === t.id ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.4)',
                 cursor: 'pointer',
+                fontFamily: FONT,
+                marginBottom: -1,
               }}>
-              <span>{t.icon}</span> <span>{t.label}</span>
+              {t.label}
             </button>
           ))}
         </div>
@@ -629,71 +574,50 @@ export default function NpsApsCalculator() {
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">🍩 NPS Corpus Sources</div>
+                <div className="text-[12px] font-semibold text-white/55 mb-4">NPS Corpus Sources</div>
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie data={[
-                      { name: ml ? 'നിങ്ങൾ 10%' : 'Your 10%',     value: R.empC },
-                      { name: ml ? `സർക്കാർ ${govPct}%` : `Govt ${govPct}%`, value: R.govC },
+                      { name: ml ? 'Your 10%' : 'Your 10%',     value: R.empC },
+                      { name: ml ? `Govt ${govPct}%` : `Govt ${govPct}%`, value: R.govC },
                       { name: ml ? 'Returns'    : 'Returns',        value: R.totR },
                     ]} cx="50%" cy="50%" innerRadius={52} outerRadius={80} paddingAngle={4} dataKey="value">
-                      {['rgba(255,255,255,0.55)','#30d158','rgba(255,255,255,0.25)'].map((c, i) => <Cell key={i} fill={c} />)}
+                      {[NPS_COLOR, APS_COLOR, 'rgba(255,255,255,0.25)'].map((c, i) => <Cell key={i} fill={c} />)}
                     </Pie>
                     <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
+                    <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
 
               <div className="rounded-2xl p-5" style={CARD}>
-                <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">💰 {ml ? 'വിരമിക്കൽ ഭാഗം' : 'Retirement Split'}</div>
+                <div className="text-[12px] font-semibold text-white/55 mb-4">{ml ? 'Retirement Split' : 'Retirement Split'}</div>
                 <ResponsiveContainer width="100%" height={220}>
                   <PieChart>
                     <Pie data={[
-                      { name: ml ? 'ഒറ്റത്തവണ 60%' : 'Lump 60%',    value: R.lump },
-                      { name: ml ? 'Annuity 40%' : 'Annuity 40%', value: R.annCorp },
+                      { name: 'Lump 60%',    value: R.lump },
+                      { name: 'Annuity 40%', value: R.annCorp },
                     ]} cx="50%" cy="50%" innerRadius={52} outerRadius={80} paddingAngle={4} dataKey="value">
-                      {['#30d158','rgba(255,255,255,0.35)'].map((c, i) => <Cell key={i} fill={c} />)}
+                      {[NPS_COLOR, 'rgba(255,255,255,0.3)'].map((c, i) => <Cell key={i} fill={c} />)}
                     </Pie>
                     <Tooltip formatter={v => fmtF(v)} contentStyle={TT_STYLE} />
-                    <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
+                    <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">🕐 {ml ? 'പേ റിവിഷൻ ടൈംലൈൻ' : 'Pay Revision Timeline'}</div>
+              <div className="text-[12px] font-semibold text-white/55 mb-4">{ml ? 'Pay Revision Timeline' : 'Pay Revision Timeline'}</div>
               <div className="flex gap-3 overflow-x-auto pb-2">
                 {R.data.filter(d => d.isRev).map(d => (
-                  <div key={d.year} className="rounded-xl p-3 flex-shrink-0 min-w-[150px]"
-                    style={{ background: 'var(--surface-xs)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <div className="text-[10px] font-black text-white/55 mb-1">{d.revLabel}</div>
-                    <div className="text-[11px] text-white/50">Basic: {fmtF(d.basic)}</div>
-                    <div className="text-[11px] text-white/55">DA: {d.daPct}%</div>
+                  <div key={d.year} className="rounded-xl p-4 flex-shrink-0 min-w-[160px]"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <div className="text-[11px] font-semibold text-white/60 mb-1">{d.revLabel}</div>
+                    <div className="text-[13px] text-white/70 font-medium">Basic: {fmtF(d.basic)}</div>
+                    <div className="text-[12px] text-white/50">DA: {d.daPct}%</div>
                   </div>
                 ))}
-              </div>
-            </div>
-
-            <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">📝 {ml ? 'പ്രധാന വസ്തുതകൾ' : 'Key Facts'}</div>
-              <div className="grid gap-2.5">
-                {[
-                  { type: 'ok',   text: ml ? 'APS: 30+ വർഷം സേവനത്തിന് Last Basic-ന്റെ 50%. കുറഞ്ഞ സേവനം: (വർഷം÷60)×Basic.' : 'APS: 50% of last Basic for 30+ yrs service. Less service: (Yrs÷60)×Basic.' },
-                  { type: 'info', text: ml ? `NPS: ജീവനക്കാരൻ 10% + സർക്കാർ ${govPct}% of (Basic+DA). DA, increment, revision-ൊടൊപ്പം വളരുന്നു.` : `NPS: Emp 10% + Govt ${govPct}% of (Basic+DA) monthly. Grows with DA, increments & revisions.` },
-                  { type: 'warn', text: ml ? `APS ${postDR}%/yr DR-ൊടൊപ്പം വളരുന്നു. NPS annuity ഉറച്ചതാണ് — വർഷങ്ങൾ പോകുംതോറും വ്യത്യാസം കൂടും.` : `APS pension grows with DR (${postDR}%/yr) after retirement. NPS annuity is fixed — gap widens over time.` },
-                  { type: 'info', text: ml ? '12th Pay Rev (ജൂൺ 2026): Basic×1.38, DA resets to 4%. അടുത്ത revisions ഓരോ 5 വർഷവും.' : '12th Pay Rev (Jun 2026): Basic×1.38, DA resets to 4%. Next revisions every 5 years.' },
-                ].map((n, i) => {
-                  const cols = { ok: ['rgba(48,209,88,0.07)','rgba(48,209,88,0.2)','#86efac'], info: ['rgba(255,255,255,0.04)','rgba(255,255,255,0.12)','rgba(255,255,255,0.65)'], warn: ['rgba(255,69,58,0.07)','rgba(255,69,58,0.2)','#ff9f9f'] }[n.type];
-                  const icons = { ok: '✅', info: 'ℹ️', warn: '⚠️' };
-                  return (
-                    <div key={i} className="rounded-xl px-4 py-3 text-[11px] leading-relaxed flex gap-2"
-                      style={{ background: cols[0], border: `1px solid ${cols[1]}`, color: cols[2] }}>
-                      <span>{icons[n.type]}</span><span>{n.text}</span>
-                    </div>
-                  );
-                })}
               </div>
             </div>
           </div>
@@ -703,42 +627,42 @@ export default function NpsApsCalculator() {
         {tab === 'growth' && (
           <div className="flex flex-col gap-5">
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-                📈 {ml ? 'ശമ്പള വളർച്ച' : 'Salary Growth'} {pvOn && <span className="text-[#30d158] ml-2">— Today&apos;s ₹</span>}
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                {ml ? 'Salary Growth' : 'Salary Growth'} {pvOn && <span className="text-white/40 ml-2">— Present Value</span>}
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <ComposedChart data={R.data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
-                  <XAxis dataKey="year" tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="year" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Area type="monotone" dataKey={pvOn ? 'annSalPV' : 'annSal'} name={ml ? 'വാർഷിക ശമ്പളം' : 'Annual Salary'} fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
-                  <Line type="monotone" dataKey="basic" name={ml ? 'Basic Pay' : 'Basic Pay'} stroke="#30d158" strokeWidth={1.5} dot={false} />
-                  {R.data.filter(d => d.isRev).map(d => <ReferenceLine key={d.year} x={d.year} stroke="var(--surface-sm)" strokeDasharray="3 3" />)}
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Area type="monotone" dataKey={pvOn ? 'annSalPV' : 'annSal'} name="Annual Salary" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.4)" strokeWidth={2} />
+                  <Line type="monotone" dataKey="basic" name="Basic Pay" stroke={APS_COLOR} strokeWidth={1.5} dot={false} />
+                  {R.data.filter(d => d.isRev).map(d => <ReferenceLine key={d.year} x={d.year} stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />)}
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
 
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-                🏦 NPS Corpus Growth ({ml ? 'Return:' : 'Return:'} {npsRet}%)
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                NPS Corpus Growth (Return: {npsRet}%)
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={R.data}>
                   <defs>
                     <linearGradient id="corpG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="rgba(255,255,255,0.5)" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="rgba(255,255,255,0.5)" stopOpacity={0} />
+                      <stop offset="5%"  stopColor={NPS_COLOR} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={NPS_COLOR} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
-                  <XAxis dataKey="year" tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="year" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Area type="monotone" dataKey={pvOn ? 'corpusPV' : 'corpus'} name="NPS Corpus" fill="url(#corpG)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
-                  <Area type="monotone" dataKey="totC" name={ml ? 'സംഭാവനകൾ' : 'Contributions'} fill="rgba(48,209,88,0.06)" stroke="#30d158" strokeWidth={1.5} />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Area type="monotone" dataKey={pvOn ? 'corpusPV' : 'corpus'} name="NPS Corpus" fill="url(#corpG)" stroke={NPS_COLOR} strokeWidth={2} />
+                  <Area type="monotone" dataKey="totC" name="Contributions" fill={`rgba(245,158,11,0.06)`} stroke={APS_COLOR} strokeWidth={1.5} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -749,69 +673,64 @@ export default function NpsApsCalculator() {
         {tab === 'pension' && (
           <div className="flex flex-col gap-5">
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-                📊 {ml ? 'മാസ പെൻഷൻ' : 'Monthly Pension'} · APS +{postDR}%/yr · NPS Fixed
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Monthly Pension After Retirement — APS +{postDR}%/yr vs NPS Fixed
               </div>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={R.post}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
-                  <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke="#30d158" strokeWidth={2.5} dot={false} />
-                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke="rgba(255,255,255,0.55)" strokeWidth={2.5} dot={false} strokeDasharray="6 3" />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke={APS_COLOR} strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke={NPS_COLOR} strokeWidth={2.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-                💰 {ml ? 'മൊത്തം പെൻഷൻ' : 'Cumulative Pension'}
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Cumulative Pension Received
               </div>
               <ResponsiveContainer width="100%" height={280}>
                 <AreaChart data={R.post}>
                   <defs>
                     <linearGradient id="apsG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="#30d158" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#30d158" stopOpacity={0} />
+                      <stop offset="5%"  stopColor={APS_COLOR} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={APS_COLOR} stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="npsG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor="rgba(255,255,255,0.5)" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="rgba(255,255,255,0.5)" stopOpacity={0} />
+                      <stop offset="5%"  stopColor={NPS_COLOR} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={NPS_COLOR} stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
-                  <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 11, color: 'var(--text-faint)' }} />
-                  <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG)" stroke="#30d158" strokeWidth={2} />
-                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke="rgba(255,255,255,0.5)" strokeWidth={2} />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG)" stroke={APS_COLOR} strokeWidth={2} />
+                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke={NPS_COLOR} strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
 
             <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[11px] font-black uppercase tracking-widest text-white/50 mb-4">
-                📐 {ml ? 'APS മേൽക്കൈ' : 'APS Advantage vs NPS'}
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Pension Difference (APS - NPS cumulative)
               </div>
               <ResponsiveContainer width="100%" height={220}>
                 <BarChart data={R.post}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-xs)" />
-                  <XAxis dataKey="label" tick={{ fill: 'var(--text-ghost)', fontSize: 10 }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'var(--text-ghost)', fontSize: 11 }} axisLine={false} tickLine={false} width={55} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
                   <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Bar dataKey={pvOn ? 'advPV' : 'adv'} name="APS Advantage" radius={[4,4,0,0]}>
-                    {R.post.map((e, i) => <Cell key={i} fill={(pvOn ? e.advPV : e.adv) >= 0 ? '#30d158' : '#ff453a'} fillOpacity={0.6} />)}
+                  <Bar dataKey={pvOn ? 'advPV' : 'diff'} name="APS - NPS" radius={[4,4,0,0]}>
+                    {R.post.map((e, i) => <Cell key={i} fill={(pvOn ? e.advPV : e.diff) >= 0 ? APS_COLOR : NPS_COLOR} fillOpacity={0.6} />)}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
-              {R.brk && R.apsP > R.npsP && (
-                <div className="mt-3 rounded-xl px-4 py-2.5 text-[11px] flex gap-2" style={{ background: 'rgba(48,209,88,0.07)', border: '1px solid rgba(48,209,88,0.2)', color: '#86efac' }}>
-                  ✅ <span><strong>Insight:</strong> APS {ml ? 'ഏകദേശം' : 'recovers'} {fmt(R.lump)} NPS lump sum {ml ? 'ഏകദേശം' : 'in ~'}<strong> {R.brk} {ml ? 'വർഷം' : 'years'}</strong>.</span>
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -820,40 +739,40 @@ export default function NpsApsCalculator() {
         {tab === 'table' && (
           <div className="rounded-2xl overflow-hidden" style={CARD}>
             <div className="overflow-x-auto">
-              <table className="w-full text-[11px]" style={{ minWidth: 640 }}>
+              <table className="w-full text-[12px]" style={{ minWidth: 640, fontFamily: FONT }}>
                 <thead>
-                  <tr style={{ background: 'var(--surface-xs)', borderBottom: '1px solid var(--surface-xs)' }}>
-                    {['Year','Basic','DA%','Gross','Emp','Govt','Monthly','Corpus',...(pvOn?['PV Corpus']:[])].map(h => (
-                      <th key={h} className="px-4 py-3 text-left font-black uppercase tracking-widest text-white/45 whitespace-nowrap text-[9px]">{h}</th>
+                  <tr style={{ background: 'rgba(255,255,255,0.04)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    {['Year','Basic','DA%','Gross','Emp NPS','Govt NPS','Total/mo','Corpus',...(pvOn?['PV Corpus']:[])].map(h => (
+                      <th key={h} className="px-4 py-3 text-left font-semibold text-white/50 whitespace-nowrap text-[11px]">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {R.data.map((r, i) => (
-                    <tr key={i} className="border-b transition-colors hover:bg-white/[0.02]"
-                      style={{ borderColor: 'var(--surface-xs)', background: r.isRev ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
-                      <td className="px-4 py-2.5 font-bold text-white/70">
-                        {r.year}{r.isRev && <span className="ml-1.5 text-[8px] text-white/40 font-black">REV</span>}
+                    <tr key={i} className="border-b transition-colors hover:bg-white/[0.03]"
+                      style={{ borderColor: 'rgba(255,255,255,0.06)', background: r.isRev ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
+                      <td className="px-4 py-3 font-semibold text-white/75">
+                        {r.year}{r.isRev && <span className="ml-1.5 text-[9px] text-white/40 font-semibold">REV</span>}
                       </td>
-                      <td className="px-4 py-2.5 text-white/60">{fmtF(r.basic)}</td>
-                      <td className="px-4 py-2.5 text-white/50">{r.daPct}%</td>
-                      <td className="px-4 py-2.5 text-white/70 font-semibold">{fmtF(r.gross)}</td>
-                      <td className="px-4 py-2.5 text-[#ff453a]/70">{fmtF(r.nE)}</td>
-                      <td className="px-4 py-2.5 text-white/50">{fmtF(r.nG)}</td>
-                      <td className="px-4 py-2.5 text-[#30d158]/80 font-semibold">{fmtF(r.mC)}</td>
-                      <td className="px-4 py-2.5 text-white/70 font-bold">{fmt(r.corpus)}</td>
-                      {pvOn && <td className="px-4 py-2.5 text-white/55">{fmt(r.corpusPV)}</td>}
+                      <td className="px-4 py-3 text-white/65">{fmtF(r.basic)}</td>
+                      <td className="px-4 py-3 text-white/55">{r.daPct}%</td>
+                      <td className="px-4 py-3 text-white/75 font-medium">{fmtF(r.gross)}</td>
+                      <td className="px-4 py-3 text-white/55">{fmtF(r.nE)}</td>
+                      <td className="px-4 py-3 text-white/55">{fmtF(r.nG)}</td>
+                      <td className="px-4 py-3 font-medium" style={{ color: NPS_COLOR }}>{fmtF(r.mC)}</td>
+                      <td className="px-4 py-3 text-white/75 font-medium">{fmt(r.corpus)}</td>
+                      {pvOn && <td className="px-4 py-3 text-white/55">{fmt(r.corpusPV)}</td>}
                     </tr>
                   ))}
                 </tbody>
                 <tfoot>
-                  <tr style={{ borderTop: '2px solid var(--surface-sm)' }}>
-                    <td colSpan={4} className="px-4 py-3 font-bold text-white/60 text-[10px]">TOTALS →</td>
-                    <td className="px-4 py-3 font-bold text-[#ff453a]">{fmt(R.empC)}</td>
-                    <td className="px-4 py-3 font-bold text-white/60">{fmt(R.govC)}</td>
-                    <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.totC)}</td>
-                    <td className="px-4 py-3 font-black text-[#30d158]">{fmt(R.fC)}</td>
-                    {pvOn && <td className="px-4 py-3 font-bold text-white/55">{fmt(Math.round(R.fC * R.rIA))}</td>}
+                  <tr style={{ borderTop: '2px solid rgba(255,255,255,0.1)' }}>
+                    <td colSpan={4} className="px-4 py-3 font-semibold text-white/55 text-[11px]">TOTALS</td>
+                    <td className="px-4 py-3 font-semibold text-white/65">{fmt(R.empC)}</td>
+                    <td className="px-4 py-3 font-semibold text-white/65">{fmt(R.govC)}</td>
+                    <td className="px-4 py-3 font-semibold" style={{ color: NPS_COLOR }}>{fmt(R.totC)}</td>
+                    <td className="px-4 py-3 font-bold text-white/85">{fmt(R.fC)}</td>
+                    {pvOn && <td className="px-4 py-3 font-medium text-white/55">{fmt(Math.round(R.fC * R.rIA))}</td>}
                   </tr>
                 </tfoot>
               </table>
@@ -864,8 +783,8 @@ export default function NpsApsCalculator() {
       </>)}
 
       {/* Disclaimer */}
-      <div className="mt-8 text-[11px] text-white/40 text-center leading-relaxed">
-        ⚠️ Illustrative only. Actual amounts depend on pay scales, promotions, DA rates &amp; NPS performance. Consult your pension section for official figures.
+      <div className="mt-8 text-[12px] text-white/40 text-center leading-relaxed" style={{ fontFamily: FONT }}>
+        Illustrative only. Actual amounts depend on pay scales, promotions, DA rates &amp; NPS performance. Consult your pension section for official figures.
       </div>
     </div>
   );
