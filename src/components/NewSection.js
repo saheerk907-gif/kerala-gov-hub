@@ -33,7 +33,28 @@ export default function NewsSection() {
 
   return (
     <div className="py-2 md:py-3 flex flex-col h-full">
-      <div className="glass-card glow-top rounded-[24px] md:rounded-[28px] p-4 md:p-5 flex flex-col h-full" style={{ border: '1px solid rgba(255,255,255,0.08)' }}>
+      {/* Gradient border wrapper */}
+      <div style={{
+        background: 'linear-gradient(135deg,rgba(140,80,240,0.5),rgba(60,130,255,0.5))',
+        padding: '1.5px', borderRadius: 28, display: 'flex', flexDirection: 'column', flex: 1,
+      }}>
+      <div className="relative overflow-hidden flex flex-col"
+        style={{
+          background: '#0d1117',
+          backgroundImage: "url('/images/news-bg.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center top',
+          borderRadius: 26, padding: '16px 20px', flex: 1,
+        }}>
+
+        {/* Left-to-right fade */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to right, rgba(13,17,23,0.98) 28%, rgba(13,17,23,0.78) 55%, rgba(13,17,23,0.35) 80%, transparent 100%)' }}/>
+        {/* Top-to-bottom fade */}
+        <div style={{ position: 'absolute', inset: 0, zIndex: 1,
+          background: 'linear-gradient(to bottom, transparent 22%, rgba(13,17,23,0.55) 40%, rgba(13,17,23,0.97) 58%)' }}/>
+
+        <div className="relative flex flex-col h-full" style={{ zIndex: 2 }}>
 
         {/* Header */}
         <div className="mb-3">
@@ -128,7 +149,9 @@ export default function NewsSection() {
           </Link>
         )}
 
-      </div>
+        </div>{/* /content zIndex wrapper */}
+      </div>{/* /dark card */}
+      </div>{/* /gradient border */}
     </div>
   );
 }

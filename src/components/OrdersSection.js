@@ -2,40 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const F  = '#3a4258';   // fill
-const F2 = '#2e3a50';   // fill2
-const D  = '#252e42';   // dark detail
 const BG = '#0d1117';   // card bg
-
-// ─── Government Seal + Scroll illustration ────────────────────────────────────
-function OrdersIllustration() {
-  return (
-    <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
-      {/* Official circular seal – top right */}
-      <circle cx="225" cy="52" r="52" fill="none" stroke={F} strokeWidth="5" strokeDasharray="14 6"/>
-      <circle cx="225" cy="52" r="40" fill={F2} stroke={F} strokeWidth="2"/>
-      <circle cx="225" cy="52" r="27" fill="none" stroke={F} strokeWidth="1.5"/>
-      {/* 8-point star in seal */}
-      <path d="M225,36 L228,46 L238,43 L231,52 L238,61 L228,58 L225,68 L222,58 L212,61 L219,52 L212,43 L222,46 Z" fill={F}/>
-      {/* Scroll – bottom right */}
-      <g transform="translate(145,138)">
-        <ellipse cx="10" cy="0" rx="10" ry="40" fill="#323c52" stroke={F} strokeWidth="1.5"/>
-        <rect x="10" y="-40" width="95" height="80" fill={F2} stroke={F} strokeWidth="1.5"/>
-        <ellipse cx="105" cy="0" rx="10" ry="40" fill="#323c52" stroke={F} strokeWidth="1.5"/>
-        <line x1="22" y1="-24" x2="93" y2="-24" stroke={D} strokeWidth="3.5" strokeLinecap="round"/>
-        <line x1="22" y1="-8"  x2="93" y2="-8"  stroke={D} strokeWidth="3.5" strokeLinecap="round"/>
-        <line x1="22" y1="8"   x2="75" y2="8"   stroke={D} strokeWidth="3.5" strokeLinecap="round"/>
-        <line x1="22" y1="24"  x2="85" y2="24"  stroke={D} strokeWidth="3.5" strokeLinecap="round"/>
-      </g>
-      {/* Background document – lower left, very subtle */}
-      <rect x="18" y="100" width="58" height="78" rx="6" fill="#252e42" stroke={D} strokeWidth="1"/>
-      <line x1="28" y1="120" x2="66" y2="120" stroke={D} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="28" y1="134" x2="66" y2="134" stroke={D} strokeWidth="2" strokeLinecap="round"/>
-      <line x1="28" y1="148" x2="52" y2="148" stroke={D} strokeWidth="2" strokeLinecap="round"/>
-    </svg>
-  );
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function OrdersSection({ orders }) {
@@ -65,12 +32,15 @@ export default function OrdersSection({ orders }) {
         background: 'linear-gradient(135deg,rgba(140,80,240,0.5),rgba(60,130,255,0.5))',
         padding: '1.5px', borderRadius: 28, display: 'flex', flexDirection: 'column', flex: 1,
       }}>
-        {/* Dark card */}
+        {/* Dark card with photo background */}
         <div className="relative overflow-hidden flex flex-col"
-          style={{ background: BG, borderRadius: 26, padding: '16px 20px', flex: 1 }}>
-
-          {/* SVG illustration layer */}
-          <OrdersIllustration />
+          style={{
+            background: BG,
+            backgroundImage: "url('/images/orders-bg.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center right',
+            borderRadius: 26, padding: '16px 20px', flex: 1,
+          }}>
           {/* Left-to-right fade (keeps content readable) */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 1,
             background: 'linear-gradient(to right, rgba(13,17,23,0.98) 28%, rgba(13,17,23,0.78) 55%, rgba(13,17,23,0.35) 80%, transparent 100%)' }}/>
