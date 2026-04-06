@@ -293,7 +293,6 @@ export default function NpsApsCalculator() {
   const TABS = [
     { id: 'compare',  label: ml ? 'താരതമ്യം' : 'Compare' },
     { id: 'growth',   label: ml ? 'വളർച്ച'   : 'Growth' },
-    { id: 'pension',  label: ml ? 'ശേഷം'     : 'Post-Retire' },
     { id: 'table',    label: ml ? 'പട്ടിക'   : 'Table' },
   ];
 
@@ -437,11 +436,23 @@ export default function NpsApsCalculator() {
                 <span>Last Basic: <strong className="text-white">{fmtF(R.lB)}</strong></span>
               </div>
             </div>
-            <button onClick={() => setPvOn(v => !v)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all"
-              style={{ background: pvOn ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)', border: `1px solid rgba(255,255,255,0.12)`, color: pvOn ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.45)', cursor: 'pointer', fontFamily: FONT }}>
-              {pvOn ? `Today's ₹ (${inf}% inflation)` : 'Show Present Value'}
-            </button>
+            <div className="flex flex-col items-end gap-1">
+              <button onClick={() => setPvOn(v => !v)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] font-semibold transition-all"
+                style={{
+                  background: pvOn ? 'rgba(59,130,246,0.15)' : 'rgba(255,255,255,0.06)',
+                  border: pvOn ? '1px solid rgba(59,130,246,0.35)' : '1px solid rgba(255,255,255,0.15)',
+                  color: pvOn ? '#60a5fa' : 'rgba(255,255,255,0.7)',
+                  cursor: 'pointer', fontFamily: FONT,
+                  boxShadow: pvOn ? '0 0 12px rgba(59,130,246,0.15)' : 'none',
+                }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                </svg>
+                {pvOn ? `Today's ₹ (${inf}% inflation adjusted)` : `Show in Today's ₹`}
+              </button>
+              {!pvOn && <span className="text-[10px] text-white/35 italic">See what future amounts are worth today</span>}
+            </div>
           </div>
 
           {/* APS and NPS cards — equal styling */}
@@ -669,72 +680,6 @@ export default function NpsApsCalculator() {
           </div>
         )}
 
-        {/* ── Post-retire tab ───────────────────────────────────────────────── */}
-        {tab === 'pension' && (
-          <div className="flex flex-col gap-5">
-            <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[12px] font-semibold text-white/55 mb-4">
-                Monthly Pension After Retirement — APS +{postDR}%/yr vs NPS Fixed
-              </div>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={R.post}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
-                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
-                  <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke={APS_COLOR} strokeWidth={2.5} dot={false} />
-                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke={NPS_COLOR} strokeWidth={2.5} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[12px] font-semibold text-white/55 mb-4">
-                Cumulative Pension Received
-              </div>
-              <ResponsiveContainer width="100%" height={280}>
-                <AreaChart data={R.post}>
-                  <defs>
-                    <linearGradient id="apsG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor={APS_COLOR} stopOpacity={0.2} />
-                      <stop offset="95%" stopColor={APS_COLOR} stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="npsG" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor={NPS_COLOR} stopOpacity={0.2} />
-                      <stop offset="95%" stopColor={NPS_COLOR} stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
-                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
-                  <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG)" stroke={APS_COLOR} strokeWidth={2} />
-                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG)" stroke={NPS_COLOR} strokeWidth={2} />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="rounded-2xl p-5" style={CARD}>
-              <div className="text-[12px] font-semibold text-white/55 mb-4">
-                Pension Difference (APS - NPS cumulative)
-              </div>
-              <ResponsiveContainer width="100%" height={220}>
-                <BarChart data={R.post}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
-                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
-                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
-                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
-                  <Bar dataKey={pvOn ? 'advPV' : 'diff'} name="APS - NPS" radius={[4,4,0,0]}>
-                    {R.post.map((e, i) => <Cell key={i} fill={(pvOn ? e.advPV : e.diff) >= 0 ? APS_COLOR : NPS_COLOR} fillOpacity={0.6} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
         {/* ── Table tab ─────────────────────────────────────────────────────── */}
         {tab === 'table' && (
           <div className="rounded-2xl overflow-hidden" style={CARD}>
@@ -779,6 +724,78 @@ export default function NpsApsCalculator() {
             </div>
           </div>
         )}
+
+      {/* ── Post-Retirement Growth (always visible) ──────────────────────── */}
+      {R && (
+        <div className="mt-8">
+          <div className="text-[11px] font-bold uppercase tracking-widest mb-5" style={{ color: 'rgba(255,255,255,0.45)', fontFamily: FONT }}>
+            {ml ? 'വിരമിക്കൽ ശേഷം വളർച്ച' : 'Post-Retirement Growth — 25 Year Projection'}
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <div className="rounded-2xl p-5" style={CARD}>
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Monthly Pension After Retirement — APS +{postDR}%/yr vs NPS Fixed
+              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={R.post}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
+                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Line type="monotone" dataKey={pvOn ? 'apsPV' : 'apsP'} name="APS" stroke={APS_COLOR} strokeWidth={2.5} dot={false} />
+                  <Line type="monotone" dataKey={pvOn ? 'npsPV' : 'npsP'} name="NPS" stroke={NPS_COLOR} strokeWidth={2.5} dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="rounded-2xl p-5" style={CARD}>
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Cumulative Pension Received
+              </div>
+              <ResponsiveContainer width="100%" height={280}>
+                <AreaChart data={R.post}>
+                  <defs>
+                    <linearGradient id="apsG2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor={APS_COLOR} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={APS_COLOR} stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="npsG2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%"  stopColor={NPS_COLOR} stopOpacity={0.2} />
+                      <stop offset="95%" stopColor={NPS_COLOR} stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
+                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
+                  <Legend wrapperStyle={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', fontFamily: FONT }} />
+                  <Area type="monotone" dataKey={pvOn ? 'cAP' : 'cA'} name="APS Total" fill="url(#apsG2)" stroke={APS_COLOR} strokeWidth={2} />
+                  <Area type="monotone" dataKey={pvOn ? 'cNP' : 'cN'} name="NPS Total" fill="url(#npsG2)" stroke={NPS_COLOR} strokeWidth={2} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="rounded-2xl p-5" style={CARD}>
+              <div className="text-[12px] font-semibold text-white/55 mb-4">
+                Pension Difference (APS - NPS cumulative)
+              </div>
+              <ResponsiveContainer width="100%" height={220}>
+                <BarChart data={R.post}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
+                  <XAxis dataKey="label" tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 11, fontFamily: FONT }} axisLine={false} tickLine={false} interval={4} />
+                  <YAxis tickFormatter={fmt} tick={{ fill: 'rgba(255,255,255,0.45)', fontSize: 12, fontFamily: FONT }} axisLine={false} tickLine={false} width={55} />
+                  <Tooltip contentStyle={TT_STYLE} formatter={v => fmtF(v)} />
+                  <Bar dataKey={pvOn ? 'advPV' : 'diff'} name="APS - NPS" radius={[4,4,0,0]}>
+                    {R.post.map((e, i) => <Cell key={i} fill={(pvOn ? e.advPV : e.diff) >= 0 ? APS_COLOR : NPS_COLOR} fillOpacity={0.6} />)}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
 
       </>)}
 
