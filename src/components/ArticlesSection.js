@@ -50,8 +50,8 @@ export default function ArticlesSection() {
         {/* Cinematic photo card */}
         <div className="relative overflow-hidden" style={{
           backgroundImage: "url('/images/govtoffic.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 20%',
+          backgroundSize: 'auto 110%',
+          backgroundPosition: 'right 15%',
           borderRadius: 26,
           minHeight: 380,
         }}>

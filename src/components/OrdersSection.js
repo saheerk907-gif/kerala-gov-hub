@@ -37,8 +37,8 @@ export default function OrdersSection({ orders }) {
           style={{
             background: BG,
             backgroundImage: "url('/images/govtoffic.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center 40%',
+            backgroundSize: 'auto 110%',
+            backgroundPosition: 'right 25%',
             borderRadius: 26, padding: '16px 20px', flex: 1,
           }}>
           {/* Left-to-right fade (keeps content readable) */}

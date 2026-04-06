@@ -49,8 +49,8 @@ export default function ForumSection() {
           {/* Cinematic photo card */}
           <div className="relative overflow-hidden" style={{
             backgroundImage:"url('/images/govtoffic.jpg')",
-            backgroundSize:'cover',
-            backgroundPosition:'center 50%',
+            backgroundSize:'auto 110%',
+            backgroundPosition:'right 30%',
             borderRadius:26,
             minHeight:380,
           }}>
