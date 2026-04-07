@@ -155,27 +155,29 @@ export default function PdfToExcelClient() {
       const XLSX = await import('xlsx');
       const wb   = XLSX.utils.book_new();
 
+      // Collect all rows from every page into one array
+      const allRows = [];
       for (let p = 1; p <= pdfDoc.numPages; p++) {
         setProgress(Math.round((p / pdfDoc.numPages) * 100));
         const page    = await pdfDoc.getPage(p);
         const content = await page.getTextContent();
         const rows    = extractTableData(content.items);
         totalRows    += rows.length;
-
-        const ws = XLSX.utils.aoa_to_sheet(rows);
-
-        // Auto-width columns
-        const maxCols = rows.reduce((m, r) => Math.max(m, r.length), 0);
-        const colW    = Array.from({ length: maxCols }, (_, ci) => ({
-          wch: Math.min(
-            rows.reduce((m, r) => Math.max(m, String(r[ci] ?? '').length), 8) + 2,
-            60,
-          ),
-        }));
-        ws['!cols'] = colW;
-
-        XLSX.utils.book_append_sheet(wb, ws, `Page ${p}`);
+        allRows.push(...rows);
       }
+
+      const ws = XLSX.utils.aoa_to_sheet(allRows);
+
+      // Auto-width columns
+      const maxCols = allRows.reduce((m, r) => Math.max(m, r.length), 0);
+      ws['!cols'] = Array.from({ length: maxCols }, (_, ci) => ({
+        wch: Math.min(
+          allRows.reduce((m, r) => Math.max(m, String(r[ci] ?? '').length), 8) + 2,
+          60,
+        ),
+      }));
+
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
       XLSX.writeFile(wb, file.name.replace(/\.pdf$/i, '') + '.xlsx');
       setStats({ pages: pdfDoc.numPages, totalRows });
@@ -292,7 +294,7 @@ export default function PdfToExcelClient() {
               }}>
                 <p style={{ color: '#10b981', fontWeight: 700, fontSize: 14, margin: 0 }}>✓ Download started!</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '4px 0 0' }}>
-                  {stats.pages} sheet{stats.pages > 1 ? 's' : ''} · {stats.totalRows} rows extracted
+                  {stats.pages} page{stats.pages > 1 ? 's' : ''} merged · {stats.totalRows} rows in one sheet
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
