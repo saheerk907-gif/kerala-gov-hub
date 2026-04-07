@@ -6,6 +6,70 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const ACCENT = '#2997ff';
 
+const F1 = '#2a3552';
+const F2 = '#1e2a44';
+const D  = '#162038';
+
+function ArticleIllustration() {
+  return (
+    <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+
+      {/* Large newspaper page — dominant, right-center */}
+      <g transform="translate(450,185) rotate(-15)">
+        <rect x="-85" y="-120" width="170" height="240" rx="8" fill={F1}/>
+        <rect x="-85" y="-120" width="170" height="30" rx="8" fill={D}/>
+        <rect x="-70" y="-82" width="140" height="11" rx="4" fill={D}/>
+        <rect x="-70" y="-65" width="110" height="8"  rx="3" fill={D}/>
+        <line x1="0" y1="-49" x2="0" y2="100" stroke={D} strokeWidth="2"/>
+        {[-42,-28,-14,0,14,28,42,56,72,88].map((y,i)=>(
+          <rect key={`l${i}`} x="-76" y={y} width={i%4===3?50:66} height="6" rx="3" fill={D}/>
+        ))}
+        {[-42,-28,-14,0,14,28,42,56].map((y,i)=>(
+          <rect key={`r${i}`} x="8"  y={y} width={i%3===2?40:62} height="6" rx="3" fill={D}/>
+        ))}
+        <rect x="8" y="66" width="62" height="44" rx="5" fill={D}/>
+      </g>
+
+      {/* Second page — behind, rotated right */}
+      <g transform="translate(540,140) rotate(20)">
+        <rect x="-65" y="-100" width="130" height="200" rx="7" fill={F2}/>
+        <rect x="-65" y="-100" width="130" height="24"  rx="7" fill={D}/>
+        {[-62,-46,-30,-14,2,18,34,50,66,82].map((y,i)=>(
+          <rect key={i} x="-52" y={y} width={i%3===1?70:104} height="5" rx="3" fill={D}/>
+        ))}
+      </g>
+
+      {/* Third small card — bottom-left of cluster */}
+      <g transform="translate(390,295) rotate(-6)">
+        <rect x="-60" y="-80" width="120" height="160" rx="7" fill="#243050"/>
+        <rect x="-60" y="-80" width="120" height="22"  rx="7" fill={D}/>
+        {[-45,-30,-16,-2,12,26,40,56,70].map((y,i)=>(
+          <rect key={i} x="-48" y={y} width={i%4===2?55:92} height="5" rx="3" fill={D}/>
+        ))}
+      </g>
+
+      {/* Bookmark ribbon on main page */}
+      <g transform="translate(524,75)">
+        <path d="M0,0 L18,0 L18,45 L9,34 L0,45 Z" fill="#2997ff" opacity="0.4"/>
+      </g>
+
+      {/* Pen / pencil */}
+      <g transform="translate(340,100) rotate(-35)">
+        <rect x="-5" y="-55" width="10" height="90" rx="4" fill="#2e3f60"/>
+        <polygon points="-5,35 5,35 0,55" fill="#fbbf24" opacity="0.6"/>
+        <rect x="-5" y="-55" width="10" height="12" rx="4" fill="#3a4f75"/>
+      </g>
+
+      {/* Accent dots */}
+      <circle cx="330" cy="190" r="5"   fill={F1}/>
+      <circle cx="320" cy="210" r="3"   fill={F2}/>
+      <circle cx="578" cy="300" r="6"   fill={F1}/>
+      <circle cx="568" cy="328" r="3.5" fill={F2}/>
+    </svg>
+  );
+}
+
 const CAT_COLORS = {
   news: '#2997ff', medisep: '#ff9f0a', pension: '#30d158',
   ksr: '#5ac8fa', gpf: '#64d2ff', da: '#ff453a',
@@ -47,26 +111,25 @@ export default function ArticlesSection() {
         background: 'linear-gradient(135deg,rgba(140,80,240,0.55),rgba(60,130,255,0.55))',
         padding: '1.5px', borderRadius: 28,
       }}>
-        {/* Cinematic photo card */}
+        {/* SVG illustrated card */}
         <div className="relative overflow-hidden" style={{
-          backgroundImage: "url('/images/govtoffic.jpg')",
-          backgroundSize: 'auto 110%',
-          backgroundPosition: 'right 15%',
+          background: '#080c14',
           borderRadius: 26,
           minHeight: 380,
         }}>
-          {/* Overlays */}
-          <div style={{ position:'absolute', inset:0, background:'rgba(5,7,14,0.68)', zIndex:1 }}/>
-          <div style={{ position:'absolute', inset:0, zIndex:2,
-            background:'linear-gradient(to right, rgba(5,7,14,0.97) 0%, rgba(5,7,14,0.80) 42%, rgba(5,7,14,0.40) 68%, transparent 100%)' }}/>
-          <div style={{ position:'absolute', inset:0, zIndex:2,
-            background:'linear-gradient(to bottom, rgba(5,7,14,0.82) 0%, transparent 32%, rgba(5,7,14,0.90) 100%)' }}/>
+          {/* SVG illustration — behind everything */}
+          <ArticleIllustration />
+          {/* Fade content area */}
+          <div style={{ position:'absolute', inset:0, zIndex:1,
+            background:'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }}/>
+          <div style={{ position:'absolute', inset:0, zIndex:1,
+            background:'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }}/>
           {/* Blue accent glow */}
-          <div style={{ position:'absolute', bottom:0, left:0, width:'45%', height:'35%', zIndex:2,
-            background:'radial-gradient(ellipse at bottom left, rgba(41,151,255,0.14) 0%, transparent 70%)' }}/>
+          <div style={{ position:'absolute', bottom:0, left:0, width:'45%', height:'35%', zIndex:1,
+            background:'radial-gradient(ellipse at bottom left, rgba(41,151,255,0.13) 0%, transparent 70%)' }}/>
 
           {/* Content */}
-          <div className="relative p-5 md:p-7 flex flex-col" style={{ zIndex:3, minHeight:380 }}>
+          <div className="relative p-5 md:p-7 flex flex-col" style={{ zIndex:2, minHeight:380 }}>
 
             {/* Header */}
             <div className="mb-5">
