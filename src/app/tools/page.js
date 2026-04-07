@@ -46,6 +46,15 @@ const pdfTools = [
     color: '#ec4899',
     badge: 'NEW',
   },
+  {
+    icon: '📊',
+    title: 'PDF to Excel',
+    subtitle: 'PDF → Excel',
+    desc: 'Extract tables from PDF and download as .xlsx — browser-only, files never leave your device',
+    href: '/tools/pdf-to-excel',
+    color: '#10b981',
+    badge: 'NEW',
+  },
 ];
 
 const utilityTools = [
