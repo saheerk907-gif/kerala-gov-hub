@@ -4,6 +4,15 @@ import { useState } from 'react';
 const MOBILE_VISIBLE = 4;
 const ACCENT = '#30d158';
 
+const FALLBACK_LINKS = [
+  { id: 'ql1', icon: '🏛️', title_ml: 'സ്പാർക്ക് പോർട്ടൽ',       subtitle: 'Salary Processing & Payroll',   url: 'https://spark.kerala.gov.in',    color: 'blue'   },
+  { id: 'ql2', icon: '🏦', title_ml: 'ട്രഷറി',                   subtitle: 'Kerala Treasury',               url: 'https://treasury.kerala.gov.in', color: 'green'  },
+  { id: 'ql3', icon: '🏥', title_ml: 'മെഡിസെപ്',                 subtitle: 'Medisep Health Insurance',      url: 'https://medisep.kerala.gov.in',  color: 'orange' },
+  { id: 'ql4', icon: '📋', title_ml: 'ഇ-ഓഫീസ്',                  subtitle: 'e-Office Kerala',               url: 'https://eoffice.kerala.gov.in',  color: 'purple' },
+  { id: 'ql5', icon: '🎓', title_ml: 'ഡിപ്പാർട്ട്‌മെന്റൽ ടെസ്റ്റ്', subtitle: 'Departmental Test Board',  url: 'https://keralapsc.kerala.gov.in',color: 'teal'   },
+  { id: 'ql6', icon: '📜', title_ml: 'കേരള സർക്കാർ',             subtitle: 'Kerala Government Portal',     url: 'https://kerala.gov.in',          color: 'gold'   },
+];
+
 const F1 = '#2a3552';
 const F2 = '#1e2a44';
 const D  = '#162038';
@@ -94,7 +103,7 @@ const COLOR_MAP = {
 
 export default function QuickLinksSection({ links }) {
   const [expanded, setExpanded] = useState(false);
-  if (!links?.length) return null;
+  const items = links?.length ? links : FALLBACK_LINKS;
 
   return (
     <section id="links" className="relative py-3 md:py-4 px-4 md:px-6">
@@ -136,14 +145,14 @@ export default function QuickLinksSection({ links }) {
                 <div className="flex items-center gap-2 mt-3">
                   <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
                     style={{ background:'rgba(48,209,88,0.13)', border:'1px solid rgba(48,209,88,0.32)', color:ACCENT }}>
-                    🔗 {links.length} Official Portals
+                    🔗 {items.length} Official Portals
                   </div>
                 </div>
               </div>
 
               {/* Links grid */}
               <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                {links.map((l, idx) => {
+                {items.map((l, idx) => {
                   const c = COLOR_MAP[l.color] || COLOR_MAP.blue;
                   return (
                     <div key={l.id} className={idx >= MOBILE_VISIBLE && !expanded ? 'hidden' : 'block'}>
@@ -180,12 +189,12 @@ export default function QuickLinksSection({ links }) {
               </div>
 
               {/* Expand */}
-              {links.length > MOBILE_VISIBLE && (
+              {items.length > MOBILE_VISIBLE && (
                 <div className="mt-4">
                   <button onClick={()=>setExpanded(v=>!v)}
                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl text-[12px] font-bold transition-all cursor-pointer border-none"
                     style={{ background:'rgba(48,209,88,0.09)', color:ACCENT, border:'1px solid rgba(48,209,88,0.25)', backdropFilter:'blur(8px)' }}>
-                    {expanded ? 'Show Less ↑' : `Show All ${links.length} Portals ↓`}
+                    {expanded ? 'Show Less ↑' : `Show All ${items.length} Portals ↓`}
                   </button>
                 </div>
               )}

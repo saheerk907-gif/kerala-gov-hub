@@ -12,6 +12,7 @@ import TrendingArticle from '@/components/TrendingArticle';
 import QuickLinksSection from '@/components/QuickLinksSection';
 import SchemesSection from '@/components/SchemesSection';
 import DepartmentalTestsSection from '@/components/DepartmentalTestsSection';
+import DepartmentResourcesSection from '@/components/DepartmentResourcesSection';
 import Footer from '@/components/Footer';
 import ScrollReveal from '@/components/ScrollReveal';
 import MobileBottomNav from '@/components/MobileBottomNav';
@@ -104,6 +105,10 @@ export default async function HomePage() {
 
       <ScrollReveal direction="up" delay={100}>
         <SchemesSection schemes={schemes} />
+      </ScrollReveal>
+
+      <ScrollReveal direction="up" delay={100}>
+        <DepartmentResourcesSection />
       </ScrollReveal>
 
       <ScrollReveal direction="up" delay={100}>
