@@ -25,20 +25,24 @@ const outlineBtn   = {
 /**
  * Robust table extraction from pdfjs text content.
  *
- * Strategy:
- *  1. Estimate average char width & line height from the document itself.
- *  2. Group items into rows using fuzzy Y-matching (tolerance = 55 % of lineHeight).
- *  3. Within each row merge adjacent text chunks into cells when the gap between
- *     them is less than (2.5 × avgCharWidth) — i.e. they belong to the same cell.
- *     A larger gap means a new column.
+ * Row grouping:
+ *   Items whose Y positions are within ROW_TOL of each other are on the same row.
+ *   We use CLOSEST-match (not first-match) so a slightly large tolerance never
+ *   accidentally swallows items that belong to the next row.
+ *   ROW_TOL is fixed at 4 pt — enough to cover baseline variation within a row
+ *   (mixed fonts, slight kerning) but small enough that rows 10+ pt apart stay separate.
+ *
+ * Column detection:
+ *   COL_GAP = max(2.5 × avgCharWidth, 8 pt).
+ *   Items closer than COL_GAP are merged into the same cell (text joined with a space).
+ *   Items farther apart start a new column.
  */
 function extractTableData(items) {
   // ── 1. Filter blanks ──────────────────────────────────────────────────────
   const valid = items.filter(it => it.str && it.str.trim() !== '');
   if (!valid.length) return [];
 
-  // ── 2. Adaptive metrics ───────────────────────────────────────────────────
-  // Average character width (use items that actually have a width)
+  // ── 2. Average character width for adaptive column gap ───────────────────
   let wSum = 0, wCount = 0;
   for (const it of valid) {
     if (it.width > 0 && it.str.trim().length > 0) {
@@ -46,37 +50,32 @@ function extractTableData(items) {
       wCount += it.str.trim().length;
     }
   }
-  const avgCharW = wCount > 0 ? wSum / wCount : 6;   // fallback 6 pt
-  const COL_GAP  = Math.max(avgCharW * 2.5, 8);       // ≥ 8 pt always
+  const avgCharW = wCount > 0 ? wSum / wCount : 6;
+  const COL_GAP  = Math.max(avgCharW * 2.5, 8);   // adaptive, min 8 pt
 
-  // Estimate line height: median of all positive Y-deltas between sorted unique rows
-  const uniqueYs = [...new Set(valid.map(it => Math.round(it.transform[5])))].sort((a, b) => a - b);
-  const deltas   = [];
-  for (let i = 1; i < uniqueYs.length; i++) {
-    const d = uniqueYs[i] - uniqueYs[i - 1];
-    if (d > 1 && d < 60) deltas.push(d);
-  }
-  deltas.sort((a, b) => a - b);
-  const lineH   = deltas.length ? deltas[Math.floor(deltas.length / 2)] : 12;
-  const ROW_TOL = lineH * 0.55;   // items within 55 % of line height → same row
+  // Fixed small row tolerance — just enough to absorb baseline jitter within one line
+  const ROW_TOL = 4;
 
-  // ── 3. Fuzzy row grouping ─────────────────────────────────────────────────
-  // rowMap: representative-Y → item[]
-  const rowKeys = [];   // sorted array of row Y values we've seen
+  // ── 3. Fuzzy row grouping (CLOSEST match) ─────────────────────────────────
+  const rowKeys = [];   // representative Y values, in insertion order
   const rowMap  = new Map();
 
   for (const it of valid) {
-    const y = it.transform[4 + 1]; // transform[5] = ty
-    // Find an existing row within tolerance
-    let matched = null;
+    const y = it.transform[5]; // ty
+
+    // Find the CLOSEST existing row within ROW_TOL
+    let matched = null, minDist = Infinity;
     for (const ry of rowKeys) {
-      if (Math.abs(ry - y) <= ROW_TOL) { matched = ry; break; }
+      const dist = Math.abs(ry - y);
+      if (dist <= ROW_TOL && dist < minDist) { matched = ry; minDist = dist; }
     }
+
     if (matched === null) {
-      rowKeys.push(y);
       rowMap.set(y, []);
+      rowKeys.push(y);
       matched = y;
     }
+
     rowMap.get(matched).push({
       x:    it.transform[4],
       endX: it.transform[4] + (it.width > 0 ? it.width : avgCharW * it.str.length),
@@ -86,11 +85,11 @@ function extractTableData(items) {
 
   // ── 4. Build 2-D array ────────────────────────────────────────────────────
   return [...rowMap.entries()]
-    .sort(([ya], [yb]) => yb - ya)   // PDF Y is bottom-up → sort descending = top-first
+    .sort(([ya], [yb]) => yb - ya)   // PDF Y is bottom-up → descending = top-first
     .map(([, row]) => {
-      row.sort((a, b) => a.x - b.x); // left → right
+      row.sort((a, b) => a.x - b.x); // left → right within row
 
-      // Merge items into cells by X gap
+      // Merge adjacent items into cells by X gap
       const cells = [];
       for (const item of row) {
         if (!cells.length) {
@@ -101,7 +100,6 @@ function extractTableData(items) {
         const gap  = item.x - prev.endX;
 
         if (gap <= COL_GAP) {
-          // Same cell — add space only when neither side already has one
           const sp = gap > 0.5 && !/\s$/.test(prev.text) && !/^\s/.test(item.text);
           prev.text += (sp ? ' ' : '') + item.text;
           prev.endX  = Math.max(prev.endX, item.endX);
