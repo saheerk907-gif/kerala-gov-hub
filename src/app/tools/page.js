@@ -55,6 +55,15 @@ const pdfTools = [
     color: '#10b981',
     badge: 'NEW',
   },
+  {
+    icon: '🔄',
+    title: 'Excel to CSV',
+    subtitle: 'Excel → CSV',
+    desc: 'Convert Excel sheets to CSV — choose delimiter, preview data, browser-only',
+    href: '/tools/excel-to-csv',
+    color: '#f59e0b',
+    badge: 'NEW',
+  },
 ];
 
 const utilityTools = [

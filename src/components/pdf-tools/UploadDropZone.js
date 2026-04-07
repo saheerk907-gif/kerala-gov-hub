@@ -1,14 +1,15 @@
 'use client';
 import { useRef, useState } from 'react';
 
-export default function UploadDropZone({ onFiles, multiple = false, label = 'Drop PDF(s) here or click to browse' }) {
+export default function UploadDropZone({ onFiles, multiple = false, label = 'Drop PDF(s) here or click to browse', accept = 'application/pdf', filterFn = null }) {
   const inputRef = useRef(null);
   const [dragging, setDragging] = useState(false);
 
   function handleDrop(e) {
     e.preventDefault();
     setDragging(false);
-    const files = Array.from(e.dataTransfer.files).filter(f => f.type === 'application/pdf');
+    let files = Array.from(e.dataTransfer.files);
+    if (filterFn) files = files.filter(filterFn);
     if (files.length) onFiles(multiple ? files : [files[0]]);
   }
 
@@ -40,11 +41,11 @@ export default function UploadDropZone({ onFiles, multiple = false, label = 'Dro
       <p style={{ color: dragging ? '#2997ff' : 'rgba(255,255,255,0.6)', fontWeight: 600, fontSize: 14, margin: 0 }}>
         {label}
       </p>
-      <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 4 }}>PDF only</p>
+      <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12, marginTop: 4 }}>{accept === 'application/pdf' ? 'PDF only' : accept}</p>
       <input
         ref={inputRef}
         type="file"
-        accept="application/pdf"
+        accept={accept}
         multiple={multiple}
         style={{ display: 'none' }}
         onChange={handleChange}
