@@ -81,6 +81,20 @@ function autoColWidths(rows) {
   }));
 }
 
+function rowsToTsv(rows) {
+  return rows.map(r => r.map(c => String(c ?? '').replace(/\t/g, ' ')).join('\t')).join('\n');
+}
+
+function rowsToCsv(rows) {
+  return rows.map(r =>
+    r.map(c => {
+      const s = String(c ?? '');
+      return (s.includes(',') || s.includes('"') || s.includes('\n'))
+        ? `"${s.replace(/"/g, '""')}"` : s;
+    }).join(',')
+  ).join('\n');
+}
+
 // ─── Option toggle chip ───────────────────────────────────────────────────────
 function Chip({ active, onClick, children }) {
   return (
@@ -117,6 +131,25 @@ function Toggle({ checked, onChange, label }) {
   );
 }
 
+// ─── Number input ─────────────────────────────────────────────────────────────
+function NumInput({ value, onChange, min, max, label }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', flex: 1 }}>{label}</span>
+      <input
+        type="number" min={min} max={max} value={value}
+        onChange={e => onChange(Number(e.target.value))}
+        style={{
+          width: 56, padding: '4px 8px', borderRadius: 8,
+          border: '1px solid rgba(255,255,255,0.12)',
+          background: 'rgba(255,255,255,0.07)', color: '#fff',
+          fontSize: 13, fontWeight: 600, textAlign: 'center', outline: 'none',
+        }}
+      />
+    </div>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function PdfToExcelClient() {
   const [file,        setFile]        = useState(null);
@@ -125,17 +158,25 @@ export default function PdfToExcelClient() {
   const [progress,    setProgress]    = useState(0);
   const [preview,     setPreview]     = useState([]);
   const [stats,       setStats]       = useState(null);
+  const [copied,      setCopied]      = useState(false);
+  const [lastRows,    setLastRows]    = useState([]);   // for clipboard copy
 
   // Options
   const [sheetMode,   setSheetMode]   = useState('single');   // 'single' | 'multi'
-  const [addPageCol,  setAddPageCol]  = useState(false);      // prepend page number column
-  const [boldHeader,  setBoldHeader]  = useState(true);       // bold first row of each sheet
+  const [exportFmt,   setExportFmt]   = useState('xlsx');     // 'xlsx' | 'csv'
+  const [addPageCol,  setAddPageCol]  = useState(false);
+  const [boldHeader,  setBoldHeader]  = useState(true);
+  const [minCols,     setMinCols]     = useState(1);          // skip rows with fewer cols
+  const [pageFrom,    setPageFrom]    = useState(1);
+  const [pageTo,      setPageTo]      = useState(1);
 
   async function handleFile([f]) {
-    setStatus('loading'); setPreview([]); setStats(null);
+    setStatus('loading'); setPreview([]); setStats(null); setLastRows([]);
     try {
       const buf = await f.arrayBuffer();
       const doc = await pdfjsLib.getDocument({ data: buf }).promise;
+      setPageFrom(1);
+      setPageTo(doc.numPages);
       const previewPages = [];
       for (let p = 1; p <= Math.min(3, doc.numPages); p++) {
         const content = await (await doc.getPage(p)).getTextContent();
@@ -149,24 +190,54 @@ export default function PdfToExcelClient() {
 
   async function handleConvert() {
     if (!pdfDoc) return;
-    setStatus('converting'); setProgress(0);
+    setStatus('converting'); setProgress(0); setCopied(false);
     let totalRows = 0, totalSheets = 0;
-    try {
-      const XLSX = await import('xlsx');
-      const wb   = XLSX.utils.book_new();
+    const clampedFrom = Math.max(1, Math.min(pageFrom, pdfDoc.numPages));
+    const clampedTo   = Math.max(clampedFrom, Math.min(pageTo, pdfDoc.numPages));
+    const pageCount   = clampedTo - clampedFrom + 1;
 
-      if (sheetMode === 'single') {
-        // ── All pages → one sheet ─────────────────────────────────────────
+    try {
+      if (exportFmt === 'csv') {
+        // ── CSV export ────────────────────────────────────────────────────
         const allRows = [];
-        for (let p = 1; p <= pdfDoc.numPages; p++) {
-          setProgress(Math.round((p / pdfDoc.numPages) * 100));
+        for (let p = clampedFrom; p <= clampedTo; p++) {
+          setProgress(Math.round(((p - clampedFrom + 1) / pageCount) * 100));
           const content = await (await pdfDoc.getPage(p)).getTextContent();
-          const rows    = extractTableData(content.items);
+          const rows    = extractTableData(content.items).filter(r => r.length >= minCols);
           rows.forEach(row => {
             allRows.push(addPageCol ? [`Page ${p}`, ...row] : row);
           });
           totalRows += rows.length;
         }
+        setLastRows(allRows);
+        const csvStr  = rowsToCsv(allRows);
+        const blob    = new Blob([csvStr], { type: 'text/csv;charset=utf-8;' });
+        const url     = URL.createObjectURL(blob);
+        const a       = document.createElement('a');
+        a.href = url; a.download = file.name.replace(/\.pdf$/i, '') + '.csv';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        setStats({ pages: pageCount, totalRows, totalSheets: 1 });
+        setStatus('done');
+        return;
+      }
+
+      // ── Excel export ──────────────────────────────────────────────────
+      const XLSX = await import('xlsx');
+      const wb   = XLSX.utils.book_new();
+
+      if (sheetMode === 'single') {
+        const allRows = [];
+        for (let p = clampedFrom; p <= clampedTo; p++) {
+          setProgress(Math.round(((p - clampedFrom + 1) / pageCount) * 100));
+          const content = await (await pdfDoc.getPage(p)).getTextContent();
+          const rows    = extractTableData(content.items).filter(r => r.length >= minCols);
+          rows.forEach(row => {
+            allRows.push(addPageCol ? [`Page ${p}`, ...row] : row);
+          });
+          totalRows += rows.length;
+        }
+        setLastRows(allRows);
         const ws = XLSX.utils.aoa_to_sheet(allRows);
         ws['!cols'] = autoColWidths(allRows);
         if (boldHeader && allRows.length) {
@@ -180,13 +251,14 @@ export default function PdfToExcelClient() {
         totalSheets = 1;
 
       } else {
-        // ── Each page → separate sheet ────────────────────────────────────
-        for (let p = 1; p <= pdfDoc.numPages; p++) {
-          setProgress(Math.round((p / pdfDoc.numPages) * 100));
+        const allRowsFlat = [];
+        for (let p = clampedFrom; p <= clampedTo; p++) {
+          setProgress(Math.round(((p - clampedFrom + 1) / pageCount) * 100));
           const content = await (await pdfDoc.getPage(p)).getTextContent();
-          const rows    = extractTableData(content.items);
+          const rows    = extractTableData(content.items).filter(r => r.length >= minCols);
           if (!rows.length) continue;
           const sheetRows = addPageCol ? rows.map(r => [`Page ${p}`, ...r]) : rows;
+          allRowsFlat.push(...sheetRows);
           const ws = XLSX.utils.aoa_to_sheet(sheetRows);
           ws['!cols'] = autoColWidths(sheetRows);
           if (boldHeader && sheetRows.length) {
@@ -200,23 +272,33 @@ export default function PdfToExcelClient() {
           totalRows += rows.length;
           totalSheets++;
         }
+        setLastRows(allRowsFlat);
       }
 
       XLSX.writeFile(wb, file.name.replace(/\.pdf$/i, '') + '.xlsx');
-      setStats({ pages: pdfDoc.numPages, totalRows, totalSheets });
+      setStats({ pages: pageCount, totalRows, totalSheets });
       setStatus('done');
     } catch (err) { setStatus('error: ' + err.message); }
+  }
+
+  function handleCopyClipboard() {
+    if (!lastRows.length) return;
+    navigator.clipboard.writeText(rowsToTsv(lastRows)).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
   }
 
   function handleReset() {
     setFile(null); setPdfDoc(null); setStatus(null);
     setProgress(0); setPreview([]); setStats(null);
+    setLastRows([]); setCopied(false);
   }
 
   const busy = status === 'loading' || status === 'converting';
 
   return (
-    <GlassTool icon="📊" title="PDF to Excel" titleMl="PDF → Excel (.xlsx)">
+    <GlassTool icon="📊" title="PDF to Excel" titleMl="PDF → Excel / CSV">
 
       {!pdfDoc && !busy && (
         <>
@@ -253,21 +335,63 @@ export default function PdfToExcelClient() {
             <div style={{
               background: 'rgba(255,255,255,0.03)', borderRadius: 12,
               border: '1px solid rgba(255,255,255,0.07)', padding: '14px 16px',
-              marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 14,
+              marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 16,
             }}>
-              {/* Sheet layout */}
+
+              {/* Export format */}
               <div>
                 <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
-                  Sheet layout
+                  Export format
                 </p>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <Chip active={sheetMode === 'single'} onClick={() => setSheetMode('single')}>
-                    📄 All pages → 1 sheet
-                  </Chip>
-                  <Chip active={sheetMode === 'multi'} onClick={() => setSheetMode('multi')}>
-                    📑 Each page → separate sheet
-                  </Chip>
+                  <Chip active={exportFmt === 'xlsx'} onClick={() => setExportFmt('xlsx')}>📊 Excel (.xlsx)</Chip>
+                  <Chip active={exportFmt === 'csv'}  onClick={() => setExportFmt('csv')}>📄 CSV (.csv)</Chip>
                 </div>
+              </div>
+
+              {/* Sheet layout — only for xlsx */}
+              {exportFmt === 'xlsx' && (
+                <div>
+                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
+                    Sheet layout
+                  </p>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <Chip active={sheetMode === 'single'} onClick={() => setSheetMode('single')}>📄 All pages → 1 sheet</Chip>
+                    <Chip active={sheetMode === 'multi'}  onClick={() => setSheetMode('multi')}>📑 Each page → separate sheet</Chip>
+                  </div>
+                </div>
+              )}
+
+              {/* Page range */}
+              <div>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
+                  Page range
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <NumInput label="From page" value={pageFrom} min={1} max={pdfDoc.numPages}
+                    onChange={v => setPageFrom(Math.max(1, Math.min(v, pageTo)))} />
+                  <NumInput label="To page" value={pageTo} min={pageFrom} max={pdfDoc.numPages}
+                    onChange={v => setPageTo(Math.max(pageFrom, Math.min(v, pdfDoc.numPages)))} />
+                </div>
+                {(pageFrom !== 1 || pageTo !== pdfDoc.numPages) && (
+                  <p style={{ fontSize: 10, color: '#10b981', marginTop: 6 }}>
+                    Converting pages {pageFrom}–{pageTo} ({pageTo - pageFrom + 1} of {pdfDoc.numPages})
+                  </p>
+                )}
+              </div>
+
+              {/* Row filter */}
+              <div>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
+                  Row filter
+                </p>
+                <NumInput label="Skip rows with fewer than N columns" value={minCols} min={1} max={20}
+                  onChange={v => setMinCols(Math.max(1, v))} />
+                {minCols > 1 && (
+                  <p style={{ fontSize: 10, color: 'rgba(255,200,100,0.8)', marginTop: 6 }}>
+                    Rows with &lt;{minCols} columns will be skipped (removes single-column noise)
+                  </p>
+                )}
               </div>
 
               {/* Toggles */}
@@ -282,7 +406,7 @@ export default function PdfToExcelClient() {
           {preview.length > 0 && status !== 'done' && (
             <div style={{ marginBottom: 16 }}>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Preview
+                Preview (first 3 pages)
               </p>
               {preview.map(({ pageNum, rows }) => {
                 const cols = rows.reduce((m, r) => Math.max(m, r.length), 0);
@@ -322,11 +446,13 @@ export default function PdfToExcelClient() {
           {/* Convert button */}
           {status !== 'done' && (
             <button style={busy ? btnDisabled : btn} disabled={busy} onClick={handleConvert}>
-              {status === 'converting' ? `Converting… ${progress}%` : '📊 Convert to Excel (.xlsx)'}
+              {status === 'converting'
+                ? `Converting… ${progress}%`
+                : exportFmt === 'csv' ? '📄 Convert to CSV' : '📊 Convert to Excel (.xlsx)'}
             </button>
           )}
 
-          {/* Progress */}
+          {/* Progress bar */}
           {status === 'converting' && (
             <div style={{ marginTop: 10, height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.08)' }}>
               <div style={{
@@ -349,8 +475,11 @@ export default function PdfToExcelClient() {
                   {stats.totalSheets} sheet{stats.totalSheets > 1 ? 's' : ''} · {stats.totalRows} rows · {stats.pages} page{stats.pages > 1 ? 's' : ''}
                 </p>
               </div>
-              <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
+              <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
                 <button style={outlineBtn} onClick={handleConvert}>⬇ Download again</button>
+                <button style={outlineBtn} onClick={handleCopyClipboard}>
+                  {copied ? '✓ Copied!' : '📋 Copy to clipboard'}
+                </button>
                 <button style={outlineBtn} onClick={handleReset}>← New file</button>
               </div>
             </>
