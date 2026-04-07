@@ -6,6 +6,76 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const ACCENT = '#64d2ff';
 
+const F1 = '#2a3552';
+const F2 = '#1e2a44';
+const D  = '#162038';
+
+function ForumIllustration() {
+  return (
+    <svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
+
+      {/* Large speech bubble — primary */}
+      <g transform="translate(440,148)">
+        <rect x="-95" y="-80" width="190" height="130" rx="22" fill={F1}/>
+        <path d="M-28,50 L-58,82 L12,50 Z" fill={F1}/>
+        <rect x="-76" y="-62" width="152" height="9" rx="4" fill={D}/>
+        <rect x="-76" y="-46" width="122" height="9" rx="4" fill={D}/>
+        <rect x="-76" y="-30" width="142" height="9" rx="4" fill={D}/>
+        <rect x="-76" y="-14" width="88"  height="9" rx="4" fill={D}/>
+        <rect x="-76" y="2"   width="112" height="9" rx="4" fill={D}/>
+        <rect x="-76" y="18"  width="68"  height="9" rx="4" fill={D}/>
+      </g>
+
+      {/* Reply bubble — smaller, offset right */}
+      <g transform="translate(502,272)">
+        <rect x="-78" y="-58" width="156" height="96" rx="18" fill={F2}/>
+        <path d="M-28,-58 L-56,-84 L14,-58 Z" fill={F2}/>
+        <rect x="-62" y="-42" width="124" height="7" rx="3" fill={D}/>
+        <rect x="-62" y="-28" width="96"  height="7" rx="3" fill={D}/>
+        <rect x="-62" y="-14" width="112" height="7" rx="3" fill={D}/>
+        <rect x="-62" y="0"   width="68"  height="7" rx="3" fill={D}/>
+        <rect x="-62" y="14"  width="84"  height="7" rx="3" fill={D}/>
+      </g>
+
+      {/* Typing-dots bubble */}
+      <g transform="translate(362,312)">
+        <rect x="-48" y="-26" width="96" height="52" rx="16" fill="#253048"/>
+        <path d="M12,26 L-14,46 L32,26 Z" fill="#253048"/>
+        <circle cx="-16" cy="0" r="5.5" fill={D}/>
+        <circle cx="0"   cy="0" r="5.5" fill={D}/>
+        <circle cx="16"  cy="0" r="5.5" fill={D}/>
+      </g>
+
+      {/* Avatar pair — top cluster */}
+      <g transform="translate(354,80)">
+        <circle r="20" fill={F2}/>
+        <circle cy="-8" r="8" fill={D}/>
+        <ellipse cy="14" rx="14" ry="8" fill={D}/>
+      </g>
+      <g transform="translate(396,76)">
+        <circle r="17" fill={F1}/>
+        <circle cy="-7" r="7" fill={D}/>
+        <ellipse cy="12" rx="12" ry="7" fill={D}/>
+      </g>
+
+      {/* Notification bell — top-right */}
+      <g transform="translate(556,76)">
+        <path d="M0,-26 Q20,-26 20,0 L20,18 Q24,18 24,24 L-24,24 Q-24,18 -20,18 L-20,0 Q-20,-26 0,-26 Z"
+          fill={F1}/>
+        <rect x="-7" y="24" width="14" height="7" rx="3.5" fill={F2}/>
+        <circle cy="-28" r="5.5" fill={D}/>
+      </g>
+
+      {/* Accent dots */}
+      <circle cx="328" cy="178" r="4"   fill={F1}/>
+      <circle cx="336" cy="198" r="2.5" fill={F2}/>
+      <circle cx="578" cy="334" r="5"   fill={F1}/>
+      <circle cx="566" cy="352" r="3"   fill={F2}/>
+    </svg>
+  );
+}
+
 const CATEGORY_LABELS = {
   service_matters: { label: 'സേവന കാര്യങ്ങൾ', color: '#2997ff' },
   pension:         { label: 'പെൻഷൻ',           color: '#ff9f0a' },
@@ -46,26 +116,25 @@ export default function ForumSection() {
           background:'linear-gradient(135deg,rgba(140,80,240,0.55),rgba(60,130,255,0.55))',
           padding:'1.5px', borderRadius:28,
         }}>
-          {/* Cinematic photo card */}
+          {/* SVG illustrated card */}
           <div className="relative overflow-hidden" style={{
-            backgroundImage:"url('/images/govtoffic.jpg')",
-            backgroundSize:'auto 110%',
-            backgroundPosition:'right 30%',
-            borderRadius:26,
-            minHeight:380,
+            background: '#080c14',
+            borderRadius: 26,
+            minHeight: 380,
           }}>
-            {/* Overlays */}
-            <div style={{ position:'absolute', inset:0, background:'rgba(4,6,13,0.70)', zIndex:1 }}/>
-            <div style={{ position:'absolute', inset:0, zIndex:2,
-              background:'linear-gradient(to right, rgba(4,6,13,0.97) 0%, rgba(4,6,13,0.82) 40%, rgba(4,6,13,0.42) 68%, transparent 100%)' }}/>
-            <div style={{ position:'absolute', inset:0, zIndex:2,
-              background:'linear-gradient(to bottom, rgba(4,6,13,0.85) 0%, transparent 30%, rgba(4,6,13,0.92) 100%)' }}/>
-            {/* Teal glow */}
-            <div style={{ position:'absolute', bottom:0, left:0, width:'45%', height:'35%', zIndex:2,
-              background:'radial-gradient(ellipse at bottom left, rgba(100,210,255,0.12) 0%, transparent 70%)' }}/>
+            {/* SVG illustration — behind everything */}
+            <ForumIllustration />
+            {/* Fade content area */}
+            <div style={{ position:'absolute', inset:0, zIndex:1,
+              background:'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }}/>
+            <div style={{ position:'absolute', inset:0, zIndex:1,
+              background:'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }}/>
+            {/* Teal accent glow */}
+            <div style={{ position:'absolute', bottom:0, left:0, width:'45%', height:'35%', zIndex:1,
+              background:'radial-gradient(ellipse at bottom left, rgba(100,210,255,0.11) 0%, transparent 70%)' }}/>
 
             {/* Content */}
-            <div className="relative p-5 md:p-7 flex flex-col" style={{ zIndex:3, minHeight:380 }}>
+            <div className="relative p-5 md:p-7 flex flex-col" style={{ zIndex:2, minHeight:380 }}>
 
               {/* Header */}
               <div className="flex items-start justify-between mb-5 gap-3">
