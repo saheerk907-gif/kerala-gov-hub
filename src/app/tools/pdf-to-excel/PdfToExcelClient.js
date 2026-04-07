@@ -7,6 +7,7 @@ import UploadDropZone from '@/components/pdf-tools/UploadDropZone';
 
 GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
+// ─── Styles ──────────────────────────────────────────────────────────────────
 const btn = {
   width: '100%', padding: '14px', borderRadius: 12, border: 'none',
   background: 'linear-gradient(135deg,#10b981,#0ea5e9)',
@@ -14,68 +15,36 @@ const btn = {
   marginTop: 8, letterSpacing: 0.3,
   boxShadow: '0 4px 20px rgba(16,185,129,0.25)',
 };
-const btnDisabled  = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
-const outlineBtn   = {
+const btnDisabled = { ...btn, opacity: 0.4, cursor: 'not-allowed', boxShadow: 'none' };
+const outlineBtn  = {
   padding: '9px 18px', borderRadius: 10,
   border: '1px solid rgba(255,255,255,0.12)',
   background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.7)',
   fontWeight: 600, fontSize: 13, cursor: 'pointer',
 };
 
-/**
- * Robust table extraction from pdfjs text content.
- *
- * Row grouping:
- *   Items whose Y positions are within ROW_TOL of each other are on the same row.
- *   We use CLOSEST-match (not first-match) so a slightly large tolerance never
- *   accidentally swallows items that belong to the next row.
- *   ROW_TOL is fixed at 4 pt — enough to cover baseline variation within a row
- *   (mixed fonts, slight kerning) but small enough that rows 10+ pt apart stay separate.
- *
- * Column detection:
- *   COL_GAP = max(2.5 × avgCharWidth, 8 pt).
- *   Items closer than COL_GAP are merged into the same cell (text joined with a space).
- *   Items farther apart start a new column.
- */
+// ─── Extraction ───────────────────────────────────────────────────────────────
 function extractTableData(items) {
-  // ── 1. Filter blanks ──────────────────────────────────────────────────────
   const valid = items.filter(it => it.str && it.str.trim() !== '');
   if (!valid.length) return [];
 
-  // ── 2. Average character width for adaptive column gap ───────────────────
   let wSum = 0, wCount = 0;
   for (const it of valid) {
-    if (it.width > 0 && it.str.trim().length > 0) {
-      wSum   += it.width;
-      wCount += it.str.trim().length;
-    }
+    if (it.width > 0 && it.str.trim().length > 0) { wSum += it.width; wCount += it.str.trim().length; }
   }
   const avgCharW = wCount > 0 ? wSum / wCount : 6;
-  const COL_GAP  = Math.max(avgCharW * 2.5, 8);   // adaptive, min 8 pt
+  const COL_GAP  = Math.max(avgCharW * 2.5, 8);
+  const ROW_TOL  = 4;
 
-  // Fixed small row tolerance — just enough to absorb baseline jitter within one line
-  const ROW_TOL = 4;
-
-  // ── 3. Fuzzy row grouping (CLOSEST match) ─────────────────────────────────
-  const rowKeys = [];   // representative Y values, in insertion order
-  const rowMap  = new Map();
-
+  const rowKeys = [], rowMap = new Map();
   for (const it of valid) {
-    const y = it.transform[5]; // ty
-
-    // Find the CLOSEST existing row within ROW_TOL
+    const y = it.transform[5];
     let matched = null, minDist = Infinity;
     for (const ry of rowKeys) {
       const dist = Math.abs(ry - y);
       if (dist <= ROW_TOL && dist < minDist) { matched = ry; minDist = dist; }
     }
-
-    if (matched === null) {
-      rowMap.set(y, []);
-      rowKeys.push(y);
-      matched = y;
-    }
-
+    if (matched === null) { rowMap.set(y, []); rowKeys.push(y); matched = y; }
     rowMap.get(matched).push({
       x:    it.transform[4],
       endX: it.transform[4] + (it.width > 0 ? it.width : avgCharW * it.str.length),
@@ -83,22 +52,15 @@ function extractTableData(items) {
     });
   }
 
-  // ── 4. Build 2-D array ────────────────────────────────────────────────────
   return [...rowMap.entries()]
-    .sort(([ya], [yb]) => yb - ya)   // PDF Y is bottom-up → descending = top-first
+    .sort(([ya], [yb]) => yb - ya)
     .map(([, row]) => {
-      row.sort((a, b) => a.x - b.x); // left → right within row
-
-      // Merge adjacent items into cells by X gap
+      row.sort((a, b) => a.x - b.x);
       const cells = [];
       for (const item of row) {
-        if (!cells.length) {
-          cells.push({ text: item.text, endX: item.endX });
-          continue;
-        }
+        if (!cells.length) { cells.push({ text: item.text, endX: item.endX }); continue; }
         const prev = cells[cells.length - 1];
         const gap  = item.x - prev.endX;
-
         if (gap <= COL_GAP) {
           const sp = gap > 0.5 && !/\s$/.test(prev.text) && !/^\s/.test(item.text);
           prev.text += (sp ? ' ' : '') + item.text;
@@ -107,84 +69,143 @@ function extractTableData(items) {
           cells.push({ text: item.text, endX: item.endX });
         }
       }
-
       return cells.map(c => c.text.trim()).filter(Boolean);
     })
     .filter(row => row.length > 0);
 }
 
+function autoColWidths(rows) {
+  const maxCols = rows.reduce((m, r) => Math.max(m, r.length), 0);
+  return Array.from({ length: maxCols }, (_, ci) => ({
+    wch: Math.min(rows.reduce((m, r) => Math.max(m, String(r[ci] ?? '').length), 8) + 2, 60),
+  }));
+}
+
+// ─── Option toggle chip ───────────────────────────────────────────────────────
+function Chip({ active, onClick, children }) {
+  return (
+    <button onClick={onClick} style={{
+      padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer',
+      fontSize: 12, fontWeight: 700,
+      background: active ? 'rgba(16,185,129,0.18)' : 'rgba(255,255,255,0.06)',
+      color:      active ? '#10b981'                : 'rgba(255,255,255,0.45)',
+      outline:    active ? '1px solid rgba(16,185,129,0.4)' : '1px solid rgba(255,255,255,0.1)',
+      transition: 'all 0.15s',
+    }}>
+      {children}
+    </button>
+  );
+}
+
+// ─── Toggle switch ────────────────────────────────────────────────────────────
+function Toggle({ checked, onChange, label }) {
+  return (
+    <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+      <div onClick={() => onChange(!checked)} style={{
+        width: 36, height: 20, borderRadius: 10, position: 'relative', transition: 'background 0.2s',
+        background: checked ? '#10b981' : 'rgba(255,255,255,0.12)',
+        flexShrink: 0,
+      }}>
+        <div style={{
+          position: 'absolute', top: 2, left: checked ? 18 : 2,
+          width: 16, height: 16, borderRadius: '50%', background: '#fff',
+          transition: 'left 0.2s', boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
+        }} />
+      </div>
+      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>{label}</span>
+    </label>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
 export default function PdfToExcelClient() {
-  const [file,     setFile]     = useState(null);
-  const [pdfDoc,   setPdfDoc]   = useState(null);
-  const [status,   setStatus]   = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [preview,  setPreview]  = useState([]);   // [{pageNum, rows}]
-  const [stats,    setStats]    = useState(null);  // {pages, totalRows}
+  const [file,        setFile]        = useState(null);
+  const [pdfDoc,      setPdfDoc]      = useState(null);
+  const [status,      setStatus]      = useState(null);
+  const [progress,    setProgress]    = useState(0);
+  const [preview,     setPreview]     = useState([]);
+  const [stats,       setStats]       = useState(null);
+
+  // Options
+  const [sheetMode,   setSheetMode]   = useState('single');   // 'single' | 'multi'
+  const [addPageCol,  setAddPageCol]  = useState(false);      // prepend page number column
+  const [boldHeader,  setBoldHeader]  = useState(true);       // bold first row of each sheet
 
   async function handleFile([f]) {
-    setStatus('loading');
-    setPreview([]);
-    setStats(null);
+    setStatus('loading'); setPreview([]); setStats(null);
     try {
       const buf = await f.arrayBuffer();
       const doc = await pdfjsLib.getDocument({ data: buf }).promise;
-
-      // Preview pages 1–3 (or all if fewer)
       const previewPages = [];
       for (let p = 1; p <= Math.min(3, doc.numPages); p++) {
-        const pg      = await doc.getPage(p);
-        const content = await pg.getTextContent();
+        const content = await (await doc.getPage(p)).getTextContent();
         const rows    = extractTableData(content.items);
         if (rows.length) previewPages.push({ pageNum: p, rows: rows.slice(0, 6) });
       }
       setPreview(previewPages);
-      setFile(f);
-      setPdfDoc(doc);
-      setStatus(null);
-    } catch (err) {
-      setStatus('error: ' + err.message);
-    }
+      setFile(f); setPdfDoc(doc); setStatus(null);
+    } catch (err) { setStatus('error: ' + err.message); }
   }
 
   async function handleConvert() {
     if (!pdfDoc) return;
-    setStatus('converting');
-    setProgress(0);
-    let totalRows = 0;
+    setStatus('converting'); setProgress(0);
+    let totalRows = 0, totalSheets = 0;
     try {
       const XLSX = await import('xlsx');
       const wb   = XLSX.utils.book_new();
 
-      // Collect all rows from every page into one array
-      const allRows = [];
-      for (let p = 1; p <= pdfDoc.numPages; p++) {
-        setProgress(Math.round((p / pdfDoc.numPages) * 100));
-        const page    = await pdfDoc.getPage(p);
-        const content = await page.getTextContent();
-        const rows    = extractTableData(content.items);
-        totalRows    += rows.length;
-        allRows.push(...rows);
+      if (sheetMode === 'single') {
+        // ── All pages → one sheet ─────────────────────────────────────────
+        const allRows = [];
+        for (let p = 1; p <= pdfDoc.numPages; p++) {
+          setProgress(Math.round((p / pdfDoc.numPages) * 100));
+          const content = await (await pdfDoc.getPage(p)).getTextContent();
+          const rows    = extractTableData(content.items);
+          rows.forEach(row => {
+            allRows.push(addPageCol ? [`Page ${p}`, ...row] : row);
+          });
+          totalRows += rows.length;
+        }
+        const ws = XLSX.utils.aoa_to_sheet(allRows);
+        ws['!cols'] = autoColWidths(allRows);
+        if (boldHeader && allRows.length) {
+          const maxC = allRows[0].length;
+          for (let c = 0; c < maxC; c++) {
+            const addr = XLSX.utils.encode_cell({ r: 0, c });
+            if (ws[addr]) ws[addr].s = { font: { bold: true } };
+          }
+        }
+        XLSX.utils.book_append_sheet(wb, ws, 'All Pages');
+        totalSheets = 1;
+
+      } else {
+        // ── Each page → separate sheet ────────────────────────────────────
+        for (let p = 1; p <= pdfDoc.numPages; p++) {
+          setProgress(Math.round((p / pdfDoc.numPages) * 100));
+          const content = await (await pdfDoc.getPage(p)).getTextContent();
+          const rows    = extractTableData(content.items);
+          if (!rows.length) continue;
+          const sheetRows = addPageCol ? rows.map(r => [`Page ${p}`, ...r]) : rows;
+          const ws = XLSX.utils.aoa_to_sheet(sheetRows);
+          ws['!cols'] = autoColWidths(sheetRows);
+          if (boldHeader && sheetRows.length) {
+            const maxC = sheetRows[0].length;
+            for (let c = 0; c < maxC; c++) {
+              const addr = XLSX.utils.encode_cell({ r: 0, c });
+              if (ws[addr]) ws[addr].s = { font: { bold: true } };
+            }
+          }
+          XLSX.utils.book_append_sheet(wb, ws, `Page ${p}`);
+          totalRows += rows.length;
+          totalSheets++;
+        }
       }
 
-      const ws = XLSX.utils.aoa_to_sheet(allRows);
-
-      // Auto-width columns
-      const maxCols = allRows.reduce((m, r) => Math.max(m, r.length), 0);
-      ws['!cols'] = Array.from({ length: maxCols }, (_, ci) => ({
-        wch: Math.min(
-          allRows.reduce((m, r) => Math.max(m, String(r[ci] ?? '').length), 8) + 2,
-          60,
-        ),
-      }));
-
-      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
       XLSX.writeFile(wb, file.name.replace(/\.pdf$/i, '') + '.xlsx');
-      setStats({ pages: pdfDoc.numPages, totalRows });
+      setStats({ pages: pdfDoc.numPages, totalRows, totalSheets });
       setStatus('done');
-    } catch (err) {
-      setStatus('error: ' + err.message);
-    }
+    } catch (err) { setStatus('error: ' + err.message); }
   }
 
   function handleReset() {
@@ -192,26 +213,27 @@ export default function PdfToExcelClient() {
     setProgress(0); setPreview([]); setStats(null);
   }
 
-  const busy    = status === 'loading' || status === 'converting';
-  const maxCols = preview.reduce((m, { rows }) =>
-    rows.reduce((m2, r) => Math.max(m2, r.length), m), 0);
+  const busy = status === 'loading' || status === 'converting';
 
   return (
     <GlassTool icon="📊" title="PDF to Excel" titleMl="PDF → Excel (.xlsx)">
 
       {!pdfDoc && !busy && (
-        <UploadDropZone onFiles={handleFile} label="Drop a PDF here or click to browse" />
+        <>
+          <UploadDropZone onFiles={handleFile} label="Drop a PDF here or click to browse" />
+          <p style={{ color: 'rgba(255,255,255,0.22)', fontSize: 11, marginTop: 14, lineHeight: 1.7, textAlign: 'center' }}>
+            Extracts tables & structured text from any PDF.<br/>Files never leave your device.
+          </p>
+        </>
       )}
 
       {status === 'loading' && (
-        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center', padding: 24 }}>
-          Analysing PDF…
-        </p>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, textAlign: 'center', padding: 24 }}>Analysing PDF…</p>
       )}
 
       {pdfDoc && (
         <>
-          {/* File info */}
+          {/* File bar */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 10,
             background: 'rgba(255,255,255,0.05)', borderRadius: 10,
@@ -223,34 +245,64 @@ export default function PdfToExcelClient() {
               {file.name}
             </span>
             <span style={{ color: 'rgba(255,255,255,0.3)', fontSize: 11 }}>{pdfDoc.numPages} page{pdfDoc.numPages > 1 ? 's' : ''}</span>
-            <button onClick={handleReset}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16 }}>×</button>
+            <button onClick={handleReset} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff453a', fontSize: 16 }}>×</button>
           </div>
 
+          {/* ── Options ── */}
+          {status !== 'done' && (
+            <div style={{
+              background: 'rgba(255,255,255,0.03)', borderRadius: 12,
+              border: '1px solid rgba(255,255,255,0.07)', padding: '14px 16px',
+              marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 14,
+            }}>
+              {/* Sheet layout */}
+              <div>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>
+                  Sheet layout
+                </p>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <Chip active={sheetMode === 'single'} onClick={() => setSheetMode('single')}>
+                    📄 All pages → 1 sheet
+                  </Chip>
+                  <Chip active={sheetMode === 'multi'} onClick={() => setSheetMode('multi')}>
+                    📑 Each page → separate sheet
+                  </Chip>
+                </div>
+              </div>
+
+              {/* Toggles */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <Toggle checked={boldHeader}  onChange={setBoldHeader}  label="Bold first row (header row)" />
+                <Toggle checked={addPageCol}  onChange={setAddPageCol}  label="Add page number column" />
+              </div>
+            </div>
+          )}
+
           {/* Preview */}
-          {preview.length > 0 && (
+          {preview.length > 0 && status !== 'done' && (
             <div style={{ marginBottom: 16 }}>
               <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 8, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                Preview (first 6 rows per page)
+                Preview
               </p>
               {preview.map(({ pageNum, rows }) => {
                 const cols = rows.reduce((m, r) => Math.max(m, r.length), 0);
                 return (
                   <div key={pageNum} style={{ marginBottom: 10 }}>
-                    <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', marginBottom: 4 }}>Page {pageNum} — {rows.length} rows · {cols} col{cols !== 1 ? 's' : ''}</p>
+                    <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)', marginBottom: 4 }}>
+                      Page {pageNum} — {rows.length} rows · {cols} col{cols !== 1 ? 's' : ''}
+                    </p>
                     <div style={{ overflowX: 'auto', borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)' }}>
-                      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+                      <table style={{ borderCollapse: 'collapse', fontSize: 11 }}>
                         <tbody>
                           {rows.map((row, ri) => (
                             <tr key={ri} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                               {Array.from({ length: cols }).map((_, ci) => (
                                 <td key={ci} style={{
-                                  padding: '4px 10px',
-                                  color: ri === 0 ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.55)',
-                                  fontWeight: ri === 0 ? 700 : 400,
-                                  whiteSpace: 'nowrap',
-                                  maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis',
-                                  background: ri === 0 ? 'rgba(16,185,129,0.07)' : 'transparent',
+                                  padding: '4px 10px', whiteSpace: 'nowrap',
+                                  maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis',
+                                  color:      ri === 0 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.55)',
+                                  fontWeight: ri === 0 && boldHeader ? 700 : 400,
+                                  background: ri === 0 && boldHeader ? 'rgba(16,185,129,0.07)' : 'transparent',
                                   fontFamily: "'Noto Sans Malayalam', sans-serif",
                                 }}>
                                   {row[ci] ?? ''}
@@ -267,14 +319,14 @@ export default function PdfToExcelClient() {
             </div>
           )}
 
-          {/* Convert */}
+          {/* Convert button */}
           {status !== 'done' && (
             <button style={busy ? btnDisabled : btn} disabled={busy} onClick={handleConvert}>
               {status === 'converting' ? `Converting… ${progress}%` : '📊 Convert to Excel (.xlsx)'}
             </button>
           )}
 
-          {/* Progress bar */}
+          {/* Progress */}
           {status === 'converting' && (
             <div style={{ marginTop: 10, height: 4, borderRadius: 4, background: 'rgba(255,255,255,0.08)' }}>
               <div style={{
@@ -294,7 +346,7 @@ export default function PdfToExcelClient() {
               }}>
                 <p style={{ color: '#10b981', fontWeight: 700, fontSize: 14, margin: 0 }}>✓ Download started!</p>
                 <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, margin: '4px 0 0' }}>
-                  {stats.pages} page{stats.pages > 1 ? 's' : ''} merged · {stats.totalRows} rows in one sheet
+                  {stats.totalSheets} sheet{stats.totalSheets > 1 ? 's' : ''} · {stats.totalRows} rows · {stats.pages} page{stats.pages > 1 ? 's' : ''}
                 </p>
               </div>
               <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
@@ -304,13 +356,6 @@ export default function PdfToExcelClient() {
             </>
           )}
         </>
-      )}
-
-      {!pdfDoc && !busy && (
-        <p style={{ color: 'rgba(255,255,255,0.22)', fontSize: 11, marginTop: 16, lineHeight: 1.7, textAlign: 'center' }}>
-          Best for PDFs with tables or structured data.<br />
-          Each PDF page becomes a separate Excel sheet.
-        </p>
       )}
 
       {status?.startsWith('error') && (
