@@ -22,21 +22,57 @@ const outlineBtn = {
   fontWeight: 600, fontSize: 13, cursor: 'pointer',
 };
 
-/** Group text items into rows by rounding Y to nearest tolerance */
-function extractRows(items, tolerance = 4) {
-  const rowMap = {};
+/**
+ * Extract rows + columns from pdfjs text items.
+ * - rowTol: Y-position tolerance to group items on the same line (pt)
+ * - colGap: minimum X gap between items to treat as separate columns (pt)
+ *   Items closer than colGap are merged into the same cell.
+ */
+function extractRows(items, rowTol = 5, colGap = 8) {
+  // 1. Group items by row (rounded Y)
+  const rowMap = new Map();
   for (const item of items) {
-    if (!item.str?.trim()) continue;
-    const y = Math.round(item.transform[5] / tolerance) * tolerance;
-    const x = item.transform[4];
-    if (!rowMap[y]) rowMap[y] = [];
-    rowMap[y].push({ x, text: item.str.trim() });
+    if (item.str == null || item.str === '') continue;
+    const y = Math.round(item.transform[5] / rowTol) * rowTol;
+    if (!rowMap.has(y)) rowMap.set(y, []);
+    rowMap.get(y).push({
+      x:     item.transform[4],
+      endX:  item.transform[4] + (item.width || 0),
+      text:  item.str,
+    });
   }
-  // Sort rows top-to-bottom (PDF Y is bottom-up, so descending)
-  return Object.keys(rowMap)
-    .map(Number)
-    .sort((a, b) => b - a)
-    .map(y => rowMap[y].sort((a, b) => a.x - b.x).map(c => c.text));
+
+  // 2. Sort rows top→bottom (PDF Y goes bottom-up → sort descending)
+  return [...rowMap.entries()]
+    .sort(([ya], [yb]) => yb - ya)
+    .map(([, row]) => {
+      // Sort items left→right
+      row.sort((a, b) => a.x - b.x);
+
+      // 3. Merge items into cells based on X gap
+      const cells = [];
+      for (const item of row) {
+        if (cells.length === 0) {
+          cells.push({ text: item.text, endX: item.endX });
+          continue;
+        }
+        const prev = cells[cells.length - 1];
+        const gap  = item.x - prev.endX;
+
+        if (gap <= colGap) {
+          // Same cell — append with space only when needed
+          const needsSpace = gap > 0.5 &&
+            !/\s$/.test(prev.text) && !/^\s/.test(item.text);
+          prev.text += (needsSpace ? ' ' : '') + item.text;
+          prev.endX  = Math.max(prev.endX, item.endX);
+        } else {
+          cells.push({ text: item.text, endX: item.endX });
+        }
+      }
+
+      return cells.map(c => c.text.trim()).filter(t => t !== '');
+    })
+    .filter(row => row.length > 0);
 }
 
 export default function PdfToExcelClient() {
