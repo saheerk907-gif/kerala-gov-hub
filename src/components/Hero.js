@@ -29,32 +29,44 @@ function HeroIllustration() {
       aria-hidden="true"
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
     >
-      {/* ── Kerala lamp (nilavilakku) — right side ── */}
-      <g transform="translate(760,270)" opacity="0.18">
-        {/* base plate */}
-        <ellipse cx="0" cy="95" rx="54" ry="10" fill="#c8960c"/>
-        {/* stand column */}
-        <rect x="-6" y="20" width="12" height="75" rx="6" fill="#c8960c"/>
-        {/* lamp body */}
-        <ellipse cx="0" cy="18" rx="38" ry="14" fill="#c8960c"/>
-        <ellipse cx="0" cy="12" rx="28" ry="10" fill="#b07a08"/>
-        {/* neck */}
-        <rect x="-5" y="-10" width="10" height="24" rx="5" fill="#c8960c"/>
-        {/* flame cup */}
-        <ellipse cx="0" cy="-14" rx="18" ry="7" fill="#c8960c"/>
-        {/* flame */}
-        <path d="M0,-14 C-6,-28 -4,-44 0,-52 C4,-44 6,-28 0,-14Z" fill="#f5d060"/>
-        <path d="M0,-18 C-3,-26 -2,-36 0,-42 C2,-36 3,-26 0,-18Z" fill="#fce38a"/>
-        {/* side arms */}
-        <g>
-          {[-1,1].map(dir => (
-            <g key={dir} transform={`scale(${dir},1)`}>
-              <path d="M32,10 Q58,-8 70,-20" stroke="#c8960c" strokeWidth="5" fill="none" strokeLinecap="round"/>
-              <ellipse cx="70" cy="-22" rx="10" ry="4" fill="#c8960c"/>
-              <path d="M70,-22 C66,-32 68,-40 70,-46 C72,-40 74,-32 70,-22Z" fill="#f5d060"/>
-            </g>
-          ))}
-        </g>
+      {/* ── Floating stats / calculator card — right side ── */}
+      <g transform="translate(700,180)" opacity="0.16">
+        {/* card shadow */}
+        <rect x="4" y="6" width="164" height="200" rx="14" fill="rgba(0,0,0,0.4)"/>
+        {/* card body */}
+        <rect x="0" y="0" width="164" height="200" rx="14" fill="#1a2236"/>
+        <rect x="0" y="0" width="164" height="200" rx="14" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1"/>
+        {/* header strip */}
+        <rect x="0" y="0" width="164" height="36" rx="14" fill="#202c44"/>
+        <rect x="0" y="22" width="164" height="14" fill="#202c44"/>
+        <circle cx="18" cy="18" r="5" fill="#ff453a" opacity="0.7"/>
+        <circle cx="34" cy="18" r="5" fill="#f5d060" opacity="0.7"/>
+        <circle cx="50" cy="18" r="5" fill="#30d158" opacity="0.7"/>
+        <rect x="68" y="13" width="72" height="10" rx="5" fill="rgba(255,255,255,0.08)"/>
+        {/* bar chart */}
+        <rect x="16" y="142" width="18" height="42" rx="3" fill="#2997ff" opacity="0.6"/>
+        <rect x="42" y="122" width="18" height="62" rx="3" fill="#2997ff" opacity="0.7"/>
+        <rect x="68" y="108" width="18" height="76" rx="3" fill="#c8960c" opacity="0.8"/>
+        <rect x="94" y="118" width="18" height="66" rx="3" fill="#2997ff" opacity="0.6"/>
+        <rect x="120"y="98"  width="18" height="86" rx="3" fill="#c8960c" opacity="0.9"/>
+        {/* label row */}
+        <rect x="16" y="50" width="60" height="8" rx="4" fill="#c8960c" opacity="0.6"/>
+        <rect x="16" y="66" width="132" height="6" rx="3" fill="#2e3c5c"/>
+        <rect x="16" y="80" width="110" height="6" rx="3" fill="#2e3c5c"/>
+        <rect x="16" y="94" width="120" height="6" rx="3" fill="#2e3c5c"/>
+      </g>
+      {/* second smaller card behind */}
+      <g transform="translate(840,240) rotate(10)" opacity="0.10">
+        <rect x="0" y="0" width="120" height="150" rx="12" fill="#162038"/>
+        <rect x="0" y="0" width="120" height="150" rx="12" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1"/>
+        <rect x="12" y="16" width="50" height="7" rx="3" fill="#c8960c" opacity="0.5"/>
+        <rect x="12" y="32" width="96" height="5" rx="2" fill="#2e3c5c"/>
+        <rect x="12" y="46" width="80" height="5" rx="2" fill="#2e3c5c"/>
+        <rect x="12" y="60" width="88" height="5" rx="2" fill="#2e3c5c"/>
+        <rect x="12" y="90" width="20" height="44" rx="3" fill="#2997ff" opacity="0.5"/>
+        <rect x="40" y="76" width="20" height="58" rx="3" fill="#c8960c" opacity="0.5"/>
+        <rect x="68" y="84" width="20" height="50" rx="3" fill="#2997ff" opacity="0.4"/>
+        <rect x="96" y="70" width="20" height="64" rx="3" fill="#c8960c" opacity="0.5"/>
       </g>
 
       {/* ── Geometric lotus — top left ── */}
