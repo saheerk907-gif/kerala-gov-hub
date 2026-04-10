@@ -191,24 +191,87 @@ export default function ToolsSection() {
           </h2>
         </div>
 
-        {/* Trending chips */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span className="text-[9px] font-black uppercase tracking-widest text-white/35 self-center mr-1">Trending:</span>
-          {[
-            { label: 'PDF Editor',   href: '/tools/pdf-editor',          icon: '📝' },
-            { label: 'PDF Merger',   href: '/tools/pdf-merger',          icon: '🗂️' },
-            { label: 'PDF Splitter', href: '/tools/pdf-splitter',        icon: '✂️' },
-            { label: 'NPS vs APS',   href: '/nps-aps',                   icon: '📊' },
-            { label: 'DA Arrear',    href: '/da-arrear',                 icon: '💸' },
-            { label: 'Leave Calc',   href: '/leave',                     icon: '📅' },
-            { label: 'Holiday List', href: '/tools/holiday-list-2026',   icon: '🗓️' },
-          ].map(t => (
-            <Link key={t.href} href={t.href}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold no-underline transition-all hover:bg-white/[0.10]"
-              style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.09)' }}>
-              <span className="text-[12px]">{t.icon}</span>{t.label}
-            </Link>
-          ))}
+        {/* Trending Now */}
+        <style>{`
+          .trend-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 17px;
+            border-radius: 100px;
+            border: 1px solid rgba(255,255,255,0.11);
+            background: rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.78);
+            font-size: 12.5px;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.22s ease, box-shadow 0.22s ease;
+          }
+          .trend-btn:hover {
+            background: rgba(200,150,12,0.14);
+            border-color: rgba(200,150,12,0.45);
+            color: rgba(245,208,96,0.92);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 18px rgba(200,150,12,0.13);
+          }
+          .trend-btn .trend-icon {
+            font-size: 14px;
+            line-height: 1;
+          }
+          @keyframes trendFadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+          .trend-container {
+            animation: trendFadeUp 0.38s ease-out 0.08s both;
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .trend-container { animation: none !important; opacity: 1 !important; }
+          }
+        `}</style>
+
+        <div className="trend-container" style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.085)',
+          borderRadius: 16,
+          padding: '15px 18px',
+          marginBottom: 20,
+        }}>
+          {/* Label row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 13 }}>
+            <span style={{ fontSize: 15, lineHeight: 1 }}>🔥</span>
+            <span style={{
+              fontSize: 13, fontWeight: 800, letterSpacing: '0.01em',
+              color: 'rgba(255,255,255,0.92)',
+            }}>Trending Now</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.07)' }} />
+            <span style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.28)', letterSpacing: '0.06em' }}>
+              POPULAR THIS WEEK
+            </span>
+          </div>
+
+          {/* Scrollable pill row */}
+          <div style={{
+            display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 2,
+            scrollbarWidth: 'none', msOverflowStyle: 'none',
+          }}>
+            {[
+              { label: 'PDF Editor',   href: '/tools/pdf-editor',        icon: '📝' },
+              { label: 'PDF Merger',   href: '/tools/pdf-merger',        icon: '🗂️' },
+              { label: 'PDF Splitter', href: '/tools/pdf-splitter',      icon: '✂️' },
+              { label: 'NPS vs APS',   href: '/nps-aps',                 icon: '📊' },
+              { label: 'DA Arrear',    href: '/da-arrear',               icon: '💸' },
+              { label: 'Leave Calc',   href: '/leave',                   icon: '📅' },
+              { label: 'Holiday List', href: '/tools/holiday-list-2026', icon: '🗓️' },
+            ].map(t => (
+              <Link key={t.href} href={t.href} className="trend-btn">
+                <span className="trend-icon">{t.icon}</span>
+                {t.label}
+              </Link>
+            ))}
+          </div>
         </div>
 
         {/* Cards */}
