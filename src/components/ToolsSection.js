@@ -412,28 +412,34 @@ export default function ToolsSection() {
                   if (tier === 'tertiary') e.currentTarget.style.opacity = '0.80';
                 } : undefined}
               >
-                {/* Left-to-right gradient — dark content area → colour tint */}
-                <div style={{
-                  position:'absolute', inset:0,
-                  background:`linear-gradient(to right, rgba(13,17,23,0.97) 22%, rgba(${rgb},0.11) 100%)`,
-                  zIndex:1,
-                }} />
-
-                {/* SVG illustration (same geometric style as cards below) */}
+                {/* SVG illustration — source order: renders first (behind) */}
                 <SVG color={color} />
 
-                {/* Label */}
+                {/* Gradient — solid dark over full text area, fades right to reveal SVG */}
+                <div style={{
+                  position:'absolute', inset:0, pointerEvents:'none',
+                  background:`linear-gradient(to right,
+                    #0d1117 0%,
+                    #0d1117 38%,
+                    rgba(13,17,23,0.92) 52%,
+                    rgba(13,17,23,0.45) 68%,
+                    transparent 100%)`,
+                }} />
+
+                {/* Label — always on top */}
                 <div style={{ position:'relative', zIndex:2 }}>
                   <div style={{
                     fontSize:   tier === 'primary' ? 13 : tier === 'secondary' ? 12.5 : 12,
                     fontWeight: tier === 'primary' ? 800 : tier === 'secondary' ? 700  : 600,
-                    color:      tier === 'primary' ? color : tier === 'secondary' ? 'rgba(255,255,255,0.86)' : 'rgba(255,255,255,0.56)',
+                    color:      tier === 'primary' ? color : '#fff',
                     lineHeight: 1.2, whiteSpace:'nowrap',
+                    textShadow: '0 1px 6px rgba(0,0,0,0.90)',
                   }}>{label}</div>
                   <div style={{
                     fontSize:  tier === 'primary' ? 10 : 9.5,
-                    color:     tier === 'primary' ? `rgba(${rgb},0.64)` : 'rgba(255,255,255,0.28)',
+                    color:     tier === 'primary' ? `rgba(${rgb},0.78)` : 'rgba(255,255,255,0.52)',
                     marginTop: 3, whiteSpace:'nowrap',
+                    textShadow: '0 1px 4px rgba(0,0,0,0.80)',
                   }}>{sub}</div>
                 </div>
               </Link>
