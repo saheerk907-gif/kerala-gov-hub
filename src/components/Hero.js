@@ -22,12 +22,6 @@ const QUICK_LINKS = [
 // ─── Subtle SVG background ────────────────────────────────────────────────────
 function HeroSVG() {
   const pings = [0, 1.8, 3.6, 5.4, 7.2];
-  const lanes = [
-    { y: 112, delay: '0s',   dur: '7s',  dir:  1 },
-    { y: 192, delay: '2.5s', dur: '9s',  dir: -1 },
-    { y: 308, delay: '1.2s', dur: '8s',  dir:  1 },
-    { y: 388, delay: '3.8s', dur: '6.5s',dir: -1 },
-  ];
 
   return (
     <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
@@ -39,19 +33,7 @@ function HeroSVG() {
           70%  {          opacity: 0.08; }
           100% { r: 310; opacity: 0;    }
         }
-        @keyframes svgLTR {
-          0%   { transform: translateX(-10px); opacity: 0; }
-          8%   { opacity: 1; }
-          92%  { opacity: 1; }
-          100% { transform: translateX(910px); opacity: 0; }
-        }
-        @keyframes svgRTL {
-          0%   { transform: translateX(910px); opacity: 0; }
-          8%   { opacity: 1; }
-          92%  { opacity: 1; }
-          100% { transform: translateX(-10px); opacity: 0; }
-        }
-        @keyframes svgDot {
+@keyframes svgDot {
           0%, 100% { opacity: 0.030; }
           50%       { opacity: 0.065; }
         }
@@ -73,11 +55,6 @@ function HeroSVG() {
           style={{ animation: `svgPing 9s cubic-bezier(0.2,0.6,0.4,1) ${d}s infinite` }}/>
       ))}
 
-      {/* Data packets */}
-      {lanes.map(({ y, delay, dur, dir }, i) => (
-        <circle key={i} cy={y} r="2.8" fill="rgba(200,150,12,0.50)"
-          style={{ animation: `${dir === 1 ? 'svgLTR' : 'svgRTL'} ${dur} linear ${delay} infinite` }}/>
-      ))}
 
       {/* Faint column lines */}
       {[225, 450, 675].map((x, i) => (
