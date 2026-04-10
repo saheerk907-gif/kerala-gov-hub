@@ -154,6 +154,135 @@ const CATEGORIES = [
   },
 ];
 
+// ─── Trending mini illustrations (same geometric style, vibrant accent colors) ─
+
+function TrendDocSVG({ color }) {
+  return (
+    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
+      {/* Back page (tilted) */}
+      <g transform="translate(70,52) rotate(-16)">
+        <rect x="-28" y="-38" width="56" height="76" rx="7" fill={color} opacity={0.10}/>
+        <polygon points="18,-38 28,-38 28,-26" fill={color} opacity={0.18}/>
+      </g>
+      {/* Front page */}
+      <g transform="translate(57,46) rotate(9)">
+        <rect x="-26" y="-36" width="52" height="72" rx="6" fill={color} opacity={0.20}/>
+        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.34}/>
+        <line x1="-18" y1="-20" x2="14" y2="-20" stroke={color} strokeWidth="4"   strokeLinecap="round" opacity={0.52}/>
+        <line x1="-18" y1="-7"  x2="14" y2="-7"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.40}/>
+        <line x1="-18" y1="6"   x2="6"  y2="6"   stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.30}/>
+        <line x1="-18" y1="19"  x2="11" y2="19"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.22}/>
+      </g>
+    </svg>
+  );
+}
+
+function TrendMergeSVG({ color }) {
+  return (
+    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
+      {/* Left doc */}
+      <g transform="translate(44,44) rotate(-20)">
+        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.14}/>
+        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.25}/>
+        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.42}/>
+        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.32}/>
+        <line x1="-13" y1="7"   x2="4"  y2="7"   stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.22}/>
+      </g>
+      {/* Right doc */}
+      <g transform="translate(76,38) rotate(16)">
+        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.14}/>
+        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.25}/>
+        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.42}/>
+        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.32}/>
+      </g>
+      {/* Merge arrow */}
+      <line x1="46" y1="25" x2="60" y2="25" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.48}/>
+      <polygon points="62,21 70,25 62,29" fill={color} opacity={0.48}/>
+    </svg>
+  );
+}
+
+function TrendSplitSVG({ color }) {
+  return (
+    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
+      <g transform="translate(60,38)">
+        {/* Top half */}
+        <rect x="-26" y="-36" width="52" height="32" rx="6" fill={color} opacity={0.18}/>
+        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.32}/>
+        <line x1="-18" y1="-23" x2="13" y2="-23" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.48}/>
+        <line x1="-18" y1="-11" x2="13" y2="-11" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.36}/>
+        {/* Dashed cut line */}
+        <line x1="-30" y1="0" x2="30" y2="0" stroke={color} strokeWidth="2.5" strokeDasharray="4,3" strokeLinecap="round" opacity={0.70}/>
+        {/* Bottom half */}
+        <rect x="-26" y="2"  width="52" height="28" rx="6" fill={color} opacity={0.12}/>
+        <line x1="-18" y1="12" x2="13" y2="12" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.28}/>
+        <line x1="-18" y1="22" x2="4"  y2="22" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.20}/>
+      </g>
+    </svg>
+  );
+}
+
+function TrendChartSVG({ color }) {
+  return (
+    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
+      {/* Axes */}
+      <line x1="32" y1="10" x2="32" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.22}/>
+      <line x1="32" y1="62" x2="93" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.22}/>
+      {/* Bars */}
+      <rect x="37" y="38" width="10" height="24" rx="3" fill={color} opacity={0.20}/>
+      <rect x="51" y="24" width="10" height="38" rx="3" fill={color} opacity={0.28}/>
+      <rect x="65" y="44" width="10" height="18" rx="3" fill={color} opacity={0.18}/>
+      <rect x="79" y="30" width="10" height="32" rx="3" fill={color} opacity={0.24}/>
+      {/* Trend line */}
+      <polyline points="42,38 56,24 70,44 84,30"
+        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity={0.62}/>
+      <circle cx="84" cy="30" r="4" fill={color} opacity={0.78}/>
+    </svg>
+  );
+}
+
+function TrendCalSVG({ color }) {
+  return (
+    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
+      <g transform="translate(60,38)">
+        {/* Body */}
+        <rect x="-28" y="-24" width="56" height="48" rx="7" fill={color} opacity={0.16}/>
+        {/* Header band */}
+        <rect x="-28" y="-24" width="56" height="13" rx="7" fill={color} opacity={0.28}/>
+        <rect x="-28" y="-17" width="56" height="6"        fill={color} opacity={0.28}/>
+        {/* Peg handles */}
+        <rect x="-16" y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.52}/>
+        <rect x="11"  y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.52}/>
+        {/* Day-grid dots */}
+        {[-16,-4,8].flatMap((x, xi) =>
+          [-6,6,18].map((y, yi) => (
+            <circle key={`${xi}${yi}`} cx={x} cy={y} r="2.8" fill={color} opacity={0.22 + yi * 0.06}/>
+          ))
+        )}
+        {/* Highlighted day */}
+        <rect x="4" y="12" width="17" height="13" rx="4" fill={color} opacity={0.52}/>
+      </g>
+    </svg>
+  );
+}
+
+// ─── Trending items data ──────────────────────────────────────────────────────
+
+const TRENDING = [
+  { label:'PDF Editor',   sub:'Edit & Annotate', href:'/tools/pdf-editor',        color:'#f5a623', rgb:'245,166,35',  tier:'primary',   SVG:TrendDocSVG   },
+  { label:'PDF Merger',   sub:'Combine Files',   href:'/tools/pdf-merger',        color:'#22d3ee', rgb:'34,211,238',  tier:'secondary', SVG:TrendMergeSVG },
+  { label:'PDF Splitter', sub:'Extract Pages',   href:'/tools/pdf-splitter',      color:'#a78bfa', rgb:'167,139,250', tier:'secondary', SVG:TrendSplitSVG },
+  { label:'NPS vs APS',   sub:'Compare Plans',   href:'/nps-aps',                 color:'#60a5fa', rgb:'96,165,250',  tier:'tertiary',  SVG:TrendChartSVG },
+  { label:'DA Arrear',    sub:'Calculate',       href:'/da-arrear',               color:'#34d399', rgb:'52,211,153',  tier:'tertiary',  SVG:TrendChartSVG },
+  { label:'Leave Calc',   sub:'Track Leave',     href:'/leave',                   color:'#fb7185', rgb:'251,113,133', tier:'tertiary',  SVG:TrendCalSVG   },
+  { label:'Holiday List', sub:'2026 Holidays',   href:'/tools/holiday-list-2026', color:'#fbbf24', rgb:'251,191,36',  tier:'tertiary',  SVG:TrendCalSVG   },
+];
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ToolsSection() {
@@ -191,156 +320,124 @@ export default function ToolsSection() {
           </h2>
         </div>
 
-        {/* Trending Now — 3-tier hierarchy */}
+        {/* Trending Now — illustrated mini-cards (same SVG style as cards below) */}
         <style>{`
-          /* ── Primary: richer gold, inner glow, scale up ── */
-          .tb-primary {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 11px 22px; border-radius: 100px;
-            border: 1px solid rgba(200,150,12,0.58);
-            background: rgba(200,150,12,0.20);
-            color: rgba(245,208,96,0.97);
-            font-size: 13px; font-weight: 800;
-            text-decoration: none; white-space: nowrap; flex-shrink: 0;
-            transform: scale(1.02);
-            transform-origin: left center;
-            box-shadow:
-              inset 0 1px 0 rgba(245,208,96,0.20),
-              inset 0 0 14px rgba(200,150,12,0.12),
-              0 0 22px rgba(200,150,12,0.22),
-              0 2px 12px rgba(0,0,0,0.28);
-            transition: background 0.22s, border-color 0.22s, transform 0.22s, box-shadow 0.22s;
-            animation: tbPulse 3.6s ease-in-out infinite;
+          .tc {
+            position: relative; display: flex; flex-direction: column;
+            justify-content: center; border-radius: 14px; overflow: hidden;
+            text-decoration: none; flex-shrink: 0; background: #0d1117; cursor: pointer;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
           }
-          .tb-primary:hover {
-            background: rgba(200,150,12,0.30);
-            border-color: rgba(200,150,12,0.78);
-            transform: scale(1.04) translateY(-2px);
-            box-shadow:
-              inset 0 1px 0 rgba(245,208,96,0.28),
-              inset 0 0 20px rgba(200,150,12,0.18),
-              0 0 36px rgba(200,150,12,0.36),
-              0 4px 18px rgba(0,0,0,0.32);
+          .tc:hover { transform: translateY(-3px); }
+
+          .tc-primary {
+            min-width: 152px; height: 80px; padding: 0 15px;
+            border: 1.5px solid rgba(245,166,35,0.42);
+            box-shadow: 0 0 22px rgba(245,166,35,0.20), 0 4px 16px rgba(0,0,0,0.40);
+            animation: tcPulse 3.8s ease-in-out infinite;
+          }
+          .tc-primary:hover {
+            border-color: rgba(245,166,35,0.70);
+            box-shadow: 0 0 36px rgba(245,166,35,0.34), 0 8px 28px rgba(0,0,0,0.46);
+            transform: translateY(-3px) scale(1.02);
             animation: none;
           }
+          .tc-secondary {
+            min-width: 130px; height: 70px; padding: 0 13px;
+            border: 1px solid rgba(255,255,255,0.09);
+          }
+          .tc-tertiary {
+            min-width: 116px; height: 62px; padding: 0 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            opacity: 0.80;
+          }
+          .tc-tertiary:hover { opacity: 1; }
 
-          /* ── Secondary: solid, readable ─────────────────── */
-          .tb-secondary {
-            display: inline-flex; align-items: center; gap: 7px;
-            padding: 9px 17px; border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.14);
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.84);
-            font-size: 12.5px; font-weight: 700;
-            text-decoration: none; white-space: nowrap; flex-shrink: 0;
-            transition: background 0.22s, border-color 0.22s, color 0.22s, transform 0.22s, box-shadow 0.22s;
+          @keyframes tcPulse {
+            0%,100% { box-shadow: 0 0 22px rgba(245,166,35,0.20), 0 4px 16px rgba(0,0,0,0.40); }
+            50%      { box-shadow: 0 0 36px rgba(245,166,35,0.34), 0 4px 16px rgba(0,0,0,0.40); }
           }
-          .tb-secondary:hover {
-            background: rgba(200,150,12,0.13);
-            border-color: rgba(200,150,12,0.42);
-            color: rgba(245,208,96,0.90);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(200,150,12,0.12);
-          }
-
-          /* ── Tertiary: muted, recedes ────────────────────── */
-          .tb-tertiary {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 8px 14px; border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: transparent;
-            color: rgba(255,255,255,0.38);
-            font-size: 11.5px; font-weight: 600;
-            text-decoration: none; white-space: nowrap; flex-shrink: 0;
-            transition: background 0.22s, border-color 0.22s, color 0.22s, transform 0.22s, box-shadow 0.22s;
-          }
-          .tb-tertiary:hover {
-            background: rgba(200,150,12,0.10);
-            border-color: rgba(200,150,12,0.30);
-            color: rgba(245,208,96,0.78);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(200,150,12,0.09);
-          }
-
-          /* ── Pulse: inner + outer glow breathes together ── */
-          @keyframes tbPulse {
-            0%, 100% {
-              box-shadow:
-                inset 0 1px 0 rgba(245,208,96,0.20),
-                inset 0 0 14px rgba(200,150,12,0.12),
-                0 0 22px rgba(200,150,12,0.22),
-                0 2px 12px rgba(0,0,0,0.28);
-            }
-            50% {
-              box-shadow:
-                inset 0 1px 0 rgba(245,208,96,0.26),
-                inset 0 0 20px rgba(200,150,12,0.18),
-                0 0 34px rgba(200,150,12,0.34),
-                0 2px 12px rgba(0,0,0,0.28);
-            }
-          }
-
-          /* ── Entry ───────────────────────────────────────── */
           @keyframes trendFadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: translateY(0); }
           }
-          .trend-container {
-            animation: trendFadeUp 0.38s ease-out 0.08s both;
-          }
+          .trend-container { animation: trendFadeUp 0.38s ease-out 0.08s both; }
           @media (prefers-reduced-motion: reduce) {
             .trend-container { animation: none !important; opacity: 1 !important; }
-            .tb-primary      { animation: none !important; transform: scale(1.02); }
+            .tc-primary      { animation: none !important; }
           }
         `}</style>
 
-        {/* Container — stronger featured-strip presence */}
         <div className="trend-container" style={{
-          background: 'rgba(255,255,255,0.038)',
-          border: '1px solid rgba(200,150,12,0.30)',
+          background: 'rgba(255,255,255,0.030)',
+          border: '1px solid rgba(200,150,12,0.26)',
           borderRadius: 16,
-          padding: '15px 18px',
+          padding: '14px 16px',
           marginBottom: 20,
-          boxShadow: '0 0 0 1px rgba(200,150,12,0.10), 0 8px 32px rgba(0,0,0,0.28)',
+          boxShadow: '0 0 0 1px rgba(200,150,12,0.08), 0 8px 32px rgba(0,0,0,0.28)',
         }}>
 
           {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 13 }}>
-            <span style={{ fontSize: 15, lineHeight: 1 }}>🔥</span>
-            <span style={{ fontSize: 13, fontWeight: 800, color: 'rgba(255,255,255,0.92)', letterSpacing: '0.01em' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:13 }}>
+            <span style={{ fontSize:15, lineHeight:1 }}>🔥</span>
+            <span style={{ fontSize:13, fontWeight:800, color:'rgba(255,255,255,0.92)', letterSpacing:'0.01em' }}>
               Trending Now
             </span>
-            <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
-            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)' }}>
+            <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.07)' }} />
+            <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'rgba(255,255,255,0.22)' }}>
               7 tools
             </span>
           </div>
 
-          {/* Pills — spacing gap replaces dividers */}
+          {/* Mini-card strip */}
           <div style={{
-            display: 'flex', alignItems: 'center', gap: 8,
-            overflowX: 'auto', paddingBottom: 2,
-            scrollbarWidth: 'none', msOverflowStyle: 'none',
+            display:'flex', alignItems:'stretch', gap:8,
+            overflowX:'auto', paddingBottom:4,
+            scrollbarWidth:'none', msOverflowStyle:'none',
           }}>
-            {/* Primary */}
-            <Link href="/tools/pdf-editor" className="tb-primary">
-              <span style={{ fontSize: 14, lineHeight: 1 }}>📝</span>
-              PDF Editor
-            </Link>
+            {TRENDING.map(({ label, sub, href, color, rgb, tier, SVG }, i) => (
+              <Link
+                key={href}
+                href={href}
+                className={`tc tc-${tier}`}
+                style={{ marginLeft: (i === 1 || i === 3) ? 6 : 0 }}
+                onMouseEnter={tier !== 'primary' ? e => {
+                  e.currentTarget.style.borderColor = `rgba(${rgb},0.38)`;
+                  e.currentTarget.style.boxShadow   = `0 6px 22px rgba(${rgb},0.16), 0 3px 12px rgba(0,0,0,0.36)`;
+                  if (tier === 'tertiary') e.currentTarget.style.opacity = '1';
+                } : undefined}
+                onMouseLeave={tier !== 'primary' ? e => {
+                  e.currentTarget.style.borderColor = tier === 'secondary' ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.06)';
+                  e.currentTarget.style.boxShadow   = 'none';
+                  if (tier === 'tertiary') e.currentTarget.style.opacity = '0.80';
+                } : undefined}
+              >
+                {/* Left-to-right gradient — dark content area → colour tint */}
+                <div style={{
+                  position:'absolute', inset:0,
+                  background:`linear-gradient(to right, rgba(13,17,23,0.97) 22%, rgba(${rgb},0.11) 100%)`,
+                  zIndex:1,
+                }} />
 
-            {/* Secondary — extra left margin creates breathing room without a line */}
-            <Link href="/tools/pdf-merger"   className="tb-secondary" style={{ marginLeft: 8 }}>
-              <span style={{ fontSize: 13, lineHeight: 1 }}>🗂️</span>PDF Merger
-            </Link>
-            <Link href="/tools/pdf-splitter" className="tb-secondary">
-              <span style={{ fontSize: 13, lineHeight: 1 }}>✂️</span>PDF Splitter
-            </Link>
+                {/* SVG illustration (same geometric style as cards below) */}
+                <SVG color={color} />
 
-            {/* Tertiary — extra margin fades them into the background visually */}
-            <Link href="/nps-aps"                 className="tb-tertiary" style={{ marginLeft: 8 }}>📊 NPS vs APS</Link>
-            <Link href="/da-arrear"               className="tb-tertiary">💸 DA Arrear</Link>
-            <Link href="/leave"                   className="tb-tertiary">📅 Leave Calc</Link>
-            <Link href="/tools/holiday-list-2026" className="tb-tertiary">🗓️ Holiday List</Link>
+                {/* Label */}
+                <div style={{ position:'relative', zIndex:2 }}>
+                  <div style={{
+                    fontSize:   tier === 'primary' ? 13 : tier === 'secondary' ? 12.5 : 12,
+                    fontWeight: tier === 'primary' ? 800 : tier === 'secondary' ? 700  : 600,
+                    color:      tier === 'primary' ? color : tier === 'secondary' ? 'rgba(255,255,255,0.86)' : 'rgba(255,255,255,0.56)',
+                    lineHeight: 1.2, whiteSpace:'nowrap',
+                  }}>{label}</div>
+                  <div style={{
+                    fontSize:  tier === 'primary' ? 10 : 9.5,
+                    color:     tier === 'primary' ? `rgba(${rgb},0.64)` : 'rgba(255,255,255,0.28)',
+                    marginTop: 3, whiteSpace:'nowrap',
+                  }}>{sub}</div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
 
