@@ -19,212 +19,147 @@ const QUICK_LINKS = [
   { label: 'Income Tax',   href: '/income-tax' },
 ];
 
-// ─── Minimal animated SVG ─────────────────────────────────────────────────────
+// ─── Thematic SVG — Kerala Govt Portal ───────────────────────────────────────
 function HeroIllustration() {
-  const HX = 808, HY = 258;
-  const R_OUTER = 168;
-  const R_MID   = 116;
-  const R_INNER =  58;
-
-  function polar(deg, r) {
-    const rad = deg * Math.PI / 180;
-    return [+(HX + r * Math.cos(rad)).toFixed(2), +(HY + r * Math.sin(rad)).toFixed(2)];
-  }
-
-  // 5 visible nodes on the left arc (from top to bottom)
-  const nodeAngles = [270, 222, 180, 138, 90];
-
-  function bezier(x2, y2, bend = 24) {
-    const mx = (HX + x2) / 2, my = (HY + y2) / 2;
-    const dx = x2 - HX, dy = y2 - HY;
-    const len = Math.sqrt(dx * dx + dy * dy) || 1;
-    return `M${HX},${HY} Q${(mx - (dy / len) * bend).toFixed(2)},${(my + (dx / len) * bend).toFixed(2)} ${x2},${y2}`;
-  }
+  // Gold particles rising from bottom (like sparks from a ceremonial lamp)
+  const particles = [
+    { x: 68,  y: 510, r: 2.0, dur: '9s',  delay: '0s'   },
+    { x: 148, y: 500, r: 1.4, dur: '11s', delay: '1.8s' },
+    { x: 240, y: 515, r: 1.8, dur: '8s',  delay: '3.2s' },
+    { x: 340, y: 505, r: 1.2, dur: '13s', delay: '0.6s' },
+    { x: 450, y: 512, r: 2.2, dur: '10s', delay: '2.5s' },
+    { x: 560, y: 508, r: 1.5, dur: '12s', delay: '4.0s' },
+    { x: 660, y: 502, r: 1.8, dur: '9s',  delay: '1.2s' },
+    { x: 750, y: 514, r: 1.3, dur: '11s', delay: '3.8s' },
+    { x: 840, y: 506, r: 2.0, dur: '10s', delay: '0.4s' },
+    { x: 170, y: 498, r: 1.0, dur: '14s', delay: '5.5s' },
+    { x: 490, y: 516, r: 1.6, dur: '8s',  delay: '6.0s' },
+    { x: 720, y: 500, r: 1.2, dur: '13s', delay: '2.0s' },
+  ];
 
   return (
     <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
       preserveAspectRatio="xMidYMid slice" aria-hidden="true"
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
 
-      <defs>
-        <radialGradient id="centreGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"   stopColor="#c8960c" stopOpacity="0.22"/>
-          <stop offset="100%" stopColor="#c8960c" stopOpacity="0"/>
-        </radialGradient>
-        <filter id="blur4" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="4"/>
-        </filter>
-        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-          <feGaussianBlur stdDeviation="5" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
+      <style>{`
+        @keyframes floatUp {
+          0%   { transform: translateY(0);      opacity: 0;    }
+          15%  { opacity: 0.65; }
+          75%  { opacity: 0.35; }
+          100% { transform: translateY(-310px); opacity: 0;    }
+        }
+        @keyframes softPulse {
+          0%, 100% { opacity: 0.05; }
+          50%       { opacity: 0.13; }
+        }
+        @keyframes fadeDoc {
+          0%, 100% { opacity: 0.07; }
+          50%       { opacity: 0.13; }
+        }
+        @keyframes scanLine {
+          0%   { transform: translateY(-30px); opacity: 0; }
+          10%  { opacity: 0.06; }
+          90%  { opacity: 0.06; }
+          100% { transform: translateY(560px); opacity: 0; }
+        }
+      `}</style>
 
       {/* ── Sparse dot grid ────────────────────────────────────────────────── */}
-      {Array.from({ length: 8 }).flatMap((_, r) =>
-        Array.from({ length: 14 }).map((_, c) => (
-          <circle key={`g${r}-${c}`}
-            cx={c * 68 + 10} cy={r * 68 + 10}
-            r="1.1" fill="rgba(255,255,255,0.038)"/>
+      {Array.from({ length: 8 }).flatMap((_, row) =>
+        Array.from({ length: 14 }).map((_, col) => (
+          <circle key={`g${row}-${col}`}
+            cx={col * 68 + 10} cy={row * 68 + 10}
+            r="1.1" fill="rgba(255,255,255,0.035)"/>
         ))
       )}
 
-      {/* ── Wide orbit (static, very faint) ────────────────────────────────── */}
-      <circle cx={HX} cy={HY} r="225"
-        fill="none" stroke="rgba(200,150,12,0.05)" strokeWidth="1"/>
+      {/* ── Horizontal ruled lines (like a government register) ──────────── */}
+      {[100, 175, 250, 325, 400, 475].map((y, i) => (
+        <line key={`rl${i}`} x1="0" y1={y} x2="900" y2={y}
+          stroke="rgba(200,150,12,0.04)" strokeWidth="1"
+          style={{ animation: `softPulse ${5 + i * 0.6}s ease-in-out ${i * 0.4}s infinite` }}/>
+      ))}
 
-      {/* ── Outer ring — CLOCKWISE ROTATION ────────────────────────────────── */}
-      <g>
-        <animateTransform attributeName="transform" type="rotate"
-          from={`0 ${HX} ${HY}`} to={`360 ${HX} ${HY}`}
-          dur="55s" repeatCount="indefinite"/>
-        {/* Dashed outer ring */}
-        <circle cx={HX} cy={HY} r={R_OUTER}
-          fill="none" stroke="rgba(200,150,12,0.18)" strokeWidth="1.5"
-          strokeDasharray="6,10"/>
-        {/* Calibration ticks — 12 positions */}
-        {Array.from({ length: 12 }).map((_, i) => {
-          const a = i * 30 * Math.PI / 180;
-          const isMaj = i % 3 === 0;
-          const len = isMaj ? 11 : 5;
-          return (
-            <line key={i}
-              x1={(HX + R_OUTER * Math.cos(a)).toFixed(2)}
-              y1={(HY + R_OUTER * Math.sin(a)).toFixed(2)}
-              x2={(HX + (R_OUTER + len) * Math.cos(a)).toFixed(2)}
-              y2={(HY + (R_OUTER + len) * Math.sin(a)).toFixed(2)}
-              stroke="rgba(200,150,12,0.28)"
-              strokeWidth={isMaj ? 2 : 1} strokeLinecap="round"/>
-          );
-        })}
-        {/* 4 accent dots on outer ring at 90° intervals */}
-        {[0, 90, 180, 270].map(deg => {
-          const [x, y] = polar(deg, R_OUTER);
-          return <circle key={deg} cx={x} cy={y} r="3.5"
-            fill="rgba(200,150,12,0.45)"/>;
-        })}
+      {/* ── Slow scan line (top → bottom) ────────────────────────────────── */}
+      <line x1="0" y1="0" x2="900" y2="0"
+        stroke="rgba(200,150,12,0.06)" strokeWidth="1.5"
+        style={{ animation: 'scanLine 14s linear 0s infinite' }}/>
+      <line x1="0" y1="0" x2="900" y2="0"
+        stroke="rgba(200,150,12,0.04)" strokeWidth="1"
+        style={{ animation: 'scanLine 14s linear 7s infinite' }}/>
+
+      {/* ── Radial glow pulse — centre ────────────────────────────────────── */}
+      <ellipse cx="450" cy="260" rx="340" ry="210"
+        fill="rgba(200,150,12,0.05)"
+        style={{ animation: 'softPulse 6s ease-in-out infinite' }}/>
+      <ellipse cx="450" cy="260" rx="180" ry="110"
+        fill="rgba(200,150,12,0.04)"
+        style={{ animation: 'softPulse 4s ease-in-out 1s infinite' }}/>
+
+      {/* ── Document card silhouette — LEFT (govt order) ──────────────────── */}
+      <g transform="translate(28,145) rotate(-6,80,110)"
+        style={{ animation: 'fadeDoc 8s ease-in-out infinite' }}>
+        {/* Card */}
+        <rect width="148" height="196" rx="8" fill="rgba(200,150,12,0.06)"
+          stroke="rgba(200,150,12,0.15)" strokeWidth="1"/>
+        {/* Gold header band */}
+        <rect width="148" height="28" rx="8" fill="rgba(200,150,12,0.10)"/>
+        <rect y="20" width="148" height="8" fill="rgba(200,150,12,0.10)"/>
+        <rect y="28" width="148" height="0.75" fill="rgba(200,150,12,0.20)"/>
+        {/* Content lines */}
+        <rect x="10" y="9"  width="88" height="6"  rx="2" fill="rgba(200,150,12,0.28)"/>
+        <rect x="10" y="38" width="66" height="4.5" rx="2" fill="rgba(255,255,255,0.10)"/>
+        <rect x="10" y="50" width="128" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+        <rect x="10" y="62" width="114" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+        <rect x="10" y="74" width="122" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+        <rect x="10" y="86" width="98"  height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
+        {/* Table */}
+        <rect x="10"  y="104" width="128" height="0.75" fill="rgba(255,255,255,0.08)"/>
+        <rect x="10"  y="108" width="36"  height="4"    rx="1" fill="rgba(200,150,12,0.22)"/>
+        <rect x="58"  y="108" width="48"  height="4"    rx="1" fill="rgba(200,150,12,0.22)"/>
+        <rect x="10"  y="118" width="32"  height="3.5"  rx="1" fill="rgba(255,255,255,0.08)"/>
+        <rect x="58"  y="118" width="44"  height="3.5"  rx="1" fill="rgba(255,255,255,0.08)"/>
+        <rect x="10"  y="128" width="32"  height="3.5"  rx="1" fill="rgba(255,255,255,0.06)"/>
+        <rect x="58"  y="128" width="44"  height="3.5"  rx="1" fill="rgba(255,255,255,0.06)"/>
+        {/* Seal */}
+        <circle cx="126" cy="170" r="16"
+          fill="none" stroke="rgba(200,150,12,0.20)" strokeWidth="1.2"/>
+        <circle cx="126" cy="170" r="10"
+          fill="none" stroke="rgba(200,150,12,0.12)" strokeWidth="0.75"/>
       </g>
 
-      {/* ── Mid ring — COUNTER-CLOCKWISE ROTATION ──────────────────────────── */}
-      <g>
-        <animateTransform attributeName="transform" type="rotate"
-          from={`0 ${HX} ${HY}`} to={`-360 ${HX} ${HY}`}
-          dur="38s" repeatCount="indefinite"/>
-        <circle cx={HX} cy={HY} r={R_MID}
-          fill="none" stroke="rgba(96,165,250,0.12)" strokeWidth="1"
-          strokeDasharray="3,16"/>
-        {/* 4 small accent dots */}
-        {[45, 135, 225, 315].map(deg => {
-          const [x, y] = polar(deg, R_MID);
-          return <circle key={deg} cx={x} cy={y} r="2.5"
-            fill="rgba(96,165,250,0.35)"/>;
-        })}
+      {/* ── Document card silhouette — RIGHT (pay slip) ───────────────────── */}
+      <g transform="translate(738,148) rotate(7,74,100)"
+        style={{ animation: 'fadeDoc 10s ease-in-out 2s infinite' }}>
+        <rect width="140" height="188" rx="8" fill="rgba(41,151,255,0.04)"
+          stroke="rgba(41,151,255,0.12)" strokeWidth="1"/>
+        <rect width="140" height="28" rx="8" fill="rgba(41,151,255,0.08)"/>
+        <rect y="20" width="140" height="8" fill="rgba(41,151,255,0.08)"/>
+        <rect y="28" width="140" height="0.75" fill="rgba(41,151,255,0.16)"/>
+        <rect x="10" y="9"  width="78" height="6"  rx="2" fill="rgba(147,197,253,0.30)"/>
+        <rect x="10" y="38" width="56" height="4.5" rx="2" fill="rgba(255,255,255,0.10)"/>
+        {[50, 62, 74, 86].map((y, i) => [
+          <rect key={`la${y}`} x="10" y={y} width={[52,48,54,46][i]} height="4" rx="1.5" fill="rgba(255,255,255,0.07)"/>,
+          <rect key={`ba${y}`} x="74" y={y+1} width="56" height="2.5" rx="1.5" fill="rgba(41,151,255,0.08)"/>,
+          <rect key={`bf${y}`} x="74" y={y+1} width={56 * [0.85,0.52,0.35,0.68][i]} height="2.5" rx="1.5" fill="rgba(41,151,255,0.32)"/>,
+        ])}
+        <rect x="10" y="108" width="120" height="0.75" fill="rgba(255,255,255,0.08)"/>
+        <rect x="10" y="116" width="56"  height="5"   rx="2" fill="rgba(200,150,12,0.18)"/>
+        <rect x="80" y="114" width="50"  height="9"   rx="3" fill="rgba(200,150,12,0.14)"/>
       </g>
 
-      {/* ── Inner ring (static) ────────────────────────────────────────────── */}
-      <circle cx={HX} cy={HY} r={R_INNER}
-        fill="none" stroke="rgba(200,150,12,0.10)" strokeWidth="0.75"
-        strokeDasharray="2,10"/>
+      {/* ── Floating gold particles (rising sparks) ───────────────────────── */}
+      {particles.map(({ x, y, r, dur, delay }, i) => (
+        <circle key={`p${i}`} cx={x} cy={y} r={r}
+          fill={i % 3 === 0 ? '#f5d060' : '#c8960c'}
+          style={{ animation: `floatUp ${dur} ease-in-out ${delay} infinite` }}/>
+      ))}
 
-      {/* ── Spokes ─────────────────────────────────────────────────────────── */}
-      {nodeAngles.map(a => {
-        const [x2, y2] = polar(a, R_OUTER);
-        return (
-          <line key={`sp${a}`} x1={HX} y1={HY} x2={x2} y2={y2}
-            stroke="rgba(200,150,12,0.06)" strokeWidth="1"/>
-        );
-      })}
-
-      {/* ── Flowing connection lines ────────────────────────────────────────── */}
-      {nodeAngles.map((a, i) => {
-        const [x2, y2] = polar(a, R_OUTER);
-        return (
-          <path key={`fl${a}`} d={bezier(x2, y2, 18)} fill="none"
-            stroke="rgba(200,150,12,0.22)" strokeWidth="1.2"
-            strokeDasharray="5,5">
-            <animate attributeName="stroke-dashoffset"
-              from="0" to="-30"
-              dur={`${2.2 + i * 0.35}s`} repeatCount="indefinite"/>
-          </path>
-        );
-      })}
-
-      {/* ── Node dots ──────────────────────────────────────────────────────── */}
-      {nodeAngles.map((a, i) => {
-        const [cx, cy] = polar(a, R_OUTER);
-        const isKey = a === 270 || a === 180 || a === 90;
-        return (
-          <g key={`nd${a}`}>
-            {/* Pulsing halo */}
-            <circle cx={cx} cy={cy} r="16" fill={`rgba(200,150,12,0.05)`}>
-              <animate attributeName="r"      values="12;20;12"
-                dur={`${3 + i * 0.5}s`} begin={`${i * 0.4}s`} repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="0.04;0.12;0.04"
-                dur={`${3 + i * 0.5}s`} begin={`${i * 0.4}s`} repeatCount="indefinite"/>
-            </circle>
-            {/* Node ring */}
-            <circle cx={cx} cy={cy} r={isKey ? 9 : 6}
-              fill={isKey ? 'rgba(200,150,12,0.12)' : 'rgba(255,255,255,0.04)'}
-              stroke={isKey ? 'rgba(200,150,12,0.50)' : 'rgba(255,255,255,0.14)'}
-              strokeWidth={isKey ? 1.5 : 1}>
-              <animate attributeName="opacity" values="0.5;1;0.5"
-                dur={`${2.4 + i * 0.3}s`} begin={`${i * 0.35}s`} repeatCount="indefinite"/>
-            </circle>
-            {/* Key dot centre */}
-            {isKey && (
-              <circle cx={cx} cy={cy} r="3" fill="#f5d060" opacity="0.85"/>
-            )}
-          </g>
-        );
-      })}
-
-      {/* ── Centre pulsing orb ─────────────────────────────────────────────── */}
-      {/* Glow layer */}
-      <circle cx={HX} cy={HY} r="50" fill="url(#centreGlow)">
-        <animate attributeName="r"       values="44;58;44" dur="5s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.7;1;0.7" dur="5s" repeatCount="indefinite"/>
-      </circle>
-      {/* Breathing ring */}
-      <circle cx={HX} cy={HY} r="28"
-        fill="none" stroke="rgba(200,150,12,0.22)" strokeWidth="1.5">
-        <animate attributeName="r"       values="26;32;26" dur="4s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.18;0.30;0.18" dur="4s" repeatCount="indefinite"/>
-      </circle>
-      {/* Core */}
-      <circle cx={HX} cy={HY} r="13"
-        fill="rgba(200,150,12,0.55)" filter="url(#glow)">
-        <animate attributeName="opacity" values="0.45;0.75;0.45" dur="3s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx={HX} cy={HY} r="6" fill="#f5d060"/>
-      <circle cx={HX} cy={HY} r="2.5" fill="rgba(255,255,255,0.9)"/>
-
-      {/* ── Left-side vertical accent line ─────────────────────────────────── */}
-      <g transform="translate(36,120)" opacity="0.10">
-        <line x1="0" y1="0" x2="0" y2="280"
-          stroke="rgba(200,150,12,0.40)" strokeWidth="1"
-          strokeDasharray="1,6"/>
-        {[0, 70, 140, 210, 280].map((y, i) => (
-          <circle key={y} cx="0" cy={y} r={i === 2 ? 3.5 : 2}
-            fill={i === 2 ? '#f5d060' : 'rgba(200,150,12,0.55)'}>
-            <animate attributeName="opacity" values="0.3;0.9;0.3"
-              dur={`${2.5 + i * 0.5}s`} begin={`${i * 0.5}s`} repeatCount="indefinite"/>
-          </circle>
-        ))}
-      </g>
-
-      {/* ── Accent particles ───────────────────────────────────────────────── */}
-      {[
-        [198, 72,  '#c8960c', 3.5, 4],
-        [152, 448, '#2997ff', 2.5, 5],
-        [558, 38,  '#c8960c', 2,   3],
-        [496, 488, '#2997ff', 3,   6],
-        [326, 48,  '#c8960c', 2,   4],
-        [722, 490, '#2997ff', 2,   5],
-      ].map(([x, y, c, r, dur], i) => (
-        <circle key={`p${i}`} cx={x} cy={y} r={r} fill={c} opacity="0.10">
-          <animate attributeName="opacity" values="0.05;0.18;0.05"
-            dur={`${dur}s`} begin={`${i * 0.6}s`} repeatCount="indefinite"/>
-        </circle>
+      {/* ── Subtle vertical divider lines (like column rules in a register) ── */}
+      {[220, 450, 680].map((x, i) => (
+        <line key={`vl${i}`} x1={x} y1="0" x2={x} y2="520"
+          stroke="rgba(200,150,12,0.025)" strokeWidth="1"/>
       ))}
     </svg>
   );
@@ -247,10 +182,10 @@ export default function Hero() {
         <HeroIllustration />
       </div>
 
-      {/* Subtle centre glow */}
+      {/* Warm gold radial glow */}
       <div className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: 'radial-gradient(ellipse 60% 45% at 50% 40%, rgba(200,150,12,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 65% 50% at 50% 38%, rgba(200,150,12,0.09) 0%, transparent 70%)',
         }}/>
 
       {/* Content */}
@@ -258,10 +193,9 @@ export default function Hero() {
 
         {/* Logo */}
         <div className="relative mb-5">
-          {/* Gold halo behind logo */}
           <div className="absolute inset-0 rounded-full pointer-events-none"
             style={{
-              background: 'radial-gradient(ellipse,rgba(200,150,12,0.25) 0%,transparent 70%)',
+              background: 'radial-gradient(ellipse,rgba(200,150,12,0.22) 0%,transparent 70%)',
               filter: 'blur(14px)', transform: 'scale(1.6) translateY(4px)',
             }}/>
           <div className="relative rounded-full p-[2px]"
@@ -276,25 +210,29 @@ export default function Hero() {
         </div>
 
         {/* Eyebrow */}
-        <p className="mb-3 text-[10px] md:text-[11px] font-black uppercase tracking-[0.26em]"
-          style={{ color: 'rgba(245,208,96,0.55)', letterSpacing: '0.24em' }}>
+        <p className="mb-4 text-[10px] md:text-[11px] font-black uppercase tracking-[0.26em]"
+          style={{ color: 'rgba(245,208,96,0.50)' }}>
           Kerala Government Employees Portal
         </p>
 
-        {/* Headings */}
-        <h1 className="font-malayalam font-bold leading-[1.18] tracking-tight bg-clip-text text-transparent mb-1"
+        {/* ── HEADING — single line ── */}
+        <h1
+          className="font-malayalam font-bold bg-clip-text text-transparent mb-2 whitespace-nowrap"
           style={{
-            fontSize: 'clamp(30px,5.5vw,68px)',
-            backgroundImage: 'linear-gradient(160deg,#c8960c 0%,#f5d060 40%,#fce38a 54%,#f5d060 70%,#c8960c 100%)',
+            fontSize: 'clamp(22px, 5vw, 64px)',
+            lineHeight: 1.2,
+            backgroundImage: 'linear-gradient(160deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 70%,#c8960c 100%)',
             filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
           }}>
           കേരള സർക്കാർ
         </h1>
-        <h2 className="font-malayalam font-semibold leading-[1.28] tracking-tight bg-clip-text text-transparent mb-6 md:mb-8"
+        <h2
+          className="font-malayalam font-semibold bg-clip-text text-transparent mb-7"
           style={{
-            fontSize: 'clamp(17px,3vw,38px)',
-            backgroundImage: 'linear-gradient(160deg,#9c720a,#e8c247,#fce38a,#e8c247,#9c720a)',
-            filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.16))',
+            fontSize: 'clamp(14px, 2.6vw, 34px)',
+            lineHeight: 1.3,
+            backgroundImage: 'linear-gradient(160deg,#9c720a,#e8c247,#f5d060,#e8c247,#9c720a)',
+            filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.14))',
           }}>
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
@@ -304,21 +242,21 @@ export default function Hero() {
           className="flex items-center gap-3 w-full max-w-[460px] rounded-2xl px-4 py-3 md:py-3.5 mb-7 transition-all duration-300 cursor-text hover:scale-[1.01] hover:brightness-110"
           style={{
             background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(245,208,96,0.18)',
+            border: '1px solid rgba(245,208,96,0.16)',
             backdropFilter: 'blur(20px)',
             boxShadow: '0 0 0 1px rgba(255,255,255,0.04) inset, 0 4px 20px rgba(0,0,0,0.22)',
           }}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="rgba(245,208,96,0.55)" strokeWidth="2.2" strokeLinecap="round">
+            stroke="rgba(245,208,96,0.50)" strokeWidth="2.2" strokeLinecap="round">
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <span className="flex-1 text-left text-[13px]"
-            style={{ color: 'rgba(255,255,255,0.30)' }}>
+            style={{ color: 'rgba(255,255,255,0.28)' }}>
             Search tools, orders, schemes…
           </span>
           <kbd className="hidden md:inline-flex text-[10px] font-bold px-2 py-0.5 rounded-md"
-            style={{ background: 'rgba(245,208,96,0.08)', color: 'rgba(245,208,96,0.50)', border: '1px solid rgba(245,208,96,0.16)' }}>
+            style={{ background: 'rgba(245,208,96,0.07)', color: 'rgba(245,208,96,0.45)', border: '1px solid rgba(245,208,96,0.14)' }}>
             ⌘ K
           </kbd>
         </button>
@@ -335,7 +273,7 @@ export default function Hero() {
                 {s.value}
               </span>
               <span className="text-[8px] md:text-[9px] font-semibold uppercase tracking-widest mt-1"
-                style={{ color: 'rgba(255,255,255,0.38)' }}>
+                style={{ color: 'rgba(255,255,255,0.35)' }}>
                 {s.label}
               </span>
             </div>
@@ -349,7 +287,7 @@ export default function Hero() {
               className="px-3 py-1.5 rounded-full text-[11px] font-medium no-underline transition-all duration-200 hover:scale-105"
               style={{
                 background: 'rgba(255,255,255,0.04)',
-                color: 'rgba(255,255,255,0.48)',
+                color: 'rgba(255,255,255,0.45)',
                 border: '1px solid rgba(255,255,255,0.07)',
               }}>
               {link.label}
