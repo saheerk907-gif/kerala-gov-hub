@@ -19,22 +19,26 @@ const QUICK_LINKS = [
   { label: 'Income Tax',   href: '/income-tax' },
 ];
 
-// ─── Thematic SVG — Kerala Govt Portal ───────────────────────────────────────
+// ─── SVG background ───────────────────────────────────────────────────────────
 function HeroIllustration() {
-  // Gold particles rising from bottom (like sparks from a ceremonial lamp)
-  const particles = [
-    { x: 68,  y: 510, r: 2.0, dur: '9s',  delay: '0s'   },
-    { x: 148, y: 500, r: 1.4, dur: '11s', delay: '1.8s' },
-    { x: 240, y: 515, r: 1.8, dur: '8s',  delay: '3.2s' },
-    { x: 340, y: 505, r: 1.2, dur: '13s', delay: '0.6s' },
-    { x: 450, y: 512, r: 2.2, dur: '10s', delay: '2.5s' },
-    { x: 560, y: 508, r: 1.5, dur: '12s', delay: '4.0s' },
-    { x: 660, y: 502, r: 1.8, dur: '9s',  delay: '1.2s' },
-    { x: 750, y: 514, r: 1.3, dur: '11s', delay: '3.8s' },
-    { x: 840, y: 506, r: 2.0, dur: '10s', delay: '0.4s' },
-    { x: 170, y: 498, r: 1.0, dur: '14s', delay: '5.5s' },
-    { x: 490, y: 516, r: 1.6, dur: '8s',  delay: '6.0s' },
-    { x: 720, y: 500, r: 1.2, dur: '13s', delay: '2.0s' },
+  // Sonar ping rings: 5 rings staggered 1.8s apart, 9s total
+  const pings   = [0, 1.8, 3.6, 5.4, 7.2];
+
+  // Horizontal data-packet lanes: (y, delay, duration, direction)
+  const lanes = [
+    { y: 112, delay: '0s',   dur: '7s',  dir:  1 },
+    { y: 192, delay: '2.5s', dur: '9s',  dir: -1 },
+    { y: 308, delay: '1.2s', dur: '8s',  dir:  1 },
+    { y: 388, delay: '3.8s', dur: '6.5s',dir: -1 },
+    { y: 460, delay: '0.6s', dur: '10s', dir:  1 },
+  ];
+
+  // Scattered small accent nodes (static)
+  const nodes = [
+    { x: 68,  y: 132 }, { x: 840, y: 108 },
+    { x: 56,  y: 388 }, { x: 856, y: 404 },
+    { x: 112, y: 264 }, { x: 790, y: 264 },
+    { x: 200, y: 80  }, { x: 700, y: 448 },
   ];
 
   return (
@@ -43,121 +47,97 @@ function HeroIllustration() {
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
 
       <style>{`
-        @keyframes floatUp {
-          0%   { transform: translateY(0);      opacity: 0;    }
-          15%  { opacity: 0.65; }
-          75%  { opacity: 0.35; }
-          100% { transform: translateY(-310px); opacity: 0;    }
+        @keyframes ping {
+          0%   { r: 8;   opacity: 0.40; stroke-width: 1.5; }
+          70%  { opacity: 0.12; }
+          100% { r: 320; opacity: 0;    stroke-width: 0.5; }
         }
-        @keyframes softPulse {
-          0%, 100% { opacity: 0.05; }
-          50%       { opacity: 0.13; }
+        @keyframes packetLTR {
+          0%   { transform: translateX(-20px); opacity: 0;    }
+          8%   { opacity: 1; }
+          92%  { opacity: 1; }
+          100% { transform: translateX(920px);  opacity: 0;    }
         }
-        @keyframes fadeDoc {
-          0%, 100% { opacity: 0.07; }
-          50%       { opacity: 0.13; }
+        @keyframes packetRTL {
+          0%   { transform: translateX(920px);  opacity: 0;    }
+          8%   { opacity: 1; }
+          92%  { opacity: 1; }
+          100% { transform: translateX(-20px); opacity: 0;    }
         }
-        @keyframes scanLine {
-          0%   { transform: translateY(-30px); opacity: 0; }
-          10%  { opacity: 0.06; }
-          90%  { opacity: 0.06; }
-          100% { transform: translateY(560px); opacity: 0; }
+        @keyframes nodePulse {
+          0%, 100% { opacity: 0.15; r: 3;   }
+          50%       { opacity: 0.55; r: 4.5; }
+        }
+        @keyframes gridWave {
+          0%, 100% { opacity: 0.032; }
+          50%       { opacity: 0.072; }
         }
       `}</style>
 
-      {/* ── Sparse dot grid ────────────────────────────────────────────────── */}
+      {/* ── Dot grid with wave pulse ───────────────────────────────────────── */}
       {Array.from({ length: 8 }).flatMap((_, row) =>
         Array.from({ length: 14 }).map((_, col) => (
           <circle key={`g${row}-${col}`}
             cx={col * 68 + 10} cy={row * 68 + 10}
-            r="1.1" fill="rgba(255,255,255,0.035)"/>
+            r="1.2" fill="rgba(255,255,255,1)"
+            style={{
+              animation: `gridWave ${3 + (row + col) * 0.18}s ease-in-out ${(row * 0.12 + col * 0.08)}s infinite`,
+            }}/>
         ))
       )}
 
-      {/* ── Horizontal ruled lines (like a government register) ──────────── */}
-      {[100, 175, 250, 325, 400, 475].map((y, i) => (
-        <line key={`rl${i}`} x1="0" y1={y} x2="900" y2={y}
-          stroke="rgba(200,150,12,0.04)" strokeWidth="1"
-          style={{ animation: `softPulse ${5 + i * 0.6}s ease-in-out ${i * 0.4}s infinite` }}/>
+      {/* ── Horizontal lane lines (very faint) ────────────────────────────── */}
+      {lanes.map(({ y }, i) => (
+        <line key={`ln${i}`} x1="0" y1={y} x2="900" y2={y}
+          stroke="rgba(200,150,12,0.04)" strokeWidth="1"/>
       ))}
 
-      {/* ── Slow scan line (top → bottom) ────────────────────────────────── */}
-      <line x1="0" y1="0" x2="900" y2="0"
-        stroke="rgba(200,150,12,0.06)" strokeWidth="1.5"
-        style={{ animation: 'scanLine 14s linear 0s infinite' }}/>
-      <line x1="0" y1="0" x2="900" y2="0"
-        stroke="rgba(200,150,12,0.04)" strokeWidth="1"
-        style={{ animation: 'scanLine 14s linear 7s infinite' }}/>
-
-      {/* ── Radial glow pulse — centre ────────────────────────────────────── */}
-      <ellipse cx="450" cy="260" rx="340" ry="210"
-        fill="rgba(200,150,12,0.05)"
-        style={{ animation: 'softPulse 6s ease-in-out infinite' }}/>
-      <ellipse cx="450" cy="260" rx="180" ry="110"
-        fill="rgba(200,150,12,0.04)"
-        style={{ animation: 'softPulse 4s ease-in-out 1s infinite' }}/>
-
-      {/* ── Document card silhouette — LEFT (govt order) ──────────────────── */}
-      <g transform="translate(28,145) rotate(-6,80,110)"
-        style={{ animation: 'fadeDoc 8s ease-in-out infinite' }}>
-        {/* Card */}
-        <rect width="148" height="196" rx="8" fill="rgba(200,150,12,0.06)"
-          stroke="rgba(200,150,12,0.15)" strokeWidth="1"/>
-        {/* Gold header band */}
-        <rect width="148" height="28" rx="8" fill="rgba(200,150,12,0.10)"/>
-        <rect y="20" width="148" height="8" fill="rgba(200,150,12,0.10)"/>
-        <rect y="28" width="148" height="0.75" fill="rgba(200,150,12,0.20)"/>
-        {/* Content lines */}
-        <rect x="10" y="9"  width="88" height="6"  rx="2" fill="rgba(200,150,12,0.28)"/>
-        <rect x="10" y="38" width="66" height="4.5" rx="2" fill="rgba(255,255,255,0.10)"/>
-        <rect x="10" y="50" width="128" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
-        <rect x="10" y="62" width="114" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
-        <rect x="10" y="74" width="122" height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
-        <rect x="10" y="86" width="98"  height="4" rx="2" fill="rgba(255,255,255,0.07)"/>
-        {/* Table */}
-        <rect x="10"  y="104" width="128" height="0.75" fill="rgba(255,255,255,0.08)"/>
-        <rect x="10"  y="108" width="36"  height="4"    rx="1" fill="rgba(200,150,12,0.22)"/>
-        <rect x="58"  y="108" width="48"  height="4"    rx="1" fill="rgba(200,150,12,0.22)"/>
-        <rect x="10"  y="118" width="32"  height="3.5"  rx="1" fill="rgba(255,255,255,0.08)"/>
-        <rect x="58"  y="118" width="44"  height="3.5"  rx="1" fill="rgba(255,255,255,0.08)"/>
-        <rect x="10"  y="128" width="32"  height="3.5"  rx="1" fill="rgba(255,255,255,0.06)"/>
-        <rect x="58"  y="128" width="44"  height="3.5"  rx="1" fill="rgba(255,255,255,0.06)"/>
-        {/* Seal */}
-        <circle cx="126" cy="170" r="16"
-          fill="none" stroke="rgba(200,150,12,0.20)" strokeWidth="1.2"/>
-        <circle cx="126" cy="170" r="10"
-          fill="none" stroke="rgba(200,150,12,0.12)" strokeWidth="0.75"/>
-      </g>
-
-      {/* ── Document card silhouette — RIGHT (pay slip) ───────────────────── */}
-      <g transform="translate(738,148) rotate(7,74,100)"
-        style={{ animation: 'fadeDoc 10s ease-in-out 2s infinite' }}>
-        <rect width="140" height="188" rx="8" fill="rgba(41,151,255,0.04)"
-          stroke="rgba(41,151,255,0.12)" strokeWidth="1"/>
-        <rect width="140" height="28" rx="8" fill="rgba(41,151,255,0.08)"/>
-        <rect y="20" width="140" height="8" fill="rgba(41,151,255,0.08)"/>
-        <rect y="28" width="140" height="0.75" fill="rgba(41,151,255,0.16)"/>
-        <rect x="10" y="9"  width="78" height="6"  rx="2" fill="rgba(147,197,253,0.30)"/>
-        <rect x="10" y="38" width="56" height="4.5" rx="2" fill="rgba(255,255,255,0.10)"/>
-        {[50, 62, 74, 86].map((y, i) => [
-          <rect key={`la${y}`} x="10" y={y} width={[52,48,54,46][i]} height="4" rx="1.5" fill="rgba(255,255,255,0.07)"/>,
-          <rect key={`ba${y}`} x="74" y={y+1} width="56" height="2.5" rx="1.5" fill="rgba(41,151,255,0.08)"/>,
-          <rect key={`bf${y}`} x="74" y={y+1} width={56 * [0.85,0.52,0.35,0.68][i]} height="2.5" rx="1.5" fill="rgba(41,151,255,0.32)"/>,
-        ])}
-        <rect x="10" y="108" width="120" height="0.75" fill="rgba(255,255,255,0.08)"/>
-        <rect x="10" y="116" width="56"  height="5"   rx="2" fill="rgba(200,150,12,0.18)"/>
-        <rect x="80" y="114" width="50"  height="9"   rx="3" fill="rgba(200,150,12,0.14)"/>
-      </g>
-
-      {/* ── Floating gold particles (rising sparks) ───────────────────────── */}
-      {particles.map(({ x, y, r, dur, delay }, i) => (
-        <circle key={`p${i}`} cx={x} cy={y} r={r}
-          fill={i % 3 === 0 ? '#f5d060' : '#c8960c'}
-          style={{ animation: `floatUp ${dur} ease-in-out ${delay} infinite` }}/>
+      {/* ── Traveling data packets on each lane ───────────────────────────── */}
+      {lanes.map(({ y, delay, dur, dir }, i) => (
+        <g key={`pk${i}`}>
+          {/* Lane glow trail */}
+          <circle cy={y} r="3.5" fill="rgba(200,150,12,0.55)"
+            style={{
+              animation: `${dir === 1 ? 'packetLTR' : 'packetRTL'} ${dur} linear ${delay} infinite`,
+            }}/>
+          {/* Leading dot */}
+          <circle cy={y} r="1.8" fill="#f5d060"
+            style={{
+              animation: `${dir === 1 ? 'packetLTR' : 'packetRTL'} ${dur} linear ${delay} infinite`,
+              animationDelay: `calc(${delay} + 0.05s)`,
+            }}/>
+        </g>
       ))}
 
-      {/* ── Subtle vertical divider lines (like column rules in a register) ── */}
-      {[220, 450, 680].map((x, i) => (
+      {/* ── Sonar ping rings from centre ──────────────────────────────────── */}
+      {pings.map((delay, i) => (
+        <circle key={`ping${i}`} cx="450" cy="262" r="8"
+          fill="none" stroke="rgba(200,150,12,0.38)" strokeWidth="1.5"
+          style={{ animation: `ping 9s cubic-bezier(0.2,0.6,0.4,1) ${delay}s infinite` }}/>
+      ))}
+
+      {/* ── Accent: second smaller sonar (right side) ─────────────────────── */}
+      {[0, 2.4, 4.8].map((delay, i) => (
+        <circle key={`ping2${i}`} cx="750" cy="200" r="6"
+          fill="none" stroke="rgba(41,151,255,0.20)" strokeWidth="1"
+          style={{ animation: `ping 7s cubic-bezier(0.2,0.6,0.4,1) ${delay}s infinite` }}/>
+      ))}
+
+      {/* ── Static accent nodes (endpoints of the signal) ─────────────────── */}
+      {nodes.map(({ x, y }, i) => (
+        <g key={`nd${i}`}>
+          <circle cx={x} cy={y} r="6"
+            fill="rgba(200,150,12,0.04)"
+            stroke="rgba(200,150,12,0.18)" strokeWidth="1"
+            style={{ animation: `nodePulse ${3 + i * 0.4}s ease-in-out ${i * 0.5}s infinite` }}/>
+          <circle cx={x} cy={y} r="2.5"
+            fill="rgba(200,150,12,0.50)"
+            style={{ animation: `nodePulse ${3 + i * 0.4}s ease-in-out ${i * 0.5}s infinite` }}/>
+        </g>
+      ))}
+
+      {/* ── Vertical faint column lines ────────────────────────────────────── */}
+      {[225, 450, 675].map((x, i) => (
         <line key={`vl${i}`} x1={x} y1="0" x2={x} y2="520"
           stroke="rgba(200,150,12,0.025)" strokeWidth="1"/>
       ))}
@@ -177,15 +157,14 @@ export default function Hero() {
                  min-h-[60vh] md:min-h-[68vh] px-4 md:px-8
                  pt-[72px] md:pt-[88px] pb-10 md:pb-14">
 
-      {/* SVG background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <HeroIllustration />
       </div>
 
-      {/* Warm gold radial glow */}
+      {/* Centre glow */}
       <div className="absolute inset-0 pointer-events-none z-0"
         style={{
-          background: 'radial-gradient(ellipse 65% 50% at 50% 38%, rgba(200,150,12,0.09) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 45% at 50% 38%, rgba(200,150,12,0.08) 0%, transparent 70%)',
         }}/>
 
       {/* Content */}
@@ -215,21 +194,19 @@ export default function Hero() {
           Kerala Government Employees Portal
         </p>
 
-        {/* ── HEADING — single line ── */}
-        <h1
-          className="font-malayalam font-bold bg-clip-text text-transparent mb-2 whitespace-nowrap"
+        {/* Heading — single line */}
+        <h1 className="font-malayalam font-bold bg-clip-text text-transparent mb-2 whitespace-nowrap"
           style={{
-            fontSize: 'clamp(22px, 5vw, 64px)',
+            fontSize: 'clamp(22px,5vw,64px)',
             lineHeight: 1.2,
             backgroundImage: 'linear-gradient(160deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 70%,#c8960c 100%)',
             filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
           }}>
           കേരള സർക്കാർ
         </h1>
-        <h2
-          className="font-malayalam font-semibold bg-clip-text text-transparent mb-7"
+        <h2 className="font-malayalam font-semibold bg-clip-text text-transparent mb-7"
           style={{
-            fontSize: 'clamp(14px, 2.6vw, 34px)',
+            fontSize: 'clamp(14px,2.6vw,34px)',
             lineHeight: 1.3,
             backgroundImage: 'linear-gradient(160deg,#9c720a,#e8c247,#f5d060,#e8c247,#9c720a)',
             filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.14))',
@@ -237,9 +214,9 @@ export default function Hero() {
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
 
-        {/* Search bar */}
+        {/* Search */}
         <button onClick={openSearch}
-          className="flex items-center gap-3 w-full max-w-[460px] rounded-2xl px-4 py-3 md:py-3.5 mb-7 transition-all duration-300 cursor-text hover:scale-[1.01] hover:brightness-110"
+          className="flex items-center gap-3 w-full max-w-[460px] rounded-2xl px-4 py-3 md:py-3.5 mb-7 transition-all duration-300 cursor-text hover:scale-[1.01]"
           style={{
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(245,208,96,0.16)',
@@ -251,8 +228,7 @@ export default function Hero() {
             <circle cx="11" cy="11" r="8"/>
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
-          <span className="flex-1 text-left text-[13px]"
-            style={{ color: 'rgba(255,255,255,0.28)' }}>
+          <span className="flex-1 text-left text-[13px]" style={{ color: 'rgba(255,255,255,0.28)' }}>
             Search tools, orders, schemes…
           </span>
           <kbd className="hidden md:inline-flex text-[10px] font-bold px-2 py-0.5 rounded-md"
