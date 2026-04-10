@@ -368,14 +368,7 @@ export default function ToolsSection() {
           }
         `}</style>
 
-        <div className="trend-container" style={{
-          background: 'rgba(255,255,255,0.030)',
-          border: '1px solid rgba(200,150,12,0.26)',
-          borderRadius: 16,
-          padding: '14px 16px',
-          marginBottom: 20,
-          boxShadow: '0 0 0 1px rgba(200,150,12,0.08), 0 8px 32px rgba(0,0,0,0.28)',
-        }}>
+        <div className="trend-container" style={{ marginBottom: 20 }}>
 
           {/* Header */}
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:13 }}>
