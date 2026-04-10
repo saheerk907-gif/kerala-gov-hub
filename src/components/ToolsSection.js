@@ -193,24 +193,34 @@ export default function ToolsSection() {
 
         {/* Trending Now — 3-tier hierarchy */}
         <style>{`
-          /* ── Primary: gold, glowing, slow pulse ──────────── */
+          /* ── Primary: richer gold, inner glow, scale up ── */
           .tb-primary {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 20px; border-radius: 100px;
-            border: 1px solid rgba(200,150,12,0.50);
-            background: rgba(200,150,12,0.15);
-            color: rgba(245,208,96,0.95);
+            padding: 11px 22px; border-radius: 100px;
+            border: 1px solid rgba(200,150,12,0.58);
+            background: rgba(200,150,12,0.20);
+            color: rgba(245,208,96,0.97);
             font-size: 13px; font-weight: 800;
             text-decoration: none; white-space: nowrap; flex-shrink: 0;
-            box-shadow: 0 0 18px rgba(200,150,12,0.18), 0 2px 10px rgba(0,0,0,0.25);
+            transform: scale(1.02);
+            transform-origin: left center;
+            box-shadow:
+              inset 0 1px 0 rgba(245,208,96,0.20),
+              inset 0 0 14px rgba(200,150,12,0.12),
+              0 0 22px rgba(200,150,12,0.22),
+              0 2px 12px rgba(0,0,0,0.28);
             transition: background 0.22s, border-color 0.22s, transform 0.22s, box-shadow 0.22s;
-            animation: tbPulse 3.2s ease-in-out infinite;
+            animation: tbPulse 3.6s ease-in-out infinite;
           }
           .tb-primary:hover {
-            background: rgba(200,150,12,0.25);
-            border-color: rgba(200,150,12,0.72);
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(200,150,12,0.32), 0 4px 18px rgba(0,0,0,0.28);
+            background: rgba(200,150,12,0.30);
+            border-color: rgba(200,150,12,0.78);
+            transform: scale(1.04) translateY(-2px);
+            box-shadow:
+              inset 0 1px 0 rgba(245,208,96,0.28),
+              inset 0 0 20px rgba(200,150,12,0.18),
+              0 0 36px rgba(200,150,12,0.36),
+              0 4px 18px rgba(0,0,0,0.32);
             animation: none;
           }
 
@@ -233,13 +243,13 @@ export default function ToolsSection() {
             box-shadow: 0 4px 16px rgba(200,150,12,0.12);
           }
 
-          /* ── Tertiary: muted, recedes ─────────────────────  */
+          /* ── Tertiary: muted, recedes ────────────────────── */
           .tb-tertiary {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 14px; border-radius: 100px;
             border: 1px solid rgba(255,255,255,0.07);
-            background: rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.44);
+            background: transparent;
+            color: rgba(255,255,255,0.38);
             font-size: 11.5px; font-weight: 600;
             text-decoration: none; white-space: nowrap; flex-shrink: 0;
             transition: background 0.22s, border-color 0.22s, color 0.22s, transform 0.22s, box-shadow 0.22s;
@@ -252,19 +262,25 @@ export default function ToolsSection() {
             box-shadow: 0 4px 12px rgba(200,150,12,0.09);
           }
 
-          /* ── Group divider ────────────────────────────────── */
-          .tb-divider {
-            width: 1px; align-self: stretch; flex-shrink: 0;
-            background: rgba(255,255,255,0.09); margin: 0 4px;
-          }
-
-          /* ── Slow pulse on primary glow ───────────────────── */
+          /* ── Pulse: inner + outer glow breathes together ── */
           @keyframes tbPulse {
-            0%, 100% { box-shadow: 0 0 18px rgba(200,150,12,0.18), 0 2px 10px rgba(0,0,0,0.25); }
-            50%       { box-shadow: 0 0 28px rgba(200,150,12,0.30), 0 2px 10px rgba(0,0,0,0.25); }
+            0%, 100% {
+              box-shadow:
+                inset 0 1px 0 rgba(245,208,96,0.20),
+                inset 0 0 14px rgba(200,150,12,0.12),
+                0 0 22px rgba(200,150,12,0.22),
+                0 2px 12px rgba(0,0,0,0.28);
+            }
+            50% {
+              box-shadow:
+                inset 0 1px 0 rgba(245,208,96,0.26),
+                inset 0 0 20px rgba(200,150,12,0.18),
+                0 0 34px rgba(200,150,12,0.34),
+                0 2px 12px rgba(0,0,0,0.28);
+            }
           }
 
-          /* ── Entry animation ──────────────────────────────── */
+          /* ── Entry ───────────────────────────────────────── */
           @keyframes trendFadeUp {
             from { opacity: 0; transform: translateY(12px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -274,17 +290,18 @@ export default function ToolsSection() {
           }
           @media (prefers-reduced-motion: reduce) {
             .trend-container { animation: none !important; opacity: 1 !important; }
-            .tb-primary      { animation: none !important; }
+            .tb-primary      { animation: none !important; transform: scale(1.02); }
           }
         `}</style>
 
+        {/* Container — stronger featured-strip presence */}
         <div className="trend-container" style={{
           background: 'rgba(255,255,255,0.038)',
-          border: '1px solid rgba(200,150,12,0.22)',
+          border: '1px solid rgba(200,150,12,0.30)',
           borderRadius: 16,
           padding: '15px 18px',
           marginBottom: 20,
-          boxShadow: '0 0 0 1px rgba(200,150,12,0.07), 0 8px 28px rgba(0,0,0,0.26)',
+          boxShadow: '0 0 0 1px rgba(200,150,12,0.10), 0 8px 32px rgba(0,0,0,0.28)',
         }}>
 
           {/* Header */}
@@ -294,40 +311,33 @@ export default function ToolsSection() {
               Trending Now
             </span>
             <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
-            <span style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.22)',
-            }}>
+            <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.22)' }}>
               7 tools
             </span>
           </div>
 
-          {/* Pills — 3-tier hierarchy */}
+          {/* Pills — spacing gap replaces dividers */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 8,
             overflowX: 'auto', paddingBottom: 2,
             scrollbarWidth: 'none', msOverflowStyle: 'none',
           }}>
-            {/* Primary — #1 pick */}
+            {/* Primary */}
             <Link href="/tools/pdf-editor" className="tb-primary">
               <span style={{ fontSize: 14, lineHeight: 1 }}>📝</span>
               PDF Editor
             </Link>
 
-            <div className="tb-divider" />
-
-            {/* Secondary — runner-ups */}
-            <Link href="/tools/pdf-merger"  className="tb-secondary">
+            {/* Secondary — extra left margin creates breathing room without a line */}
+            <Link href="/tools/pdf-merger"   className="tb-secondary" style={{ marginLeft: 8 }}>
               <span style={{ fontSize: 13, lineHeight: 1 }}>🗂️</span>PDF Merger
             </Link>
             <Link href="/tools/pdf-splitter" className="tb-secondary">
               <span style={{ fontSize: 13, lineHeight: 1 }}>✂️</span>PDF Splitter
             </Link>
 
-            <div className="tb-divider" />
-
-            {/* Tertiary — supporting cast */}
-            <Link href="/nps-aps"                 className="tb-tertiary">📊 NPS vs APS</Link>
+            {/* Tertiary — extra margin fades them into the background visually */}
+            <Link href="/nps-aps"                 className="tb-tertiary" style={{ marginLeft: 8 }}>📊 NPS vs APS</Link>
             <Link href="/da-arrear"               className="tb-tertiary">💸 DA Arrear</Link>
             <Link href="/leave"                   className="tb-tertiary">📅 Leave Calc</Link>
             <Link href="/tools/holiday-list-2026" className="tb-tertiary">🗓️ Holiday List</Link>
