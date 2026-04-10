@@ -382,11 +382,13 @@ export default function ToolsSection() {
             </span>
           </div>
 
-          {/* Mini-card strip */}
+          {/* Mini-card strip — scrollable, right-fade hints at more content */}
+          <div style={{ position:'relative' }}>
           <div style={{
             display:'flex', alignItems:'stretch', gap:8,
             overflowX:'auto', paddingBottom:4,
             scrollbarWidth:'none', msOverflowStyle:'none',
+            WebkitOverflowScrolling:'touch',
           }}>
             {TRENDING.map(({ label, sub, href, color, rgb, tier, SVG }, i) => (
               <Link
@@ -437,6 +439,13 @@ export default function ToolsSection() {
                 </div>
               </Link>
             ))}
+          </div>
+          {/* Right-edge fade — signals horizontal scroll on mobile */}
+          <div className="md:hidden" style={{
+            position:'absolute', top:0, right:0, bottom:4,
+            width:40, pointerEvents:'none',
+            background:'linear-gradient(to right, transparent, rgba(6,10,18,0.85))',
+          }} />
           </div>
         </div>
 

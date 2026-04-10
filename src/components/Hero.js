@@ -242,7 +242,7 @@ export default function Hero() {
           style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
           {STATS.map((s, i) => (
             <div key={i}
-              className="flex flex-col items-center justify-center px-5 py-3 md:px-6 md:py-3.5"
+              className="flex flex-col items-center justify-center px-4 py-3 md:px-6 md:py-3.5"
               style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
               <span className="font-black leading-none"
                 style={{ fontSize: 'clamp(14px,1.6vw,19px)', color: '#f5d060', textShadow: '0 0 10px rgba(200,150,12,0.35)' }}>
@@ -257,10 +257,10 @@ export default function Hero() {
         </div>
 
         {/* Quick links */}
-        <div className="flex flex-wrap justify-center gap-1.5">
+        <div className="flex flex-wrap justify-center gap-2">
           {QUICK_LINKS.map(link => (
             <Link key={link.href} href={link.href}
-              className="px-3 py-1.5 rounded-full text-[11px] font-medium no-underline transition-all duration-200 hover:scale-105"
+              className="px-4 py-2 rounded-full text-[12px] font-medium no-underline transition-all duration-200 hover:scale-105"
               style={{
                 background: 'rgba(255,255,255,0.04)',
                 color: 'rgba(255,255,255,0.45)',

@@ -290,8 +290,8 @@ export default function ExperiencesSection() {
               </div>
 
               {/* ════ RIGHT: Social proof + CTAs ════ */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, width: '100%', maxWidth: 220, flexShrink: 0 }}
-                className="md:w-[220px]">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, flexShrink: 0 }}
+                className="w-full md:w-[220px]">
 
                 {/* Social proof block */}
                 <div style={{
