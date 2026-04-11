@@ -43,7 +43,7 @@ function AudioIllustration() {
       <g transform="translate(564,170)">
         {[28,48,68].map((r,i)=>(
           <path key={i} d={`M0,${-r} A${r},${r} 0 0,1 0,${r}`}
-            fill="none" stroke={F1} strokeWidth="5" strokeLinecap="round" opacity={0.92-i*0.14}/>
+            fill="none" stroke={F1} strokeWidth="5" strokeLinecap="round" opacity={0.55-i*0.15}/>
         ))}
       </g>
 
@@ -52,7 +52,7 @@ function AudioIllustration() {
         <circle r="52" fill={F2}/>
         <circle r="40" fill={D}/>
         {[24,30,36].map(r=>(
-          <circle key={r} r={r} fill="none" stroke={F1} strokeWidth="1.5" opacity="0.85"/>
+          <circle key={r} r={r} fill="none" stroke={F1} strokeWidth="1.5" opacity="0.38"/>
         ))}
         <circle r="11" fill={F1}/>
         <circle r="5"  fill={D}/>
@@ -96,7 +96,7 @@ export default function AudioClassesSection() {
             <AudioIllustration />
             {/* Fade content area */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
-              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.82) 36%, rgba(8,12,20,0.28) 56%, rgba(8,12,20,0.04) 72%, transparent 88%)' }} />
+              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }} />
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
               background: 'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }} />
             {/* Orange accent glow bottom-left */}

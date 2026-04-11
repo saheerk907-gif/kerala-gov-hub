@@ -51,13 +51,13 @@ function ArticleIllustration() {
 
       {/* Bookmark ribbon on main page */}
       <g transform="translate(524,75)">
-        <path d="M0,0 L18,0 L18,45 L9,34 L0,45 Z" fill="#2997ff" opacity="0.68"/>
+        <path d="M0,0 L18,0 L18,45 L9,34 L0,45 Z" fill="#2997ff" opacity="0.28"/>
       </g>
 
       {/* Pen / pencil */}
       <g transform="translate(340,100) rotate(-35)">
         <rect x="-5" y="-55" width="10" height="90" rx="4" fill="#2e3f60"/>
-        <polygon points="-5,35 5,35 0,55" fill="#fbbf24" opacity="0.85"/>
+        <polygon points="-5,35 5,35 0,55" fill="#fbbf24" opacity="0.38"/>
         <rect x="-5" y="-55" width="10" height="12" rx="4" fill="#3a4f75"/>
       </g>
 
@@ -121,7 +121,7 @@ export default function ArticlesSection() {
           <ArticleIllustration />
           {/* Fade content area */}
           <div style={{ position:'absolute', inset:0, zIndex:1,
-            background:'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.82) 36%, rgba(8,12,20,0.28) 56%, rgba(8,12,20,0.04) 72%, transparent 88%)' }}/>
+            background:'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }}/>
           <div style={{ position:'absolute', inset:0, zIndex:1,
             background:'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }}/>
           {/* Blue accent glow */}

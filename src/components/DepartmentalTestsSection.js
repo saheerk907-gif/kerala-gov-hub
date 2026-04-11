@@ -75,7 +75,7 @@ function DeptTestIllustration() {
       {/* Pencil — small diagonal */}
       <g transform="translate(338,188) rotate(-42)">
         <rect x="-4" y="-46" width="8" height="72" rx="3" fill={F2}/>
-        <polygon points="-4,26 4,26 0,44" fill="#fbbf24" opacity="0.82"/>
+        <polygon points="-4,26 4,26 0,44" fill="#fbbf24" opacity="0.32"/>
         <rect x="-4" y="-46" width="8" height="11" rx="3" fill="#3a4f75"/>
         <rect x="-4" y="-18" width="8" height="5" fill={D}/>
       </g>
@@ -114,7 +114,7 @@ export default function DepartmentalTestsSection() {
             <DeptTestIllustration />
             {/* Fade content area */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
-              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.82) 36%, rgba(8,12,20,0.28) 56%, rgba(8,12,20,0.04) 72%, transparent 88%)' }} />
+              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }} />
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
               background: 'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }} />
             {/* Blue accent glow bottom-left */}
