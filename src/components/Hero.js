@@ -1,292 +1,248 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+// ─── Data ─────────────────────────────────────────────────────────────────────
 const STATS = [
-  { value: '1,200+', label: 'Govt Orders' },
-  { value: '15+',    label: 'Calculators' },
-  { value: '100%',   label: 'Free Always' },
+  { value: '1,200+', label: 'Govt Orders'  },
+  { value: '15+',    label: 'Calculators'  },
+  { value: '100%',   label: 'Free Always'  },
 ];
 
 const QUICK_LINKS = [
-  { label: 'Pension',      href: '/pension' },
-  { label: 'Pay Revision', href: '/prc' },
-  { label: 'Leave',        href: '/leave' },
-  { label: 'Forms',        href: '/forms' },
-  { label: 'Govt Orders',  href: '/orders' },
-  { label: 'Income Tax',   href: '/income-tax' },
+  { label: 'Pension',      href: '/pension'     },
+  { label: 'Pay Revision', href: '/prc'         },
+  { label: 'Leave Rules',  href: '/leave'       },
+  { label: 'Forms',        href: '/forms'       },
+  { label: 'Govt Orders',  href: '/orders'      },
+  { label: 'Income Tax',   href: '/income-tax'  },
 ];
-
-// ─── SVG background ───────────────────────────────────────────────────────────
-// Perf notes:
-//  • Reduced dot grid from 8×14 (112 nodes) → 6×10 (60 nodes). Same visual density.
-//  • Animations are deferred via CSS class added 300ms after mount so the browser
-//    paints the static frame first, then starts GPU compositor work.
-//  • prefers-reduced-motion respected: animations never start if user opts out.
-function HeroIllustration({ animate }) {
-  const pings = [0, 1.8, 3.6, 5.4, 7.2];
-
-  const lanes = [
-    { y: 112, delay: '0s',   dur: '7s',  dir:  1 },
-    { y: 192, delay: '2.5s', dur: '9s',  dir: -1 },
-    { y: 308, delay: '1.2s', dur: '8s',  dir:  1 },
-    { y: 388, delay: '3.8s', dur: '6.5s',dir: -1 },
-    { y: 460, delay: '0.6s', dur: '10s', dir:  1 },
-  ];
-
-  const nodes = [
-    { x: 68,  y: 132 }, { x: 840, y: 108 },
-    { x: 56,  y: 388 }, { x: 856, y: 404 },
-    { x: 112, y: 264 }, { x: 790, y: 264 },
-    { x: 200, y: 80  }, { x: 700, y: 448 },
-  ];
-
-  // Animation style — only applied after initial paint + 300ms delay
-  const anim = (name, dur, delay = '0s', extra = '') =>
-    animate ? { animation: `${name} ${dur} ${extra} ${delay} infinite` } : {};
-
-  return (
-    <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
-      preserveAspectRatio="xMidYMid slice" aria-hidden="true"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
-
-      <style>{`
-        @keyframes ping {
-          0%   { r: 8;   opacity: 0.40; stroke-width: 1.5; }
-          70%  { opacity: 0.12; }
-          100% { r: 320; opacity: 0;    stroke-width: 0.5; }
-        }
-        @keyframes packetLTR {
-          0%   { transform: translateX(-20px); opacity: 0; }
-          8%   { opacity: 1; }
-          92%  { opacity: 1; }
-          100% { transform: translateX(920px);  opacity: 0; }
-        }
-        @keyframes packetRTL {
-          0%   { transform: translateX(920px);  opacity: 0; }
-          8%   { opacity: 1; }
-          92%  { opacity: 1; }
-          100% { transform: translateX(-20px); opacity: 0; }
-        }
-        @keyframes nodePulse {
-          0%, 100% { opacity: 0.15; r: 3;   }
-          50%       { opacity: 0.55; r: 4.5; }
-        }
-        @keyframes gridWave {
-          0%, 100% { opacity: 0.032; }
-          50%       { opacity: 0.072; }
-        }
-      `}</style>
-
-      {/* ── Dot grid — reduced 8×14 → 6×10 (same visual effect, 46% fewer nodes) ── */}
-      {Array.from({ length: 6 }).flatMap((_, row) =>
-        Array.from({ length: 10 }).map((_, col) => (
-          <circle key={`g${row}-${col}`}
-            cx={col * 92 + 14} cy={row * 88 + 14}
-            r="1.2" fill="rgba(255,255,255,1)"
-            style={anim('gridWave', `${3 + (row + col) * 0.18}s`, `${(row * 0.12 + col * 0.08)}s`, 'ease-in-out')}
-            opacity={animate ? undefined : 0.04}
-          />
-        ))
-      )}
-
-      {/* ── Horizontal lane lines (very faint, static) ─────────────────────── */}
-      {lanes.map(({ y }, i) => (
-        <line key={`ln${i}`} x1="0" y1={y} x2="900" y2={y}
-          stroke="rgba(200,150,12,0.04)" strokeWidth="1"/>
-      ))}
-
-      {/* ── Traveling data packets ─────────────────────────────────────────── */}
-      {lanes.map(({ y, delay, dur, dir }, i) => (
-        <g key={`pk${i}`} opacity={animate ? undefined : 0}>
-          <circle cy={y} r="3.5" fill="rgba(200,150,12,0.55)"
-            style={anim(dir === 1 ? 'packetLTR' : 'packetRTL', dur, delay, 'linear')}/>
-          <circle cy={y} r="1.8" fill="#f5d060"
-            style={anim(dir === 1 ? 'packetLTR' : 'packetRTL', dur,
-              `calc(${delay} + 0.05s)`, 'linear')}/>
-        </g>
-      ))}
-
-      {/* ── Sonar ping rings from centre ──────────────────────────────────── */}
-      {pings.map((delay, i) => (
-        <circle key={`ping${i}`} cx="450" cy="262" r="8"
-          fill="none" stroke="rgba(200,150,12,0.38)" strokeWidth="1.5"
-          opacity={animate ? undefined : 0}
-          style={anim('ping', '9s', `${delay}s`, 'cubic-bezier(0.2,0.6,0.4,1)')}/>
-      ))}
-
-      {/* ── Accent: second smaller sonar (right side) ─────────────────────── */}
-      {[0, 2.4, 4.8].map((delay, i) => (
-        <circle key={`ping2${i}`} cx="750" cy="200" r="6"
-          fill="none" stroke="rgba(41,151,255,0.20)" strokeWidth="1"
-          opacity={animate ? undefined : 0}
-          style={anim('ping', '7s', `${delay}s`, 'cubic-bezier(0.2,0.6,0.4,1)')}/>
-      ))}
-
-      {/* ── Static accent nodes ────────────────────────────────────────────── */}
-      {nodes.map(({ x, y }, i) => (
-        <g key={`nd${i}`}>
-          <circle cx={x} cy={y} r="6"
-            fill="rgba(200,150,12,0.04)"
-            stroke="rgba(200,150,12,0.18)" strokeWidth="1"
-            style={anim('nodePulse', `${3 + i * 0.4}s`, `${i * 0.5}s`, 'ease-in-out')}/>
-          <circle cx={x} cy={y} r="2.5"
-            fill="rgba(200,150,12,0.50)"
-            style={anim('nodePulse', `${3 + i * 0.4}s`, `${i * 0.5}s`, 'ease-in-out')}/>
-        </g>
-      ))}
-
-      {/* ── Vertical faint column lines (static) ──────────────────────────── */}
-      {[225, 450, 675].map((x, i) => (
-        <line key={`vl${i}`} x1={x} y1="0" x2={x} y2="520"
-          stroke="rgba(200,150,12,0.025)" strokeWidth="1"/>
-      ))}
-    </svg>
-  );
-}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Hero() {
-  // Defer SVG animations until after the initial paint completes.
-  // This prevents the GPU compositor from spinning up 100+ animations
-  // at the same time the browser is trying to paint the LCP element.
-  const [animate, setAnimate] = React.useState(false);
-
-  useEffect(() => {
-    // Respect user preference
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
-
-    // Start animations after a short delay to let the browser finish
-    // its initial paint and LCP measurement
-    const id = requestAnimationFrame(() => {
-      const tid = setTimeout(() => setAnimate(true), 300);
-      return () => clearTimeout(tid);
-    });
-    return () => cancelAnimationFrame(id);
-  }, []);
-
   function openSearch() {
     window.dispatchEvent(new CustomEvent('open-search'));
   }
 
   return (
-    <section
-      className="relative flex flex-col items-center justify-center text-center overflow-hidden bg-aurora
-                 min-h-[60vh] md:min-h-[68vh] px-4 md:px-8
-                 pt-[72px] md:pt-[88px] pb-10 md:pb-14">
+    <section className="hero-root relative flex flex-col items-center justify-center text-center overflow-hidden
+                        min-h-[62vh] md:min-h-[72vh] px-4 md:px-8
+                        pt-[72px] md:pt-[88px] pb-14 md:pb-20">
 
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <HeroIllustration animate={animate} />
-      </div>
+      {/* ── Hover-state stylesheet ─────────────────────────────────────────── */}
+      <style>{`
+        /* Search bar hover */
+        .hero-search:hover {
+          border-color: rgba(200, 150, 12, 0.28) !important;
+          background: rgba(255, 255, 255, 0.055) !important;
+        }
+        /* Quick link hover */
+        .hero-link:hover {
+          background: rgba(255, 255, 255, 0.08) !important;
+          color: rgba(255, 255, 255, 0.80) !important;
+          border-color: rgba(255, 255, 255, 0.14) !important;
+        }
+        /* Thin bottom separator */
+        .hero-root::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 1px;
+          background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.07) 30%, rgba(255,255,255,0.07) 70%, transparent 100%);
+        }
+      `}</style>
 
-      {/* Centre glow */}
-      <div className="absolute inset-0 pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(ellipse 60% 45% at 50% 38%, rgba(200,150,12,0.08) 0%, transparent 70%)',
-        }}/>
+      {/* ── Background: CSS dot-grid + gradient depth (zero JS, zero SVG) ─── */}
+      {/* Dot grid */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px)',
+        backgroundSize: '28px 28px',
+      }} />
+      {/* Gold radial bloom — top centre */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 70% 55% at 50% -5%, rgba(200,150,12,0.11) 0%, transparent 65%)',
+      }} />
+      {/* Cool blue depth — bottom */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 60% 40% at 50% 110%, rgba(41,151,255,0.05) 0%, transparent 65%)',
+      }} />
+      {/* Vignette edges */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(6,8,12,0.55) 100%)',
+      }} />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center">
+      {/* ── Content ───────────────────────────────────────────────────────── */}
+      <div className="relative z-10 w-full max-w-[600px] mx-auto flex flex-col items-center">
 
-        {/* Logo — priority:true so it is preloaded with the page */}
-        <div className="relative mb-5">
-          <div className="absolute inset-0 rounded-full pointer-events-none"
-            style={{
-              background: 'radial-gradient(ellipse,rgba(200,150,12,0.22) 0%,transparent 70%)',
-              filter: 'blur(14px)', transform: 'scale(1.6) translateY(4px)',
-            }}/>
-          <div className="relative rounded-full p-[2px]"
-            style={{ background: 'linear-gradient(145deg,rgba(200,150,12,0.55),rgba(245,208,96,0.20),rgba(200,150,12,0.55))' }}>
-            <Image
-              src="/logo.webp" alt="Kerala Employees Portal"
-              width={80} height={80} priority
-              className="relative z-10 rounded-full object-cover w-[56px] h-[56px] md:w-[72px] md:h-[72px] lg:w-[80px] lg:h-[80px]"
-              style={{ boxShadow: '0 8px 28px rgba(0,0,0,0.45)' }}
-            />
-          </div>
+        {/* Logo — clean icon treatment */}
+        <div className="mb-6 md:mb-7" style={{
+          width: 60, height: 60,
+          borderRadius: 16,
+          border: '1px solid rgba(200,150,12,0.28)',
+          background: 'rgba(200,150,12,0.07)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 1px 24px rgba(200,150,12,0.10), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}>
+          <Image
+            src="/logo.webp"
+            alt="Kerala Employees Portal"
+            width={40} height={40}
+            priority
+            className="rounded-lg object-cover"
+          />
         </div>
 
-        {/* Eyebrow */}
-        <p className="mb-4 text-[10px] md:text-[11px] font-black uppercase tracking-[0.26em]"
-          style={{ color: 'rgba(245,208,96,0.50)' }}>
-          Kerala Government Employees Portal
-        </p>
-
-        {/* LCP element: heading — rendered immediately, no blocking dependencies */}
-        <h1 className="font-malayalam font-bold bg-clip-text text-transparent mb-2 whitespace-nowrap"
-          style={{
-            fontSize: 'clamp(22px,5vw,64px)',
-            lineHeight: 1.2,
-            backgroundImage: 'linear-gradient(160deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 70%,#c8960c 100%)',
-            filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
+        {/* Eyebrow badge */}
+        <div className="flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full" style={{
+          background: 'rgba(200,150,12,0.07)',
+          border: '1px solid rgba(200,150,12,0.18)',
+        }}>
+          <span style={{
+            width: 6, height: 6, borderRadius: '50%',
+            background: '#c8960c', flexShrink: 0,
+            boxShadow: '0 0 6px rgba(200,150,12,0.7)',
+          }} />
+          <span style={{
+            fontSize: 10, fontWeight: 700,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: 'rgba(200,150,12,0.80)',
           }}>
+            Kerala Government Employees Portal
+          </span>
+        </div>
+
+        {/* Primary heading — the LCP element */}
+        <h1 style={{
+          fontFamily: 'var(--font-noto-malayalam), sans-serif',
+          fontSize: 'clamp(38px, 7vw, 76px)',
+          fontWeight: 900,
+          lineHeight: 1.08,
+          letterSpacing: '-0.025em',
+          marginBottom: 14,
+          background: 'linear-gradient(160deg, #b8820a 0%, #e8c247 28%, #f5d060 50%, #fce38a 62%, #f5d060 76%, #c8960c 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>
           കേരള സർക്കാർ
         </h1>
-        <h2 className="font-malayalam font-semibold bg-clip-text text-transparent mb-7"
-          style={{
-            fontSize: 'clamp(14px,2.6vw,34px)',
-            lineHeight: 1.3,
-            backgroundImage: 'linear-gradient(160deg,#9c720a,#e8c247,#f5d060,#e8c247,#9c720a)',
-            filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.14))',
-          }}>
+
+        {/* Sub-heading */}
+        <h2 style={{
+          fontFamily: 'var(--font-noto-malayalam), sans-serif',
+          fontSize: 'clamp(15px, 2.4vw, 22px)',
+          fontWeight: 400,
+          lineHeight: 1.5,
+          color: 'rgba(255,255,255,0.46)',
+          letterSpacing: '-0.01em',
+          marginBottom: 36,
+        }}>
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
 
-        {/* Search */}
-        <button onClick={openSearch}
-          className="flex items-center gap-3 w-full max-w-[460px] rounded-2xl px-4 py-3 md:py-3.5 mb-7 transition-all duration-300 cursor-text hover:scale-[1.01]"
+        {/* Search bar — primary CTA */}
+        <button
+          onClick={openSearch}
+          className="hero-search flex items-center gap-3 w-full rounded-2xl cursor-text"
           style={{
+            maxWidth: 520,
+            padding: '14px 18px',
             background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(245,208,96,0.16)',
-            backdropFilter: 'blur(20px)',
-            boxShadow: '0 0 0 1px rgba(255,255,255,0.04) inset, 0 4px 20px rgba(0,0,0,0.22)',
-          }}>
+            border: '1px solid rgba(255,255,255,0.10)',
+            backdropFilter: 'blur(12px)',
+            marginBottom: 32,
+            transition: 'border-color 0.2s ease, background 0.2s ease',
+          }}
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="rgba(245,208,96,0.50)" strokeWidth="2.2" strokeLinecap="round">
+            stroke="rgba(255,255,255,0.28)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+            style={{ flexShrink: 0 }}>
             <circle cx="11" cy="11" r="8"/>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <path d="M21 21l-4.35-4.35"/>
           </svg>
-          <span className="flex-1 text-left text-[13px]" style={{ color: 'rgba(255,255,255,0.28)' }}>
-            Search tools, orders, schemes…
+
+          <span style={{
+            flex: 1, textAlign: 'left',
+            fontSize: 14, fontWeight: 400,
+            color: 'rgba(255,255,255,0.24)',
+            letterSpacing: '0.01em',
+          }}>
+            Search pension, DA arrears, KSR rules, orders…
           </span>
-          <kbd className="hidden md:inline-flex text-[10px] font-bold px-2 py-0.5 rounded-md"
-            style={{ background: 'rgba(245,208,96,0.07)', color: 'rgba(245,208,96,0.45)', border: '1px solid rgba(245,208,96,0.14)' }}>
-            ⌘ K
+
+          <kbd className="hidden md:inline-flex items-center" style={{
+            fontSize: 11, fontWeight: 500,
+            padding: '3px 8px', borderRadius: 7,
+            background: 'rgba(255,255,255,0.05)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: 'rgba(255,255,255,0.22)',
+            letterSpacing: '0.02em',
+            fontFamily: 'inherit',
+            flexShrink: 0,
+          }}>
+            ⌘K
           </kbd>
         </button>
 
-        {/* Stats */}
-        <div className="glass-card flex items-stretch rounded-2xl overflow-hidden mb-5"
-          style={{ border: '1px solid rgba(255,255,255,0.07)' }}>
+        {/* Stats row */}
+        <div className="flex items-stretch mb-7" style={{
+          borderRadius: 16,
+          border: '1px solid rgba(255,255,255,0.07)',
+          background: 'rgba(255,255,255,0.02)',
+          overflow: 'hidden',
+        }}>
           {STATS.map((s, i) => (
             <div key={i}
-              className="flex flex-col items-center justify-center px-4 py-3 md:px-6 md:py-3.5"
-              style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none' }}>
-              <span className="font-black leading-none"
-                style={{ fontSize: 'clamp(14px,1.6vw,19px)', color: '#f5d060', textShadow: '0 0 10px rgba(200,150,12,0.35)' }}>
+              className="flex flex-col items-center justify-center"
+              style={{
+                padding: 'clamp(10px, 2vw, 14px) clamp(20px, 4vw, 36px)',
+                borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+              }}>
+              <span style={{
+                display: 'block',
+                fontSize: 'clamp(16px, 2.2vw, 22px)',
+                fontWeight: 800,
+                color: '#f5d060',
+                letterSpacing: '-0.02em',
+                lineHeight: 1,
+                marginBottom: 5,
+              }}>
                 {s.value}
               </span>
-              <span className="text-[8px] md:text-[9px] font-semibold uppercase tracking-widest mt-1"
-                style={{ color: 'rgba(255,255,255,0.35)' }}>
+              <span style={{
+                display: 'block',
+                fontSize: 9,
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.30)',
+              }}>
                 {s.label}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Quick links */}
-        <div className="flex flex-wrap justify-center gap-2">
+        {/* Quick-access links */}
+        <div className="flex flex-wrap justify-center" style={{ gap: 8 }}>
           {QUICK_LINKS.map(link => (
-            <Link key={link.href} href={link.href}
-              className="px-4 py-2 rounded-full text-[12px] font-medium no-underline transition-all duration-200 hover:scale-105"
+            <Link
+              key={link.href}
+              href={link.href}
+              className="hero-link no-underline"
               style={{
+                padding: '7px 16px',
+                borderRadius: 99,
+                fontSize: 12,
+                fontWeight: 500,
                 background: 'rgba(255,255,255,0.04)',
-                color: 'rgba(255,255,255,0.45)',
-                border: '1px solid rgba(255,255,255,0.07)',
-              }}>
+                color: 'rgba(255,255,255,0.40)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                transition: 'background 0.15s ease, color 0.15s ease, border-color 0.15s ease',
+              }}
+            >
               {link.label}
             </Link>
           ))}
