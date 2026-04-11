@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,230 +10,198 @@ const STATS = [
   { value: '100%',   label: 'Free Always' },
 ];
 
-const QUICK_LINKS = [
-  { label: 'Pension',      href: '/pension'    },
-  { label: 'Pay Revision', href: '/prc'        },
-  { label: 'Leave Rules',  href: '/leave'      },
-  { label: 'Forms',        href: '/forms'      },
-  { label: 'Govt Orders',  href: '/orders'     },
-  { label: 'Income Tax',   href: '/income-tax' },
-];
-
-// Violet palette lifted from the rest of the landing page
-const V1 = '#bf5af2';          // Apple-system purple — section labels
-const V2 = 'rgba(140,80,240)'; // Deep violet — card border gradient start
-const V3 = 'rgba(60,130,255)'; // Blue-violet — card border gradient end
-
 export default function Hero() {
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    const check = () =>
+      setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
+
+  const gold      = isLight ? '#b45309'               : '#f5d060';
+  const goldDim   = isLight ? 'rgba(180,83,9,0.65)'   : 'rgba(245,208,96,0.60)';
+  const textSub   = isLight ? 'rgba(15,23,42,0.68)'   : 'rgba(255,255,255,0.72)';
+  const textMuted = isLight ? 'rgba(15,23,42,0.45)'   : 'rgba(255,255,255,0.40)';
+  const border    = isLight ? 'rgba(0,0,0,0.08)'      : 'rgba(255,255,255,0.08)';
+  const surface   = isLight ? 'rgba(0,0,0,0.04)'      : 'rgba(255,255,255,0.04)';
+  const surfaceMd = isLight ? 'rgba(0,0,0,0.06)'      : 'rgba(255,255,255,0.06)';
+  const titleGrad = isLight
+    ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
+    : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
+
   function openSearch() {
     window.dispatchEvent(new CustomEvent('open-search'));
   }
 
   return (
-    <section className="hero-root bg-aurora relative flex flex-col items-center
-                        justify-center text-center overflow-hidden
-                        min-h-[66vh] md:min-h-[74vh] px-4 md:px-8
-                        pt-[72px] md:pt-[88px] pb-14 md:pb-20">
+    <section
+      className="hero-section relative flex flex-col items-center justify-center text-center overflow-hidden
+                 min-h-[58vh] md:min-h-[65vh]
+                 px-4 md:px-8
+                 pt-[56px] md:pt-[72px]
+                 pb-6 md:pb-10"
+      style={isLight ? {
+        background: 'radial-gradient(ellipse 80% 55% at 50% 0%,rgba(200,150,12,0.10) 0%,transparent 60%),#f5f0e8',
+      } : undefined}
+    >
 
-      <style>{`
-        .hero-search:hover {
-          border-color: rgba(140, 80, 240, 0.45) !important;
-          background:   rgba(140, 80, 240, 0.06) !important;
-        }
-        .hero-link:hover {
-          background:   rgba(140, 80, 240, 0.12) !important;
-          color:        rgba(255, 255, 255, 0.82) !important;
-          border-color: rgba(140, 80, 240, 0.35) !important;
-        }
-        .hero-root::after {
-          content: '';
-          position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-          background: linear-gradient(to right,
-            transparent 0%,
-            rgba(140,80,240,0.18) 25%,
-            rgba(60,130,255,0.18) 75%,
-            transparent 100%);
-        }
-      `}</style>
+      {/* Background: Secretariat (dark only) */}
+      {!isLight && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="/kerala-secretariat.webp"
+            alt=""
+            fill
+            priority
+            fetchPriority="high"
+            className="object-cover object-[center_65%] opacity-[0.32]"
+            style={{ filter: 'grayscale(20%) brightness(0.75) contrast(1.1)' }}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0"
+            style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.85) 0%,rgba(18,20,22,0.25) 50%,rgba(18,20,22,0.85) 100%)' }} />
+          <div className="absolute inset-0"
+            style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.60) 0%,transparent 40%,rgba(18,20,22,1) 100%)' }} />
+        </div>
+      )}
 
-      {/* ── Background depth layers ──────────────────────────────────────── */}
-      {/* Fine dot-grid texture */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.042) 1px, transparent 1px)',
-        backgroundSize: '28px 28px',
-      }} />
-      {/* Gold bloom — centre, lights the first title */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 55% 45% at 50% 34%, rgba(200,150,12,0.11) 0%, transparent 65%)',
-      }} />
-      {/* Violet bloom — top-right, matches site card gradient */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 55% 50% at 85% 10%, rgba(140,80,240,0.12) 0%, transparent 60%)',
-      }} />
-      {/* Blue-violet bloom — bottom-left */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 50% 40% at 12% 88%, rgba(60,130,255,0.08) 0%, transparent 60%)',
-      }} />
-      {/* Edge vignette */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 115% 115% at 50% 50%, transparent 48%, rgba(8,10,18,0.62) 100%)',
-      }} />
+      {/* Ambient glow */}
+      {!isLight && (
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] rounded-full blur-[130px] pointer-events-none opacity-60"
+          style={{ background: 'radial-gradient(ellipse,rgba(200,150,12,0.18) 0%,transparent 70%)' }} />
+      )}
 
-      {/* ── Content ───────────────────────────────────────────��─────────── */}
-      <div className="relative z-10 w-full max-w-[660px] mx-auto flex flex-col items-center">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
 
-        {/* Logo — bigger, violet-gradient border matching card borders */}
-        <div className="mb-6" style={{
-          padding: '1.5px',
-          borderRadius: 20,
-          background: 'linear-gradient(135deg, rgba(140,80,240,0.70), rgba(60,130,255,0.70))',
-          boxShadow: '0 4px 32px rgba(140,80,240,0.18)',
-        }}>
-          <div style={{
-            width: 84, height: 84,
-            borderRadius: 18,
-            background: 'linear-gradient(145deg, rgba(140,80,240,0.10), rgba(60,130,255,0.06))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Image
-              src="/logo.webp" alt="Kerala Employees Portal"
-              width={58} height={58} priority
-              className="rounded-[13px] object-cover"
-            />
-          </div>
+        {/* Logo */}
+        <div className="relative mb-3 md:mb-4">
+          {!isLight && (
+            <div className="absolute inset-0 rounded-full bg-black/40 blur-[24px] scale-110 translate-y-2 pointer-events-none" />
+          )}
+          <Image
+            src="/logo.webp"
+            alt="Kerala Employees Portal"
+            width={100}
+            height={100}
+            priority
+            className="relative z-10 w-[56px] h-[56px] md:w-[76px] md:h-[76px] lg:w-[88px] lg:h-[88px] rounded-full object-cover"
+            style={isLight
+              ? { boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }
+              : {
+                  boxShadow:
+                    '0 0 0 2px rgba(200,150,12,0.50),' +
+                    '0 0 24px 6px rgba(200,150,12,0.16),' +
+                    '0 16px 40px rgba(0,0,0,0.55)',
+                }}
+          />
         </div>
 
-        {/* Eyebrow — violet palette pill */}
-        <div className="flex items-center gap-2 mb-5 px-4 py-[7px] rounded-full" style={{
-          background: 'rgba(140,80,240,0.10)',
-          border: '1px solid rgba(140,80,240,0.28)',
-        }}>
-          <span style={{
-            width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
-            background: V1,
-            boxShadow: `0 0 8px ${V1}`,
-          }} />
-          <span style={{
-            fontSize: 10, fontWeight: 700,
-            letterSpacing: '0.16em', textTransform: 'uppercase',
-            color: 'rgba(191,90,242,0.90)',
-          }}>
-            Kerala Government Employees Portal
-          </span>
+        {/* Eyebrow */}
+        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.28em] mb-2 md:mb-3"
+          style={{ color: goldDim }}>
+          Kerala Government Employees Portal
+        </p>
+
+        {/* Headings */}
+        <div className="flex flex-col items-center gap-1 md:gap-2 mb-3 md:mb-4">
+          <h1
+            className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
+            style={{
+              fontSize: 'clamp(32px, 6vw, 72px)',
+              backgroundImage: titleGrad,
+              filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+            }}
+          >
+            കേരള സർക്കാർ
+          </h1>
+          <h2
+            className="font-malayalam font-bold leading-[1.25] tracking-tight bg-[length:200%_auto] bg-clip-text text-transparent"
+            style={{
+              fontSize: 'clamp(20px, 3.5vw, 46px)',
+              backgroundImage: isLight
+                ? 'linear-gradient(135deg,#92400e,#c2410c,#92400e)'
+                : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
+              filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.30))',
+            }}
+          >
+            ജീവനക്കാരുടെ വിജ്ഞാനകോശം
+          </h2>
         </div>
 
-        {/* ── First title — gold, dominant ─────────────────────────────── */}
-        <h1 style={{
-          fontFamily: 'var(--font-noto-malayalam), sans-serif',
-          fontSize: 'clamp(34px, 9.5vw, 82px)',
-          fontWeight: 900,
-          lineHeight: 1.04,
-          letterSpacing: '-0.022em',
-          whiteSpace: 'nowrap',
-          marginBottom: 10,
-          background: 'linear-gradient(155deg, #b07d0a 0%, #dbb83c 20%, #f5d060 44%, #fde98a 58%, #f5d060 74%, #c8960c 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}>
-          കേരള സർക്കാർ
-        </h1>
-
-        {/* ── Second title — violet, prominent ─────────────────────────── */}
-        <h2 style={{
-          fontFamily: 'var(--font-noto-malayalam), sans-serif',
-          fontSize: 'clamp(18px, 4.2vw, 40px)',
-          fontWeight: 700,
-          lineHeight: 1.2,
-          letterSpacing: '-0.01em',
-          marginBottom: 32,
-          background: 'linear-gradient(140deg, rgba(140,80,240,0.90) 0%, #bf5af2 38%, #d08ef7 60%, #bf5af2 80%, rgba(60,130,255,0.90) 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-        }}>
-          ജീവനക്കാരുടെ വിജ്ഞാനകോശം
-        </h2>
-
-        {/* Search */}
-        <button onClick={openSearch}
-          className="hero-search flex items-center gap-3 w-full rounded-[14px] cursor-text"
+        {/* Search bar */}
+        <button
+          onClick={openSearch}
+          className="group flex items-center gap-3 w-full max-w-[480px] rounded-2xl px-4 py-3 md:py-3.5 mb-6 md:mb-8 transition-all duration-300 cursor-text hover:scale-[1.01]"
           style={{
-            maxWidth: 530,
-            padding: '13px 18px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.10)',
-            backdropFilter: 'blur(14px)',
-            marginBottom: 26,
-            transition: 'border-color 0.18s, background 0.18s',
-          }}>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-            stroke="rgba(255,255,255,0.26)" strokeWidth="2"
-            strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-            <circle cx="11" cy="11" r="8"/>
-            <path d="M21 21l-4.35-4.35"/>
+            background: isLight ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.06)',
+            border: `1.5px solid ${isLight ? goldDim : gold + '40'}`,
+            backdropFilter: 'blur(16px)',
+            boxShadow: isLight
+              ? `0 2px 12px rgba(0,0,0,0.06), inset 0 0 24px ${gold}15`
+              : `0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 24px ${gold}20`,
+          }}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <span style={{
-            flex: 1, textAlign: 'left',
-            fontSize: 13.5, fontWeight: 400,
-            color: 'rgba(255,255,255,0.22)',
-          }}>
-            Search pension, DA arrears, KSR rules, orders…
+          <span className="flex-1 text-left text-[13px] md:text-[14px]" style={{ color: textMuted }}>
+            Search tools, orders, schemes...
           </span>
-          <kbd className="hidden md:inline-flex items-center" style={{
-            fontSize: 11, fontWeight: 500,
-            padding: '3px 8px', borderRadius: 6,
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            color: 'rgba(255,255,255,0.20)',
-            fontFamily: 'inherit', flexShrink: 0,
-          }}>
-            ⌘K
+          <kbd
+            className="hidden md:inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg"
+            style={{ background: `${gold}15`, color: gold, border: `1px solid ${gold}40` }}
+          >
+            Ctrl K
           </kbd>
         </button>
 
-        {/* Stats */}
-        <div className="flex items-stretch mb-6" style={{
-          borderRadius: 14,
-          border: '1px solid rgba(255,255,255,0.07)',
-          background: 'rgba(255,255,255,0.025)',
-          overflow: 'hidden',
-        }}>
+        {/* Stats bar */}
+        <div className="flex items-stretch rounded-2xl overflow-hidden"
+          style={{ background: surface, border: `1px solid ${border}` }}>
           {STATS.map((s, i) => (
-            <div key={i} className="flex flex-col items-center justify-center" style={{
-              padding: 'clamp(10px,1.8vw,14px) clamp(18px,3.5vw,36px)',
-              borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.07)' : 'none',
-            }}>
-              <span style={{
-                fontSize: 'clamp(15px,2.2vw,22px)', fontWeight: 800,
-                color: '#f5d060', letterSpacing: '-0.02em',
-                lineHeight: 1, marginBottom: 5,
-              }}>
+            <div
+              key={i}
+              className="flex flex-col items-center justify-center px-4 py-2.5 md:px-6 md:py-3"
+              style={{ borderRight: i < STATS.length - 1 ? `1px solid ${border}` : 'none' }}
+            >
+              <span className="font-black tracking-tight leading-none"
+                style={{ fontSize: 'clamp(13px, 1.8vw, 18px)', color: gold }}>
                 {s.value}
               </span>
-              <span style={{
-                fontSize: 9, fontWeight: 600,
-                letterSpacing: '0.13em', textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.28)',
-              }}>
+              <span className="text-[8px] md:text-[9px] font-medium uppercase tracking-wider mt-0.5"
+                style={{ color: textSub }}>
                 {s.label}
               </span>
             </div>
           ))}
         </div>
 
-        {/* Quick links */}
-        <div className="flex flex-wrap justify-center" style={{ gap: 7 }}>
-          {QUICK_LINKS.map(link => (
-            <Link key={link.href} href={link.href}
-              className="hero-link no-underline" style={{
-                padding: '6px 15px', borderRadius: 99,
-                fontSize: 12, fontWeight: 500,
-                background: 'rgba(140,80,240,0.06)',
-                color: 'rgba(255,255,255,0.40)',
-                border: '1px solid rgba(140,80,240,0.18)',
-                transition: 'background 0.15s, color 0.15s, border-color 0.15s',
-              }}>
+        {/* Quick-access links */}
+        <div className="flex flex-wrap justify-center gap-2 mt-5">
+          {[
+            { label: 'Pension',      href: '/pension'    },
+            { label: 'Pay Revision', href: '/prc'        },
+            { label: 'Leave',        href: '/leave'      },
+            { label: 'Forms',        href: '/forms'      },
+            { label: 'Govt Orders',  href: '/orders'     },
+            { label: 'Income Tax',   href: '/income-tax' },
+          ].map(link => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="px-3 py-1.5 rounded-full text-[11px] font-semibold no-underline transition-all duration-200 hover:scale-105 hover:brightness-110"
+              style={{
+                background: surfaceMd,
+                color: textSub,
+                border: `1px solid ${border}`,
+              }}
+            >
               {link.label}
             </Link>
           ))}
