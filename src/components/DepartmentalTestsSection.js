@@ -114,7 +114,7 @@ export default function DepartmentalTestsSection() {
             <DeptTestIllustration />
             {/* Fade content area */}
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
-              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.88) 44%, rgba(8,12,20,0.50) 68%, transparent 100%)' }} />
+              background: 'linear-gradient(to right, rgba(8,12,20,0.97) 0%, rgba(8,12,20,0.82) 36%, rgba(8,12,20,0.28) 56%, rgba(8,12,20,0.04) 72%, transparent 88%)' }} />
             <div style={{ position: 'absolute', inset: 0, zIndex: 1,
               background: 'linear-gradient(to bottom, rgba(8,12,20,0.55) 0%, transparent 30%, rgba(8,12,20,0.75) 100%)' }} />
             {/* Blue accent glow bottom-left */}

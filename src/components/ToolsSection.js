@@ -162,17 +162,17 @@ function TrendDocSVG({ color }) {
       style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
       {/* Back page (tilted) */}
       <g transform="translate(70,52) rotate(-16)">
-        <rect x="-28" y="-38" width="56" height="76" rx="7" fill={color} opacity={0.28}/>
-        <polygon points="18,-38 28,-38 28,-26" fill={color} opacity={0.46}/>
+        <rect x="-28" y="-38" width="56" height="76" rx="7" fill={color} opacity={0.55}/>
+        <polygon points="18,-38 28,-38 28,-26" fill={color} opacity={0.75}/>
       </g>
       {/* Front page */}
       <g transform="translate(57,46) rotate(9)">
-        <rect x="-26" y="-36" width="52" height="72" rx="6" fill={color} opacity={0.42}/>
-        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.60}/>
-        <line x1="-18" y1="-20" x2="14" y2="-20" stroke={color} strokeWidth="4"   strokeLinecap="round" opacity={0.75}/>
-        <line x1="-18" y1="-7"  x2="14" y2="-7"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.62}/>
-        <line x1="-18" y1="6"   x2="6"  y2="6"   stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.52}/>
-        <line x1="-18" y1="19"  x2="11" y2="19"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.42}/>
+        <rect x="-26" y="-36" width="52" height="72" rx="6" fill={color} opacity={0.70}/>
+        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.88}/>
+        <line x1="-18" y1="-20" x2="14" y2="-20" stroke={color} strokeWidth="4"   strokeLinecap="round" opacity={0.95}/>
+        <line x1="-18" y1="-7"  x2="14" y2="-7"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.85}/>
+        <line x1="-18" y1="6"   x2="6"  y2="6"   stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.75}/>
+        <line x1="-18" y1="19"  x2="11" y2="19"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.65}/>
       </g>
     </svg>
   );
@@ -184,22 +184,22 @@ function TrendMergeSVG({ color }) {
       style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
       {/* Left doc */}
       <g transform="translate(44,44) rotate(-20)">
-        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.35}/>
-        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.55}/>
-        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.70}/>
-        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.58}/>
-        <line x1="-13" y1="7"   x2="4"  y2="7"   stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.46}/>
+        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.65}/>
+        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.85}/>
+        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.95}/>
+        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.82}/>
+        <line x1="-13" y1="7"   x2="4"  y2="7"   stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.70}/>
       </g>
       {/* Right doc */}
       <g transform="translate(76,38) rotate(16)">
-        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.35}/>
-        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.55}/>
-        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.70}/>
-        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.58}/>
+        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.65}/>
+        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.85}/>
+        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.95}/>
+        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.82}/>
       </g>
       {/* Merge arrow */}
-      <line x1="46" y1="25" x2="60" y2="25" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.72}/>
-      <polygon points="62,21 70,25 62,29" fill={color} opacity={0.72}/>
+      <line x1="46" y1="25" x2="60" y2="25" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.92}/>
+      <polygon points="62,21 70,25 62,29" fill={color} opacity={0.92}/>
     </svg>
   );
 }
@@ -210,16 +210,16 @@ function TrendSplitSVG({ color }) {
       style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
       <g transform="translate(60,38)">
         {/* Top half */}
-        <rect x="-26" y="-36" width="52" height="32" rx="6" fill={color} opacity={0.42}/>
-        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.60}/>
-        <line x1="-18" y1="-23" x2="13" y2="-23" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.72}/>
-        <line x1="-18" y1="-11" x2="13" y2="-11" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.60}/>
+        <rect x="-26" y="-36" width="52" height="32" rx="6" fill={color} opacity={0.68}/>
+        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.88}/>
+        <line x1="-18" y1="-23" x2="13" y2="-23" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.95}/>
+        <line x1="-18" y1="-11" x2="13" y2="-11" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.82}/>
         {/* Dashed cut line */}
-        <line x1="-30" y1="0" x2="30" y2="0" stroke={color} strokeWidth="2.5" strokeDasharray="4,3" strokeLinecap="round" opacity={0.88}/>
+        <line x1="-30" y1="0" x2="30" y2="0" stroke={color} strokeWidth="2.5" strokeDasharray="4,3" strokeLinecap="round" opacity={1.0}/>
         {/* Bottom half */}
-        <rect x="-26" y="2"  width="52" height="28" rx="6" fill={color} opacity={0.34}/>
-        <line x1="-18" y1="12" x2="13" y2="12" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.55}/>
-        <line x1="-18" y1="22" x2="4"  y2="22" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.44}/>
+        <rect x="-26" y="2"  width="52" height="28" rx="6" fill={color} opacity={0.60}/>
+        <line x1="-18" y1="12" x2="13" y2="12" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.80}/>
+        <line x1="-18" y1="22" x2="4"  y2="22" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.68}/>
       </g>
     </svg>
   );
@@ -230,17 +230,17 @@ function TrendChartSVG({ color }) {
     <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
       style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
       {/* Axes */}
-      <line x1="32" y1="10" x2="32" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.55}/>
-      <line x1="32" y1="62" x2="93" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.55}/>
+      <line x1="32" y1="10" x2="32" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.80}/>
+      <line x1="32" y1="62" x2="93" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.80}/>
       {/* Bars */}
-      <rect x="37" y="38" width="10" height="24" rx="3" fill={color} opacity={0.48}/>
-      <rect x="51" y="24" width="10" height="38" rx="3" fill={color} opacity={0.58}/>
-      <rect x="65" y="44" width="10" height="18" rx="3" fill={color} opacity={0.44}/>
-      <rect x="79" y="30" width="10" height="32" rx="3" fill={color} opacity={0.52}/>
+      <rect x="37" y="38" width="10" height="24" rx="3" fill={color} opacity={0.72}/>
+      <rect x="51" y="24" width="10" height="38" rx="3" fill={color} opacity={0.85}/>
+      <rect x="65" y="44" width="10" height="18" rx="3" fill={color} opacity={0.68}/>
+      <rect x="79" y="30" width="10" height="32" rx="3" fill={color} opacity={0.78}/>
       {/* Trend line */}
       <polyline points="42,38 56,24 70,44 84,30"
-        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity={0.85}/>
-      <circle cx="84" cy="30" r="4" fill={color} opacity={0.95}/>
+        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity={1.0}/>
+      <circle cx="84" cy="30" r="4" fill={color} opacity={1.0}/>
     </svg>
   );
 }
@@ -251,21 +251,21 @@ function TrendCalSVG({ color }) {
       style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
       <g transform="translate(60,38)">
         {/* Body */}
-        <rect x="-28" y="-24" width="56" height="48" rx="7" fill={color} opacity={0.38}/>
+        <rect x="-28" y="-24" width="56" height="48" rx="7" fill={color} opacity={0.62}/>
         {/* Header band */}
-        <rect x="-28" y="-24" width="56" height="13" rx="7" fill={color} opacity={0.58}/>
-        <rect x="-28" y="-17" width="56" height="6"        fill={color} opacity={0.58}/>
+        <rect x="-28" y="-24" width="56" height="13" rx="7" fill={color} opacity={0.85}/>
+        <rect x="-28" y="-17" width="56" height="6"        fill={color} opacity={0.85}/>
         {/* Peg handles */}
-        <rect x="-16" y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.75}/>
-        <rect x="11"  y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.75}/>
+        <rect x="-16" y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.95}/>
+        <rect x="11"  y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.95}/>
         {/* Day-grid dots */}
         {[-16,-4,8].flatMap((x, xi) =>
           [-6,6,18].map((y, yi) => (
-            <circle key={`${xi}${yi}`} cx={x} cy={y} r="2.8" fill={color} opacity={0.45 + yi * 0.08}/>
+            <circle key={`${xi}${yi}`} cx={x} cy={y} r="2.8" fill={color} opacity={0.62 + yi * 0.10}/>
           ))
         )}
         {/* Highlighted day */}
-        <rect x="4" y="12" width="17" height="13" rx="4" fill={color} opacity={0.75}/>
+        <rect x="4" y="12" width="17" height="13" rx="4" fill={color} opacity={0.95}/>
       </g>
     </svg>
   );
@@ -415,10 +415,10 @@ export default function ToolsSection() {
                   position:'absolute', inset:0, pointerEvents:'none',
                   background:`linear-gradient(to right,
                     #0d1117 0%,
-                    #0d1117 38%,
-                    rgba(13,17,23,0.92) 52%,
-                    rgba(13,17,23,0.45) 68%,
-                    transparent 100%)`,
+                    #0d1117 24%,
+                    rgba(13,17,23,0.70) 40%,
+                    rgba(13,17,23,0.18) 58%,
+                    transparent 76%)`,
                 }} />
 
                 {/* Label — always on top */}
@@ -468,7 +468,7 @@ export default function ToolsSection() {
                 {/* Left-to-right fade so content stays readable */}
                 <div style={{
                   position: 'absolute', inset: 0,
-                  background: `linear-gradient(to right, rgba(13,17,23,0.96) 18%, rgba(13,17,23,0.7) 42%, rgba(13,17,23,0.15) 72%, transparent 100%)`,
+                  background: `linear-gradient(to right, rgba(13,17,23,0.96) 15%, rgba(13,17,23,0.55) 36%, rgba(13,17,23,0.08) 58%, transparent 80%)`,
                 }}/>
 
                 {/* Content */}
