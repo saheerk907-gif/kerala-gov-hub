@@ -164,11 +164,11 @@ export default function ArticlesSection() {
                       <div className="p-4 rounded-[16px] transition-all hover:bg-white/[0.07]"
                         style={{ background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.12)', backdropFilter:'blur(10px)' }}>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide"
                             style={{ background:`${CAT_COLORS[featured.category]||ACCENT}25`, color:CAT_COLORS[featured.category]||ACCENT, border:`1px solid ${CAT_COLORS[featured.category]||ACCENT}40` }}>
                             ✦ Featured · {featured.category || 'general'}
                           </span>
-                          <span className="text-[10px]" style={{ color:'rgba(255,255,255,0.4)' }}>{formatDate(featured.created_at)}</span>
+                          <span className="text-[11px]" style={{ color:'rgba(255,255,255,0.62)' }}>{formatDate(featured.created_at)}</span>
                         </div>
                         <h3 className="text-[clamp(15px,2vw,20px)] font-[900] text-white leading-snug mb-1.5 group-hover:text-white/90"
                           style={{ fontFamily:"var(--font-noto-malayalam), sans-serif", textShadow:'0 1px 10px rgba(0,0,0,0.8)' }}>
@@ -203,11 +203,11 @@ export default function ArticlesSection() {
                             style={{ fontFamily:"var(--font-noto-malayalam), sans-serif" }}>
                             {article.title_ml}
                           </div>
-                          <div className="text-[10px] mt-0.5" style={{ color:'rgba(255,255,255,0.4)' }}>
+                          <div className="text-[11px] mt-0.5" style={{ color:'rgba(255,255,255,0.62)' }}>
                             {article.category} · {formatDate(article.created_at)}
                           </div>
                         </div>
-                        <svg className="flex-shrink-0 w-3 h-3 text-white/30 group-hover:text-white/60 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <svg className="flex-shrink-0 w-3 h-3 text-white/55 group-hover:text-white/80 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                           <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       </Link>

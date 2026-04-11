@@ -307,7 +307,7 @@ export default function ToolsSection() {
 
         {/* Section header */}
         <div className="mb-4">
-          <div className="text-[10px] font-black uppercase tracking-[0.25em] text-white/40 mb-1">Tools & Calculators</div>
+          <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/65 mb-1">Tools & Calculators</div>
           <h2
             className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
             style={{
@@ -377,7 +377,7 @@ export default function ToolsSection() {
               Trending Now
             </span>
             <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.07)' }} />
-            <span style={{ fontSize:9, fontWeight:700, letterSpacing:'0.12em', textTransform:'uppercase', color:'rgba(255,255,255,0.22)' }}>
+            <span style={{ fontSize:11, fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(255,255,255,0.52)' }}>
               7 tools
             </span>
           </div>
@@ -427,12 +427,12 @@ export default function ToolsSection() {
                     fontSize:   tier === 'primary' ? 13 : tier === 'secondary' ? 12.5 : 12,
                     fontWeight: tier === 'primary' ? 800 : tier === 'secondary' ? 700  : 600,
                     color:      tier === 'primary' ? color : '#fff',
-                    lineHeight: 1.2, whiteSpace:'nowrap',
+                    lineHeight: 1.3, whiteSpace:'nowrap',
                     textShadow: '0 1px 6px rgba(0,0,0,0.90)',
                   }}>{label}</div>
                   <div style={{
-                    fontSize:  tier === 'primary' ? 10 : 9.5,
-                    color:     tier === 'primary' ? `rgba(${rgb},0.78)` : 'rgba(255,255,255,0.52)',
+                    fontSize:  tier === 'primary' ? 11 : 10.5,
+                    color:     tier === 'primary' ? `rgba(${rgb},0.88)` : 'rgba(255,255,255,0.70)',
                     marginTop: 3, whiteSpace:'nowrap',
                     textShadow: '0 1px 4px rgba(0,0,0,0.80)',
                   }}>{sub}</div>
@@ -489,7 +489,7 @@ export default function ToolsSection() {
                       padding: '5px 12px', borderRadius: 20,
                       background: `rgba(${colorRgb},0.13)`,
                       border: `1.5px solid rgba(${colorRgb},0.4)`,
-                      color, fontSize: 10, fontWeight: 900, letterSpacing: '0.1em',
+                      color, fontSize: 11, fontWeight: 800, letterSpacing: '0.06em',
                       whiteSpace: 'nowrap',
                     }}>
                       {icon} {count} TOOLS
@@ -501,7 +501,7 @@ export default function ToolsSection() {
                     <h3 style={{ color: 'rgba(255,255,255,0.95)', fontSize: 15, fontWeight: 700, marginBottom: 6 }}>
                       {title}
                     </h3>
-                    <p style={{ color: 'rgba(255,255,255,0.52)', fontSize: 11, lineHeight: 1.65 }}>
+                    <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 12, lineHeight: 1.65 }}>
                       {desc}
                     </p>
                   </div>

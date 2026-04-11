@@ -135,7 +135,7 @@ export default function AudioPlayer({ limit }) {
 
             {/* Title */}
             <div className="flex-grow min-w-0">
-              <div className="text-[9px] font-black uppercase tracking-[0.15em] mb-0.5" style={{ color: ACCENT }}>Now Playing · EP {current.episode_number}</div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.10em] mb-0.5" style={{ color: ACCENT }}>Now Playing · EP {current.episode_number}</div>
               <div className="text-[13px] font-bold text-white leading-snug truncate" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                 {current.title_ml}
               </div>
@@ -144,7 +144,7 @@ export default function AudioPlayer({ limit }) {
             {/* Play/pause + skip */}
             <div className="flex items-center gap-2 flex-shrink-0">
               <button onClick={() => skip(-10)}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-black text-white/60 hover:text-white transition-colors"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white/72 hover:text-white transition-colors"
                 style={{ background: 'rgba(255,255,255,0.06)' }}>-10</button>
               <button onClick={() => playEpisode(current)}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 active:scale-95"
@@ -155,13 +155,13 @@ export default function AudioPlayer({ limit }) {
                 }
               </button>
               <button onClick={() => skip(10)}
-                className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-black text-white/60 hover:text-white transition-colors"
+                className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white/72 hover:text-white transition-colors"
                 style={{ background: 'rgba(255,255,255,0.06)' }}>+10</button>
               <button onClick={cycleSpeed}
-                className="h-7 px-2.5 rounded-full text-[10px] font-black transition-all"
+                className="h-7 px-2.5 rounded-full text-[11px] font-bold transition-all"
                 style={{
                   background: speed !== 1 ? 'rgba(255,159,10,0.2)' : 'rgba(255,255,255,0.06)',
-                  color: speed !== 1 ? ACCENT : 'rgba(255,255,255,0.5)',
+                  color: speed !== 1 ? ACCENT : 'rgba(255,255,255,0.68)',
                   border: speed !== 1 ? '1px solid rgba(255,159,10,0.3)' : '1px solid transparent',
                 }}>
                 {speed}×
@@ -178,8 +178,8 @@ export default function AudioPlayer({ limit }) {
                 style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${ACCENT}, #ffcc02)` }} />
             </div>
             <div className="flex justify-between mt-1">
-              <span className="text-[10px] text-white/40">{formatTime(currentTime)}</span>
-              <span className="text-[10px] text-white/40">{formatTime(duration)}</span>
+              <span className="text-[11px] text-white/62">{formatTime(currentTime)}</span>
+              <span className="text-[11px] text-white/62">{formatTime(duration)}</span>
             </div>
           </div>
         </div>
@@ -211,31 +211,31 @@ export default function AudioPlayer({ limit }) {
                       ? <WaveformBars playing={playing} />
                       : isActive
                         ? <svg width="14" height="14" viewBox="0 0 24 24" fill={ACCENT}><path d="M8 5v14l11-7z"/></svg>
-                        : <span className="text-[10px] font-black text-white/50">{ep.episode_number}</span>
+                        : <span className="text-[11px] font-bold text-white/68">{ep.episode_number}</span>
                     }
                   </div>
 
                   {/* Title + meta */}
                   <div className="flex-grow min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full"
+                      <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
                         style={isActive
                           ? { background: 'rgba(255,159,10,0.2)', color: ACCENT }
-                          : { background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}>
+                          : { background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.68)' }}>
                         EP {ep.episode_number}
                       </span>
-                      {ep.duration_label && <span className="text-[10px] text-white/35">{ep.duration_label}</span>}
+                      {ep.duration_label && <span className="text-[11px] text-white/60">{ep.duration_label}</span>}
                     </div>
                     <div className="text-[13px] font-bold leading-snug truncate transition-colors"
                       style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", color: isActive ? 'white' : 'rgba(255,255,255,0.85)' }}>
                       {ep.title_ml}
                     </div>
-                    {ep.title_en && <div className="text-[11px] text-white/40 mt-0.5 truncate">{ep.title_en}</div>}
+                    {ep.title_en && <div className="text-[12px] text-white/60 mt-0.5 truncate">{ep.title_en}</div>}
                   </div>
 
                   {/* Arrow */}
                   <svg className="w-3.5 h-3.5 flex-shrink-0 transition-all group-hover:translate-x-0.5"
-                    style={{ color: isActive ? ACCENT : 'rgba(255,255,255,0.25)' }}
+                    style={{ color: isActive ? ACCENT : 'rgba(255,255,255,0.52)' }}
                     fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
                   </svg>

@@ -56,7 +56,7 @@ export default function AnnouncementBanner() {
           style={{ background: 'rgba(41,151,255,0.85)', borderColor: 'var(--surface-sm)' }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-          <span className="text-[9px] font-black uppercase tracking-[0.25em] text-white whitespace-nowrap">
+          <span className="text-[11px] font-black uppercase tracking-[0.15em] text-white whitespace-nowrap">
             Live
           </span>
         </div>
@@ -74,16 +74,16 @@ export default function AnnouncementBanner() {
               <a key={i} href={item.href}
                 className="inline-flex items-center gap-2 px-5 no-underline group flex-shrink-0">
                 <span
-                  className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded flex-shrink-0"
+                  className="text-[10px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded flex-shrink-0"
                   style={{ background: item.color + '25', color: item.color, border: `1px solid ${item.color}30` }}>
                   {item.label}
                 </span>
-                <span className="text-[11px] font-medium text-white/55 group-hover:text-white/85 transition-colors"
+                <span className="text-[12px] font-medium text-white/78 group-hover:text-white/95 transition-colors"
                   style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   {item.text}
                 </span>
                 {item.sub && (
-                  <span className="text-[10px] text-white/45 font-sans flex-shrink-0">{item.sub}</span>
+                  <span className="text-[11px] text-white/62 font-sans flex-shrink-0">{item.sub}</span>
                 )}
                 <span className="text-white/10 mx-1 flex-shrink-0">◆</span>
               </a>
@@ -93,7 +93,7 @@ export default function AnnouncementBanner() {
 
         {/* Dismiss */}
         <button onClick={() => setDismissed(true)}
-          className="flex-shrink-0 px-3 h-full text-white/40 hover:text-white/60 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
+          className="flex-shrink-0 px-3 h-full text-white/60 hover:text-white/85 transition-colors text-lg font-light border-none bg-transparent cursor-pointer border-l"
           style={{ borderColor: 'var(--surface-xs)' }}>
           ×
         </button>

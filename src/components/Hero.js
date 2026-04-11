@@ -110,7 +110,7 @@ export default function Hero() {
         {/* Headings */}
         <div className="flex flex-col items-center gap-1 md:gap-2 mb-3 md:mb-4">
           <h1
-            className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
+            className="font-malayalam font-bold leading-[1.35] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
             style={{
               fontSize: 'clamp(32px, 6vw, 72px)',
               backgroundImage: titleGrad,
@@ -120,7 +120,7 @@ export default function Hero() {
             കേരള സർക്കാർ
           </h1>
           <h2
-            className="font-malayalam font-bold leading-[1.25] tracking-tight bg-[length:200%_auto] bg-clip-text text-transparent"
+            className="font-malayalam font-bold leading-[1.4] tracking-tight bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
               fontSize: 'clamp(20px, 3.5vw, 46px)',
               backgroundImage: isLight

@@ -14,8 +14,8 @@
 
   /* Text */
   --text-primary: rgba(255, 255, 255, 0.92);
-  --text-secondary: rgba(255, 255, 255, 0.58);
-  --text-muted: rgba(255, 255, 255, 0.32);
+  --text-secondary: rgba(255, 255, 255, 0.68);
+  --text-muted: rgba(255, 255, 255, 0.52);
 
   /* Accents */
   --accent-blue: #2997ff;
@@ -34,7 +34,7 @@
   --nav-bg: rgba(18, 20, 22, 0.60);
   --nav-bg-scrolled: rgba(18, 20, 22, 0.80);
   --nav-border: rgba(255, 255, 255, 0.09);
-  --nav-text: rgba(255, 255, 255, 0.55);
+  --nav-text: rgba(255, 255, 255, 0.72);
   --nav-text-active: #ffffff;
   --nav-dropdown-bg: rgba(20, 22, 26, 0.92);
   --nav-dropdown-border: rgba(255, 255, 255, 0.09);
@@ -57,9 +57,9 @@
   --surface-sm:   rgba(255,255,255,0.08);
   --surface-md:   rgba(255,255,255,0.12);
   --surface-lg:   rgba(255,255,255,0.18);
-  --text-dim:     rgba(255,255,255,0.65);
-  --text-faint:   rgba(255,255,255,0.40);
-  --text-ghost:   rgba(255,255,255,0.20);
+  --text-dim:     rgba(255,255,255,0.75);
+  --text-faint:   rgba(255,255,255,0.58);
+  --text-ghost:   rgba(255,255,255,0.42);
   --border-xs:    rgba(255,255,255,0.06);
   --border-sm:    rgba(255,255,255,0.10);
   --border-md:    rgba(255,255,255,0.20);
@@ -212,9 +212,9 @@ img, video, svg { max-width: 100%; }
    SECTION LABEL
    ══════════════════════════════════════════════════════════ */
 .section-label {
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.3em;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }

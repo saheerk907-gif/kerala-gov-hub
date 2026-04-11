@@ -82,7 +82,7 @@ export default function TopBar() {
     >
       {/* Left — Social icons */}
       <div className="flex items-center gap-1">
-        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/45 mr-2">Follow</span>
+        <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65 mr-2">Follow</span>
         {socials.map(s => (
           <a
             key={s.label}
@@ -104,12 +104,12 @@ export default function TopBar() {
 
         {/* News ticker */}
         <div className="flex items-center gap-2 overflow-hidden max-w-[340px]">
-          <span className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-[#2997ff]/20 text-[#2997ff] whitespace-nowrap">
+          <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-[#2997ff]/20 text-[#2997ff] whitespace-nowrap">
             LIVE
           </span>
           <span
             key={newsIdx}
-            className="text-[11px] text-white/50 truncate font-medium animate-fade-up"
+            className="text-[12px] text-white/72 truncate font-medium animate-fade-up"
             style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}
           >
             {ticker[newsIdx]}
@@ -125,12 +125,12 @@ export default function TopBar() {
               href={p.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[10px] font-bold text-white/55 no-underline hover:text-white/80 transition-colors px-1.5 py-0.5 rounded hover:bg-white/[0.05]"
+              className="text-[11px] font-semibold text-white/72 no-underline hover:text-white/90 transition-colors px-1.5 py-0.5 rounded hover:bg-white/[0.05]"
             >
               {p.label}
             </a>
             {i < quickPortals.length - 1 && (
-              <span className="text-white/15 text-[10px]">|</span>
+              <span className="text-white/25 text-[11px]">|</span>
             )}
           </span>
         ))}
@@ -138,7 +138,7 @@ export default function TopBar() {
         <div className="topbar-divider w-px h-4 bg-white/10 mx-2" />
 
         {/* Date */}
-        <span className="text-[10px] font-semibold text-white/50 whitespace-nowrap">
+        <span className="text-[11px] font-semibold text-white/68 whitespace-nowrap">
           📅 {dateStr}
         </span>
       </div>
