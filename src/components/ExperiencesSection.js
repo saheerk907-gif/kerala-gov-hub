@@ -307,7 +307,7 @@ export default function ExperiencesSection() {
                 }}>
                   {/* Avatar stack */}
                   <div style={{ display: 'flex', marginBottom: 12 }}>
-                    {['/images/employee1.jpg', '/images/employee2.jpg'].map((src, i) => (
+                    {['/images/employee1.webp', '/images/employee2.webp'].map((src, i) => (
                       <div key={i} style={{
                         width: 34, height: 34, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
                         border: '2px solid rgba(48,209,88,0.55)', marginLeft: i > 0 ? -10 : 0,

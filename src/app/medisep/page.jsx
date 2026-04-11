@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
+import Image from 'next/image';
 import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
@@ -80,7 +81,9 @@ export default async function MedisepPage() {
                     className="group block p-6 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
                     style={{ background: 'rgba(255,159,10,0.04)', border: '1px solid rgba(255,159,10,0.12)' }}>
                     {post.image_url && (
-                      <img src={post.image_url} alt={`${post.title_ml || post.title_en || 'MEDISEP article'} article thumbnail`} className="w-full h-48 object-cover rounded-xl mb-4" />
+                      <div className="relative w-full h-48 rounded-xl overflow-hidden mb-4">
+                        <Image src={post.image_url} alt={`${post.title_ml || post.title_en || 'MEDISEP article'} article thumbnail`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 600px" loading="lazy" />
+                      </div>
                     )}
                     <div className="text-xs text-[#ff9f0a] font-bold uppercase tracking-widest mb-2">
                       {new Date(post.created_at).toLocaleDateString('ml-IN', { year: 'numeric', month: 'long', day: 'numeric' })}

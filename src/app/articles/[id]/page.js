@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Image from 'next/image';
 import { buildArticleJsonLd } from '@/lib/seo';
 import { sanitize } from '@/lib/sanitize';
 
@@ -123,9 +124,11 @@ export default async function ArticleDetailPage({ params }) {
         {/* Content */}
         <div className="max-w-3xl mx-auto px-6 py-12">
           {item.image_url && (
-            <img src={item.image_url} alt={item.title_ml}
+            <Image src={item.image_url} alt={item.title_ml}
+              width={1200} height={630}
               className="w-full rounded-2xl object-cover mb-10"
-              style={{ maxHeight: '420px' }} />
+              style={{ maxHeight: '420px' }}
+              loading="eager" />
           )}
 
           {item.summary_ml && (

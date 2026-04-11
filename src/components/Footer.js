@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 export default function Footer() {
   return (
     <footer className="relative py-8 md:py-14 px-4 md:px-6 border-t border-white/[0.06]">
@@ -8,11 +9,13 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <picture>
-                <source srcSet="/logo.webp" type="image/webp" />
-                <img src="/logo.png" alt="Kerala Gov Logo"
-                  className="w-9 h-9 rounded-full object-cover ring-1 ring-[#c8960c]/30" />
-              </picture>
+              <Image
+                src="/logo.webp"
+                alt="Kerala Gov Logo"
+                width={36} height={36}
+                className="rounded-full object-cover ring-1 ring-[#c8960c]/30"
+                loading="lazy"
+              />
               <div>
                 <div className="text-[13px] font-bold text-white/85 leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   കേരള ജീവനക്കാര്യ ഹബ്

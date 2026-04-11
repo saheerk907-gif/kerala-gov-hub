@@ -64,7 +64,7 @@ export const organizationJsonLd = {
   '@type': 'Organization',
   name: 'Kerala Employees',
   url: BASE_URL,
-  logo: `${BASE_URL}/logo.png`,
+  logo: `${BASE_URL}/logo.webp`,
   description:
     'Information portal for Kerala government employees — MEDISEP, pension, service rules, salary calculators, and government orders.',
   sameAs: [],

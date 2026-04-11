@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import NpsQueryForm from '@/components/NpsQueryForm';
 import NpsGovOrders from '@/components/NpsGovOrders';
 import Link from 'next/link';
+import Image from 'next/image';
 import RelatedLinks from '@/components/RelatedLinks';
 import { buildMetadata } from '@/lib/seo';
 
@@ -324,7 +325,9 @@ export default async function NpsPage() {
                     className="group block p-6 rounded-2xl no-underline transition-all hover:-translate-y-0.5"
                     style={{ background: `${PURPLE}05`, border: `1px solid ${PURPLE}15` }}>
                     {post.image_url && (
-                      <img src={post.image_url} alt={`${post.title_ml || post.title_en || 'NPS article'} article thumbnail`} className="w-full h-44 object-cover rounded-xl mb-4" />
+                      <div className="relative w-full h-44 rounded-xl overflow-hidden mb-4">
+                        <Image src={post.image_url} alt={`${post.title_ml || post.title_en || 'NPS article'} article thumbnail`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 600px" loading="lazy" />
+                      </div>
                     )}
                     <div className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: PURPLE }}>
                       {new Date(post.created_at).toLocaleDateString('ml-IN', {
