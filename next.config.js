@@ -1,15 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimize images: WebP format, responsive sizing, lazy loading
+  // Optimize images: WebP/AVIF, responsive sizing, aggressive caching
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.supabase.co' },
       { protocol: 'https', hostname: 'upload.wikimedia.org' },
       { protocol: 'https', hostname: '**' }, // external news article images
     ],
-    formats: ['image/webp', 'image/avif'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Serve AVIF first (30-50% smaller than WebP), fall back to WebP
+    formats: ['image/avif', 'image/webp'],
+    // Trimmed device sizes — covers mobile (390, 750), tablet (1080), desktop (1920)
+    deviceSizes: [390, 640, 750, 1080, 1200, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    // Cache optimised images for 30 days (default is 60s — far too short)
+    minimumCacheTTL: 2592000,
   },
 
   // Enable gzip compression

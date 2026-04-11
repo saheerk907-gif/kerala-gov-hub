@@ -5,18 +5,23 @@ import GoogleAnalytics from '@/components/GoogleAnalytics';
 import ScrollToTop from '@/components/ScrollToTop';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
 
+// Only the weights actually used — was 5 files, now 2 files
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-ibm-plex-mono',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['400', '700'],
 });
 
+// Reduced from 7 weights → 3. Drops ~60% of Malayalam font payload.
+// preload:true injects <link rel="preload"> so the headline text
+// doesn't block FCP waiting for the font response.
 const notoMalayalam = Noto_Sans_Malayalam({
   subsets: ['malayalam'],
   display: 'swap',
   variable: '--font-noto-malayalam',
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '700', '900'],
+  preload: true,
 });
 
 const BASE_URL = 'https://keralaemployees.in';
@@ -66,6 +71,9 @@ export default function RootLayout({ children }) {
     <html lang="ml" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Hint browser to pre-connect to Google Fonts CDN — reduces font TTFB */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

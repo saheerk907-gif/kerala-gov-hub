@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 
@@ -39,13 +40,18 @@ export default function NewsSection() {
         padding: '1.5px', borderRadius: 28, display: 'flex', flexDirection: 'column', flex: 1,
       }}>
       <div className="relative overflow-hidden flex flex-col"
-        style={{
-          background: '#0d1117',
-          backgroundImage: "url('/images/news-bg.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center top',
-          borderRadius: 26, padding: '16px 20px', flex: 1,
-        }}>
+        style={{ background: '#0d1117', borderRadius: 26, padding: '16px 20px', flex: 1 }}>
+        {/* Optimised background image — lazy loaded, served as WebP */}
+        <Image
+          src="/images/news-bg.webp"
+          alt=""
+          fill
+          className="object-cover"
+          style={{ objectPosition: 'center top' }}
+          sizes="(max-width: 768px) 100vw, 600px"
+          loading="lazy"
+          quality={65}
+        />
 
         {/* Left-to-right fade */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const ACCENT = '#ff9f0a';
@@ -32,13 +33,18 @@ export default function SchemesSection({ schemes }) {
           padding:'1.5px', borderRadius:28,
         }}>
           {/* Cinematic photo card */}
-          <div className="relative overflow-hidden" style={{
-            backgroundImage:"url('/images/orders-bg.jpg')",
-            backgroundSize:'cover',
-            backgroundPosition:'center left',
-            borderRadius:26,
-            minHeight:360,
-          }}>
+          <div className="relative overflow-hidden" style={{ borderRadius:26, minHeight:360 }}>
+            {/* Optimised background image — lazy loaded, served as WebP */}
+            <Image
+              src="/images/orders-bg.webp"
+              alt=""
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center left' }}
+              sizes="(max-width: 768px) 100vw, 1200px"
+              loading="lazy"
+              quality={65}
+            />
             {/* Overlays */}
             <div style={{ position:'absolute', inset:0, background:'rgba(6,8,15,0.72)', zIndex:1 }}/>
             <div style={{ position:'absolute', inset:0, zIndex:2,

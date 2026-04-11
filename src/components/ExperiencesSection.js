@@ -156,14 +156,19 @@ export default function ExperiencesSection() {
       }}>
         <div className="relative overflow-hidden" style={{ borderRadius: 26 }}>
 
-          {/* ── Background: blurred image ── */}
-          <div style={{
-            position: 'absolute', inset: 0,
-            backgroundImage: "url('/images/govtemployees.jpg')",
-            backgroundSize: 'cover', backgroundPosition: 'center 30%',
-            filter: 'blur(3px)', transform: 'scale(1.06)',
-            zIndex: 0,
-          }} />
+          {/* ── Background: blurred image — optimised WebP via Next.js Image ── */}
+          <div style={{ position: 'absolute', inset: '-12px', zIndex: 0, filter: 'blur(3px)', overflow: 'hidden' }}>
+            <Image
+              src="/images/govtemployees.webp"
+              alt=""
+              fill
+              className="object-cover"
+              style={{ objectPosition: 'center 30%', transform: 'scale(1.06)' }}
+              sizes="100vw"
+              loading="lazy"
+              quality={55}
+            />
+          </div>
 
           {/* ── Overlays: 80%+ dark coverage ── */}
           {/* Base flat tint */}

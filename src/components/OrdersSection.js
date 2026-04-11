@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 const BG = '#0d1117';   // card bg
@@ -34,13 +35,18 @@ export default function OrdersSection({ orders }) {
       }}>
         {/* Dark card with photo background */}
         <div className="relative overflow-hidden flex flex-col"
-          style={{
-            background: BG,
-            backgroundImage: "url('/images/orders-bg.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center right',
-            borderRadius: 26, padding: '16px 20px', flex: 1,
-          }}>
+          style={{ background: BG, borderRadius: 26, padding: '16px 20px', flex: 1 }}>
+          {/* Optimised background image — lazy loaded, served as WebP */}
+          <Image
+            src="/images/orders-bg.webp"
+            alt=""
+            fill
+            className="object-cover"
+            style={{ objectPosition: 'center right' }}
+            sizes="(max-width: 768px) 100vw, 600px"
+            loading="lazy"
+            quality={65}
+          />
           {/* Left-to-right fade (keeps content readable) */}
           <div style={{ position: 'absolute', inset: 0, zIndex: 1,
             background: 'linear-gradient(to right, rgba(13,17,23,0.98) 28%, rgba(13,17,23,0.78) 55%, rgba(13,17,23,0.35) 80%, transparent 100%)' }}/>

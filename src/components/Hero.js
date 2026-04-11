@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -20,11 +20,14 @@ const QUICK_LINKS = [
 ];
 
 // ─── SVG background ───────────────────────────────────────────────────────────
-function HeroIllustration() {
-  // Sonar ping rings: 5 rings staggered 1.8s apart, 9s total
-  const pings   = [0, 1.8, 3.6, 5.4, 7.2];
+// Perf notes:
+//  • Reduced dot grid from 8×14 (112 nodes) → 6×10 (60 nodes). Same visual density.
+//  • Animations are deferred via CSS class added 300ms after mount so the browser
+//    paints the static frame first, then starts GPU compositor work.
+//  • prefers-reduced-motion respected: animations never start if user opts out.
+function HeroIllustration({ animate }) {
+  const pings = [0, 1.8, 3.6, 5.4, 7.2];
 
-  // Horizontal data-packet lanes: (y, delay, duration, direction)
   const lanes = [
     { y: 112, delay: '0s',   dur: '7s',  dir:  1 },
     { y: 192, delay: '2.5s', dur: '9s',  dir: -1 },
@@ -33,13 +36,16 @@ function HeroIllustration() {
     { y: 460, delay: '0.6s', dur: '10s', dir:  1 },
   ];
 
-  // Scattered small accent nodes (static)
   const nodes = [
     { x: 68,  y: 132 }, { x: 840, y: 108 },
     { x: 56,  y: 388 }, { x: 856, y: 404 },
     { x: 112, y: 264 }, { x: 790, y: 264 },
     { x: 200, y: 80  }, { x: 700, y: 448 },
   ];
+
+  // Animation style — only applied after initial paint + 300ms delay
+  const anim = (name, dur, delay = '0s', extra = '') =>
+    animate ? { animation: `${name} ${dur} ${extra} ${delay} infinite` } : {};
 
   return (
     <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg"
@@ -53,16 +59,16 @@ function HeroIllustration() {
           100% { r: 320; opacity: 0;    stroke-width: 0.5; }
         }
         @keyframes packetLTR {
-          0%   { transform: translateX(-20px); opacity: 0;    }
+          0%   { transform: translateX(-20px); opacity: 0; }
           8%   { opacity: 1; }
           92%  { opacity: 1; }
-          100% { transform: translateX(920px);  opacity: 0;    }
+          100% { transform: translateX(920px);  opacity: 0; }
         }
         @keyframes packetRTL {
-          0%   { transform: translateX(920px);  opacity: 0;    }
+          0%   { transform: translateX(920px);  opacity: 0; }
           8%   { opacity: 1; }
           92%  { opacity: 1; }
-          100% { transform: translateX(-20px); opacity: 0;    }
+          100% { transform: translateX(-20px); opacity: 0; }
         }
         @keyframes nodePulse {
           0%, 100% { opacity: 0.15; r: 3;   }
@@ -74,38 +80,32 @@ function HeroIllustration() {
         }
       `}</style>
 
-      {/* ── Dot grid with wave pulse ───────────────────────────────────────── */}
-      {Array.from({ length: 8 }).flatMap((_, row) =>
-        Array.from({ length: 14 }).map((_, col) => (
+      {/* ── Dot grid — reduced 8×14 → 6×10 (same visual effect, 46% fewer nodes) ── */}
+      {Array.from({ length: 6 }).flatMap((_, row) =>
+        Array.from({ length: 10 }).map((_, col) => (
           <circle key={`g${row}-${col}`}
-            cx={col * 68 + 10} cy={row * 68 + 10}
+            cx={col * 92 + 14} cy={row * 88 + 14}
             r="1.2" fill="rgba(255,255,255,1)"
-            style={{
-              animation: `gridWave ${3 + (row + col) * 0.18}s ease-in-out ${(row * 0.12 + col * 0.08)}s infinite`,
-            }}/>
+            style={anim('gridWave', `${3 + (row + col) * 0.18}s`, `${(row * 0.12 + col * 0.08)}s`, 'ease-in-out')}
+            opacity={animate ? undefined : 0.04}
+          />
         ))
       )}
 
-      {/* ── Horizontal lane lines (very faint) ────────────────────────────── */}
+      {/* ── Horizontal lane lines (very faint, static) ─────────────────────── */}
       {lanes.map(({ y }, i) => (
         <line key={`ln${i}`} x1="0" y1={y} x2="900" y2={y}
           stroke="rgba(200,150,12,0.04)" strokeWidth="1"/>
       ))}
 
-      {/* ── Traveling data packets on each lane ───────────────────────────── */}
+      {/* ── Traveling data packets ─────────────────────────────────────────── */}
       {lanes.map(({ y, delay, dur, dir }, i) => (
-        <g key={`pk${i}`}>
-          {/* Lane glow trail */}
+        <g key={`pk${i}`} opacity={animate ? undefined : 0}>
           <circle cy={y} r="3.5" fill="rgba(200,150,12,0.55)"
-            style={{
-              animation: `${dir === 1 ? 'packetLTR' : 'packetRTL'} ${dur} linear ${delay} infinite`,
-            }}/>
-          {/* Leading dot */}
+            style={anim(dir === 1 ? 'packetLTR' : 'packetRTL', dur, delay, 'linear')}/>
           <circle cy={y} r="1.8" fill="#f5d060"
-            style={{
-              animation: `${dir === 1 ? 'packetLTR' : 'packetRTL'} ${dur} linear ${delay} infinite`,
-              animationDelay: `calc(${delay} + 0.05s)`,
-            }}/>
+            style={anim(dir === 1 ? 'packetLTR' : 'packetRTL', dur,
+              `calc(${delay} + 0.05s)`, 'linear')}/>
         </g>
       ))}
 
@@ -113,30 +113,32 @@ function HeroIllustration() {
       {pings.map((delay, i) => (
         <circle key={`ping${i}`} cx="450" cy="262" r="8"
           fill="none" stroke="rgba(200,150,12,0.38)" strokeWidth="1.5"
-          style={{ animation: `ping 9s cubic-bezier(0.2,0.6,0.4,1) ${delay}s infinite` }}/>
+          opacity={animate ? undefined : 0}
+          style={anim('ping', '9s', `${delay}s`, 'cubic-bezier(0.2,0.6,0.4,1)')}/>
       ))}
 
       {/* ── Accent: second smaller sonar (right side) ─────────────────────── */}
       {[0, 2.4, 4.8].map((delay, i) => (
         <circle key={`ping2${i}`} cx="750" cy="200" r="6"
           fill="none" stroke="rgba(41,151,255,0.20)" strokeWidth="1"
-          style={{ animation: `ping 7s cubic-bezier(0.2,0.6,0.4,1) ${delay}s infinite` }}/>
+          opacity={animate ? undefined : 0}
+          style={anim('ping', '7s', `${delay}s`, 'cubic-bezier(0.2,0.6,0.4,1)')}/>
       ))}
 
-      {/* ── Static accent nodes (endpoints of the signal) ─────────────────── */}
+      {/* ── Static accent nodes ────────────────────────────────────────────── */}
       {nodes.map(({ x, y }, i) => (
         <g key={`nd${i}`}>
           <circle cx={x} cy={y} r="6"
             fill="rgba(200,150,12,0.04)"
             stroke="rgba(200,150,12,0.18)" strokeWidth="1"
-            style={{ animation: `nodePulse ${3 + i * 0.4}s ease-in-out ${i * 0.5}s infinite` }}/>
+            style={anim('nodePulse', `${3 + i * 0.4}s`, `${i * 0.5}s`, 'ease-in-out')}/>
           <circle cx={x} cy={y} r="2.5"
             fill="rgba(200,150,12,0.50)"
-            style={{ animation: `nodePulse ${3 + i * 0.4}s ease-in-out ${i * 0.5}s infinite` }}/>
+            style={anim('nodePulse', `${3 + i * 0.4}s`, `${i * 0.5}s`, 'ease-in-out')}/>
         </g>
       ))}
 
-      {/* ── Vertical faint column lines ────────────────────────────────────── */}
+      {/* ── Vertical faint column lines (static) ──────────────────────────── */}
       {[225, 450, 675].map((x, i) => (
         <line key={`vl${i}`} x1={x} y1="0" x2={x} y2="520"
           stroke="rgba(200,150,12,0.025)" strokeWidth="1"/>
@@ -147,6 +149,25 @@ function HeroIllustration() {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Hero() {
+  // Defer SVG animations until after the initial paint completes.
+  // This prevents the GPU compositor from spinning up 100+ animations
+  // at the same time the browser is trying to paint the LCP element.
+  const [animate, setAnimate] = React.useState(false);
+
+  useEffect(() => {
+    // Respect user preference
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    // Start animations after a short delay to let the browser finish
+    // its initial paint and LCP measurement
+    const id = requestAnimationFrame(() => {
+      const tid = setTimeout(() => setAnimate(true), 300);
+      return () => clearTimeout(tid);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   function openSearch() {
     window.dispatchEvent(new CustomEvent('open-search'));
   }
@@ -158,7 +179,7 @@ export default function Hero() {
                  pt-[72px] md:pt-[88px] pb-10 md:pb-14">
 
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <HeroIllustration />
+        <HeroIllustration animate={animate} />
       </div>
 
       {/* Centre glow */}
@@ -170,7 +191,7 @@ export default function Hero() {
       {/* Content */}
       <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center">
 
-        {/* Logo */}
+        {/* Logo — priority:true so it is preloaded with the page */}
         <div className="relative mb-5">
           <div className="absolute inset-0 rounded-full pointer-events-none"
             style={{
@@ -194,7 +215,7 @@ export default function Hero() {
           Kerala Government Employees Portal
         </p>
 
-        {/* Heading — single line */}
+        {/* LCP element: heading — rendered immediately, no blocking dependencies */}
         <h1 className="font-malayalam font-bold bg-clip-text text-transparent mb-2 whitespace-nowrap"
           style={{
             fontSize: 'clamp(22px,5vw,64px)',
