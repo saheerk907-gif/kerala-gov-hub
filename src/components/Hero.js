@@ -182,8 +182,8 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Quick-access links */}
-        <div className="flex flex-wrap justify-center gap-2 mt-5">
+        {/* Quick-access links — hidden on mobile */}
+        <div className="hidden md:flex flex-wrap justify-center gap-2 mt-5">
           {[
             { label: 'Pension',      href: '/pension'    },
             { label: 'Pay Revision', href: '/prc'        },

@@ -331,7 +331,7 @@ export default function ToolsSection() {
           .tc:hover { transform: translateY(-3px); }
 
           .tc-primary {
-            min-width: 152px; height: 80px; padding: 0 15px;
+            min-width: 120px; height: 62px; padding: 0 12px;
             border: 1.5px solid rgba(245,166,35,0.42);
             box-shadow: 0 0 22px rgba(245,166,35,0.20), 0 4px 16px rgba(0,0,0,0.40);
             animation: tcPulse 3.8s ease-in-out infinite;
@@ -343,11 +343,11 @@ export default function ToolsSection() {
             animation: none;
           }
           .tc-secondary {
-            min-width: 130px; height: 70px; padding: 0 13px;
+            min-width: 104px; height: 54px; padding: 0 10px;
             border: 1px solid rgba(255,255,255,0.09);
           }
           .tc-tertiary {
-            min-width: 116px; height: 62px; padding: 0 12px;
+            min-width: 92px; height: 48px; padding: 0 10px;
             border: 1px solid rgba(255,255,255,0.06);
             opacity: 0.80;
           }
@@ -424,16 +424,16 @@ export default function ToolsSection() {
                 {/* Label — always on top */}
                 <div style={{ position:'relative', zIndex:2 }}>
                   <div style={{
-                    fontSize:   tier === 'primary' ? 13 : tier === 'secondary' ? 12.5 : 12,
+                    fontSize:   tier === 'primary' ? 12 : 11.5,
                     fontWeight: tier === 'primary' ? 800 : tier === 'secondary' ? 700  : 600,
                     color:      tier === 'primary' ? color : '#fff',
                     lineHeight: 1.3, whiteSpace:'nowrap',
                     textShadow: '0 1px 6px rgba(0,0,0,0.90)',
                   }}>{label}</div>
                   <div style={{
-                    fontSize:  tier === 'primary' ? 11 : 10.5,
+                    fontSize:  10,
                     color:     tier === 'primary' ? `rgba(${rgb},0.88)` : 'rgba(255,255,255,0.70)',
-                    marginTop: 3, whiteSpace:'nowrap',
+                    marginTop: 2, whiteSpace:'nowrap',
                     textShadow: '0 1px 4px rgba(0,0,0,0.80)',
                   }}>{sub}</div>
                 </div>
@@ -459,8 +459,8 @@ export default function ToolsSection() {
               borderRadius: 22,
             }}>
               <Link href={href}
-                className="group relative flex flex-col gap-2 p-5 rounded-[20px] no-underline overflow-hidden transition-all duration-300 hover:brightness-110"
-                style={{ background: BG, minHeight: 185 }}>
+                className="group relative flex flex-col gap-2 p-4 rounded-[20px] no-underline overflow-hidden transition-all duration-300 hover:brightness-110"
+                style={{ background: BG, minHeight: 150 }}>
 
                 {/* SVG illustration — behind everything */}
                 <Illustration />
@@ -477,7 +477,7 @@ export default function ToolsSection() {
                   {/* Icon + badge row */}
                   <div className="flex items-start justify-between">
                     <div style={{
-                      width: 40, height: 40, borderRadius: 12, fontSize: 20,
+                      width: 34, height: 34, borderRadius: 10, fontSize: 17,
                       background: `rgba(${colorRgb},0.18)`,
                       border: `1px solid rgba(${colorRgb},0.35)`,
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -485,11 +485,11 @@ export default function ToolsSection() {
                       {icon}
                     </div>
                     <span style={{
-                      display: 'flex', alignItems: 'center', gap: 5,
-                      padding: '5px 12px', borderRadius: 20,
+                      display: 'flex', alignItems: 'center', gap: 4,
+                      padding: '3px 9px', borderRadius: 20,
                       background: `rgba(${colorRgb},0.13)`,
                       border: `1.5px solid rgba(${colorRgb},0.4)`,
-                      color, fontSize: 11, fontWeight: 800, letterSpacing: '0.06em',
+                      color, fontSize: 10, fontWeight: 800, letterSpacing: '0.06em',
                       whiteSpace: 'nowrap',
                     }}>
                       {icon} {count} TOOLS
@@ -497,11 +497,11 @@ export default function ToolsSection() {
                   </div>
 
                   {/* Title + desc */}
-                  <div style={{ marginTop: 10 }}>
-                    <h3 style={{ color: 'rgba(255,255,255,0.95)', fontSize: 15, fontWeight: 700, marginBottom: 6 }}>
+                  <div style={{ marginTop: 8 }}>
+                    <h3 style={{ color: 'rgba(255,255,255,0.95)', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>
                       {title}
                     </h3>
-                    <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 12, lineHeight: 1.65 }}>
+                    <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 11.5, lineHeight: 1.55 }}>
                       {desc}
                     </p>
                   </div>
