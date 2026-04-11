@@ -51,13 +51,13 @@ function ArticleIllustration() {
 
       {/* Bookmark ribbon on main page */}
       <g transform="translate(524,75)">
-        <path d="M0,0 L18,0 L18,45 L9,34 L0,45 Z" fill="#2997ff" opacity="0.4"/>
+        <path d="M0,0 L18,0 L18,45 L9,34 L0,45 Z" fill="#2997ff" opacity="0.68"/>
       </g>
 
       {/* Pen / pencil */}
       <g transform="translate(340,100) rotate(-35)">
         <rect x="-5" y="-55" width="10" height="90" rx="4" fill="#2e3f60"/>
-        <polygon points="-5,35 5,35 0,55" fill="#fbbf24" opacity="0.6"/>
+        <polygon points="-5,35 5,35 0,55" fill="#fbbf24" opacity="0.85"/>
         <rect x="-5" y="-55" width="10" height="12" rx="4" fill="#3a4f75"/>
       </g>
 

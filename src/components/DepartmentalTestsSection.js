@@ -75,7 +75,7 @@ function DeptTestIllustration() {
       {/* Pencil — small diagonal */}
       <g transform="translate(338,188) rotate(-42)">
         <rect x="-4" y="-46" width="8" height="72" rx="3" fill={F2}/>
-        <polygon points="-4,26 4,26 0,44" fill="#fbbf24" opacity="0.5"/>
+        <polygon points="-4,26 4,26 0,44" fill="#fbbf24" opacity="0.82"/>
         <rect x="-4" y="-46" width="8" height="11" rx="3" fill="#3a4f75"/>
         <rect x="-4" y="-18" width="8" height="5" fill={D}/>
       </g>

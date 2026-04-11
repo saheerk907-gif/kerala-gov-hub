@@ -43,7 +43,7 @@ function AudioIllustration() {
       <g transform="translate(564,170)">
         {[28,48,68].map((r,i)=>(
           <path key={i} d={`M0,${-r} A${r},${r} 0 0,1 0,${r}`}
-            fill="none" stroke={F1} strokeWidth="5" strokeLinecap="round" opacity={0.8-i*0.2}/>
+            fill="none" stroke={F1} strokeWidth="5" strokeLinecap="round" opacity={0.92-i*0.14}/>
         ))}
       </g>
 
@@ -52,7 +52,7 @@ function AudioIllustration() {
         <circle r="52" fill={F2}/>
         <circle r="40" fill={D}/>
         {[24,30,36].map(r=>(
-          <circle key={r} r={r} fill="none" stroke={F1} strokeWidth="1.5" opacity="0.6"/>
+          <circle key={r} r={r} fill="none" stroke={F1} strokeWidth="1.5" opacity="0.85"/>
         ))}
         <circle r="11" fill={F1}/>
         <circle r="5"  fill={D}/>
