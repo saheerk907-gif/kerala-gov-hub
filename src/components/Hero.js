@@ -39,14 +39,14 @@ export default function Hero() {
           fill
           priority
           fetchPriority="high"
-          className="object-cover object-[center_65%] opacity-[0.32]"
-          style={{ filter: 'grayscale(20%) brightness(0.75) contrast(1.1)' }}
+          className="object-cover object-[center_65%] opacity-[0.55]"
+          style={{ filter: 'grayscale(10%) brightness(0.70) contrast(1.15)' }}
           sizes="100vw"
         />
         <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.85) 0%,rgba(18,20,22,0.25) 50%,rgba(18,20,22,0.85) 100%)' }} />
+          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.82) 0%,rgba(18,20,22,0.15) 50%,rgba(18,20,22,0.75) 100%)' }} />
         <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.60) 0%,transparent 40%,rgba(18,20,22,1) 100%)' }} />
+          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.45) 0%,transparent 45%,rgba(18,20,22,1) 100%)' }} />
       </div>
 
       {/* Ambient gold glow */}
