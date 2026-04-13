@@ -115,28 +115,37 @@ export default function Hero() {
           <HeroSearchButton />
         </div>
 
-        {/* Tagline — one continuous italic line, gold punchline */}
-        <p style={{
-          fontSize: 'clamp(13px, 2.5vw, 15px)',
-          fontStyle: 'italic',
-          color: 'rgba(255,255,255,0.40)',
-          lineHeight: 1.7,
-          margin: '0 0 28px',
-          letterSpacing: '0.01em',
-          textAlign: 'center',
-          maxWidth: 500,
-          padding: '0 8px',
-        }}>
-          From your first posting to your last farewell —{' '}
-          <span style={{
-            fontWeight: 700,
-            background: 'linear-gradient(90deg, #c8960c, #f5d060)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>
-            every answer is right here. 🌿
-          </span>
+        {/* Tagline — single unified shimmer line */}
+        <style>{`
+          @keyframes taglineShimmer {
+            0%   { background-position: 200% center; }
+            100% { background-position: -200% center; }
+          }
+          .hero-tagline {
+            font-style: italic;
+            font-weight: 600;
+            font-size: clamp(12px, 3vw, 15px);
+            background: linear-gradient(90deg,
+              #a06a08 0%, #c8960c 18%, #f5d060 35%,
+              #fce38a 50%,
+              #f5d060 65%, #c8960c 82%, #a06a08 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: taglineShimmer 5s linear infinite;
+            letter-spacing: 0.015em;
+            line-height: 1.65;
+            text-align: center;
+            margin: 0 0 28px;
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .hero-tagline { animation: none; background-position: 0 center; }
+          }
+        `}</style>
+        <p className="hero-tagline">
+          From your first posting to your last farewell — every answer is right here.&nbsp;🌿
         </p>
 
         {/* Stats */}
