@@ -1,21 +1,22 @@
 import './globals.css';
 import { IBM_Plex_Mono, Noto_Sans_Malayalam } from 'next/font/google';
-import Navbar from '@/components/Navbar';
-import GoogleAnalytics from '@/components/GoogleAnalytics';
-import ScrollToTop from '@/components/ScrollToTop';
+import dynamic from 'next/dynamic';
 import { organizationJsonLd, websiteJsonLd } from '@/lib/seo';
+import GoogleAnalytics from '@/components/GoogleAnalytics';
 
-// Only the weights actually used — was 5 files, now 2 files
+// ── Fonts ─────────────────────────────────────────────────────────────────────
+// display:'optional' — browser gets 100ms, then uses system font permanently.
+// IBM Plex Mono is only for code/mono text — never worth blocking paint for.
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional',
   variable: '--font-ibm-plex-mono',
   weight: ['400', '700'],
 });
 
-// Reduced from 7 weights → 3. Drops ~60% of Malayalam font payload.
-// preload:true injects <link rel="preload"> so the headline text
-// doesn't block FCP waiting for the font response.
+// Malayalam headline font — 2 weights only (700, 900).
+// display:'fallback' — 100ms window then locks to system font for this load.
+// On repeat visits font is cached → instant.
 const notoMalayalam = Noto_Sans_Malayalam({
   subsets: ['malayalam'],
   display: 'fallback',
@@ -25,17 +26,27 @@ const notoMalayalam = Noto_Sans_Malayalam({
   adjustFontFallback: true,
 });
 
+// ── Lazy-hydrate heavy layout components ─────────────────────────────────────
+// Navbar: SSR=true so nav links are in HTML (SEO + accessibility preserved),
+// but JS chunk is code-split → doesn't block initial hydration.
+const Navbar = dynamic(() => import('@/components/Navbar'), { ssr: true });
+
+// ScrollToTop: pure UI enhancement, zero SEO value — defer entirely.
+const ScrollToTop = dynamic(() => import('@/components/ScrollToTop'), {
+  ssr: false,
+  loading: () => null,
+});
+
 const BASE_URL = 'https://keralaemployees.in';
 
 export const metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Kerala Employees Portal – Salary, DA, Pension Updates', // 53 chars
+    default: 'Kerala Employees Portal – Salary, DA, Pension Updates',
     template: '%s | Kerala Employees',
   },
   description:
     'Latest Kerala govt employee updates: DA arrears, pension rules, MEDISEP, salary tools & calculators. Simple, accurate, updated.',
-  // Keep description under 160 chars — do not exceed
   keywords:
     'Kerala government employees, കേരള സർക്കാർ ജീവനക്കാർ, MEDISEP, Kerala pension calculator, KSR rules, Kerala service rules, GPF, NPS, APS, PRC calculator, government orders Kerala, departmental tests Kerala, pension forms Kerala, DCRG calculator',
   authors: [{ name: 'Kerala Employees', url: BASE_URL }],
@@ -44,10 +55,7 @@ export const metadata = {
   robots: { index: true, follow: true },
   themeColor: '#121416',
   alternates: { canonical: BASE_URL },
-  icons: {
-    icon: '/logo.webp',
-    apple: '/logo.webp',
-  },
+  icons: { icon: '/logo.webp', apple: '/logo.webp' },
   openGraph: {
     type: 'website',
     locale: 'ml_IN',
@@ -72,7 +80,20 @@ export default function RootLayout({ children }) {
     <html lang="ml" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* next/font/google self-hosts fonts — no external preconnect needed */}
+
+        {/*
+          Explicit preload for LCP image — tells browser to fetch it at highest
+          priority before it even parses the page body. next/image priority prop
+          adds this too, but explicit <link> fires earlier in the waterfall.
+        */}
+        <link
+          rel="preload"
+          as="image"
+          href="/kerala-secretariat-opt.webp"
+          fetchPriority="high"
+        />
+
+        {/* Structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

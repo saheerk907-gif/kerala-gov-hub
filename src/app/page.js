@@ -2,28 +2,31 @@ import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import { getSchemes, getGovernmentOrders, getQuickLinks, getSiteStats, getNews } from '@/lib/supabase';
 
-// ── ABOVE THE FOLD: Eagerly loaded ──────────────────────────────────────────
+// ── ABOVE FOLD: Server-rendered, zero JS cost ────────────────────────────────
 import Hero from '@/components/Hero';
-import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ToolsSection from '@/components/ToolsSection';
-import ScrollReveal from '@/components/ScrollReveal';
+
+// ── NEAR FOLD: SSR but code-split JS chunks ──────────────────────────────────
+// AnnouncementBanner fetches its own data client-side (Supabase) anyway —
+// no SSR content to lose. Deferring removes it from hydration critical path.
+const AnnouncementBanner = dynamic(
+  () => import('@/components/AnnouncementBanner'),
+  { ssr: false, loading: () => null }
+);
+
 const MobileBottomNav = dynamic(
   () => import('@/components/MobileBottomNav'),
   { ssr: false, loading: () => null }
 );
 
-// ── BELOW THE FOLD: Code-split, lazy JS bundles ──────────────────────────────
-// Sections that receive server-fetched props keep ssr:true (default).
-// Pure client-side sections (forum, experiences, audio) use ssr:false since they
-// fetch their own data client-side anyway — no SSR content to lose.
-
-const OrdersSection          = dynamic(() => import('@/components/OrdersSection'));
-const NewSection             = dynamic(() => import('@/components/NewSection'));
-const TrendingArticle        = dynamic(() => import('@/components/TrendingArticle'));
-const ArticlesSection        = dynamic(() => import('@/components/ArticlesSection'));
-const ExperiencesSection     = dynamic(() => import('@/components/ExperiencesSection'),     { ssr: false });
-const ForumSection           = dynamic(() => import('@/components/ForumSection'),           { ssr: false });
-const AudioClassesSection    = dynamic(() => import('@/components/AudioClassesSection'),    { ssr: false });
+// ── BELOW FOLD: Full lazy, with skeleton placeholders ───────────────────────
+const OrdersSection               = dynamic(() => import('@/components/OrdersSection'));
+const NewSection                  = dynamic(() => import('@/components/NewSection'));
+const TrendingArticle             = dynamic(() => import('@/components/TrendingArticle'));
+const ArticlesSection             = dynamic(() => import('@/components/ArticlesSection'));
+const ExperiencesSection          = dynamic(() => import('@/components/ExperiencesSection'),          { ssr: false });
+const ForumSection                = dynamic(() => import('@/components/ForumSection'),                { ssr: false });
+const AudioClassesSection         = dynamic(() => import('@/components/AudioClassesSection'),         { ssr: false });
 const DepartmentalTestsSection    = dynamic(() => import('@/components/DepartmentalTestsSection'));
 const SchemesSection              = dynamic(() => import('@/components/SchemesSection'));
 const DepartmentResourcesSection  = dynamic(() => import('@/components/DepartmentResourcesSection'));
@@ -32,7 +35,7 @@ const Footer                      = dynamic(() => import('@/components/Footer'))
 
 export const revalidate = 3600;
 
-// Lightweight skeleton placeholder while below-fold sections hydrate
+// Skeleton shown while JS chunks load
 function CardSkeleton({ height = 360 }) {
   return (
     <div
@@ -69,10 +72,9 @@ export default async function HomePage() {
   return (
     <div className="relative min-h-screen bg-aurora overflow-x-hidden pb-14 md:pb-0">
 
-      {/* ── ABOVE FOLD: painted instantly ── */}
+      {/* ── ABOVE FOLD: painted on first frame, zero client JS ── */}
       <Hero />
       <AnnouncementBanner />
-
       <ToolsSection />
 
       {/* ━━ GROUP: Latest Updates ━━ */}
@@ -80,18 +82,14 @@ export default async function HomePage() {
 
       <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
-          <ScrollReveal direction="up" delay={100}>
+          <Suspense fallback={<CardSkeleton />}>
+            <OrdersSection orders={orders} />
+          </Suspense>
+          <section id="news">
             <Suspense fallback={<CardSkeleton />}>
-              <OrdersSection orders={orders} />
+              <NewSection news={news} />
             </Suspense>
-          </ScrollReveal>
-          <ScrollReveal direction="up" delay={200}>
-            <section id="news">
-              <Suspense fallback={<CardSkeleton />}>
-                <NewSection news={news} />
-              </Suspense>
-            </section>
-          </ScrollReveal>
+          </section>
         </div>
       </div>
 
@@ -99,71 +97,52 @@ export default async function HomePage() {
         <TrendingArticle />
       </Suspense>
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton height={320} />}>
-          <ArticlesSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton height={320} />}>
+        <ArticlesSection />
+      </Suspense>
 
       {/* ━━ GROUP: Community ━━ */}
       <SectionDivider label="Community" icon="👥" />
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton height={400} />}>
-          <ExperiencesSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton height={400} />}>
+        <ExperiencesSection />
+      </Suspense>
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton />}>
-          <ForumSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton />}>
+        <ForumSection />
+      </Suspense>
 
       {/* ━━ GROUP: Learning ━━ */}
       <SectionDivider label="Learning" icon="📚" />
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton />}>
-          <AudioClassesSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton />}>
+        <AudioClassesSection />
+      </Suspense>
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton />}>
-          <DepartmentalTestsSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton />}>
+        <DepartmentalTestsSection />
+      </Suspense>
 
       {/* ━━ GROUP: Reference ━━ */}
       <SectionDivider label="Reference" icon="📎" />
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton />}>
-          <SchemesSection schemes={schemes} />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton />}>
+        <SchemesSection schemes={schemes} />
+      </Suspense>
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton />}>
-          <DepartmentResourcesSection />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton />}>
+        <DepartmentResourcesSection />
+      </Suspense>
 
-      <ScrollReveal direction="up" delay={100}>
-        <Suspense fallback={<CardSkeleton height={300} />}>
-          <QuickLinksSection links={quickLinks} />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={<CardSkeleton height={300} />}>
+        <QuickLinksSection links={quickLinks} />
+      </Suspense>
 
-      {/* Footer */}
-      <ScrollReveal direction="fade" delay={0}>
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
-      </ScrollReveal>
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
 
-      {/* Mobile sticky bottom nav */}
+      {/* Mobile sticky bottom nav — deferred, no SSR needed */}
       <MobileBottomNav />
     </div>
   );
