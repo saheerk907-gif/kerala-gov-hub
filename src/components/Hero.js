@@ -115,18 +115,20 @@ export default function Hero() {
           <HeroSearchButton />
         </div>
 
-        {/* Tagline — sits calmly below search, above stats */}
+        {/* Tagline — one continuous italic line, gold punchline */}
         <p style={{
-          fontSize: 'clamp(12px, 1.5vw, 14px)',
+          fontSize: 'clamp(13px, 2.5vw, 15px)',
           fontStyle: 'italic',
-          color: 'rgba(255,255,255,0.38)',
+          color: 'rgba(255,255,255,0.40)',
           lineHeight: 1.7,
           margin: '0 0 28px',
           letterSpacing: '0.01em',
+          textAlign: 'center',
+          maxWidth: 500,
+          padding: '0 8px',
         }}>
           From your first posting to your last farewell —{' '}
           <span style={{
-            fontStyle: 'normal',
             fontWeight: 700,
             background: 'linear-gradient(90deg, #c8960c, #f5d060)',
             WebkitBackgroundClip: 'text',
