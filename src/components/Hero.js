@@ -26,24 +26,22 @@ export default function Hero() {
       {/* Base gradient background */}
       <div className="absolute inset-0 pointer-events-none" style={{ background: '#0d1117' }} />
 
-      {/* Gold radial — top centre, like a soft spotlight */}
+      {/* Gold radial — top centre */}
       <div className="absolute pointer-events-none" style={{
         top: '-10%', left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: '55%',
         background: 'radial-gradient(ellipse at 50% 0%, rgba(200,150,12,0.10) 0%, transparent 70%)',
       }} />
 
-      {/* Blue radial — bottom left corner accent */}
+      {/* Blue radial — bottom left */}
       <div className="absolute pointer-events-none" style={{
-        bottom: 0, left: '-5%',
-        width: '45%', height: '45%',
+        bottom: 0, left: '-5%', width: '45%', height: '45%',
         background: 'radial-gradient(ellipse at 0% 100%, rgba(41,151,255,0.07) 0%, transparent 65%)',
       }} />
 
-      {/* Purple radial — bottom right corner accent */}
+      {/* Purple radial — bottom right */}
       <div className="absolute pointer-events-none" style={{
-        bottom: 0, right: '-5%',
-        width: '40%', height: '40%',
+        bottom: 0, right: '-5%', width: '40%', height: '40%',
         background: 'radial-gradient(ellipse at 100% 100%, rgba(120,80,220,0.06) 0%, transparent 65%)',
       }} />
 
@@ -52,7 +50,7 @@ export default function Hero() {
         background: 'linear-gradient(90deg, transparent 0%, rgba(200,150,12,0.45) 35%, rgba(245,208,96,0.60) 50%, rgba(200,150,12,0.45) 65%, transparent 100%)',
       }} />
 
-      {/* Subtle grid texture overlay */}
+      {/* Grid texture */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
         backgroundSize: '48px 48px',
@@ -64,16 +62,13 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-2xl mx-auto px-6 flex flex-col items-center">
 
         {/* Logo */}
-        <div className="relative mb-6">
-          <div
-            className="absolute inset-0 rounded-full blur-3xl scale-[1.8]"
-            style={{ background: 'rgba(200,150,12,0.22)' }}
-          />
+        <div className="relative mb-5">
+          <div className="absolute inset-0 rounded-full blur-3xl scale-[1.8]"
+            style={{ background: 'rgba(200,150,12,0.22)' }} />
           <Image
             src="/logo.webp"
             alt="Kerala Employees Portal"
-            width={120}
-            height={120}
+            width={120} height={120}
             priority
             className="relative rounded-full object-cover"
             style={{
@@ -83,124 +78,79 @@ export default function Hero() {
           />
         </div>
 
-        {/* Eyebrow label */}
-        <p
-          className="font-bold mb-5"
-          style={{
-            fontSize: 'clamp(13px, 2vw, 17px)',
-            letterSpacing: '0.18em',
-            color: 'rgba(245,208,96,0.70)',
-            textTransform: 'uppercase',
-          }}
-        >
+        {/* Eyebrow */}
+        <p className="font-bold mb-4" style={{
+          fontSize: 'clamp(11px, 1.8vw, 15px)',
+          letterSpacing: '0.18em',
+          color: 'rgba(245,208,96,0.70)',
+          textTransform: 'uppercase',
+        }}>
           Kerala Government Employees Portal
         </p>
 
-        {/* H1 — one line, never wraps */}
-        <h1
-          className="font-malayalam font-black whitespace-nowrap leading-[1.25] mb-3"
-          style={{
-            fontSize: 'clamp(36px, 8vw, 80px)',
-            background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            filter: 'drop-shadow(0 0 28px rgba(200,150,12,0.30))',
-            letterSpacing: '-0.01em',
-          }}
-        >
+        {/* H1 */}
+        <h1 className="font-malayalam font-black whitespace-nowrap leading-[1.25] mb-2" style={{
+          fontSize: 'clamp(36px, 8vw, 80px)',
+          background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 28px rgba(200,150,12,0.30))',
+          letterSpacing: '-0.01em',
+        }}>
           കേരള സർക്കാർ
         </h1>
 
         {/* H2 */}
-        <h2
-          className="font-malayalam font-semibold leading-snug mb-8"
-          style={{
-            fontSize: 'clamp(15px, 3vw, 26px)',
-            background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
-            letterSpacing: '0.01em',
-          }}
-        >
+        <h2 className="font-malayalam font-semibold leading-snug mb-6" style={{
+          fontSize: 'clamp(15px, 3vw, 26px)',
+          background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
+          WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+          filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
+          letterSpacing: '0.01em',
+        }}>
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
 
-        {/* ── Tagline ── */}
-        <div className="text-center mb-7" style={{ maxWidth: 460 }}>
-
-          {/* Decorative rule with label */}
-          <div style={{
-            display: 'flex', alignItems: 'center',
-            gap: 10, justifyContent: 'center', marginBottom: 13,
-          }}>
-            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, rgba(245,208,96,0.28), transparent)' }} />
-            <span style={{
-              fontSize: 9, fontWeight: 800, letterSpacing: '0.22em',
-              textTransform: 'uppercase', color: 'rgba(245,208,96,0.45)',
-            }}>
-              for kerala&apos;s public servants
-            </span>
-            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(245,208,96,0.28), transparent)' }} />
-          </div>
-
-          {/* Main line — italic warm body */}
-          <p style={{
-            fontSize: 'clamp(14px, 1.9vw, 17px)',
-            fontStyle: 'italic',
-            color: 'rgba(255,255,255,0.58)',
-            lineHeight: 1.80,
-            margin: '0 0 8px',
-            fontWeight: 400,
-          }}>
-            From your first posting to your last farewell —
-          </p>
-
-          {/* Punchline — bold, gold, upright */}
-          <p style={{
-            fontSize: 'clamp(15px, 2vw, 19px)',
-            fontStyle: 'normal',
-            fontWeight: 800,
-            margin: 0,
-            background: 'linear-gradient(100deg, #c8960c 0%, #f5d060 45%, #fce38a 60%, #f5d060 78%, #c8960c 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            filter: 'drop-shadow(0 0 18px rgba(200,150,12,0.28))',
-            letterSpacing: '0.01em',
-          }}>
-            every answer is right here. 🌿
-          </p>
-        </div>
-
-        {/* Search */}
-        <div className="w-full max-w-[500px]">
+        {/* Search — immediate CTA after headings */}
+        <div className="w-full max-w-[500px] mb-5">
           <HeroSearchButton />
         </div>
 
-        {/* Stats row */}
-        <div
-          className="flex items-center divide-x mb-7"
-          style={{ divideColor: 'rgba(255,255,255,0.08)' }}
-        >
+        {/* Tagline — sits calmly below search, above stats */}
+        <p style={{
+          fontSize: 'clamp(12px, 1.5vw, 14px)',
+          fontStyle: 'italic',
+          color: 'rgba(255,255,255,0.38)',
+          lineHeight: 1.7,
+          margin: '0 0 28px',
+          letterSpacing: '0.01em',
+        }}>
+          From your first posting to your last farewell —{' '}
+          <span style={{
+            fontStyle: 'normal',
+            fontWeight: 700,
+            background: 'linear-gradient(90deg, #c8960c, #f5d060)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            every answer is right here. 🌿
+          </span>
+        </p>
+
+        {/* Stats */}
+        <div className="flex items-center mb-7">
           {STATS.map((s, i) => (
             <div
               key={i}
               className="flex flex-col items-center px-5 md:px-7"
               style={{ borderRight: i < STATS.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none' }}
             >
-              <span
-                className="font-black leading-none"
-                style={{ fontSize: 'clamp(16px, 2.5vw, 22px)', color: '#f5d060' }}
-              >
+              <span className="font-black leading-none"
+                style={{ fontSize: 'clamp(16px, 2.5vw, 22px)', color: '#f5d060' }}>
                 {s.value}
               </span>
-              <span
-                className="uppercase tracking-wider mt-1"
-                style={{ fontSize: 9, color: 'rgba(255,255,255,0.38)', fontWeight: 600 }}
-              >
+              <span className="uppercase tracking-wider mt-1"
+                style={{ fontSize: 9, color: 'rgba(255,255,255,0.38)', fontWeight: 600 }}>
                 {s.label}
               </span>
             </div>
@@ -215,10 +165,8 @@ export default function Hero() {
               href={link.href}
               className="no-underline transition-all duration-150 hover:brightness-125"
               style={{
-                padding: '6px 14px',
-                borderRadius: 99,
-                fontSize: 11,
-                fontWeight: 600,
+                padding: '6px 14px', borderRadius: 99,
+                fontSize: 11, fontWeight: 600,
                 color: 'rgba(255,255,255,0.60)',
                 background: 'rgba(255,255,255,0.05)',
                 border: '1px solid rgba(255,255,255,0.09)',
