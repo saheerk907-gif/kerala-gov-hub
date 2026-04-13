@@ -3,6 +3,46 @@
 @tailwind utilities;
 
 /* ══════════════════════════════════════════════════════════
+   MALAYALAM TYPOGRAPHY — global rules
+   Malayalam script has tall ascenders + below-baseline matras.
+   Default line-heights (1.2–1.5) clip characters. Min 1.7 required.
+   ══════════════════════════════════════════════════════════ */
+
+/* Every element that carries the Malayalam font variable */
+.font-malayalam,
+[style*="noto-malayalam"],
+[style*="Noto Sans Malayalam"] {
+  font-family: var(--font-noto-malayalam), "Noto Sans Malayalam",
+               "Malayalam MN", "Kartika", sans-serif;
+  /* Malayalam-safe minimum line-height — prevents clipping of
+     ൃ ൄ ്ര ്യ ligatures and below-baseline vowel signs */
+  line-height: 1.75;
+  /* Optical size hint improves hinting at small sizes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Headings can be tighter but never below 1.4 */
+h1.font-malayalam, h2.font-malayalam, h3.font-malayalam {
+  line-height: 1.40;
+}
+
+/* Body paragraphs need the most room */
+p.font-malayalam,
+[style*="noto-malayalam"][class*="text-[1"],
+[style*="noto-malayalam"][class*="text-sm"],
+[style*="noto-malayalam"][class*="text-base"] {
+  line-height: 1.85;
+}
+
+/* Ensure body text (including fontFamily inline style) inherits smoothing */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ══════════════════════════════════════════════════════════
    THEME VARIABLES — dark (default) + light overrides
    ══════════════════════════════════════════════════════════ */
 :root {

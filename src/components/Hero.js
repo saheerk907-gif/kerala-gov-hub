@@ -98,7 +98,7 @@ export default function Hero() {
 
         {/* H1 — one line, never wraps */}
         <h1
-          className="font-malayalam font-black whitespace-nowrap leading-none mb-3"
+          className="font-malayalam font-black whitespace-nowrap leading-[1.25] mb-3"
           style={{
             fontSize: 'clamp(36px, 8vw, 80px)',
             background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',

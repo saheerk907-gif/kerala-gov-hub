@@ -297,7 +297,7 @@ export default function ToolsSection() {
         <div className="mb-4">
           <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/65 mb-1">Tools & Calculators</div>
           <h2
-            className="font-malayalam font-bold leading-[1.2] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
+            className="font-malayalam font-bold leading-[1.4] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
             style={{
               fontSize: 'clamp(20px,2.5vw,34px)',
               backgroundImage: titleGrad,

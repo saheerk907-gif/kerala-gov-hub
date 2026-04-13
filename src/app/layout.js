@@ -14,14 +14,15 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ['400', '700'],
 });
 
-// Malayalam headline font — 2 weights only (700, 900).
-// display:'fallback' — 100ms window then locks to system font for this load.
-// On repeat visits font is cached → instant.
+// Malayalam font — 3 weights: 400 body, 700 subheads, 900 headlines.
+// display:'swap' — browser renders with system Malayalam font first,
+// then swaps when Noto loads. Critical for body-text readability.
+// adjustFontFallback trims the layout shift on swap.
 const notoMalayalam = Noto_Sans_Malayalam({
   subsets: ['malayalam'],
-  display: 'fallback',
+  display: 'swap',
   variable: '--font-noto-malayalam',
-  weight: ['700', '900'],
+  weight: ['400', '700', '900'],
   preload: true,
   adjustFontFallback: true,
 });
