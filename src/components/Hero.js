@@ -128,6 +128,69 @@ export default function Hero() {
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
 
+        {/* ── Positive tagline block ── */}
+        <div className="flex flex-col items-center mb-7" style={{ maxWidth: 500 }}>
+
+          {/* Warm one-liner */}
+          <p
+            className="text-center font-sans"
+            style={{
+              fontSize: 'clamp(13px, 1.8vw, 15px)',
+              color: 'rgba(255,255,255,0.50)',
+              lineHeight: 1.85,
+              margin: '0 0 16px',
+            }}
+          >
+            From your{' '}
+            <span style={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600 }}>first posting</span>
+            {' '}to a{' '}
+            <span style={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600 }}>happy retirement</span>
+            {' '}— every rule, calculator &amp; order you&apos;ll ever need,{' '}
+            <span
+              style={{
+                background: 'linear-gradient(90deg,#c8960c,#f5d060)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: 700,
+              }}
+            >
+              all free, always.
+            </span>
+          </p>
+
+          {/* Feature pill row */}
+          <div
+            className="flex flex-wrap justify-center"
+            style={{ gap: 7 }}
+          >
+            {[
+              { emoji: '💰', label: 'Salary'      },
+              { emoji: '🧮', label: 'Pension'     },
+              { emoji: '📅', label: 'DA Arrear'   },
+              { emoji: '🌿', label: 'Leave Rules' },
+              { emoji: '📄', label: 'Govt Orders' },
+              { emoji: '💊', label: 'MEDISEP'     },
+            ].map(({ emoji, label }) => (
+              <span
+                key={label}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  padding: '5px 12px', borderRadius: 99,
+                  background: 'rgba(245,208,96,0.06)',
+                  border: '1px solid rgba(245,208,96,0.16)',
+                  color: 'rgba(245,208,96,0.72)',
+                  fontSize: 11, fontWeight: 600,
+                  letterSpacing: '0.02em',
+                }}
+              >
+                <span style={{ fontSize: 12 }}>{emoji}</span>
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
         {/* Search */}
         <div className="w-full max-w-[500px]">
           <HeroSearchButton />
