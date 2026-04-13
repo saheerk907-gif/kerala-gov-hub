@@ -7,7 +7,10 @@ import Hero from '@/components/Hero';
 import AnnouncementBanner from '@/components/AnnouncementBanner';
 import ToolsSection from '@/components/ToolsSection';
 import ScrollReveal from '@/components/ScrollReveal';
-import MobileBottomNav from '@/components/MobileBottomNav';
+const MobileBottomNav = dynamic(
+  () => import('@/components/MobileBottomNav'),
+  { ssr: false, loading: () => null }
+);
 
 // ── BELOW THE FOLD: Code-split, lazy JS bundles ──────────────────────────────
 // Sections that receive server-fetched props keep ssr:true (default).
@@ -70,9 +73,7 @@ export default async function HomePage() {
       <Hero />
       <AnnouncementBanner />
 
-      <ScrollReveal direction="up" delay={0}>
-        <ToolsSection />
-      </ScrollReveal>
+      <ToolsSection />
 
       {/* ━━ GROUP: Latest Updates ━━ */}
       <SectionDivider label="Latest Updates" icon="📢" />

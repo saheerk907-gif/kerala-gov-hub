@@ -18,10 +18,11 @@ const ibmPlexMono = IBM_Plex_Mono({
 // doesn't block FCP waiting for the font response.
 const notoMalayalam = Noto_Sans_Malayalam({
   subsets: ['malayalam'],
-  display: 'swap',
+  display: 'fallback',
   variable: '--font-noto-malayalam',
-  weight: ['400', '700', '900'],
+  weight: ['700', '900'],
   preload: true,
+  adjustFontFallback: true,
 });
 
 const BASE_URL = 'https://keralaemployees.in';
@@ -71,9 +72,7 @@ export default function RootLayout({ children }) {
     <html lang="ml" className={`${ibmPlexMono.variable} ${notoMalayalam.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Hint browser to pre-connect to Google Fonts CDN — reduces font TTFB */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* next/font/google self-hosts fonts — no external preconnect needed */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

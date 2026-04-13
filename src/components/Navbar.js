@@ -1,8 +1,12 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import ThemeToggle from '@/components/ThemeToggle';
-import SearchModal from '@/components/SearchModal';
+const SearchModal = dynamic(() => import('@/components/SearchModal'), {
+  ssr: false,
+  loading: () => null,
+});
 
 const NAV_ITEMS = [
   {
