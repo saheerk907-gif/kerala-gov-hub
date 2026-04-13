@@ -20,7 +20,7 @@ export default function Footer() {
                 <div className="text-[13px] font-bold text-white/85 leading-tight" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                   കേരള ജീവനക്കാര്യ ഹബ്
                 </div>
-                <div className="text-[9px] text-white/50 font-sans uppercase tracking-widest">
+                <div className="text-[11px] text-white/65 font-sans uppercase tracking-widest">
                   Kerala Gov Employee Hub
                 </div>
               </div>
@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-5 md:pt-6 text-[12px] text-white/58 gap-2 sm:gap-3">
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-5 md:pt-6 text-[12px] text-white/68 gap-2 sm:gap-3">
           <span>© 2026 Kerala Gov Employee Hub</span>
           <div className="flex items-center gap-4 flex-wrap justify-center">
             <a href="/about" className="hover:text-white/75 transition-colors no-underline">About</a>

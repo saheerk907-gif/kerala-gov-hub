@@ -101,10 +101,10 @@ export default function NewsSection() {
                     </div>
                     <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${index === 0 ? 'bg-[#2997ff]/30 text-[#2997ff]' : 'bg-white/[0.08] text-white/65'}`}>
+                        <span className={`text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${index === 0 ? 'bg-[#2997ff]/30 text-[#2997ff]' : 'bg-white/[0.08] text-white/75'}`}>
                           {index === 0 ? 'LATEST' : (item.category === 'news' ? 'വാർത്ത' : item.category)}
                         </span>
-                        <span className="text-[10px] text-white/70">{new Date(item.created_at).toLocaleDateString('en-GB')}</span>
+                        <span className="text-[11px] text-white/72">{new Date(item.created_at).toLocaleDateString('en-GB')}</span>
                       </div>
                       <h3 className="text-[12px] md:text-[13px] font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                         {item.title_ml}

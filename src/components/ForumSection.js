@@ -202,17 +202,17 @@ export default function ForumSection() {
                               {thread.title}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5">
-                              <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
+                              <span className="text-[11px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
                                 style={{ background:`${cat.color}18`, color: cat.color }}>
                                 {cat.label}
                               </span>
-                              <span className="text-[10px] text-white/35">{thread.author_name}</span>
-                              <span className="text-[10px] text-white/25">·</span>
-                              <span className="text-[10px] text-white/35">{timeAgo(thread.created_at)}</span>
+                              <span className="text-[11px] text-white/62">{thread.author_name}</span>
+                              <span className="text-[11px] text-white/40">·</span>
+                              <span className="text-[11px] text-white/62">{timeAgo(thread.created_at)}</span>
                             </div>
                           </div>
                           {thread.reply_count > 0 && (
-                            <div className="flex-shrink-0 flex items-center gap-1 text-[11px] text-white/40">
+                            <div className="flex-shrink-0 flex items-center gap-1 text-[11px] text-white/60">
                               <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                               </svg>

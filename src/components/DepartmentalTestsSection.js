@@ -137,12 +137,12 @@ export default function DepartmentalTestsSection() {
 
                   {/* Stats badges */}
                   <div className="flex items-center gap-2 mt-3">
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest"
                       style={{ background: 'rgba(41,151,255,0.15)', border: '1px solid rgba(41,151,255,0.35)', color: ACCENT }}>
                       📋 {DEPTS.length} Departments
                     </div>
-                    <div className="px-2.5 py-1 rounded-full text-[10px] font-semibold"
-                      style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.65)' }}>
+                    <div className="px-2.5 py-1 rounded-full text-[11px] font-semibold"
+                      style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.72)' }}>
                       📝 {TESTS.length} Tests
                     </div>
                   </div>
@@ -188,7 +188,7 @@ export default function DepartmentalTestsSection() {
                           style={{ fontFamily: "var(--font-noto-malayalam), sans-serif", textShadow: '0 1px 4px rgba(0,0,0,0.8)' }}>
                           {d.label}
                         </div>
-                        <div className="text-[9px] font-medium mt-0.5" style={{ color: d.color + 'bb' }}>
+                        <div className="text-[11px] font-medium mt-0.5" style={{ color: d.color + 'cc' }}>
                           {count} tests
                         </div>
                       </div>

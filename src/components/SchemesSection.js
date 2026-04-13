@@ -68,7 +68,7 @@ export default function SchemesSection({ schemes }) {
                 <div className="h-[3px] w-12 mt-2 rounded-full"
                   style={{ background:`linear-gradient(to right, ${ACCENT}, transparent)` }}/>
                 <div className="flex items-center gap-2 mt-3">
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest"
                     style={{ background:'rgba(255,159,10,0.15)', border:'1px solid rgba(255,159,10,0.35)', color:ACCENT }}>
                     📚 {filtered.length} Schemes & Rules
                   </div>

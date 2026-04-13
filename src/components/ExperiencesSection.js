@@ -239,7 +239,7 @@ export default function ExperiencesSection() {
 
                         <p className="line-clamp-2" style={{
                           fontSize: 13, lineHeight: 1.68,
-                          color: 'rgba(255,255,255,0.62)',
+                          color: 'rgba(255,255,255,0.78)',
                           fontFamily: "var(--font-noto-malayalam), sans-serif",
                           marginBottom: 12,
                         }}>
@@ -252,11 +252,11 @@ export default function ExperiencesSection() {
                             <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.88)' }}>
                               {featured.is_anonymous ? 'Anonymous' : featured.author_name}
                             </div>
-                            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.44)', marginTop: 1 }}>
+                            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.62)', marginTop: 1 }}>
                               {featured.department} · {getReadTime(featured.body)} min read · {timeAgo(featured.published_at)}
                             </div>
                           </div>
-                          <div style={{ marginLeft: 'auto', display: 'flex', gap: 10, fontSize: 11, color: 'rgba(255,255,255,0.40)', flexShrink: 0 }}>
+                          <div style={{ marginLeft: 'auto', display: 'flex', gap: 10, fontSize: 12, color: 'rgba(255,255,255,0.60)', flexShrink: 0 }}>
                             <span>👍 {featured.helpful_count}</span>
                             <span>❤️ {featured.relatable_count}</span>
                           </div>
@@ -277,7 +277,7 @@ export default function ExperiencesSection() {
                               }}>
                                 {exp.title}
                               </div>
-                              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.38)', marginTop: 2 }}>
+                              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.58)', marginTop: 2 }}>
                                 {exp.is_anonymous ? 'Anonymous' : exp.author_name} · {timeAgo(exp.published_at)}
                               </div>
                             </div>

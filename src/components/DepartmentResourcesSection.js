@@ -249,7 +249,7 @@ export default function DepartmentResourcesSection() {
                         <div className="text-[13px] font-bold text-white/85" style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
                           {dept.title_ml}
                         </div>
-                        <div className="text-[9px] font-black uppercase tracking-widest" style={{ color: dept.color + 'aa' }}>
+                        <div className="text-[11px] font-black uppercase tracking-widest" style={{ color: dept.color + 'cc' }}>
                           {dept.subtitle_en}
                         </div>
                       </div>

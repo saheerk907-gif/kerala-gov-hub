@@ -27,7 +27,7 @@ export default function OrdersSection({ orders }) {
   const handleSearch = (val) => setQuery(val);
 
   return (
-    <section id="orders" className="relative py-2 md:py-3 flex flex-col h-full">
+    <section id="orders" className="relative py-2 md:py-3 flex flex-col h-full w-full">
       {/* Gradient border wrapper */}
       <div style={{
         background: 'linear-gradient(135deg,rgba(140,80,240,0.5),rgba(60,130,255,0.5))',
@@ -120,10 +120,10 @@ export default function OrdersSection({ orders }) {
                       </div>
                       <div className="flex-grow min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                          <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-[#2997ff]/20 text-[#2997ff]'}`}>
+                          <span className={`text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full ${o.is_pinned ? 'bg-[#ff9f0a]/30 text-[#ff9f0a]' : 'bg-[#2997ff]/20 text-[#2997ff]'}`}>
                             {o.is_pinned ? 'PINNED' : (o.go_number?.split('/')[0] || 'GO')}
                           </span>
-                          <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
+                          <span className="text-[11px] text-white/65">{formatDate(o.go_date)}</span>
                         </div>
                         <h3 className="text-[12px] md:text-[13px] font-bold leading-snug text-white/90 group-hover:text-white transition-colors line-clamp-2"
                           style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
@@ -149,12 +149,12 @@ export default function OrdersSection({ orders }) {
                     </div>
                     <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
-                        <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.08] text-white/65">
+                        <span className="text-[11px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.08] text-white/70">
                           {o.go_number?.split('/')[0] || 'GO'}
                         </span>
-                        <span className="text-[10px] text-white/50">{formatDate(o.go_date)}</span>
+                        <span className="text-[11px] text-white/65">{formatDate(o.go_date)}</span>
                       </div>
-                      <h3 className="text-[13px] font-bold leading-snug text-white/60 line-clamp-2"
+                      <h3 className="text-[13px] font-bold leading-snug text-white/72 line-clamp-2"
                         style={{ fontFamily: "var(--font-noto-malayalam), sans-serif" }}>{o.title_ml}</h3>
                     </div>
                   </div>

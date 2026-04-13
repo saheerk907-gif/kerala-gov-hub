@@ -80,8 +80,8 @@ export default async function HomePage() {
       {/* ━━ GROUP: Latest Updates ━━ */}
       <SectionDivider label="Latest Updates" icon="📢" />
 
-      <div className="px-4 md:px-6 max-w-[1200px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 items-stretch">
+      <div className="px-4 md:px-6 max-w-[1200px] mx-auto py-3 md:py-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-stretch">
           <Suspense fallback={<CardSkeleton />}>
             <OrdersSection orders={orders} />
           </Suspense>

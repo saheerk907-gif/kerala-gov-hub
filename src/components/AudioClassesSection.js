@@ -122,13 +122,13 @@ export default function AudioClassesSection() {
 
                 {/* Live badge */}
                 <div className="flex items-center gap-2 mt-3">
-                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest"
+                  <div className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-widest"
                     style={{ background: 'rgba(255,159,10,0.15)', border: '1px solid rgba(255,159,10,0.35)', color: ACCENT }}>
                     <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: ACCENT, animation: 'pulse 2s infinite' }} />
                     Audio Classes
                   </div>
-                  <div className="px-2.5 py-1 rounded-full text-[10px] font-semibold"
-                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.65)' }}>
+                  <div className="px-2.5 py-1 rounded-full text-[11px] font-semibold"
+                    style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.72)' }}>
                     🎙️ KSR Series
                   </div>
                 </div>
