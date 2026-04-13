@@ -1,115 +1,108 @@
 'use client';
-import { useState } from 'react';
 import Link from 'next/link';
 
-const FILL  = '#181f30';   // illustration fill — much darker, barely visible
-const FILL2 = '#131a28';   // slightly darker fill variant
-const DARK  = '#0f1520';   // inner detail / shadow color
-const BG    = '#0d1117';   // card background
+// ─── SVG fill palette — visible but subtle against dark bg ───────────────────
+const F1 = '#1e2d48';   // base fill
+const F2 = '#172340';   // slightly deeper fill
+const DK = '#0f1a2e';   // inner detail / shadow
 
-// ─── Illustration components ──────────────────────────────────────────────────
+// ─── Large category illustrations ────────────────────────────────────────────
 
 function PdfIllustration() {
   return (
-    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
-      {/* Scattered doc pages */}
+    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+      style={{ position:'absolute', inset:0, width:'100%', height:'100%' }}>
       <g transform="translate(200,65) rotate(-22)">
-        <rect x="-42" y="-58" width="84" height="116" rx="8" fill={FILL}/>
-        <polygon points="24,-58 42,-58 42,-38" fill={DARK}/>
-        <line x1="-28" y1="-32" x2="20" y2="-32" stroke={DARK} strokeWidth="5" strokeLinecap="round"/>
-        <line x1="-28" y1="-14" x2="20" y2="-14" stroke={DARK} strokeWidth="5" strokeLinecap="round"/>
-        <line x1="-28" y1="4"   x2="8"  y2="4"   stroke={DARK} strokeWidth="5" strokeLinecap="round"/>
-        <line x1="-28" y1="22"  x2="14" y2="22"  stroke={DARK} strokeWidth="5" strokeLinecap="round"/>
+        <rect x="-42" y="-58" width="84" height="116" rx="8" fill={F1}/>
+        <polygon points="24,-58 42,-58 42,-38" fill={DK}/>
+        <line x1="-28" y1="-32" x2="20" y2="-32" stroke={DK} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="-28" y1="-14" x2="20" y2="-14" stroke={DK} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="-28" y1="4"   x2="8"  y2="4"   stroke={DK} strokeWidth="5" strokeLinecap="round"/>
+        <line x1="-28" y1="22"  x2="14" y2="22"  stroke={DK} strokeWidth="5" strokeLinecap="round"/>
       </g>
       <g transform="translate(262,82) rotate(16)">
-        <rect x="-36" y="-50" width="72" height="100" rx="7" fill={FILL2}/>
-        <polygon points="20,-50 36,-50 36,-34" fill={DARK}/>
-        <line x1="-24" y1="-25" x2="17" y2="-25" stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
-        <line x1="-24" y1="-8"  x2="17" y2="-8"  stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
-        <line x1="-24" y1="9"   x2="6"  y2="9"   stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
+        <rect x="-36" y="-50" width="72" height="100" rx="7" fill={F2}/>
+        <polygon points="20,-50 36,-50 36,-34" fill={DK}/>
+        <line x1="-24" y1="-25" x2="17" y2="-25" stroke={DK} strokeWidth="4" strokeLinecap="round"/>
+        <line x1="-24" y1="-8"  x2="17" y2="-8"  stroke={DK} strokeWidth="4" strokeLinecap="round"/>
+        <line x1="-24" y1="9"   x2="6"  y2="9"   stroke={DK} strokeWidth="4" strokeLinecap="round"/>
       </g>
       <g transform="translate(178,150) rotate(-7)">
-        <rect x="-36" y="-48" width="72" height="96" rx="7" fill="#3e4660"/>
-        <polygon points="19,-48 36,-48 36,-31" fill={DARK}/>
-        <line x1="-24" y1="-24" x2="15" y2="-24" stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
-        <line x1="-24" y1="-7"  x2="15" y2="-7"  stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
-        <line x1="-24" y1="10"  x2="4"  y2="10"  stroke={DARK} strokeWidth="4" strokeLinecap="round"/>
+        <rect x="-36" y="-48" width="72" height="96" rx="7" fill="#273550"/>
+        <polygon points="19,-48 36,-48 36,-31" fill={DK}/>
+        <line x1="-24" y1="-24" x2="15" y2="-24" stroke={DK} strokeWidth="4" strokeLinecap="round"/>
+        <line x1="-24" y1="-7"  x2="15" y2="-7"  stroke={DK} strokeWidth="4" strokeLinecap="round"/>
+        <line x1="-24" y1="10"  x2="4"  y2="10"  stroke={DK} strokeWidth="4" strokeLinecap="round"/>
       </g>
-      {/* Open book – bottom right */}
       <g transform="translate(262,158)">
-        <path d="M-58,0 Q-29,-20 0,0 L0,54 Q-29,36 -58,54 Z" fill={FILL2}/>
-        <path d="M0,0  Q29,-20 58,0 L58,54 Q29,36 0,54 Z"   fill={FILL}/>
-        <line x1="0" y1="0" x2="0" y2="54" stroke={DARK} strokeWidth="3"/>
-        <line x1="-46" y1="13" x2="-8"  y2="8"  stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
-        <line x1="-46" y1="26" x2="-8"  y2="21" stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
-        <line x1="-46" y1="39" x2="-20" y2="35" stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
-        <line x1="8"  y1="8"  x2="46" y2="13" stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
-        <line x1="8"  y1="21" x2="46" y2="26" stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
-        <line x1="8"  y1="35" x2="32" y2="39" stroke={DARK} strokeWidth="3" strokeLinecap="round"/>
+        <path d="M-58,0 Q-29,-20 0,0 L0,54 Q-29,36 -58,54 Z" fill={F2}/>
+        <path d="M0,0  Q29,-20 58,0 L58,54 Q29,36 0,54 Z"   fill={F1}/>
+        <line x1="0" y1="0" x2="0" y2="54" stroke={DK} strokeWidth="3"/>
+        <line x1="-46" y1="13" x2="-8"  y2="8"  stroke={DK} strokeWidth="3" strokeLinecap="round"/>
+        <line x1="-46" y1="26" x2="-8"  y2="21" stroke={DK} strokeWidth="3" strokeLinecap="round"/>
+        <line x1="-46" y1="39" x2="-20" y2="35" stroke={DK} strokeWidth="3" strokeLinecap="round"/>
+        <line x1="8"   y1="8"  x2="46" y2="13"  stroke={DK} strokeWidth="3" strokeLinecap="round"/>
+        <line x1="8"   y1="21" x2="46" y2="26"  stroke={DK} strokeWidth="3" strokeLinecap="round"/>
+        <line x1="8"   y1="35" x2="32" y2="39"  stroke={DK} strokeWidth="3" strokeLinecap="round"/>
       </g>
     </svg>
   );
 }
 
 function GearIllustration() {
-  const teeth = [0, 40, 80, 120, 160, 200, 240, 280, 320];
+  const teeth = [0,40,80,120,160,200,240,280,320];
   return (
-    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
-      {/* Large gear centered-right */}
+    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+      style={{ position:'absolute', inset:0, width:'100%', height:'100%' }}>
       <g transform="translate(178,95)">
         {teeth.map(a => (
-          <rect key={a} x="-13" y="-93" width="26" height="34" rx="7" fill={FILL}
+          <rect key={a} x="-13" y="-93" width="26" height="34" rx="7" fill={F1}
             transform={`rotate(${a})`}/>
         ))}
-        <circle r="75" fill={FILL}/>
-        <circle r="59" fill="none" stroke={DARK} strokeWidth="8"/>
-        <circle r="34" fill={BG}/>
-        <circle r="22" fill={FILL}/>
-        <circle r="12" fill={BG}/>
+        <circle r="75" fill={F1}/>
+        <circle r="59" fill="none" stroke={DK} strokeWidth="8"/>
+        <circle r="34" fill="#0d1117"/>
+        <circle r="22" fill={F1}/>
+        <circle r="12" fill="#0d1117"/>
       </g>
     </svg>
   );
 }
 
 function CalcIllustration() {
-  const rods   = [178, 210, 242, 274];
-  const beadY  = [118, 133, 150, 165];
+  const rods   = [178,210,242,274];
+  const beadY  = [118,133,150,165];
   const bColors = [
-    ['#28788a','#28788a','#28788a','#28788a'],
-    ['#7a5535','#7a5535','#7a5535','#7a5535'],
-    ['#6a7835','#6a7835','#6a7835','#6a7835'],
-    ['#28788a','#28788a','#7a5535','#6a7835'],
+    ['#1f6070','#1f6070','#1f6070','#1f6070'],
+    ['#5a3a28','#5a3a28','#5a3a28','#5a3a28'],
+    ['#4a5828','#4a5828','#4a5828','#4a5828'],
+    ['#1f6070','#1f6070','#5a3a28','#4a5828'],
   ];
   return (
-    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice"
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} aria-hidden="true">
-      {/* Coordinate grid */}
-      <g opacity="0.40">
+    <svg viewBox="0 0 300 185" xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+      style={{ position:'absolute', inset:0, width:'100%', height:'100%' }}>
+      <g opacity="0.55">
         {[118,152,186,220,255].map(x => (
-          <line key={x} x1={x} y1="6" x2={x} y2="108" stroke="#3a4258" strokeWidth="1.5"/>
+          <line key={x} x1={x} y1="6" x2={x} y2="108" stroke="#263248" strokeWidth="1.5"/>
         ))}
         {[22,46,70,94].map(y => (
-          <line key={y} x1="102" y1={y} x2="265" y2={y} stroke="#3a4258" strokeWidth="1.5"/>
+          <line key={y} x1="102" y1={y} x2="265" y2={y} stroke="#263248" strokeWidth="1.5"/>
         ))}
-        {/* Y axis + arrow */}
-        <line x1="118" y1="3"   x2="118" y2="108" stroke="#4a5268" strokeWidth="2.2"/>
-        <polygon points="118,3 112,20 124,20" fill="#4a5268"/>
-        {/* X axis + arrow */}
-        <line x1="118" y1="94" x2="268" y2="94" stroke="#4a5268" strokeWidth="2.2"/>
-        <polygon points="268,94 252,88 252,100" fill="#4a5268"/>
-        {/* Growth diagonal */}
-        <line x1="123" y1="90" x2="258" y2="20" stroke="#5a6278" strokeWidth="2.5" strokeLinecap="round"/>
+        <line x1="118" y1="3"   x2="118" y2="108" stroke="#34405e" strokeWidth="2.2"/>
+        <polygon points="118,3 112,20 124,20" fill="#34405e"/>
+        <line x1="118" y1="94" x2="268" y2="94" stroke="#34405e" strokeWidth="2.2"/>
+        <polygon points="268,94 252,88 252,100" fill="#34405e"/>
+        <line x1="123" y1="90" x2="258" y2="20" stroke="#405070" strokeWidth="2.5" strokeLinecap="round"/>
       </g>
-      {/* Abacus frame */}
-      <rect x="162" y="100" width="132" height="82" rx="8" fill="none" stroke="#5a3a2a" strokeWidth="4"/>
-      <line x1="162" y1="117" x2="294" y2="117" stroke="#5a3a2a" strokeWidth="5"/>
-      <line x1="162" y1="178" x2="294" y2="178" stroke="#5a3a2a" strokeWidth="5"/>
-      {/* Rods + beads */}
+      <rect x="162" y="100" width="132" height="82" rx="8" fill="none" stroke="#3a2a1a" strokeWidth="4"/>
+      <line x1="162" y1="117" x2="294" y2="117" stroke="#3a2a1a" strokeWidth="5"/>
+      <line x1="162" y1="178" x2="294" y2="178" stroke="#3a2a1a" strokeWidth="5"/>
       {rods.map((x, ri) => (
         <g key={x}>
-          <line x1={x} y1="100" x2={x} y2="182" stroke="#5a3a2a" strokeWidth="4"/>
+          <line x1={x} y1="100" x2={x} y2="182" stroke="#3a2a1a" strokeWidth="4"/>
           {beadY.map((y, bi) => (
             <ellipse key={bi} cx={x} cy={y} rx="13" ry="9" fill={bColors[ri][bi]}/>
           ))}
@@ -125,7 +118,7 @@ const CATEGORIES = [
   {
     icon: '📄',
     title: 'PDF Tools',
-    desc: 'Edit, merge, split, convert PDFs — all browser-based, files never leave your device',
+    desc: 'Edit, merge, split, convert PDFs — browser-based, files never leave your device',
     href: '/tools',
     color: '#22d3ee',
     colorRgb: '34,211,238',
@@ -135,7 +128,7 @@ const CATEGORIES = [
   {
     icon: '⚙️',
     title: 'Utilities',
-    desc: 'QR code generator, holiday list, and more useful tools',
+    desc: 'QR code generator, holiday list, and more useful everyday tools',
     href: '/tools',
     color: '#34d399',
     colorRgb: '52,211,153',
@@ -154,358 +147,204 @@ const CATEGORIES = [
   },
 ];
 
-// ─── Trending mini illustrations (same geometric style, vibrant accent colors) ─
-
-function TrendDocSVG({ color }) {
-  return (
-    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
-      {/* Back page (tilted) */}
-      <g transform="translate(70,52) rotate(-16)">
-        <rect x="-28" y="-38" width="56" height="76" rx="7" fill={color} opacity={0.10}/>
-        <polygon points="18,-38 28,-38 28,-26" fill={color} opacity={0.18}/>
-      </g>
-      {/* Front page */}
-      <g transform="translate(57,46) rotate(9)">
-        <rect x="-26" y="-36" width="52" height="72" rx="6" fill={color} opacity={0.20}/>
-        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.34}/>
-        <line x1="-18" y1="-20" x2="14" y2="-20" stroke={color} strokeWidth="4"   strokeLinecap="round" opacity={0.48}/>
-        <line x1="-18" y1="-7"  x2="14" y2="-7"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.36}/>
-        <line x1="-18" y1="6"   x2="6"  y2="6"   stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.26}/>
-        <line x1="-18" y1="19"  x2="11" y2="19"  stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.18}/>
-      </g>
-    </svg>
-  );
-}
-
-function TrendMergeSVG({ color }) {
-  return (
-    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
-      {/* Left doc */}
-      <g transform="translate(44,44) rotate(-20)">
-        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.13}/>
-        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.24}/>
-        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.38}/>
-        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.28}/>
-        <line x1="-13" y1="7"   x2="4"  y2="7"   stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.18}/>
-      </g>
-      {/* Right doc */}
-      <g transform="translate(76,38) rotate(16)">
-        <rect x="-20" y="-28" width="40" height="56" rx="5" fill={color} opacity={0.13}/>
-        <polygon points="12,-28 20,-28 20,-18" fill={color} opacity={0.24}/>
-        <line x1="-13" y1="-15" x2="10" y2="-15" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.38}/>
-        <line x1="-13" y1="-4"  x2="10" y2="-4"  stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.28}/>
-      </g>
-      {/* Merge arrow */}
-      <line x1="46" y1="25" x2="60" y2="25" stroke={color} strokeWidth="2.5" strokeLinecap="round" opacity={0.42}/>
-      <polygon points="62,21 70,25 62,29" fill={color} opacity={0.42}/>
-    </svg>
-  );
-}
-
-function TrendSplitSVG({ color }) {
-  return (
-    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
-      <g transform="translate(60,38)">
-        {/* Top half */}
-        <rect x="-26" y="-36" width="52" height="32" rx="6" fill={color} opacity={0.16}/>
-        <polygon points="16,-36 26,-36 26,-24" fill={color} opacity={0.30}/>
-        <line x1="-18" y1="-23" x2="13" y2="-23" stroke={color} strokeWidth="3.5" strokeLinecap="round" opacity={0.44}/>
-        <line x1="-18" y1="-11" x2="13" y2="-11" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.32}/>
-        {/* Dashed cut line */}
-        <line x1="-30" y1="0" x2="30" y2="0" stroke={color} strokeWidth="2.5" strokeDasharray="4,3" strokeLinecap="round" opacity={0.60}/>
-        {/* Bottom half */}
-        <rect x="-26" y="2"  width="52" height="28" rx="6" fill={color} opacity={0.11}/>
-        <line x1="-18" y1="12" x2="13" y2="12" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.24}/>
-        <line x1="-18" y1="22" x2="4"  y2="22" stroke={color} strokeWidth="3"   strokeLinecap="round" opacity={0.16}/>
-      </g>
-    </svg>
-  );
-}
-
-function TrendChartSVG({ color }) {
-  return (
-    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
-      {/* Axes */}
-      <line x1="32" y1="10" x2="32" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.20}/>
-      <line x1="32" y1="62" x2="93" y2="62" stroke={color} strokeWidth="2" strokeLinecap="round" opacity={0.20}/>
-      {/* Bars */}
-      <rect x="37" y="38" width="10" height="24" rx="3" fill={color} opacity={0.18}/>
-      <rect x="51" y="24" width="10" height="38" rx="3" fill={color} opacity={0.26}/>
-      <rect x="65" y="44" width="10" height="18" rx="3" fill={color} opacity={0.15}/>
-      <rect x="79" y="30" width="10" height="32" rx="3" fill={color} opacity={0.22}/>
-      {/* Trend line */}
-      <polyline points="42,38 56,24 70,44 84,30"
-        fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity={0.55}/>
-      <circle cx="84" cy="30" r="4" fill={color} opacity={0.70}/>
-    </svg>
-  );
-}
-
-function TrendCalSVG({ color }) {
-  return (
-    <svg viewBox="0 0 100 75" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
-      style={{ position:'absolute', right:-6, bottom:-4, width:'62%', height:'112%', pointerEvents:'none' }}>
-      <g transform="translate(60,38)">
-        {/* Body */}
-        <rect x="-28" y="-24" width="56" height="48" rx="7" fill={color} opacity={0.14}/>
-        {/* Header band */}
-        <rect x="-28" y="-24" width="56" height="13" rx="7" fill={color} opacity={0.26}/>
-        <rect x="-28" y="-17" width="56" height="6"        fill={color} opacity={0.26}/>
-        {/* Peg handles */}
-        <rect x="-16" y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.45}/>
-        <rect x="11"  y="-30" width="5" height="9" rx="2.5" fill={color} opacity={0.45}/>
-        {/* Day-grid dots */}
-        {[-16,-4,8].flatMap((x, xi) =>
-          [-6,6,18].map((y, yi) => (
-            <circle key={`${xi}${yi}`} cx={x} cy={y} r="2.8" fill={color} opacity={0.18 + yi * 0.06}/>
-          ))
-        )}
-        {/* Highlighted day */}
-        <rect x="4" y="12" width="17" height="13" rx="4" fill={color} opacity={0.45}/>
-      </g>
-    </svg>
-  );
-}
-
-// ─── Trending items data ──────────────────────────────────────────────────────
+// ─── Trending items ───────────────────────────────────────────────────────────
 
 const TRENDING = [
-  { label:'PDF Editor',   sub:'Edit & Annotate', href:'/tools/pdf-editor',        color:'#f5a623', rgb:'245,166,35',  tier:'primary',   SVG:TrendDocSVG   },
-  { label:'PDF Merger',   sub:'Combine Files',   href:'/tools/pdf-merger',        color:'#22d3ee', rgb:'34,211,238',  tier:'secondary', SVG:TrendMergeSVG },
-  { label:'PDF Splitter', sub:'Extract Pages',   href:'/tools/pdf-splitter',      color:'#a78bfa', rgb:'167,139,250', tier:'secondary', SVG:TrendSplitSVG },
-  { label:'NPS vs APS',   sub:'Compare Plans',   href:'/nps-aps',                 color:'#60a5fa', rgb:'96,165,250',  tier:'tertiary',  SVG:TrendChartSVG },
-  { label:'DA Arrear',    sub:'Calculate',       href:'/da-arrear',               color:'#34d399', rgb:'52,211,153',  tier:'tertiary',  SVG:TrendChartSVG },
-  { label:'Leave Calc',   sub:'Track Leave',     href:'/leave',                   color:'#fb7185', rgb:'251,113,133', tier:'tertiary',  SVG:TrendCalSVG   },
-  { label:'Holiday List', sub:'2026 Holidays',   href:'/tools/holiday-list-2026', color:'#fbbf24', rgb:'251,191,36',  tier:'tertiary',  SVG:TrendCalSVG   },
+  { label:'PDF Editor',    sub:'Edit & Annotate', href:'/tools/pdf-editor',        color:'#f5a623', rgb:'245,166,35'  },
+  { label:'PDF Merger',    sub:'Combine Files',   href:'/tools/pdf-merger',         color:'#22d3ee', rgb:'34,211,238'  },
+  { label:'PDF Splitter',  sub:'Extract Pages',   href:'/tools/pdf-splitter',       color:'#a78bfa', rgb:'167,139,250' },
+  { label:'NPS vs APS',    sub:'Compare Plans',   href:'/nps-aps',                  color:'#60a5fa', rgb:'96,165,250'  },
+  { label:'DA Arrear',     sub:'Calculate',       href:'/da-arrear',                color:'#34d399', rgb:'52,211,153'  },
+  { label:'Leave Calc',    sub:'Track Leave',     href:'/leave',                    color:'#fb7185', rgb:'251,113,133' },
+  { label:'Holiday List',  sub:'2026 Holidays',   href:'/tools/holiday-list-2026',  color:'#fbbf24', rgb:'251,191,36'  },
 ];
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 const titleGrad = 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
 export default function ToolsSection() {
-
   return (
     <section id="tools" className="relative py-3 md:py-4 px-4 md:px-6">
       <div className="max-w-[1200px] mx-auto">
 
         {/* Section header */}
-        <div className="mb-4">
-          <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/65 mb-1">Tools & Calculators</div>
+        <div className="mb-5">
+          <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/55 mb-1">
+            Tools &amp; Calculators
+          </div>
           <h2
-            className="font-malayalam font-bold leading-[1.4] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
+            className="font-bold leading-tight bg-clip-text text-transparent"
             style={{
               fontSize: 'clamp(20px,2.5vw,34px)',
               backgroundImage: titleGrad,
-              filter: 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+              filter: 'drop-shadow(0 0 12px rgba(200,150,12,0.30))',
             }}
           >
             ടൂളുകൾ
           </h2>
         </div>
 
-        {/* Trending Now — illustrated mini-cards (same SVG style as cards below) */}
-        <style>{`
-          .tc {
-            position: relative; display: flex; flex-direction: column;
-            justify-content: center; border-radius: 14px; overflow: hidden;
-            text-decoration: none; flex-shrink: 0; background: #0d1117; cursor: pointer;
-            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-          }
-          .tc:hover { transform: translateY(-3px); }
-
-          .tc-primary {
-            min-width: 120px; height: 62px; padding: 0 12px;
-            border: 1.5px solid rgba(245,166,35,0.42);
-            box-shadow: 0 0 22px rgba(245,166,35,0.20), 0 4px 16px rgba(0,0,0,0.40);
-            animation: tcPulse 3.8s ease-in-out infinite;
-          }
-          .tc-primary:hover {
-            border-color: rgba(245,166,35,0.70);
-            box-shadow: 0 0 36px rgba(245,166,35,0.34), 0 8px 28px rgba(0,0,0,0.46);
-            transform: translateY(-3px) scale(1.02);
-            animation: none;
-          }
-          .tc-secondary {
-            min-width: 104px; height: 54px; padding: 0 10px;
-            border: 1px solid rgba(255,255,255,0.09);
-          }
-          .tc-tertiary {
-            min-width: 92px; height: 48px; padding: 0 10px;
-            border: 1px solid rgba(255,255,255,0.06);
-            opacity: 0.80;
-          }
-          .tc-tertiary:hover { opacity: 1; }
-
-          @keyframes tcPulse {
-            0%,100% { box-shadow: 0 0 22px rgba(245,166,35,0.20), 0 4px 16px rgba(0,0,0,0.40); }
-            50%      { box-shadow: 0 0 36px rgba(245,166,35,0.34), 0 4px 16px rgba(0,0,0,0.40); }
-          }
-          @keyframes trendFadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
-          }
-          .trend-container { animation: trendFadeUp 0.38s ease-out 0.08s both; }
-          @media (prefers-reduced-motion: reduce) {
-            .trend-container { animation: none !important; opacity: 1 !important; }
-            .tc-primary      { animation: none !important; }
-          }
-        `}</style>
-
-        <div className="trend-container" style={{ marginBottom: 20 }}>
-
-          {/* Header */}
-          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:13 }}>
-            <span style={{ fontSize:15, lineHeight:1 }}>🔥</span>
-            <span style={{ fontSize:13, fontWeight:800, color:'rgba(255,255,255,0.92)', letterSpacing:'0.01em' }}>
+        {/* ── Trending strip ── */}
+        <div style={{ marginBottom: 22 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+            <span style={{ fontSize:14, lineHeight:1 }}>🔥</span>
+            <span style={{ fontSize:12, fontWeight:700, color:'rgba(255,255,255,0.80)', letterSpacing:'0.02em' }}>
               Trending Now
             </span>
-            <div style={{ flex:1, height:1, background:'rgba(255,255,255,0.07)' }} />
-            <span style={{ fontSize:11, fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(255,255,255,0.52)' }}>
+            <div style={{ flex:1, height:'1px', background:'rgba(255,255,255,0.07)' }} />
+            <span style={{ fontSize:10, fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(255,255,255,0.40)' }}>
               7 tools
             </span>
           </div>
 
-          {/* Mini-card strip — scrollable, right-fade hints at more content */}
+          {/* Scrollable pill row */}
           <div style={{ position:'relative' }}>
-          <div style={{
-            display:'flex', alignItems:'stretch', gap:8,
-            overflowX:'auto', paddingBottom:4,
-            scrollbarWidth:'none', msOverflowStyle:'none',
-            WebkitOverflowScrolling:'touch',
-          }}>
-            {TRENDING.map(({ label, sub, href, color, rgb, tier, SVG }, i) => (
-              <Link
-                key={href}
-                href={href}
-                className={`tc tc-${tier}`}
-                style={{ marginLeft: (i === 1 || i === 3) ? 6 : 0 }}
-                onMouseEnter={tier !== 'primary' ? e => {
-                  e.currentTarget.style.borderColor = `rgba(${rgb},0.38)`;
-                  e.currentTarget.style.boxShadow   = `0 6px 22px rgba(${rgb},0.16), 0 3px 12px rgba(0,0,0,0.36)`;
-                  if (tier === 'tertiary') e.currentTarget.style.opacity = '1';
-                } : undefined}
-                onMouseLeave={tier !== 'primary' ? e => {
-                  e.currentTarget.style.borderColor = tier === 'secondary' ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.06)';
-                  e.currentTarget.style.boxShadow   = 'none';
-                  if (tier === 'tertiary') e.currentTarget.style.opacity = '0.80';
-                } : undefined}
-              >
-                {/* SVG illustration — source order: renders first (behind) */}
-                <SVG color={color} />
-
-                {/* Gradient — solid dark over full text area, fades right to reveal SVG */}
-                <div style={{
-                  position:'absolute', inset:0, pointerEvents:'none',
-                  background:`linear-gradient(to right,
-                    #0d1117 0%,
-                    #0d1117 38%,
-                    rgba(13,17,23,0.85) 52%,
-                    rgba(13,17,23,0.35) 68%,
-                    transparent 100%)`,
-                }} />
-
-                {/* Label — always on top */}
-                <div style={{ position:'relative', zIndex:2 }}>
-                  <div style={{
-                    fontSize:   tier === 'primary' ? 12 : 11.5,
-                    fontWeight: tier === 'primary' ? 800 : tier === 'secondary' ? 700  : 600,
-                    color:      tier === 'primary' ? color : '#fff',
-                    lineHeight: 1.3, whiteSpace:'nowrap',
-                    textShadow: '0 1px 6px rgba(0,0,0,0.90)',
-                  }}>{label}</div>
-                  <div style={{
-                    fontSize:  10,
-                    color:     tier === 'primary' ? `rgba(${rgb},0.88)` : 'rgba(255,255,255,0.70)',
-                    marginTop: 2, whiteSpace:'nowrap',
-                    textShadow: '0 1px 4px rgba(0,0,0,0.80)',
-                  }}>{sub}</div>
-                </div>
-              </Link>
-            ))}
-          </div>
-          {/* Right-edge fade — signals horizontal scroll on mobile */}
-          <div className="md:hidden" style={{
-            position:'absolute', top:0, right:0, bottom:4,
-            width:40, pointerEvents:'none',
-            background:'linear-gradient(to right, transparent, rgba(6,10,18,0.85))',
-          }} />
+            <div
+              style={{
+                display:'flex', gap:8, overflowX:'auto',
+                paddingBottom:4, scrollbarWidth:'none', msOverflowStyle:'none',
+                WebkitOverflowScrolling:'touch',
+              }}
+            >
+              {TRENDING.map(({ label, sub, href, color, rgb }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  style={{
+                    display:'inline-flex', flexDirection:'column', justifyContent:'center',
+                    flexShrink:0, padding:'9px 14px',
+                    borderRadius:12, textDecoration:'none',
+                    background:'rgba(255,255,255,0.03)',
+                    border:'1px solid rgba(255,255,255,0.09)',
+                    transition:'border-color 0.18s, background 0.18s, transform 0.18s',
+                    minWidth:100,
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.borderColor = `rgba(${rgb},0.45)`;
+                    e.currentTarget.style.background   = `rgba(${rgb},0.07)`;
+                    e.currentTarget.style.transform    = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)';
+                    e.currentTarget.style.background   = 'rgba(255,255,255,0.03)';
+                    e.currentTarget.style.transform    = 'none';
+                  }}
+                >
+                  <span style={{
+                    fontSize:12, fontWeight:700,
+                    color, lineHeight:1.2, whiteSpace:'nowrap',
+                  }}>
+                    {label}
+                  </span>
+                  <span style={{
+                    fontSize:10, fontWeight:500,
+                    color:'rgba(255,255,255,0.50)', marginTop:3, whiteSpace:'nowrap',
+                  }}>
+                    {sub}
+                  </span>
+                </Link>
+              ))}
+            </div>
+            {/* Right-edge fade hint for mobile */}
+            <div
+              className="md:hidden"
+              style={{
+                position:'absolute', top:0, right:0, bottom:4, width:36,
+                pointerEvents:'none',
+                background:'linear-gradient(to right, transparent, rgba(13,17,23,0.90))',
+              }}
+            />
           </div>
         </div>
 
-        {/* Cards */}
+        {/* ── Category cards ── */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {CATEGORIES.map(({ icon, title, desc, href, color, colorRgb, count, Illustration }) => (
-            /* Gradient-border wrapper */
-            <div key={title} style={{
-              background: 'linear-gradient(135deg,rgba(110,60,200,0.38),rgba(45,105,220,0.38))',
-              padding: '1.5px',
-              borderRadius: 22,
-            }}>
-              <Link href={href}
-                className="group relative flex flex-col gap-2 p-4 rounded-[20px] no-underline overflow-hidden transition-all duration-300 hover:brightness-110"
-                style={{ background: BG, minHeight: 150 }}>
+            <Link
+              key={title}
+              href={href}
+              className="group relative flex flex-col gap-2 p-5 no-underline overflow-hidden"
+              style={{
+                borderRadius:18,
+                background:'#0d1117',
+                border:`1px solid rgba(${colorRgb},0.20)`,
+                minHeight:160,
+                transition:'border-color 0.22s, box-shadow 0.22s, transform 0.22s',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = `rgba(${colorRgb},0.45)`;
+                e.currentTarget.style.boxShadow   = `0 8px 32px rgba(${colorRgb},0.12), 0 2px 8px rgba(0,0,0,0.40)`;
+                e.currentTarget.style.transform   = 'translateY(-3px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = `rgba(${colorRgb},0.20)`;
+                e.currentTarget.style.boxShadow   = 'none';
+                e.currentTarget.style.transform   = 'none';
+              }}
+            >
+              {/* SVG illustration — behind content */}
+              <Illustration />
 
-                {/* SVG illustration — behind everything */}
-                <Illustration />
+              {/* Overlay so text stays readable */}
+              <div style={{
+                position:'absolute', inset:0, pointerEvents:'none',
+                background:'linear-gradient(to right, rgba(13,17,23,0.97) 20%, rgba(13,17,23,0.80) 45%, rgba(13,17,23,0.25) 75%, transparent 100%)',
+              }}/>
 
-                {/* Left-to-right fade so content stays readable */}
-                <div style={{
-                  position: 'absolute', inset: 0,
-                  background: `linear-gradient(to right, rgba(13,17,23,0.96) 18%, rgba(13,17,23,0.70) 42%, rgba(13,17,23,0.15) 72%, transparent 100%)`,
-                }}/>
+              {/* Card content */}
+              <div className="relative flex flex-col h-full" style={{ zIndex:10 }}>
 
-                {/* Content */}
-                <div className="relative flex flex-col h-full gap-2" style={{ zIndex: 10 }}>
-
-                  {/* Icon + badge row */}
-                  <div className="flex items-start justify-between">
-                    <div style={{
-                      width: 34, height: 34, borderRadius: 10, fontSize: 17,
-                      background: `rgba(${colorRgb},0.18)`,
-                      border: `1px solid rgba(${colorRgb},0.35)`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      {icon}
-                    </div>
-                    <span style={{
-                      display: 'flex', alignItems: 'center', gap: 4,
-                      padding: '3px 9px', borderRadius: 20,
-                      background: `rgba(${colorRgb},0.13)`,
-                      border: `1.5px solid rgba(${colorRgb},0.4)`,
-                      color, fontSize: 10, fontWeight: 800, letterSpacing: '0.06em',
-                      whiteSpace: 'nowrap',
-                    }}>
-                      {icon} {count} TOOLS
-                    </span>
+                {/* Top row: icon chip + count badge */}
+                <div className="flex items-center justify-between mb-3">
+                  <div style={{
+                    width:36, height:36, borderRadius:10, fontSize:18,
+                    background:`rgba(${colorRgb},0.14)`,
+                    border:`1px solid rgba(${colorRgb},0.28)`,
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                  }}>
+                    {icon}
                   </div>
-
-                  {/* Title + desc */}
-                  <div style={{ marginTop: 8 }}>
-                    <h3 style={{ color: 'rgba(255,255,255,0.95)', fontSize: 14, fontWeight: 700, marginBottom: 4 }}>
-                      {title}
-                    </h3>
-                    <p style={{ color: 'rgba(255,255,255,0.72)', fontSize: 11.5, lineHeight: 1.55 }}>
-                      {desc}
-                    </p>
-                  </div>
-
-                  {/* Explore CTA */}
-                  <div className="flex items-center gap-1 mt-auto"
-                    style={{ color, fontSize: 12, fontWeight: 700 }}>
-                    Explore
-                    <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"
-                      className="group-hover:translate-x-0.5 transition-transform">
-                      <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
+                  <span style={{
+                    padding:'3px 10px', borderRadius:20,
+                    background:`rgba(${colorRgb},0.12)`,
+                    border:`1px solid rgba(${colorRgb},0.30)`,
+                    color, fontSize:10, fontWeight:700,
+                    letterSpacing:'0.05em', whiteSpace:'nowrap',
+                  }}>
+                    {count} TOOLS
+                  </span>
                 </div>
-              </Link>
-            </div>
+
+                {/* Title */}
+                <h3 style={{
+                  color:'rgba(255,255,255,0.95)', fontSize:15,
+                  fontWeight:700, margin:0, marginBottom:6,
+                }}>
+                  {title}
+                </h3>
+
+                {/* Description */}
+                <p style={{
+                  color:'rgba(255,255,255,0.60)', fontSize:12,
+                  lineHeight:1.6, margin:0,
+                }}>
+                  {desc}
+                </p>
+
+                {/* Explore CTA */}
+                <div
+                  className="flex items-center gap-1 mt-auto pt-4"
+                  style={{ color, fontSize:12, fontWeight:700 }}
+                >
+                  Explore
+                  <svg width="12" height="12" fill="none" stroke="currentColor"
+                    strokeWidth="2.5" viewBox="0 0 24 24"
+                    style={{ transition:'transform 0.18s' }}
+                    className="group-hover:translate-x-0.5">
+                    <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
 
