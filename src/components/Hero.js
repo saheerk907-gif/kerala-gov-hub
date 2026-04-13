@@ -128,67 +128,51 @@ export default function Hero() {
           ജീവനക്കാരുടെ വിജ്ഞാനകോശം
         </h2>
 
-        {/* ── Positive tagline block ── */}
-        <div className="flex flex-col items-center mb-7" style={{ maxWidth: 500 }}>
+        {/* ── Tagline ── */}
+        <div className="text-center mb-7" style={{ maxWidth: 460 }}>
 
-          {/* Warm one-liner */}
-          <p
-            className="text-center font-sans"
-            style={{
-              fontSize: 'clamp(13px, 1.8vw, 15px)',
-              color: 'rgba(255,255,255,0.50)',
-              lineHeight: 1.85,
-              margin: '0 0 16px',
-            }}
-          >
-            From your{' '}
-            <span style={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600 }}>first posting</span>
-            {' '}to a{' '}
-            <span style={{ color: 'rgba(255,255,255,0.82)', fontWeight: 600 }}>happy retirement</span>
-            {' '}— every rule, calculator &amp; order you&apos;ll ever need,{' '}
-            <span
-              style={{
-                background: 'linear-gradient(90deg,#c8960c,#f5d060)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: 700,
-              }}
-            >
-              all free, always.
+          {/* Decorative rule with label */}
+          <div style={{
+            display: 'flex', alignItems: 'center',
+            gap: 10, justifyContent: 'center', marginBottom: 13,
+          }}>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, rgba(245,208,96,0.28), transparent)' }} />
+            <span style={{
+              fontSize: 9, fontWeight: 800, letterSpacing: '0.22em',
+              textTransform: 'uppercase', color: 'rgba(245,208,96,0.45)',
+            }}>
+              for kerala&apos;s public servants
             </span>
+            <div style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, rgba(245,208,96,0.28), transparent)' }} />
+          </div>
+
+          {/* Main line — italic warm body */}
+          <p style={{
+            fontSize: 'clamp(14px, 1.9vw, 17px)',
+            fontStyle: 'italic',
+            color: 'rgba(255,255,255,0.58)',
+            lineHeight: 1.80,
+            margin: '0 0 8px',
+            fontWeight: 400,
+          }}>
+            From your first posting to your last farewell —
           </p>
 
-          {/* Feature pill row */}
-          <div
-            className="flex flex-wrap justify-center"
-            style={{ gap: 7 }}
-          >
-            {[
-              { emoji: '💰', label: 'Salary'      },
-              { emoji: '🧮', label: 'Pension'     },
-              { emoji: '📅', label: 'DA Arrear'   },
-              { emoji: '🌿', label: 'Leave Rules' },
-              { emoji: '📄', label: 'Govt Orders' },
-              { emoji: '💊', label: 'MEDISEP'     },
-            ].map(({ emoji, label }) => (
-              <span
-                key={label}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  padding: '5px 12px', borderRadius: 99,
-                  background: 'rgba(245,208,96,0.06)',
-                  border: '1px solid rgba(245,208,96,0.16)',
-                  color: 'rgba(245,208,96,0.72)',
-                  fontSize: 11, fontWeight: 600,
-                  letterSpacing: '0.02em',
-                }}
-              >
-                <span style={{ fontSize: 12 }}>{emoji}</span>
-                {label}
-              </span>
-            ))}
-          </div>
+          {/* Punchline — bold, gold, upright */}
+          <p style={{
+            fontSize: 'clamp(15px, 2vw, 19px)',
+            fontStyle: 'normal',
+            fontWeight: 800,
+            margin: 0,
+            background: 'linear-gradient(100deg, #c8960c 0%, #f5d060 45%, #fce38a 60%, #f5d060 78%, #c8960c 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            filter: 'drop-shadow(0 0 18px rgba(200,150,12,0.28))',
+            letterSpacing: '0.01em',
+          }}>
+            every answer is right here. 🌿
+          </p>
         </div>
 
         {/* Search */}
