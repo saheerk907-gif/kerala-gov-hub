@@ -3,150 +3,203 @@ import Link from 'next/link';
 import HeroSearchButton from './HeroSearchButton';
 
 const STATS = [
-  { value: '1,200+', label: 'Govt Orders' },
-  { value: '15+',    label: 'Calculators' },
-  { value: '100%',   label: 'Free Always' },
+  { value: '1,200+', label: 'Govt Orders',  icon: '📋' },
+  { value: '15+',    label: 'Calculators',  icon: '🧮' },
+  { value: '100%',   label: 'Free Always',  icon: '✅' },
 ];
 
-const gold      = '#f5d060';
-const goldDim   = 'rgba(245,208,96,0.60)';
-const textSub   = 'rgba(255,255,255,0.72)';
-const border    = 'rgba(255,255,255,0.08)';
-const surface   = 'rgba(255,255,255,0.04)';
-const surfaceMd = 'rgba(255,255,255,0.06)';
-const titleGrad = 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
+const QUICK_LINKS = [
+  { label: '💰 Pension',      href: '/pension'    },
+  { label: '📊 Pay Revision', href: '/prc'        },
+  { label: '🏖️ Leave',        href: '/leave'      },
+  { label: '📄 Forms',        href: '/forms'      },
+  { label: '📋 Govt Orders',  href: '/orders'     },
+  { label: '🧾 Income Tax',   href: '/income-tax' },
+];
 
 export default function Hero() {
   return (
-    <section
-      className="hero-section relative flex flex-col items-center justify-center text-center overflow-hidden
-                 min-h-[58vh] md:min-h-[65vh]
-                 px-4 md:px-8
-                 pt-[56px] md:pt-[72px]
-                 pb-6 md:pb-10"
-    >
-      {/* Background: Secretariat building */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+    <section className="relative overflow-hidden min-h-[100svh] md:min-h-[92vh] flex flex-col">
+
+      {/* ── Background image ── */}
+      <div className="absolute inset-0 z-0">
         <Image
           src="/kerala-secretariat-opt.webp"
           alt=""
           fill
           priority
           fetchPriority="high"
-          className="object-cover object-[center_65%] opacity-[0.80]"
+          className="object-cover object-center"
           sizes="100vw"
         />
-        {/* Left/right edge fade — keep center clear so building shows */}
-        <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.75) 0%,rgba(18,20,22,0.05) 40%,rgba(18,20,22,0.05) 60%,rgba(18,20,22,0.55) 100%)' }} />
-        {/* Top fade + bottom fade to page bg */}
-        <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.35) 0%,transparent 30%,rgba(18,20,22,1) 100%)' }} />
+
+        {/* Dark base layer — sets overall darkness */}
+        <div className="absolute inset-0" style={{ background: 'rgba(10,12,15,0.52)' }} />
+
+        {/* Bottom-up heavy fade — content sits on dark base */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to top, #0d1117 0%, #0d1117 18%, rgba(13,17,23,0.85) 38%, rgba(13,17,23,0.30) 60%, transparent 100%)',
+        }} />
+
+        {/* Left vignette — helps text readability */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(105deg, rgba(10,12,15,0.80) 0%, rgba(10,12,15,0.40) 45%, transparent 75%)',
+        }} />
       </div>
 
-      {/* Ambient gold glow */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] rounded-full blur-[130px] pointer-events-none opacity-60"
-        style={{ background: 'radial-gradient(ellipse,rgba(200,150,12,0.18) 0%,transparent 70%)' }} />
+      {/* ── Gold ambient glow behind text ── */}
+      <div className="absolute z-[1] pointer-events-none"
+        style={{
+          top: '30%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 700, height: 400,
+          background: 'radial-gradient(ellipse, rgba(200,150,12,0.14) 0%, transparent 68%)',
+          filter: 'blur(40px)',
+        }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
+      {/* ── Main content ── */}
+      <div className="relative z-10 flex flex-col flex-1 pt-[72px] md:pt-[88px]">
 
-        {/* Logo */}
-        <div className="relative mb-3 md:mb-4">
-          <div className="absolute inset-0 rounded-full bg-black/40 blur-[24px] scale-110 translate-y-2 pointer-events-none" />
-          <Image
-            src="/logo.webp"
-            alt="Kerala Employees Portal"
-            width={100}
-            height={100}
-            priority
-            className="relative z-10 w-[56px] h-[56px] md:w-[76px] md:h-[76px] lg:w-[88px] lg:h-[88px] rounded-full object-cover"
-            style={{
-              boxShadow:
-                '0 0 0 2px rgba(200,150,12,0.50),' +
-                '0 0 24px 6px rgba(200,150,12,0.16),' +
-                '0 16px 40px rgba(0,0,0,0.55)',
-            }}
-          />
-        </div>
+        {/* Upper hero — logo + text + search */}
+        <div className="flex-1 flex flex-col justify-center px-5 md:px-10 lg:px-16 pb-8">
+          <div className="max-w-[720px]">
 
-        {/* Eyebrow */}
-        <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.28em] mb-2 md:mb-3"
-          style={{ color: goldDim }}>
-          Kerala Government Employees Portal
-        </p>
-
-        {/* Headings */}
-        <div className="flex flex-col items-center gap-1 md:gap-2 mb-3 md:mb-4">
-          <h1
-            className="font-malayalam font-bold leading-[1.35] tracking-tight bg-clip-text text-transparent bg-[length:200%_auto]"
-            style={{
-              fontSize: 'clamp(32px, 6vw, 72px)',
-              backgroundImage: titleGrad,
-              filter: 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
-            }}
-          >
-            കേരള സർക്കാർ
-          </h1>
-          <h2
-            className="font-malayalam font-bold leading-[1.4] tracking-tight bg-[length:200%_auto] bg-clip-text text-transparent"
-            style={{
-              fontSize: 'clamp(20px, 3.5vw, 46px)',
-              backgroundImage: 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
-              filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.30))',
-            }}
-          >
-            ജീവനക്കാരുടെ വിജ്ഞാനകോശം
-          </h2>
-        </div>
-
-        {/* Search bar — client island */}
-        <HeroSearchButton />
-
-        {/* Stats bar */}
-        <div className="flex items-stretch rounded-2xl overflow-hidden"
-          style={{ background: surface, border: `1px solid ${border}` }}>
-          {STATS.map((s, i) => (
-            <div
-              key={i}
-              className="flex flex-col items-center justify-center px-4 py-2.5 md:px-6 md:py-3"
-              style={{ borderRight: i < STATS.length - 1 ? `1px solid ${border}` : 'none' }}
-            >
-              <span className="font-black tracking-tight leading-none"
-                style={{ fontSize: 'clamp(13px, 1.8vw, 18px)', color: gold }}>
-                {s.value}
-              </span>
-              <span className="text-[8px] md:text-[9px] font-medium uppercase tracking-wider mt-0.5"
-                style={{ color: textSub }}>
-                {s.label}
-              </span>
+            {/* Logo + badge row */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="relative flex-shrink-0">
+                <div className="absolute inset-0 rounded-full blur-[18px] scale-125"
+                  style={{ background: 'rgba(200,150,12,0.35)' }} />
+                <Image
+                  src="/logo.webp"
+                  alt="Kerala Employees Portal"
+                  width={52}
+                  height={52}
+                  priority
+                  className="relative rounded-full object-cover w-[48px] h-[48px] md:w-[56px] md:h-[56px]"
+                  style={{
+                    boxShadow: '0 0 0 2px rgba(245,208,96,0.55), 0 8px 28px rgba(0,0,0,0.60)',
+                  }}
+                />
+              </div>
+              <div
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em]"
+                style={{
+                  background: 'rgba(245,208,96,0.10)',
+                  border: '1px solid rgba(245,208,96,0.30)',
+                  color: 'rgba(245,208,96,0.85)',
+                  backdropFilter: 'blur(12px)',
+                }}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-[#f5d060] animate-pulse flex-shrink-0" />
+                Kerala Govt Employees Portal
+              </div>
             </div>
-          ))}
-        </div>
 
-        {/* Quick-access links — hidden on mobile */}
-        <div className="hidden md:flex flex-wrap justify-center gap-2 mt-5">
-          {[
-            { label: 'Pension',      href: '/pension'    },
-            { label: 'Pay Revision', href: '/prc'        },
-            { label: 'Leave',        href: '/leave'      },
-            { label: 'Forms',        href: '/forms'      },
-            { label: 'Govt Orders',  href: '/orders'     },
-            { label: 'Income Tax',   href: '/income-tax' },
-          ].map(link => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="px-3 py-1.5 rounded-full text-[11px] font-semibold no-underline transition-all duration-200 hover:scale-105 hover:brightness-110"
+            {/* Main headline */}
+            <h1
+              className="font-malayalam font-black leading-[1.25] mb-2 md:mb-3"
               style={{
-                background: surfaceMd,
-                color: textSub,
-                border: `1px solid ${border}`,
+                fontSize: 'clamp(38px, 7.5vw, 82px)',
+                background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 35%, #fce38a 50%, #f5d060 65%, #c8960c 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                filter: 'drop-shadow(0 2px 20px rgba(200,150,12,0.40))',
+                letterSpacing: '-0.01em',
               }}
             >
-              {link.label}
-            </Link>
-          ))}
+              കേരള സർക്കാർ
+            </h1>
+
+            {/* Sub headline */}
+            <h2
+              className="font-malayalam font-bold leading-[1.35] mb-6 md:mb-8"
+              style={{
+                fontSize: 'clamp(18px, 3.8vw, 42px)',
+                background: 'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.90) 50%, rgba(255,255,255,0.55) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                letterSpacing: '-0.005em',
+              }}
+            >
+              ജീവനക്കാരുടെ വിജ്ഞാനകോശം
+            </h2>
+
+            {/* Search bar */}
+            <div className="w-full max-w-[560px]">
+              <HeroSearchButton />
+            </div>
+
+            {/* Quick links — visible on all sizes */}
+            <div className="flex flex-wrap gap-2 mt-1">
+              {QUICK_LINKS.map(link => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="px-3 py-1.5 rounded-full text-[11px] md:text-[12px] font-semibold no-underline transition-all duration-200 hover:scale-105"
+                  style={{
+                    background: 'rgba(255,255,255,0.07)',
+                    color: 'rgba(255,255,255,0.75)',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* ── Stats bar — anchored to bottom ── */}
+        <div
+          className="relative z-10 px-5 md:px-10 lg:px-16 py-5 md:py-6"
+          style={{
+            background: 'linear-gradient(to right, rgba(13,17,23,0.92) 0%, rgba(13,17,23,0.75) 60%, rgba(13,17,23,0.50) 100%)',
+            borderTop: '1px solid rgba(255,255,255,0.07)',
+          }}
+        >
+          <div className="flex items-center gap-6 md:gap-12 flex-wrap">
+            {STATS.map((s, i) => (
+              <div key={i} className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center text-base flex-shrink-0"
+                  style={{
+                    background: 'rgba(245,208,96,0.10)',
+                    border: '1px solid rgba(245,208,96,0.20)',
+                  }}
+                >
+                  {s.icon}
+                </div>
+                <div>
+                  <div
+                    className="font-black leading-none tracking-tight"
+                    style={{ fontSize: 'clamp(18px, 2.5vw, 26px)', color: '#f5d060' }}
+                  >
+                    {s.value}
+                  </div>
+                  <div className="text-[10px] md:text-[11px] font-medium uppercase tracking-wider mt-0.5"
+                    style={{ color: 'rgba(255,255,255,0.50)' }}>
+                    {s.label}
+                  </div>
+                </div>
+                {i < STATS.length - 1 && (
+                  <div className="hidden sm:block w-px h-8 ml-2 md:ml-6"
+                    style={{ background: 'rgba(255,255,255,0.10)' }} />
+                )}
+              </div>
+            ))}
+
+            {/* Scroll hint — desktop */}
+            <div className="hidden md:flex items-center gap-2 ml-auto opacity-40">
+              <span className="text-[11px] text-white uppercase tracking-widest">Scroll</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+                <path d="M12 5v14M5 12l7 7 7-7" />
+              </svg>
+            </div>
+          </div>
         </div>
 
       </div>
