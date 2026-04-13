@@ -44,32 +44,33 @@ export default function Hero() {
       <div className="relative z-10 w-full max-w-2xl mx-auto px-6 flex flex-col items-center">
 
         {/* Logo */}
-        <div className="relative mb-5">
+        <div className="relative mb-6">
           <div
-            className="absolute inset-0 rounded-full blur-2xl scale-150"
-            style={{ background: 'rgba(200,150,12,0.18)' }}
+            className="absolute inset-0 rounded-full blur-3xl scale-[1.8]"
+            style={{ background: 'rgba(200,150,12,0.22)' }}
           />
           <Image
             src="/logo.webp"
             alt="Kerala Employees Portal"
-            width={72}
-            height={72}
+            width={120}
+            height={120}
             priority
             className="relative rounded-full object-cover"
             style={{
-              width: 64, height: 64,
-              boxShadow: '0 0 0 1.5px rgba(245,208,96,0.45), 0 8px 32px rgba(0,0,0,0.55)',
+              width: 96, height: 96,
+              boxShadow: '0 0 0 2px rgba(245,208,96,0.50), 0 0 0 5px rgba(245,208,96,0.10), 0 16px 48px rgba(0,0,0,0.60)',
             }}
           />
         </div>
 
         {/* Eyebrow label */}
         <p
-          className="font-black uppercase mb-4"
+          className="font-bold mb-5"
           style={{
-            fontSize: 10,
-            letterSpacing: '0.32em',
-            color: 'rgba(245,208,96,0.55)',
+            fontSize: 'clamp(13px, 2vw, 17px)',
+            letterSpacing: '0.18em',
+            color: 'rgba(245,208,96,0.70)',
+            textTransform: 'uppercase',
           }}
         >
           Kerala Government Employees Portal
