@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const FILL  = '#3a4258';   // illustration fill (dark slate-blue)
-const FILL2 = '#323a52';   // slightly darker fill variant
-const DARK  = '#252e42';   // inner detail / shadow color
+const FILL  = '#181f30';   // illustration fill — much darker, barely visible
+const FILL2 = '#131a28';   // slightly darker fill variant
+const DARK  = '#0f1520';   // inner detail / shadow color
 const BG    = '#0d1117';   // card background
 
 // ─── Illustration components ──────────────────────────────────────────────────

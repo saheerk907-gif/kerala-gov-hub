@@ -46,7 +46,7 @@ export default function NewsSection() {
           src="/images/news-bg.webp"
           alt=""
           fill
-          className="object-cover"
+          className="object-cover opacity-[0.30]"
           style={{ objectPosition: 'center top' }}
           sizes="(max-width: 768px) 100vw, 600px"
           loading="lazy"
@@ -55,10 +55,10 @@ export default function NewsSection() {
 
         {/* Left-to-right fade */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to right, rgba(13,17,23,0.98) 28%, rgba(13,17,23,0.78) 55%, rgba(13,17,23,0.35) 80%, transparent 100%)' }}/>
+          background: 'linear-gradient(to right, rgba(13,17,23,0.99) 30%, rgba(13,17,23,0.90) 60%, rgba(13,17,23,0.75) 100%)' }}/>
         {/* Top-to-bottom fade */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 1,
-          background: 'linear-gradient(to bottom, transparent 22%, rgba(13,17,23,0.55) 40%, rgba(13,17,23,0.97) 58%)' }}/>
+          background: 'linear-gradient(to bottom, rgba(13,17,23,0.40) 0%, rgba(13,17,23,0.70) 50%, rgba(13,17,23,0.99) 70%)' }}/>
 
         <div className="relative flex flex-col h-full" style={{ zIndex: 2 }}>
 

@@ -39,18 +39,18 @@ export default function SchemesSection({ schemes }) {
               src="/images/orders-bg.webp"
               alt=""
               fill
-              className="object-cover"
+              className="object-cover opacity-[0.25]"
               style={{ objectPosition: 'center left' }}
               sizes="(max-width: 768px) 100vw, 1200px"
               loading="lazy"
               quality={65}
             />
             {/* Overlays */}
-            <div style={{ position:'absolute', inset:0, background:'rgba(6,8,15,0.72)', zIndex:1 }}/>
+            <div style={{ position:'absolute', inset:0, background:'rgba(6,8,15,0.88)', zIndex:1 }}/>
             <div style={{ position:'absolute', inset:0, zIndex:2,
-              background:'linear-gradient(to right, rgba(6,8,15,0.98) 0%, rgba(6,8,15,0.82) 38%, rgba(6,8,15,0.45) 66%, transparent 100%)' }}/>
+              background:'linear-gradient(to right, rgba(6,8,15,0.99) 0%, rgba(6,8,15,0.92) 45%, rgba(6,8,15,0.80) 100%)' }}/>
             <div style={{ position:'absolute', inset:0, zIndex:2,
-              background:'linear-gradient(to bottom, rgba(6,8,15,0.88) 0%, transparent 30%, rgba(6,8,15,0.92) 100%)' }}/>
+              background:'linear-gradient(to bottom, rgba(6,8,15,0.92) 0%, transparent 35%, rgba(6,8,15,0.96) 100%)' }}/>
             {/* Orange accent glow */}
             <div style={{ position:'absolute', bottom:0, left:0, width:'45%', height:'35%', zIndex:2,
               background:'radial-gradient(ellipse at bottom left, rgba(255,159,10,0.14) 0%, transparent 70%)' }}/>

@@ -6,9 +6,9 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const ACCENT = '#2997ff';
 
-const F1 = '#2a3552';
-const F2 = '#1e2a44';
-const D  = '#162038';
+const F1 = '#161e2e';
+const F2 = '#111828';
+const D  = '#0d1320';
 
 function ArticleIllustration() {
   return (

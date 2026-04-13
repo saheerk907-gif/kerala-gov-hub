@@ -162,7 +162,7 @@ export default function ExperiencesSection() {
               src="/images/govtemployees.webp"
               alt=""
               fill
-              className="object-cover"
+              className="object-cover opacity-[0.25]"
               style={{ objectPosition: 'center 30%', transform: 'scale(1.06)' }}
               sizes="100vw"
               loading="lazy"
@@ -170,12 +170,10 @@ export default function ExperiencesSection() {
             />
           </div>
 
-          {/* ── Overlays: 80%+ dark coverage ── */}
-          {/* Base flat tint */}
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(6,10,16,0.78)', zIndex: 1 }} />
-          {/* Directional: left (content) very dark → right slightly lighter */}
+          {/* ── Overlays ── */}
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(6,10,16,0.92)', zIndex: 1 }} />
           <div style={{ position: 'absolute', inset: 0, zIndex: 2,
-            background: 'linear-gradient(110deg, rgba(6,10,16,0.96) 0%, rgba(6,10,16,0.88) 55%, rgba(6,10,16,0.60) 100%)' }} />
+            background: 'linear-gradient(110deg, rgba(6,10,16,0.99) 0%, rgba(6,10,16,0.95) 55%, rgba(6,10,16,0.85) 100%)' }} />
           {/* Green ambience at bottom-left */}
           <div style={{ position: 'absolute', bottom: 0, left: 0, width: '50%', height: '45%', zIndex: 2,
             background: 'radial-gradient(ellipse at bottom left, rgba(48,209,88,0.10) 0%, transparent 70%)' }} />

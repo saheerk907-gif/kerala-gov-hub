@@ -13,9 +13,9 @@ const FALLBACK_LINKS = [
   { id: 'ql6', icon: '📜', title_ml: 'കേരള സർക്കാർ',             subtitle: 'Kerala Government Portal',     url: 'https://kerala.gov.in',          color: 'gold'   },
 ];
 
-const F1 = '#2a3552';
-const F2 = '#1e2a44';
-const D  = '#162038';
+const F1 = '#161e2e';
+const F2 = '#111828';
+const D  = '#0d1320';
 
 function QuickLinksIllustration() {
   return (

@@ -3,9 +3,9 @@ import AudioPlayer from '@/components/AudioPlayer';
 
 const ACCENT = '#ff9f0a'; // orange
 
-const F1 = '#2a3552';
-const F2 = '#1e2a44';
-const D  = '#162038';
+const F1 = '#161e2e';
+const F2 = '#111828';
+const D  = '#0d1320';
 
 function AudioIllustration() {
   return (
