@@ -66,10 +66,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Disclaimer */}
-        <div className="mt-6 px-4 py-3 rounded-xl text-[11px] text-red-400/80 leading-relaxed"
-          style={{ background: 'rgba(255,69,58,0.06)', border: '1px solid rgba(255,69,58,0.12)' }}>
-          ⚠️ ഇത് ഔദ്യോഗിക സർക്കാർ വെബ്സൈറ്റ് അല്ല. വിവരങ്ങൾ ഔദ്യോഗിക ഉറവിടങ്ങളിൽ നിന്ന് സ്ഥിരീകരിക്കുക — finance.kerala.gov.in
+        {/* Community note */}
+        <div className="mt-6 px-4 py-3 rounded-xl flex items-center gap-3"
+          style={{ background: 'rgba(245,208,96,0.05)', border: '1px solid rgba(245,208,96,0.12)' }}>
+          <span className="text-lg flex-shrink-0">🤝</span>
+          <p className="text-[12px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.62)', fontFamily: "var(--font-noto-malayalam), sans-serif" }}>
+            കേരള സർക്കാർ ജീവനക്കാർക്കായി സ്നേഹത്തോടെ നിർമ്മിച്ചത് — നിങ്ങളുടെ സേവനം ആദരണീയമാണ്.
+          </p>
         </div>
 
         {/* Bottom bar */}
