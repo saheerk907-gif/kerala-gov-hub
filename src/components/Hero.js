@@ -159,8 +159,8 @@ export default function Hero() {
           ))}
         </div>
 
-        {/* Quick links */}
-        <div className="flex flex-wrap justify-center gap-2">
+        {/* Quick links — desktop only */}
+        <div className="hidden sm:flex flex-wrap justify-center gap-2">
           {QUICK_LINKS.map(link => (
             <Link
               key={link.href}
