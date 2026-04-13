@@ -117,7 +117,11 @@ export default function Hero() {
           className="font-malayalam font-semibold leading-snug mb-8"
           style={{
             fontSize: 'clamp(15px, 3vw, 26px)',
-            color: 'rgba(255,255,255,0.45)',
+            background: 'linear-gradient(135deg, #c8960c 0%, #f5d060 38%, #fce38a 52%, #f5d060 68%, #c8960c 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            filter: 'drop-shadow(0 0 14px rgba(200,150,12,0.22))',
             letterSpacing: '0.01em',
           }}
         >
