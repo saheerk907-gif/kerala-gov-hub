@@ -129,16 +129,7 @@ export default function Navbar() {
   const [openDropdown, setOpenDropdown]   = useState(null);
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const [searchOpen, setSearchOpen]       = useState(false);
-  const [isLight, setIsLight]             = useState(false);
   const navRef = useRef(null);
-
-  useEffect(() => {
-    const check = () => setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
-    check();
-    const observer = new MutationObserver(check);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);

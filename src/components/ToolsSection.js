@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 const FILL  = '#3a4258';   // illustration fill (dark slate-blue)
@@ -285,21 +285,9 @@ const TRENDING = [
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
+const titleGrad = 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
+
 export default function ToolsSection() {
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const check = () =>
-      setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
-    check();
-    const observer = new MutationObserver(check);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
-
-  const titleGrad = isLight
-    ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
-    : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
 
   return (
     <section id="tools" className="relative py-3 md:py-4 px-4 md:px-6">
@@ -313,7 +301,7 @@ export default function ToolsSection() {
             style={{
               fontSize: 'clamp(20px,2.5vw,34px)',
               backgroundImage: titleGrad,
-              filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+              filter: 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
             }}
           >
             ടൂളുകൾ

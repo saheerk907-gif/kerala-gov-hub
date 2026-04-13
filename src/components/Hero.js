@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,33 +9,20 @@ const STATS = [
   { value: '100%',   label: 'Free Always' },
 ];
 
+const gold      = '#f5d060';
+const goldDim   = 'rgba(245,208,96,0.60)';
+const textSub   = 'rgba(255,255,255,0.72)';
+const textMuted = 'rgba(255,255,255,0.40)';
+const border    = 'rgba(255,255,255,0.08)';
+const surface   = 'rgba(255,255,255,0.04)';
+const surfaceMd = 'rgba(255,255,255,0.06)';
+const titleGrad = 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
+
+function openSearch() {
+  if (typeof window !== 'undefined') window.dispatchEvent(new CustomEvent('open-search'));
+}
+
 export default function Hero() {
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const check = () =>
-      setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
-    check();
-    const observer = new MutationObserver(check);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => observer.disconnect();
-  }, []);
-
-  const gold      = isLight ? '#b45309'               : '#f5d060';
-  const goldDim   = isLight ? 'rgba(180,83,9,0.65)'   : 'rgba(245,208,96,0.60)';
-  const textSub   = isLight ? 'rgba(15,23,42,0.68)'   : 'rgba(255,255,255,0.72)';
-  const textMuted = isLight ? 'rgba(15,23,42,0.45)'   : 'rgba(255,255,255,0.40)';
-  const border    = isLight ? 'rgba(0,0,0,0.08)'      : 'rgba(255,255,255,0.08)';
-  const surface   = isLight ? 'rgba(0,0,0,0.04)'      : 'rgba(255,255,255,0.04)';
-  const surfaceMd = isLight ? 'rgba(0,0,0,0.06)'      : 'rgba(255,255,255,0.06)';
-  const titleGrad = isLight
-    ? 'linear-gradient(135deg,#78350f 0%,#b45309 50%,#78350f 100%)'
-    : 'linear-gradient(135deg,#c8960c 0%,#f5d060 38%,#fce38a 52%,#f5d060 68%,#c8960c 100%)';
-
-  function openSearch() {
-    window.dispatchEvent(new CustomEvent('open-search'));
-  }
-
   return (
     <section
       className="hero-section relative flex flex-col items-center justify-center text-center overflow-hidden
@@ -44,45 +30,35 @@ export default function Hero() {
                  px-4 md:px-8
                  pt-[56px] md:pt-[72px]
                  pb-6 md:pb-10"
-      style={isLight ? {
-        background: 'radial-gradient(ellipse 80% 55% at 50% 0%,rgba(200,150,12,0.10) 0%,transparent 60%),#f5f0e8',
-      } : undefined}
     >
+      {/* Background: Secretariat building */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Image
+          src="/kerala-secretariat.webp"
+          alt=""
+          fill
+          priority
+          fetchPriority="high"
+          className="object-cover object-[center_65%] opacity-[0.32]"
+          style={{ filter: 'grayscale(20%) brightness(0.75) contrast(1.1)' }}
+          sizes="100vw"
+        />
+        <div className="absolute inset-0"
+          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.85) 0%,rgba(18,20,22,0.25) 50%,rgba(18,20,22,0.85) 100%)' }} />
+        <div className="absolute inset-0"
+          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.60) 0%,transparent 40%,rgba(18,20,22,1) 100%)' }} />
+      </div>
 
-      {/* Background: Secretariat (dark only) */}
-      {!isLight && (
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <Image
-            src="/kerala-secretariat.webp"
-            alt=""
-            fill
-            priority
-            fetchPriority="high"
-            className="object-cover object-[center_65%] opacity-[0.32]"
-            style={{ filter: 'grayscale(20%) brightness(0.75) contrast(1.1)' }}
-            sizes="100vw"
-          />
-          <div className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.85) 0%,rgba(18,20,22,0.25) 50%,rgba(18,20,22,0.85) 100%)' }} />
-          <div className="absolute inset-0"
-            style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.60) 0%,transparent 40%,rgba(18,20,22,1) 100%)' }} />
-        </div>
-      )}
-
-      {/* Ambient glow */}
-      {!isLight && (
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] rounded-full blur-[130px] pointer-events-none opacity-60"
-          style={{ background: 'radial-gradient(ellipse,rgba(200,150,12,0.18) 0%,transparent 70%)' }} />
-      )}
+      {/* Ambient gold glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] rounded-full blur-[130px] pointer-events-none opacity-60"
+        style={{ background: 'radial-gradient(ellipse,rgba(200,150,12,0.18) 0%,transparent 70%)' }} />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center">
 
         {/* Logo */}
         <div className="relative mb-3 md:mb-4">
-          {!isLight && (
-            <div className="absolute inset-0 rounded-full bg-black/40 blur-[24px] scale-110 translate-y-2 pointer-events-none" />
-          )}
+          <div className="absolute inset-0 rounded-full bg-black/40 blur-[24px] scale-110 translate-y-2 pointer-events-none" />
           <Image
             src="/logo.webp"
             alt="Kerala Employees Portal"
@@ -90,14 +66,12 @@ export default function Hero() {
             height={100}
             priority
             className="relative z-10 w-[56px] h-[56px] md:w-[76px] md:h-[76px] lg:w-[88px] lg:h-[88px] rounded-full object-cover"
-            style={isLight
-              ? { boxShadow: '0 2px 16px rgba(0,0,0,0.12)' }
-              : {
-                  boxShadow:
-                    '0 0 0 2px rgba(200,150,12,0.50),' +
-                    '0 0 24px 6px rgba(200,150,12,0.16),' +
-                    '0 16px 40px rgba(0,0,0,0.55)',
-                }}
+            style={{
+              boxShadow:
+                '0 0 0 2px rgba(200,150,12,0.50),' +
+                '0 0 24px 6px rgba(200,150,12,0.16),' +
+                '0 16px 40px rgba(0,0,0,0.55)',
+            }}
           />
         </div>
 
@@ -114,7 +88,7 @@ export default function Hero() {
             style={{
               fontSize: 'clamp(32px, 6vw, 72px)',
               backgroundImage: titleGrad,
-              filter: isLight ? 'none' : 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
+              filter: 'drop-shadow(0 0 12px rgba(200,150,12,0.35))',
             }}
           >
             കേരള സർക്കാർ
@@ -123,10 +97,8 @@ export default function Hero() {
             className="font-malayalam font-bold leading-[1.4] tracking-tight bg-[length:200%_auto] bg-clip-text text-transparent"
             style={{
               fontSize: 'clamp(20px, 3.5vw, 46px)',
-              backgroundImage: isLight
-                ? 'linear-gradient(135deg,#92400e,#c2410c,#92400e)'
-                : 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
-              filter: isLight ? 'none' : 'drop-shadow(0 0 6px rgba(200,150,12,0.30))',
+              backgroundImage: 'linear-gradient(135deg,#b8860b,#f5d060,#fce38a,#f5d060,#b8860b)',
+              filter: 'drop-shadow(0 0 6px rgba(200,150,12,0.30))',
             }}
           >
             ജീവനക്കാരുടെ വിജ്ഞാനകോശം
@@ -138,12 +110,10 @@ export default function Hero() {
           onClick={openSearch}
           className="group flex items-center gap-3 w-full max-w-[480px] rounded-2xl px-4 py-3 md:py-3.5 mb-6 md:mb-8 transition-all duration-300 cursor-text hover:scale-[1.01]"
           style={{
-            background: isLight ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.06)',
-            border: `1.5px solid ${isLight ? goldDim : gold + '40'}`,
+            background: 'rgba(255,255,255,0.06)',
+            border: `1.5px solid ${gold}40`,
             backdropFilter: 'blur(16px)',
-            boxShadow: isLight
-              ? `0 2px 12px rgba(0,0,0,0.06), inset 0 0 24px ${gold}15`
-              : `0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 24px ${gold}20`,
+            boxShadow: `0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), 0 0 24px ${gold}20`,
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

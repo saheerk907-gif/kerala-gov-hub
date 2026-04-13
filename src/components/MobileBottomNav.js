@@ -1,6 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 
+const bg  = 'rgba(14,16,18,0.98)';
+const bdr = 'rgba(255,255,255,0.10)';
+const dim = 'rgba(255,255,255,0.36)';
+
 const TABS = [
   {
     id: 'tools',
@@ -109,16 +113,6 @@ const TABS = [
 
 export default function MobileBottomNav() {
   const [active, setActive] = useState('tools');
-  const [isLight, setIsLight] = useState(false);
-
-  useEffect(() => {
-    const check = () =>
-      setIsLight(document.documentElement.getAttribute('data-theme') === 'light');
-    check();
-    const mo = new MutationObserver(check);
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-    return () => mo.disconnect();
-  }, []);
 
   useEffect(() => {
     const ids = TABS.map(t => t.id);
@@ -138,10 +132,6 @@ export default function MobileBottomNav() {
     return () => observers.forEach(io => io.disconnect());
   }, []);
 
-  const bg  = isLight ? 'rgba(255,252,248,0.98)' : 'rgba(14,16,18,0.98)';
-  const bdr = isLight ? 'rgba(0,0,0,0.12)'        : 'rgba(255,255,255,0.10)';
-  const dim = isLight ? 'rgba(15,23,42,0.38)'     : 'rgba(255,255,255,0.36)';
-
   return (
     <nav
       className="md:hidden fixed bottom-0 left-0 right-0 z-50"
@@ -151,9 +141,7 @@ export default function MobileBottomNav() {
         backdropFilter: 'blur(24px)',
         WebkitBackdropFilter: 'blur(24px)',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-        boxShadow: isLight
-          ? '0 -4px 24px rgba(0,0,0,0.08)'
-          : '0 -4px 24px rgba(0,0,0,0.40)',
+        boxShadow: '0 -4px 24px rgba(0,0,0,0.40)',
       }}
     >
       <div className="flex items-stretch h-[58px]">
