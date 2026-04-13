@@ -33,13 +33,15 @@ export default function Hero() {
           fill
           priority
           fetchPriority="high"
-          className="object-cover object-[center_65%] opacity-[0.55]"
+          className="object-cover object-[center_65%] opacity-[0.80]"
           sizes="100vw"
         />
+        {/* Left/right edge fade — keep center clear so building shows */}
         <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.82) 0%,rgba(18,20,22,0.15) 50%,rgba(18,20,22,0.75) 100%)' }} />
+          style={{ background: 'linear-gradient(to right,rgba(18,20,22,0.75) 0%,rgba(18,20,22,0.05) 40%,rgba(18,20,22,0.05) 60%,rgba(18,20,22,0.55) 100%)' }} />
+        {/* Top fade + bottom fade to page bg */}
         <div className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.45) 0%,transparent 45%,rgba(18,20,22,1) 100%)' }} />
+          style={{ background: 'linear-gradient(to bottom,rgba(18,20,22,0.35) 0%,transparent 30%,rgba(18,20,22,1) 100%)' }} />
       </div>
 
       {/* Ambient gold glow */}
