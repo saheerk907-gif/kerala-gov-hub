@@ -23,22 +23,42 @@ export default function Hero() {
       className="relative overflow-hidden flex flex-col items-center justify-center text-center"
       style={{ minHeight: '88vh', paddingTop: 72, paddingBottom: 48, background: '#0d1117' }}
     >
-      {/* Subtle radial glow — no image, just depth */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 55% at 50% 40%, rgba(200,150,12,0.07) 0%, transparent 65%),' +
-            'radial-gradient(ellipse 60% 40% at 20% 80%, rgba(41,151,255,0.04) 0%, transparent 60%),' +
-            '#0d1117',
-        }}
-      />
+      {/* Base gradient background */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: '#0d1117' }} />
 
-      {/* Thin top accent line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[2px] pointer-events-none"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(200,150,12,0.50) 40%, rgba(200,150,12,0.50) 60%, transparent 100%)' }}
-      />
+      {/* Gold radial — top centre, like a soft spotlight */}
+      <div className="absolute pointer-events-none" style={{
+        top: '-10%', left: '50%', transform: 'translateX(-50%)',
+        width: '70%', height: '55%',
+        background: 'radial-gradient(ellipse at 50% 0%, rgba(200,150,12,0.10) 0%, transparent 70%)',
+      }} />
+
+      {/* Blue radial — bottom left corner accent */}
+      <div className="absolute pointer-events-none" style={{
+        bottom: 0, left: '-5%',
+        width: '45%', height: '45%',
+        background: 'radial-gradient(ellipse at 0% 100%, rgba(41,151,255,0.07) 0%, transparent 65%)',
+      }} />
+
+      {/* Purple radial — bottom right corner accent */}
+      <div className="absolute pointer-events-none" style={{
+        bottom: 0, right: '-5%',
+        width: '40%', height: '40%',
+        background: 'radial-gradient(ellipse at 100% 100%, rgba(120,80,220,0.06) 0%, transparent 65%)',
+      }} />
+
+      {/* Top gold accent line */}
+      <div className="absolute top-0 left-0 right-0 h-[1.5px] pointer-events-none" style={{
+        background: 'linear-gradient(90deg, transparent 0%, rgba(200,150,12,0.45) 35%, rgba(245,208,96,0.60) 50%, rgba(200,150,12,0.45) 65%, transparent 100%)',
+      }} />
+
+      {/* Subtle grid texture overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: 'linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)',
+        backgroundSize: '48px 48px',
+        maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%)',
+      }} />
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-2xl mx-auto px-6 flex flex-col items-center">
