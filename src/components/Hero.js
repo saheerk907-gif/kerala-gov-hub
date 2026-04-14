@@ -178,9 +178,9 @@ export default function Hero() {
               style={{
                 padding: '6px 14px', borderRadius: 99,
                 fontSize: 11, fontWeight: 600,
-                color: 'rgba(255,255,255,0.60)',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.09)',
+                color: 'rgba(255,255,255,0.65)',
+                background: 'rgba(245,208,96,0.04)',
+                border: '1px solid rgba(245,208,96,0.25)',
               }}
             >
               {link.label}

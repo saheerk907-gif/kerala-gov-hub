@@ -10,12 +10,18 @@ export default function HeroSearchButton() {
       onClick={openSearch}
       className="group flex items-center gap-3 w-full rounded-xl px-4 py-3 mb-6 transition-all duration-150 cursor-text"
       style={{
-        background: 'rgba(255,255,255,0.05)',
-        border: '1px solid rgba(255,255,255,0.11)',
-        boxShadow: '0 2px 16px rgba(0,0,0,0.30)',
+        background: 'rgba(255,255,255,0.04)',
+        border: '1px solid rgba(245,208,96,0.30)',
+        boxShadow: '0 0 18px rgba(200,150,12,0.10), 0 2px 16px rgba(0,0,0,0.30)',
       }}
-      onMouseEnter={e => e.currentTarget.style.border = '1px solid rgba(245,208,96,0.30)'}
-      onMouseLeave={e => e.currentTarget.style.border = '1px solid rgba(255,255,255,0.11)'}
+      onMouseEnter={e => {
+        e.currentTarget.style.border = '1px solid rgba(245,208,96,0.60)';
+        e.currentTarget.style.boxShadow = '0 0 28px rgba(200,150,12,0.22), 0 2px 16px rgba(0,0,0,0.30)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.border = '1px solid rgba(245,208,96,0.30)';
+        e.currentTarget.style.boxShadow = '0 0 18px rgba(200,150,12,0.10), 0 2px 16px rgba(0,0,0,0.30)';
+      }}
     >
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
         stroke="rgba(255,255,255,0.30)" strokeWidth="2"
