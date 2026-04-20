@@ -50,6 +50,14 @@ const calculators = [
     color: '#ff9f0a',
   },
   {
+    icon: '🏦',
+    title: 'Loan Prepayment Calculator',
+    subtitle: 'Interest Saved · Amortization · Scenarios',
+    desc: 'See how much interest you save with extra EMI or lump-sum prepayments. Full amortization schedule & scenario comparison.',
+    href: '/loan-prepayment',
+    color: '#ff9f0a',
+  },
+  {
     icon: '📅',
     title: 'Leave Calculator',
     subtitle: 'ലീവ് കണക്കുകൂട്ടൽ',
