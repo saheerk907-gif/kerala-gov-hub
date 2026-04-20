@@ -1,5 +1,5 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
@@ -155,7 +155,7 @@ function ChartTooltip({ active, payload }) {
 
 /* ── Main calculator ─────────────────────────────────────────────────── */
 export default function LoanPrepaymentCalculator() {
-  /* Loan inputs */
+  const scenarioIdRef = useRef(1);
   const [loanAmount,      setLoanAmount]      = useState(3000000);
   const [rate,            setRate]            = useState(8.5);
   const [tenureUnit,      setTenureUnit]      = useState('years');
@@ -231,21 +231,24 @@ export default function LoanPrepaymentCalculator() {
 
   /* ── Save scenario ───────────────────────────────────────────── */
   const saveScenario = () => {
-    const name = scenarioName.trim() || `Scenario ${scenarios.length + 1}`;
-    setScenarios(prev => [
-      ...prev.slice(-3),
-      {
-        id: Date.now(), name,
-        loanAmount, rate, tenureMonths, outstandingBal, extraEMI,
-        prepayments: [...prepayments],
-        emi:           withPrep.emi,
-        totalInterest: withPrep.totalInterest,
-        months:        withPrep.months,
-        interestSaved,
-        monthsSaved,
-        startBalance:  withPrep.startBalance,
-      },
-    ]);
+    const emiVal           = isFinite(withPrep.emi) ? withPrep.emi : 0;
+    const extraVal         = isFinite(extraEMI) ? extraEMI : 0;
+    const interestSavedVal = isFinite(interestSaved) ? Math.round(interestSaved) : 0;
+    const monthsSavedVal   = isFinite(monthsSaved) ? monthsSaved : 0;
+    const name = scenarioName.trim() || `Scenario ${scenarioIdRef.current}`;
+    const newScenario = {
+      id:            scenarioIdRef.current++,
+      name,
+      loanAmount:    Math.round(loanAmount),
+      rate:          Number(rate),
+      tenureMonths:  Number(tenureMonths),
+      emi:           Math.round(emiVal + extraVal),
+      totalInterest: Math.round(withPrep.totalInterest),
+      months:        Number(withPrep.months),
+      interestSaved: interestSavedVal,
+      monthsSaved:   monthsSavedVal,
+    };
+    setScenarios(prev => [...prev.slice(-3), newScenario]);
     setScenarioName('');
   };
 
@@ -887,7 +890,7 @@ export default function LoanPrepaymentCalculator() {
                     <td className="py-3 px-4 text-sm font-medium text-white">{s.name}</td>
                     <td className="py-3 px-4 text-sm tabular-nums text-white/65">{fmt(s.loanAmount)}</td>
                     <td className="py-3 px-4 text-sm tabular-nums text-white/65">{s.rate}%</td>
-                    <td className="py-3 px-4 text-sm tabular-nums text-white">{fmt(s.emi + (s.extraEMI || 0))}</td>
+                    <td className="py-3 px-4 text-sm tabular-nums text-white">{fmt(s.emi)}</td>
                     <td className="py-3 px-4 text-sm tabular-nums text-white/80">{fmt(s.totalInterest)}</td>
                     <td className="py-3 px-4 text-sm tabular-nums font-semibold"
                       style={{ color: s.interestSaved > 100 ? GREEN : 'rgba(255,255,255,0.35)' }}>
