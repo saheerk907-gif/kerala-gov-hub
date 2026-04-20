@@ -24,23 +24,16 @@ function ym(months) {
 }
 
 /* ── Amortization engine ─────────────────────────────────────────────── */
-function calcSchedule(principal, annualRate, tenureMonths, elapsedMonths, prepayments, extraMonthly) {
+// outstandingBal: if provided, use as starting balance (mid-loan); else use principal
+function calcSchedule(principal, annualRate, tenureMonths, outstandingBal, prepayments, extraMonthly) {
   const r = annualRate / 100 / 12;
   const emi = r > 0
     ? principal * r * Math.pow(1 + r, tenureMonths) / (Math.pow(1 + r, tenureMonths) - 1)
     : principal / tenureMonths;
 
-  // Walk forward to find balance after elapsed months (no prepayments on past)
-  let startBalance = principal;
-  let paidInterest  = 0;
-  for (let m = 1; m <= elapsedMonths; m++) {
-    const interest      = startBalance * r;
-    const principalPart = Math.min(startBalance, Math.max(0, emi - interest));
-    startBalance -= principalPart;
-    paidInterest += interest;
-  }
+  const startBalance = (outstandingBal > 0 && outstandingBal <= principal) ? outstandingBal : principal;
+  const alreadyPaid  = principal - startBalance;
 
-  // Build prepayment lookup (months are relative: 1 = next EMI from current)
   const prepMap = {};
   prepayments.forEach(p => {
     const m = Number(p.month);
@@ -48,13 +41,12 @@ function calcSchedule(principal, annualRate, tenureMonths, elapsedMonths, prepay
     if (m > 0 && a > 0) prepMap[m] = (prepMap[m] || 0) + a;
   });
 
-  let balance      = startBalance;
+  let balance       = startBalance;
   let totalInterest = 0;
-  const schedule   = [];
-  const remaining  = tenureMonths - elapsedMonths;
+  const schedule    = [];
 
-  for (let m = 1; m <= remaining && balance > 0.5; m++) {
-    const interest        = balance * r;
+  for (let m = 1; m <= tenureMonths && balance > 0.5; m++) {
+    const interest         = balance * r;
     const regularPrincipal = Math.min(balance, Math.max(0, emi - interest));
     balance -= regularPrincipal;
     totalInterest += interest;
@@ -68,18 +60,17 @@ function calcSchedule(principal, annualRate, tenureMonths, elapsedMonths, prepay
     balance = Math.max(0, balance);
 
     schedule.push({
-      month:    elapsedMonths + m,
-      relMonth: m,
-      emi:      Math.round(regularPrincipal + interest),
-      interest: Math.round(interest),
-      principal: Math.round(regularPrincipal),
+      month:      m,
+      emi:        Math.round(regularPrincipal + interest),
+      interest:   Math.round(interest),
+      principal:  Math.round(regularPrincipal),
       prepayment: Math.round(lumpsum + extra),
-      balance:   Math.round(balance),
+      balance:    Math.round(balance),
       cumInterest: Math.round(totalInterest),
     });
   }
 
-  return { emi, schedule, totalInterest, months: schedule.length, startBalance, paidInterest };
+  return { emi, schedule, totalInterest, months: schedule.length, startBalance, alreadyPaid };
 }
 
 /* ── Number + slider input ───────────────────────────────────────────── */
@@ -165,15 +156,17 @@ function ChartTooltip({ active, payload }) {
 /* ── Main calculator ─────────────────────────────────────────────────── */
 export default function LoanPrepaymentCalculator() {
   /* Loan inputs */
-  const [loanAmount,    setLoanAmount]    = useState(3000000);
-  const [rate,          setRate]          = useState(8.5);
-  const [tenureUnit,    setTenureUnit]    = useState('years'); // 'years' | 'months'
-  const [tenureYears,   setTenureYears]   = useState(20);
+  const [loanAmount,      setLoanAmount]      = useState(3000000);
+  const [rate,            setRate]            = useState(8.5);
+  const [tenureUnit,      setTenureUnit]      = useState('years');
+  const [tenureYears,     setTenureYears]     = useState(20);
   const [tenureMonthsRaw, setTenureMonthsRaw] = useState(240);
-  const [elapsedMonths, setElapsedMonths] = useState(0);
-  const [extraEMI,      setExtraEMI]      = useState(0);
+  const [outstandingRaw,  setOutstandingRaw]  = useState(''); // text input, blank = full loan
+  const [extraEMI,        setExtraEMI]        = useState(0);
 
-  const tenureMonths = tenureUnit === 'years' ? tenureYears * 12 : tenureMonthsRaw;
+  const tenureMonths  = tenureUnit === 'years' ? tenureYears * 12 : tenureMonthsRaw;
+  const outstandingBal = outstandingRaw === '' ? 0 : Number(String(outstandingRaw).replace(/,/g, ''));
+  const isMidLoan      = outstandingBal > 0 && outstandingBal < loanAmount;
 
   /* Prepayments */
   const [prepayments, setPrepayments] = useState([]);
@@ -186,31 +179,30 @@ export default function LoanPrepaymentCalculator() {
 
   /* ── Calculations ────────────────────────────────────────────── */
   const original = useMemo(
-    () => calcSchedule(loanAmount, rate, tenureMonths, elapsedMonths, [], 0),
-    [loanAmount, rate, tenureMonths, elapsedMonths]
+    () => calcSchedule(loanAmount, rate, tenureMonths, outstandingBal, [], 0),
+    [loanAmount, rate, tenureMonths, outstandingBal]
   );
 
   const withPrep = useMemo(
-    () => calcSchedule(loanAmount, rate, tenureMonths, elapsedMonths, prepayments, extraEMI),
-    [loanAmount, rate, tenureMonths, elapsedMonths, prepayments, extraEMI]
+    () => calcSchedule(loanAmount, rate, tenureMonths, outstandingBal, prepayments, extraEMI),
+    [loanAmount, rate, tenureMonths, outstandingBal, prepayments, extraEMI]
   );
 
   const hasPrep       = prepayments.some(p => Number(p.amount) > 0) || extraEMI > 0;
   const interestSaved = original.totalInterest - withPrep.totalInterest;
   const monthsSaved   = original.months - withPrep.months;
-  const isMidLoan     = elapsedMonths > 0;
 
   /* ── Chart data ──────────────────────────────────────────────── */
   const chartData = useMemo(() => {
     const maxM  = Math.max(original.months, withPrep.months);
     const step  = Math.max(1, Math.floor(maxM / 60));
-    const origM = Object.fromEntries(original.schedule.map(r => [r.relMonth, r]));
-    const prepM = Object.fromEntries(withPrep.schedule.map(r => [r.relMonth, r]));
+    const origM = Object.fromEntries(original.schedule.map(r => [r.month, r]));
+    const prepM = Object.fromEntries(withPrep.schedule.map(r => [r.month, r]));
     const data  = [];
     for (let m = step; m <= maxM; m += step) {
       const o = origM[m];
       const p = prepM[m];
-      const label = m % 12 === 0 ? `Yr ${(elapsedMonths + m) / 12}` : `M${elapsedMonths + m}`;
+      const label = m % 12 === 0 ? `Yr ${m / 12}` : `M${m}`;
       data.push({
         month:        m,
         label,
@@ -221,7 +213,7 @@ export default function LoanPrepaymentCalculator() {
       });
     }
     return data;
-  }, [original, withPrep, elapsedMonths]);
+  }, [original, withPrep]);
 
   /* ── Table pagination ────────────────────────────────────────── */
   const PAGE_SIZE   = 12;
@@ -244,7 +236,7 @@ export default function LoanPrepaymentCalculator() {
       ...prev.slice(-3),
       {
         id: Date.now(), name,
-        loanAmount, rate, tenureMonths, elapsedMonths, extraEMI,
+        loanAmount, rate, tenureMonths, outstandingBal, extraEMI,
         prepayments: [...prepayments],
         emi:           withPrep.emi,
         totalInterest: withPrep.totalInterest,
@@ -275,15 +267,15 @@ export default function LoanPrepaymentCalculator() {
         <div className="rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"
           style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.14)' }}>
           <div>
-            <div className="text-sm font-semibold text-white">Mid-loan calculation</div>
+            <div className="text-sm font-semibold text-white">Calculating from outstanding balance</div>
             <div className="text-sm text-white/60 mt-0.5">
-              You have already paid <strong className="text-white">{elapsedMonths} EMIs</strong>. Showing remaining interest &amp; savings from this point.
+              Starting from <strong className="text-white">{fmt(outstandingBal)}</strong> outstanding — principal already repaid: <strong className="text-white">{fmt(original.alreadyPaid)}</strong>
             </div>
           </div>
           <div className="flex items-center gap-6 shrink-0">
             <div>
-              <div className="text-xs text-white/45 uppercase tracking-wide">Outstanding Balance</div>
-              <div className="text-lg font-bold text-white">{fmt(original.startBalance)}</div>
+              <div className="text-xs text-white/45 uppercase tracking-wide">Remaining Interest</div>
+              <div className="text-lg font-bold text-white">{fmt(original.totalInterest)}</div>
             </div>
             <div>
               <div className="text-xs text-white/45 uppercase tracking-wide">EMIs Remaining</div>
@@ -297,7 +289,7 @@ export default function LoanPrepaymentCalculator() {
       <div className="rounded-xl px-5 py-3.5 text-sm text-white/70 leading-relaxed"
         style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}>
         {isMidLoan
-          ? <>Remaining interest on your loan: <strong className="text-white">{fmt(original.totalInterest)}</strong> over <strong className="text-white">{ym(original.months)}</strong>.</>
+          ? <>Remaining interest from outstanding balance: <strong className="text-white">{fmt(original.totalInterest)}</strong> over <strong className="text-white">{ym(original.months)}</strong>.</>
           : <>Without prepayment you will pay <strong className="text-white">{fmt(original.totalInterest)}</strong> in interest — <strong className="text-white">{((original.totalInterest / loanAmount) * 100).toFixed(0)}%</strong> of your loan amount.</>
         }
         {hasPrep && interestSaved > 0 && (
@@ -371,20 +363,33 @@ export default function LoanPrepaymentCalculator() {
             </div>
           </div>
 
-          {/* Already Paid */}
-          <div className="rounded-2xl p-5 flex flex-col gap-4"
+          {/* Outstanding Balance (mid-loan) */}
+          <div className="rounded-2xl p-5 flex flex-col gap-3"
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}>
-            <div className="text-xs font-bold uppercase tracking-widest text-white/50">Already Paid (Optional)</div>
-            <NumSlider
-              label="EMIs Already Paid" suffix=" mo"
-              sub="Enter if you are mid-loan and want to calculate from current balance"
-              value={elapsedMonths} min={0} max={Math.max(0, tenureMonths - 1)} step={1}
-              onChange={v => setElapsedMonths(v)} />
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest text-white/50">Outstanding Principal</div>
+              <div className="text-xs text-white/40 mt-1">Optional — fill this if you have already paid some EMIs and want to calculate from your current balance (check your loan statement)</div>
+            </div>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-white/40">₹</span>
+              <input
+                type="text" inputMode="numeric"
+                placeholder={`Leave blank for full loan (${fmt(loanAmount)})`}
+                value={outstandingRaw}
+                onChange={e => setOutstandingRaw(e.target.value)}
+                onBlur={() => {
+                  const v = Number(String(outstandingRaw).replace(/,/g, ''));
+                  if (!isNaN(v) && v > 0) setOutstandingRaw(v.toLocaleString('en-IN'));
+                  else if (outstandingRaw !== '') setOutstandingRaw('');
+                }}
+                className="w-full rounded-xl pl-7 pr-4 py-2.5 text-sm text-white outline-none placeholder:text-white/25 border border-white/12 bg-white/[0.06] focus:border-white/30"
+              />
+            </div>
             {isMidLoan && (
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 pt-1">
                 {[
-                  { label: 'Outstanding Balance', value: fmt(original.startBalance) },
-                  { label: 'Interest Paid So Far', value: fmt(original.paidInterest) },
+                  { label: 'Principal Repaid', value: fmt(original.alreadyPaid) },
+                  { label: 'EMIs Remaining',   value: `${original.months} months` },
                 ].map(c => (
                   <div key={c.label} className="rounded-lg p-3"
                     style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
@@ -392,6 +397,13 @@ export default function LoanPrepaymentCalculator() {
                     <div className="text-sm font-bold text-white mt-1">{c.value}</div>
                   </div>
                 ))}
+              </div>
+            )}
+            {outstandingRaw !== '' && !isMidLoan && (
+              <div className="text-xs text-white/40">
+                {outstandingBal >= loanAmount
+                  ? 'Outstanding balance must be less than the loan amount.'
+                  : 'Enter a valid positive amount less than the loan amount.'}
               </div>
             )}
           </div>
@@ -419,7 +431,7 @@ export default function LoanPrepaymentCalculator() {
                 <div>
                   <div className="text-sm font-semibold text-white/85">Lump Sum Prepayments</div>
                   <div className="text-xs text-white/45 mt-0.5">
-                    Month number is relative to {isMidLoan ? 'current position' : 'loan start'}
+                    Month 1 = next EMI from {isMidLoan ? 'outstanding balance' : 'loan start'}
                   </div>
                 </div>
                 <button onClick={addPrepayment}
@@ -448,9 +460,7 @@ export default function LoanPrepaymentCalculator() {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-white/45 mb-1.5 block">
-                        After Month # {isMidLoan ? `(from mo ${elapsedMonths + 1})` : ''}
-                      </label>
+                      <label className="text-xs text-white/45 mb-1.5 block">After Month #</label>
                       <input type="number" min={1} max={tenureMonths - elapsedMonths}
                         value={p.month}
                         onChange={e => updatePrepayment(p.id, 'month', e.target.value)}
@@ -501,7 +511,7 @@ export default function LoanPrepaymentCalculator() {
             <StatCard
               label="Monthly EMI"
               value={fmt(original.emi)}
-              sub={isMidLoan ? 'Unchanged' : `For ${ym(tenureMonths)}`} />
+              sub={isMidLoan ? `From ₹${Math.round(outstandingBal / 100000 * 10) / 10}L balance` : `For ${ym(tenureMonths)}`} />
             <StatCard
               label={isMidLoan ? 'Remaining Interest' : 'Total Interest'}
               value={fmt(original.totalInterest)}
@@ -516,7 +526,7 @@ export default function LoanPrepaymentCalculator() {
               value={ym(hasPrep ? withPrep.months : original.months)}
               sub={hasPrep && monthsSaved > 0
                 ? `${monthsSaved} months saved`
-                : isMidLoan ? 'From today' : 'From loan start'} />
+                : isMidLoan ? 'From outstanding balance' : 'From loan start'} />
           </div>
 
           {/* Tab bar */}
@@ -640,9 +650,9 @@ export default function LoanPrepaymentCalculator() {
                   style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}>
                   <div className="text-sm font-semibold text-white/70 mb-4">Payment Breakdown</div>
                   {[
-                    { label: 'Principal',              amount: isMidLoan ? original.startBalance : loanAmount,  total: (isMidLoan ? original.startBalance : loanAmount) + original.totalInterest },
-                    { label: 'Interest — without prepayment', amount: original.totalInterest,  total: (isMidLoan ? original.startBalance : loanAmount) + original.totalInterest },
-                    { label: 'Interest — with prepayment',    amount: withPrep.totalInterest,  total: (isMidLoan ? original.startBalance : loanAmount) + original.totalInterest, savings: true },
+                    { label: isMidLoan ? 'Outstanding Principal' : 'Principal',  amount: original.startBalance,       total: original.startBalance + original.totalInterest },
+                    { label: 'Interest — without prepayment', amount: original.totalInterest,  total: original.startBalance + original.totalInterest },
+                    { label: 'Interest — with prepayment',    amount: withPrep.totalInterest,  total: original.startBalance + original.totalInterest, savings: true },
                   ].map(b => (
                     <div key={b.label} className="flex flex-col gap-1.5 mb-3">
                       <div className="flex justify-between text-sm">
@@ -673,7 +683,7 @@ export default function LoanPrepaymentCalculator() {
             <div className="flex flex-col gap-3">
               <div className="text-sm text-white/50">
                 {isMidLoan
-                  ? `Showing months ${elapsedMonths + 1} to ${elapsedMonths + withPrep.months} (${withPrep.months} remaining). Highlighted rows = prepayment made.`
+                  ? `Showing ${withPrep.months} remaining EMIs from outstanding balance of ${fmt(outstandingBal)}. Highlighted rows = prepayment made.`
                   : 'Full amortization schedule. Highlighted rows = prepayment made.'}
               </div>
               <div className="rounded-2xl overflow-hidden"
@@ -717,10 +727,10 @@ export default function LoanPrepaymentCalculator() {
                       <tr style={{ background: 'rgba(255,255,255,0.05)', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
                         <td className="px-4 py-3 text-xs font-bold uppercase text-white/40">Total</td>
                         <td className="px-4 py-3 text-sm tabular-nums font-semibold text-white">
-                          {fmt((isMidLoan ? original.startBalance : loanAmount) + withPrep.totalInterest)}
+                          {fmt(original.startBalance + withPrep.totalInterest)}
                         </td>
                         <td className="px-4 py-3 text-sm tabular-nums text-white/70">
-                          {fmt(isMidLoan ? original.startBalance : loanAmount)}
+                          {fmt(original.startBalance)}
                         </td>
                         <td className="px-4 py-3 text-sm tabular-nums text-white/70">{fmt(withPrep.totalInterest)}</td>
                         <td className="px-4 py-3" colSpan={2} />
@@ -765,8 +775,8 @@ export default function LoanPrepaymentCalculator() {
                     {[
                       {
                         label: isMidLoan ? 'Outstanding Balance' : 'Loan Amount',
-                        orig:  fmt(isMidLoan ? original.startBalance : loanAmount),
-                        prep:  fmt(isMidLoan ? original.startBalance : loanAmount),
+                        orig:  fmt(original.startBalance),
+                        prep:  fmt(original.startBalance),
                         diff:  '—', pos: false,
                       },
                       {
@@ -783,8 +793,8 @@ export default function LoanPrepaymentCalculator() {
                       },
                       {
                         label: 'Total Payment',
-                        orig:  fmt((isMidLoan ? original.startBalance : loanAmount) + original.totalInterest),
-                        prep:  fmt((isMidLoan ? original.startBalance : loanAmount) + withPrep.totalInterest),
+                        orig:  fmt(original.startBalance + original.totalInterest),
+                        prep:  fmt(original.startBalance + withPrep.totalInterest),
                         diff:  interestSaved > 0 ? `−${fmt(interestSaved)}` : '—', pos: true,
                       },
                       {
@@ -795,9 +805,9 @@ export default function LoanPrepaymentCalculator() {
                       },
                       {
                         label: 'Interest % of Balance',
-                        orig:  `${((original.totalInterest / (isMidLoan ? original.startBalance : loanAmount)) * 100).toFixed(1)}%`,
-                        prep:  `${((withPrep.totalInterest / (isMidLoan ? original.startBalance : loanAmount)) * 100).toFixed(1)}%`,
-                        diff:  `−${(((original.totalInterest - withPrep.totalInterest) / (isMidLoan ? original.startBalance : loanAmount)) * 100).toFixed(1)}%`,
+                        orig:  `${((original.totalInterest / original.startBalance) * 100).toFixed(1)}%`,
+                        prep:  `${((withPrep.totalInterest / original.startBalance) * 100).toFixed(1)}%`,
+                        diff:  `−${(((original.totalInterest - withPrep.totalInterest) / original.startBalance) * 100).toFixed(1)}%`,
                         pos:   true,
                       },
                     ].map((row, i) => (
